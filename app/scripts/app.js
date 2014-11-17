@@ -7,7 +7,6 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers'])
-
 .run(function($ionicPlatform, $state) {
 
   $ionicPlatform.ready(function() {
@@ -24,7 +23,7 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider) {
   _(['current-command', 'favorites', 'food-choice', 'settings']).forEach(function(label) {
     $stateProvider.state(label, {
       url: '/'+label,

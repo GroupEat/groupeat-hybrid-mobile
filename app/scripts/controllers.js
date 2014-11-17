@@ -28,7 +28,7 @@ angular.module('groupeat.controllers', [])
 
 })
 
-.controller('CommandViewController', function($scope) {
+.controller('CommandViewController', function($scope, $state) {
 
   $scope.onNewCommandTap = function() {
 		$state.go('food-choice');

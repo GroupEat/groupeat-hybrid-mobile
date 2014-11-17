@@ -1,25 +1,26 @@
 'use strict';
 
-describe('Controller: PetIndexCtrl', function () {
+describe('Controller: CommandViewController', function () {
 
   var should = chai.should();
 
   // load the controller's module
-  beforeEach(module('MyIonicProject'));
+  beforeEach(module('groupeat'));
 
-  var PetIndexCtrl,
+  var CommandViewController,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    PetIndexCtrl = $controller('PetIndexCtrl', {
+    CommandViewController = $controller('CommandViewController', {
       $scope: scope
     });
   }));
 
-  it('should attach a list of pets to the scope', function () {
-    scope.pets.should.have.length(4);
+// test
+  it('should be a list of 10 groups', function () {
+    scope.groups.should.have.length(10);
   });
 
 });
