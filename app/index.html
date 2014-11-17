@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>"MyIonicProject"</title>
+
+    <!-- build:css styles/vendor.css -->
+    <!-- <link rel="stylesheet" href="vendor/some.contrib.css"> -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="lib/ionic/release/css/ionic.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+
+  <body ng-app="groupeat">
+    <ion-side-menus ng-controller="SideMenuController">
+
+      <!-- Center content -->
+      <ion-side-menu-content>
+        <!--
+          The nav bar that will be updated as we navigate between views
+          Additional attributes set its look, nav-bar animation and icons
+          Icons provided by Ionicons: http://ionicons.com/
+        -->
+        <ion-nav-bar class="bar-energized">
+          <ion-nav-buttons side="left">
+            <button on-tap="onNavBarMenuButtonTap()" class="button-icon ion-navicon-round light"></button>
+          </ion-nav-buttons>
+          <ion-nav-buttons side="right">
+            <button class="button-icon ion-plus-round light" side="right"></button>
+          </ion-nav-buttons>
+        </ion-nav-bar>
+
+        <!--
+          The views will be rendered in the <nav-view> directive below
+          Templates are in the /templates folder (but you could also
+          have templates inline in this html file if you'd like).
+        -->
+        <ion-nav-view animation="fade-in"></ion-nav-view>
+
+      </ion-side-menu-content>
+
+
+      <!-- Left menu -->
+      <ion-side-menu side="left">
+        <ion-header-bar class="bar-assertive">
+          <h1 class="title">Menu</h1>
+        </ion-header-bar>
+
+        <!-- Left menu components -->
+        <ion-content>
+          <ion-list> <!-- menu -->
+            <ion-item on-tap="onCommandTap()" class="item item-icon-left">
+              <i class="icon ion-fork energized"></i>
+                Commande en cours
+            </ion-item>
+            <ion-item on-tap="onFavoritesTap()" class="item item-icon-left" href="#">
+              <i class="icon ion-heart energized"></i>
+                Favoris
+            </ion-item>
+            <ion-item on-tap="onSettingsTap()" class="item item-icon-left" href="#">
+              <i class="icon ion-ios7-settings-strong energized"></i>
+                Réglages
+            </ion-item>
+          </ion-list>
+         </ion-content>
+
+      </ion-side-menu>
+    </ion-side-menus>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- <script src="vendor/someContribJs.js"></script> -->
+    <!-- bower:js -->
+    <script src="lib/angular/angular.js"></script>
+    <script src="lib/angular-animate/angular-animate.js"></script>
+    <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="lib/collide/collide.js"></script>
+    <script src="lib/ionic/release/js/ionic.js"></script>
+    <script src="lib/ionic/release/js/ionic-angular.js"></script>
+    <script src="lib/lodash/dist/lodash.compat.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+
+        <!-- build:js scripts/scripts.js -->
+        <script src="scripts/config.js"></script>
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
