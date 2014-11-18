@@ -18,6 +18,11 @@ On Windows, check out [RubyInstaller](http://rubyinstaller.org/) and make sure y
 
     gem install compass
 
+You might not have write access to your Library/Ruby/Gems/ directory. If so, try
+    
+    sudo gem install compass
+    
+
 ### Node.js and Global Dependencies
 
 On all platforms, the best option is to check out [Node.js](http://nodejs.org/).
