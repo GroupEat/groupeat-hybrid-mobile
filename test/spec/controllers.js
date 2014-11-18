@@ -18,7 +18,7 @@ describe('Controller: CommandViewController', function () {
     });
   }));
 
-// test
+  // test
   it('should be a list of 10 groups', function () {
     scope.groups.should.have.length(10);
   });
