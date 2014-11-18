@@ -1,5 +1,7 @@
 # GroupEat Hybrid Mobile Application
 
+[![Build Status](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile.svg?token=QRmpFsqtUNJgQHQ5YEdF&branch=master)](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile)
+
 ## Prerequisites
 
 ### Ruby and RubyGems
@@ -7,6 +9,7 @@
 Ruby and RubyGems come preinstalled on Mac OSX.
 
 On Ubuntu, run
+
     sudo apt-get install ruby-full rubygems
 
 On Windows, check out [RubyInstaller](http://rubyinstaller.org/) and make sure you also install RubyGems.
@@ -14,6 +17,11 @@ On Windows, check out [RubyInstaller](http://rubyinstaller.org/) and make sure y
 ### Compass
 
     gem install compass
+
+You might not have write access to your Library/Ruby/Gems/ directory. If so, try
+    
+    sudo gem install compass
+    
 
 ### Node.js and Global Dependencies
 
