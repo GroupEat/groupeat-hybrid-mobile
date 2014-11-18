@@ -1,7 +1,33 @@
 {
-  "name": "MyIonicProject",
+  "name": "groupeat-hybrid-mobile",
   "version": "0.1.0",
+  "description": "Ionic+Angular.js application (Yeoman generated) for GroupEat",
   "private": true,
+  "contributors": [
+    {
+    "name": "Guillaume Diallo Mulliez",
+    "email": "g.diallo.mulliez@gmail.com"
+    },
+    {
+    "name": "Etienne de Montalivet",
+    "email": "etienne.demontalivet@gmail.com"
+    },
+    {
+    "name": "Woody Rousseau",
+    "email": "woody.a.rousseau@gmail.com"
+    },
+    {
+    "name": "Sammy Teillet",
+    "email": "sammy.teillet@gmail.com"
+    },
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GroupEat/groupeat-hybrid-mobile"
+  },
+  "bugs": {
+    "url": "https://github.com/GroupEat/groupeat-hybrid-mobile/issues"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",

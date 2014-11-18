@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.MyIonicProject" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>MyIonicProject</name>
+<widget id="com.example.GroupEat" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>GroupEat</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        Ionic+Angular.js application (Yeoman generated) for GroupEat.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="contact@groupeat.fr" href="http://groupeat.fr">
+        GroupEat Team
     </author>
     <content src="index.html" />
     <access origin="*" />

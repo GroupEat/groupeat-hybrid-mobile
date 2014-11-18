@@ -64,4 +64,4 @@ angular.module('groupeat.controllers', [])
 		return $scope.shownGroup === group;
 	};
 
-})
+});
