@@ -1,18 +1,22 @@
 // Your application styles go here
 @import "variables";
 
-.list .item.item-accordion {
-  line-height: 64px;
-  padding-top: 0;
-  padding-bottom: 0;
-  transition: 0.09s all linear;
-}
-.list .item.item-accordion.ng-hide {
-  line-height: 0px;
-}
-.list .item.item-accordion.ng-hide-add,
-.list .item.item-accordion.ng-hide-remove {
-  display: block !important;
+.list {
+  .item.item-accordion {
+    line-height: 64px;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition: 0.09s all linear;
+  }
+
+  .item.item-accordion.ng-hide {
+    line-height: 0px;
+  }
+
+  .item.item-accordion.ng-hide-add,
+  .item.item-accordion.ng-hide-remove {
+    display: block !important;
+  }
 }
 
 // Importing ionic in order to possible override variables
