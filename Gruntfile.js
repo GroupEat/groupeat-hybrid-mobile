@@ -6,15 +6,15 @@ var path = require('path');
 var cordovaCli = require('cordova');
 
 // OS Recognition added because windows is shit and works weirdly...
-var os = require ('os');
-if ( os.platform() == 'win32') {
-  var spawn = require('win-spawn');  
+var os = require('os');
+if ( os.platform() === 'win32')
+{
+  var spawn = require('win-spawn');
 }
-else { 
+else
+{
   var spawn = require('child_process').spawn;
 }
-var spawn = require('child_process').spawn;
-
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
