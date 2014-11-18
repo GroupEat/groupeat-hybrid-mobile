@@ -30,3 +30,10 @@ Then run the following command to install the needed dependencies
     npm install
     bower install
     grunt serve
+
+## Before Making a Commit
+
+Always run the following command before commiting, to make sure the code does not include
+parse errors or warnings, as well as to be sure unit tests pass.
+
+    grunt
