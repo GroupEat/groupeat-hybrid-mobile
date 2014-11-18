@@ -5,20 +5,20 @@
   "private": true,
   "contributors": [
     {
-    "name": "Guillaume Diallo Mulliez",
-    "email": "g.diallo.mulliez@gmail.com"
+      "name": "Guillaume Diallo Mulliez",
+      "email": "g.diallo.mulliez@gmail.com"
     },
     {
-    "name": "Etienne de Montalivet",
-    "email": "etienne.demontalivet@gmail.com"
+      "name": "Etienne de Montalivet",
+      "email": "etienne.demontalivet@gmail.com"
     },
     {
-    "name": "Woody Rousseau",
-    "email": "woody.a.rousseau@gmail.com"
+      "name": "Woody Rousseau",
+      "email": "woody.a.rousseau@gmail.com"
     },
     {
-    "name": "Sammy Teillet",
-    "email": "sammy.teillet@gmail.com"
+      "name": "Sammy Teillet",
+      "email": "sammy.teillet@gmail.com"
     }
   ],
   "repository": {
