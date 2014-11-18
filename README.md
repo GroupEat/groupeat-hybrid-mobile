@@ -1,5 +1,7 @@
 # GroupEat Hybrid Mobile Application
 
+[![Build Status](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile.svg?token=QRmpFsqtUNJgQHQ5YEdF&branch=master)](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile)
+
 ## Prerequisites
 
 ### Ruby and RubyGems
