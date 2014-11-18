@@ -9,6 +9,7 @@
 Ruby and RubyGems come preinstalled on Mac OSX.
 
 On Ubuntu, run
+
     sudo apt-get install ruby-full rubygems
 
 On Windows, check out [RubyInstaller](http://rubyinstaller.org/) and make sure you also install RubyGems.
