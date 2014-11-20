@@ -2,6 +2,8 @@
 
 [![Build Status](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile.svg?token=QRmpFsqtUNJgQHQ5YEdF&branch=master)](https://magnum.travis-ci.com/GroupEat/groupeat-hybrid-mobile)
 
+[![Build Status](https://api.shippable.com/projects/546a96c3d46935d5fbbddccc/badge?branchName=master)](https://app.shippable.com/projects/546a96c3d46935d5fbbddccc/builds/latest)
+
 ## Prerequisites
 
 ### Ruby and RubyGems

@@ -3,7 +3,25 @@ angular.module('groupeat.controllers', [])
 
 .controller('SideMenuController', function($scope, $ionicSideMenuDelegate, $state) {
 
-  $scope.toggleLeft = function() {
+    $scope.menu = [
+        {
+            'title'     : 'Comande en cours',
+            'iconName'  : 'ion-fork',
+            'action'    : 'onCommandTap()'
+        },
+        {
+            'title'     : 'Favoris',
+            'iconName'  : 'ion-heart',
+            'action'    : 'onFavoritesTap()'
+        },
+        {
+            'title'     : 'Réglages',
+            'iconName'  : 'ion-ios7-settings-strong',
+            'action'    : 'onSettingsTap()'
+        }
+  ];
+
+    $scope.toggleLeft = function() {
 		$ionicSideMenuDelegate.toggleLeft();
 	};
 

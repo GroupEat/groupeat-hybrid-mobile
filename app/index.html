@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="groupeat">
+
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -17,7 +18,7 @@
     <!-- endbuild -->
   </head>
 
-  <body ng-app="groupeat">
+  <body>
     <ion-side-menus ng-controller="SideMenuController">
 
       <!-- Center content -->
@@ -32,7 +33,11 @@
             <button on-tap="onNavBarMenuButtonTap()" class="button button-icon icon ion-navicon"></button>
           </ion-nav-buttons>
           <ion-nav-buttons side="right">
+<<<<<<< HEAD
             <button class="button button-icon icon ion-plus-round" side="right"></button>
+=======
+            <button on-tap="onNewCommandTap()" class="button-icon ion-plus-round light" side="right"></button>
+>>>>>>> 80c993764cdba54da4f07295731aeaa882ea1176
           </ion-nav-buttons>
         </ion-nav-bar>
 
@@ -55,17 +60,9 @@
         <!-- Left menu components -->
         <ion-content>
           <ion-list> <!-- menu -->
-            <ion-item on-tap="onCommandTap()" class="item item-icon-left">
-              <i class="icon ion-fork energized"></i>
-                Commande en cours
-            </ion-item>
-            <ion-item on-tap="onFavoritesTap()" class="item item-icon-left" href="#">
-              <i class="icon ion-heart energized"></i>
-                Favoris
-            </ion-item>
-            <ion-item on-tap="onSettingsTap()" class="item item-icon-left" href="#">
-              <i class="icon ion-ios7-settings-strong energized"></i>
-                Réglages
+            <ion-item ng-repeat="menuItem in menu" on-tap="{{menuItem.action}}" class="item item-icon-left">
+                <i class="icon {{menuItem.iconName}} energized"></i>
+                {{menuItem.title}}
             </ion-item>
           </ion-list>
          </ion-content>
