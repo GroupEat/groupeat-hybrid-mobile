@@ -30,9 +30,7 @@ angular.module('groupeat.controllers', [])
 
 .controller('CommandViewController', function($scope, $state) {
 
-  $scope.onNewCommandTap = function() {
-		$state.go('food-choice');
-	};
+  $scope.shownGroup = null;
 
 	/*
 	accordion list
@@ -45,8 +43,11 @@ angular.module('groupeat.controllers', [])
 		};
 
 		$scope.groups[i].items.push('infos sur le restaurant ' + i);
-
 	}
+
+  $scope.onNewCommandTap = function() {
+    $state.go('food-choice');
+  };
 
 	/*
 	* if given group is the selected group, deselect it
