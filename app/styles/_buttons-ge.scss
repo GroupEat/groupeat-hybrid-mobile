@@ -1,0 +1,14 @@
+@import "variables" ;
+
+
+#new-command-button {
+	height: 54px;
+	border-radius:10px;
+	background-color:$energized;
+}
+
+#new-command-text {
+	color:white;
+	font-family: "PT Sans";
+	font-weight: bold;
+}
