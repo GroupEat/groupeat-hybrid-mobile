@@ -5,7 +5,7 @@ angular.module('groupeat.controllers', [])
 
     $scope.menu = [
         {
-            'title'     : 'Comande en cours',
+            'title'     : 'Commande en cours',
             'iconName'  : 'ion-fork',
             'action'    : 'onCommandTap()'
         },

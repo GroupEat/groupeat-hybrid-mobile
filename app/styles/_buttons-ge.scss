@@ -5,10 +5,15 @@
 	height: 54px;
 	border-radius:10px;
 	background-color:$energized;
+	box-shadow:inset 0px 1px 0px 0px #f29c93;
+
 }
 
 #new-command-text {
 	color:white;
 	font-family: "PT Sans";
 	font-weight: bold;
+	text-shadow:1px 1px 0px #b23e35;
 }
+
+
