@@ -46,8 +46,9 @@ angular.module('groupeat.controllers', [])
 
 })
 
-.controller('CommandViewController', function($scope, $state) {
+.controller('CommandViewController', function($scope, $state, $ionicSideMenuDelegate) {
 
+	$ionicSideMenuDelegate.canDragContent(true);
   $scope.shownGroup = null;
 
 	/*
