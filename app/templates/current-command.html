@@ -1,9 +1,7 @@
 <ion-view ng-controller="CommandViewController" title="Commandes" >
     
 	<ion-content has-header="true">
-	
-    	<ion-scroll direction="y" style="width: 500px; height: 290px"> <!-- witdh and height have to be adapted to screen size -->
-        <ion-list>
+	        <ion-list>
           <div ng-repeat="group in groups">
             <ion-item class="item-stable"
                       ng-click="toggleGroup(group)"
@@ -19,15 +17,10 @@
             </ion-item>
           </div>
         </ion-list>
-      </ion-scroll>
          
-      <div>
-          <center>
-          <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-large button-footer">
-                  <text id="new-command-text"> Nouvelle Commande ! <text/>
-          </button>
-          </center>
-      </div>
 
 	</ion-content>
+  <div class="bar bar-footer bar-balanced">
+  <button class="button button-clear pull-right">Nouvelle commande</button>
+  </div>
 </ion-view>
