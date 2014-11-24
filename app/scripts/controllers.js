@@ -87,6 +87,10 @@ angular.module('groupeat.controllers', [])
 
 .controller('FirstPageViewController', function($scope, $state, $ionicSideMenuDelegate) {
 	 $ionicSideMenuDelegate.canDragContent(false) ;
+
+	 $scope.onAccessTap = function() {
+	 	$state.go('current-command');
+	 }
 	 
 })
 
