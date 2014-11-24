@@ -1,5 +1,5 @@
 // Your application styles go here
-@import "variables", "buttons-ge","first-page";
+@import "variables", "buttons-ge";
 
 .list {
   .item.item-accordion {
@@ -21,3 +21,5 @@
 
 // Importing ionic in order to possible override variables
 @import "../lib/ionic/scss/ionic";
+
+@import "first-page";

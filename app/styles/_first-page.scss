@@ -1,4 +1,4 @@
-#login-text-first-page{
+.login-text-first-page{
 	color:grey;
 	text-align:center;
 }
@@ -10,5 +10,27 @@
 	margin-left: auto;
     margin-right: auto;
     margin-bottom:10%;
-    margin-top:10%;
+    margin-top:7%;
+}
+
+.one-all-icon{
+	width:100%;
+	height:100%;
+	display:block;
+}
+
+.button-first-page-bottom{
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    border-radius:20px ;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-bottom-button-first-page{
+	font-family: "Calibri Light";
+}
+
+.border-less{
+	margin-top:0;
+	margin-bottom:0;
 }

@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat.services'])
+angular.module('groupeat', ['ionic','ngCordova', 'config', 'groupeat.controllers', 'groupeat.services'])
 .run(function($ionicPlatform, $state) {
 
   $ionicPlatform.ready(function() {

@@ -1,14 +1,31 @@
 <ion-view hide-nav-bar="true" ng-controller="FirstPageViewController" >
 	<ion-content>
 
-		<img src="../ressources/images/Logo-ge.png" alt="logo" id="logo-first-page" >
+		<img src="../ressources/images/logo-groupeat.png" alt="logo" id="logo-first-page" >
 
-		<h3 id="login-text-first-page"> LOGIN </h3>
+		<h3 class="login-text-first-page "> Login </h3>
 
-		<div class="list list-inset">
+			<div class="row">
+				<div class="col"></div>
+				<div class="col"></div>
+
+		    	<div class="col" ng-controller="GoogleLoginController">
+				<img ng-src="../ressources/images/logo-google-plus.png" class="one-all-icon"/>
+				</div>
+				<div class="col">
+				<img ng-src="../ressources/images/logo-facebook.png" class="one-all-icon"/>
+				</div>
+
+				<div class="col"></div>
+				<div class="col"></div>
+		 	</div>
+
+		
+		<div class="list list-inset border-less">
+			<h6 class="login-text-first-page"> OR </h6>
 		  <label class="item item-input">
 		    <span class="input-label">
-				<i class="icon-large ion-ios7-person-outline placeholder-icon"></i>
+				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
 		    </span>
 		    <input type="text" placeholder="Email">
 		  </label>
@@ -19,6 +36,19 @@
 		    </span>
 		    <input type="password" placeholder="Password">
 		  </label>
+
+		  <button class="button button-energized button-block">
+  		ACCESS
+		</button>
+
+		<div class = "row">
+                    <button class="button button-small button-light button-first-page-bottom" >
+                       <text class="text-bottom-button-first-page">&nbsp &nbsp SIGN UP &nbsp &nbsp </text> 
+                    </button>
+                    <button class="button button-small button-light button-first-page-bottom">
+                      <text class="text-bottom-button-first-page"> &nbsp &nbsp RESET PASSWORD &nbsp &nbsp </text>
+                    </button>
+        </div>
 		</div>
 
 	</ion-content>

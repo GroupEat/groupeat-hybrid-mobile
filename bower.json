@@ -4,7 +4,8 @@
   "dependencies": {
     "ionic": "v1.0.0-beta.13",
     "lodash": "v2.4.1",
-    "angular-lodash": "~0.1.2"
+    "angular-lodash": "~0.1.2",
+    "ngCordova":""
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
