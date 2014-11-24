@@ -83,4 +83,9 @@ angular.module('groupeat.controllers', [])
 		return $scope.shownGroup === group;
 	};
 
+})
+
+.controller('FirstPageViewController', function($scope, $state, $ionicSideMenuDelegate) {
+	 $ionicSideMenuDelegate.canDragContent(false) ;
+	 
 });

@@ -10,7 +10,7 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
 .run(function($ionicPlatform, $state) {
 
   $ionicPlatform.ready(function() {
-    $state.go('current-command'); // Initialize state at current command view
+    $state.go('first-page'); // Initialize state at current command view
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -25,6 +25,10 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
 
 .config(function($stateProvider) {
   $stateProvider
+  .state('first-page', {
+    url:'/first-page',
+    templateUrl: 'templates/first-page.html'
+  })
   .state('current-command', {
     url: '/current-command',
     templateUrl: 'templates/current-command.html'
