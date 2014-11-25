@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.directives', []);
+var moduleDirective = angular.module('groupeat.directives', []);
 
-module.directive('hideTabs', function($rootScope) {
+moduleDirective.directive('hideTabs', function($rootScope) {
 	return {
 		restrict: 'A',
 		link: function($scope) {
