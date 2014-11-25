@@ -5,7 +5,7 @@ www
 app/lib
 coverage
 platforms
-ressources
+resources
 plugins
 *.swp
 *.swo
