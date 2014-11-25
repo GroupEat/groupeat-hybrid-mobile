@@ -1,33 +1,29 @@
 <ion-view ng-controller="CommandViewController" title="Commandes" >
     
-	<ion-content has-header="true">
-	
-    	<ion-scroll direction="y" style="width: 500px; height: 290px"> <!-- witdh and height have to be adapted to screen size -->
-        <ion-list>
-          <div ng-repeat="group in groups">
-            <ion-item class="item-stable"
-                      ng-click="toggleGroup(group)"
-                      ng-class="{active: isGroupShown(group)}">
-<!--                 <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i> -->             
-              Restaurant {{group.name}}
-            </ion-item>
-            <ion-item class="item-accordion"
-                      ng-repeat="item in group.items"
-                      ng-show="isGroupShown(group)">
-                      <img width="54 pixels" src="img/logo-digenova.png">
-              {{item}}
-            </ion-item>
-          </div>
-        </ion-list>
-      </ion-scroll>
-         
-      <div>
-          <center>
-          <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-large button-footer">
+    <ion-content>
+
+          <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-full button-outline">
                   <text id="new-command-text"> Nouvelle Commande ! <text/>
           </button>
-          </center>
-      </div>
 
-	</ion-content>
+          <ion-list>
+            <div ng-repeat="group in groups">
+              <ion-item class="item-stable"
+                        ng-click="toggleGroup(group)"
+                        ng-class="{active: isGroupShown(group)}">
+                Restaurant {{group.name}}
+              </ion-item>
+              <ion-item class="item-accordion"
+                        ng-repeat="item in group.items"
+                        ng-show="isGroupShown(group)">
+                        <img width="54 pixels" src="img/logo-digenova.png">
+                {{item}}
+              </ion-item>
+            </div>
+          </ion-list>
+
+
+    </ion-content>
+
+
 </ion-view>
