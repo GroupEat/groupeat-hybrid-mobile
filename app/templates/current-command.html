@@ -7,7 +7,7 @@
                       ng-click="toggleGroup(group)"
                       ng-class="{active: isGroupShown(group)}">
 <!--                 <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i> -->             
-              Restaurant {{group.name}}
+              Commande {{group.name}}
             </ion-item>
             <ion-item class="item-accordion"
                       ng-repeat="item in group.items"
@@ -20,7 +20,10 @@
          
 
 	</ion-content>
-  <div class="bar bar-footer bar-balanced">
-  <button class="button button-clear pull-right">Nouvelle commande</button>
-  </div>
+<!--   <div class="bar bar-footer">
+  <button class="button button-full button-balanced">Nouvelle commande</button>
+  </div> -->
+  <ion-footer-bar class="bar-balanced">
+    <div class="button button-clear centered">Nouvelle commande</button>
+  </ion-footer-bar>
 </ion-view>
