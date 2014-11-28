@@ -70,14 +70,14 @@ angular.module('groupeat.controllers', [])
 			buttons: [{
 				text: 'Cancel',
 				type: 'button-outline button-energized',
-				onTouch: function() {
+				onTap: function() {
 					close();
 					$scope.tapChoice = 'Cancel';
 				}
 			}, {
 				text: 'Send',
 				type: 'button-energized',
-				onTouch: function() {
+				onTap: function() {
 					console.log($scope.user.email); // test console
 					return $scope.user.email;
 				}
