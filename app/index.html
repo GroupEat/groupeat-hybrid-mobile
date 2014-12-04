@@ -34,11 +34,11 @@
           Templates are in the /templates folder (but you could also
           have templates inline in this html file if you'd like).
         -->
-    <ion-nav-view animation="fade-in">
+    <ion-nav-view class="has-footer" animation="fade-in">
     </ion-nav-view>
 
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuController" class="tabs tabs-icon-top">
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuController" class="tabs tabs-energized tabs-icon-top">
 
       <a on-tap="onCommandTap()" class="tab-item">
         <i class="icon ion-fork"></i>

@@ -1,9 +1,10 @@
 <ion-view ng-controller="CommandViewController" title="Commandes" >
 
-    <ion-content>
-        <div id="new-command-button" on-tap="onNewCommandTap()" class="button button-full button-outline">
-                    <text id="new-command-text"> Nouvelle Commande ! </text>
-        </div>          
+    <ion-content class="has-footer">
+
+          <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-full button-outline">
+                  <text id="new-command-text"> Nouvelle Commande ! <text/>
+          </button>
 
           
             <div ng-repeat="group in groups">
