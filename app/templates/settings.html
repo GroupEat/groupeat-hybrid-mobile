@@ -1,18 +1,22 @@
 
-<ion-view title="Réglages" >
+<ion-view ng-controller="CommandViewController" title="Réglages" >
 
   <!-- view for test -->
 
   <ion-content has-header="true">
 
-    <div class="list">
+      <ul ng-repeat="setting in settings">
+        <li class="item item-stable">
+        Réglage {{setting.name}}
+              <label class="toggle toggle-assertive">
+           <input type="checkbox">
+           <div class="track">
+             <div class="handle"></div>
+           </div>
+         </label>
+        </li>
+      </ul>
 
-      <a class="item item-avatar" href="#">
-        <img src="venkman.jpg">
-        <h2>reglages man !</h2>
-        <p>Back off, man. I'm a scientist.</p>
-      </a>
 
-    </div>
   </ion-content>
 </ion-view>

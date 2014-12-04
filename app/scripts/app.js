@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('groupeat', ['ionic','ngCordova', 'config', 'groupeat.controllers', 'groupeat.services'])
+angular.module('groupeat', ['ionic','ngCordova', 'config', 'groupeat.controllers', 'groupeat.services','groupeat.directives'])
 .run(function($ionicPlatform, $state) {
 
   $ionicPlatform.ready(function() {
@@ -32,10 +32,6 @@ angular.module('groupeat', ['ionic','ngCordova', 'config', 'groupeat.controllers
   .state('current-command', {
     url: '/current-command',
     templateUrl: 'templates/current-command.html'
-  })
-  .state('favorites', {
-    url: '/favorites',
-    templateUrl: 'templates/favorites.html'
   })
   .state('food-choice', {
     url: '/food-choice',

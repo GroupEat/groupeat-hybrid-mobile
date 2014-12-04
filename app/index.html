@@ -18,53 +18,42 @@
     <!-- endbuild -->
   </head>
 
+<!-- ---------------------------- -->
   <body>
-    <ion-side-menus ng-controller="SideMenuController">
 
-      <!-- Center content -->
-      <ion-side-menu-content>
         <!--
           The nav bar that will be updated as we navigate between views
           Additional attributes set its look, nav-bar animation and icons
           Icons provided by Ionicons: http://ionicons.com/
         -->
-        <ion-nav-bar class="bar-energized bar-header">
-          <ion-nav-buttons side="left">
-            <button on-tap="onNavBarMenuButtonTap()" class="button button-icon icon ion-navicon-round"></button>
-          </ion-nav-buttons>
-          <ion-nav-buttons side="right">
-            <button on-tap="onNewCommandTap()" class="button-icon icon ion-plus-round light" side="right"></button>
-          </ion-nav-buttons>
-        </ion-nav-bar>
+    <ion-nav-bar class="bar-energized bar-header">
+    </ion-nav-bar>
 
         <!--
           The views will be rendered in the <nav-view> directive below
           Templates are in the /templates folder (but you could also
           have templates inline in this html file if you'd like).
         -->
-        <ion-nav-view animation="fade-in"></ion-nav-view>
+    <ion-nav-view animation="fade-in">
+    </ion-nav-view>
 
-      </ion-side-menu-content>
+
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuController" class="tabs tabs-icon-top">
+
+      <a on-tap="onCommandTap()" class="tab-item">
+        <i class="icon ion-fork"></i>
+        restaurants
+      </a>
+
+      <a on-tap="onSettingsTap()" class="tab-item">
+        <i class="icon ion-gear-a"></i>
+        Réglages
+      </a>
+    </div>
 
 
-      <!-- Left menu -->
-      <ion-side-menu side="left">
-        <ion-header-bar class="bar-assertive">
-          <h1 class="title">Menu</h1>
-        </ion-header-bar>
 
-        <!-- Left menu components -->
-        <ion-content>
-          <ion-list> <!-- menu -->
-            <ion-item ng-repeat="menuItem in menu" on-tap="{{menuItem.action}}" class="item item-icon-left">
-                <i class="icon {{menuItem.iconName}} energized"></i>
-                {{menuItem.title}}
-            </ion-item>
-          </ion-list>
-         </ion-content>
-
-      </ion-side-menu>
-    </ion-side-menus>
+<!-- ------------------------------------------- -->
 
     <!-- build:js scripts/vendor.js -->
     <!-- <script src="vendor/someContribJs.js"></script> -->
@@ -91,6 +80,8 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers.js"></script>
         <script src="scripts/services.js"></script>
+        <script src="scripts/directives.js"></script>
+
         <!-- endbuild -->
 </body>
 </html>
