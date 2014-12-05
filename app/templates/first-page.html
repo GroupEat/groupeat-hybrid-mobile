@@ -1,9 +1,34 @@
 <ion-view hide-nav-bar="true" hide-tabs>
 	<ion-content ng-controller="FirstPageViewController">
-
+		<div class="padding-vertical">
 		<img src="../images/logo-groupeat.png" alt="logo" id="logo-first-page" >
 
-		<h3 class="login-text-first-page "> Login </h3>
+		<h2 class="login-text-first-page " style="text-align: center"> Commander en groupe </h2>
+		<h2 class="login-text-first-page " style="text-align: center"> Manger moins cher </h2>
+		</div>
+
+		<div class="padding">
+          <button class="button button-block button-positive" type="submit">
+          	<div class="row ">
+			  <div class="col col-10"><i class="ion-social-facebook"></i></div>
+			  <div class="col"  style="text-align: left"><b>Connection avec Facebook</b>
+			</div>
+          </button>
+          <button class="button button-block button-assertive" type="submit">
+          	<div class="row">
+			  <div class="col col-10"><i class="ion-social-google"></i></div>
+			  <div class="col"  style="text-align: left"><b>Connection avec Google</b>
+			</div>
+          </button>
+          <button on-touch="onAccessTap()" class="button button-block button-dark" type="submit">
+          	<div class="row">
+			  <div class="col col-10"><i class="ion-email"></i></div>
+			  <div class="col"  style="text-align: left"><b>Connection par Email</b>
+			</div>
+          </button>
+        </div>
+
+<!-- 		<h3 class="login-text-first-page "> Login </h3>
 
 			<div class="row">
 				<div class="col"></div>
@@ -49,7 +74,7 @@
                       <text class="text-bottom-button-first-page"> &nbsp &nbsp RESET PASSWORD &nbsp &nbsp </text>
                     </button>
         </div>
-		</div>
+		</div> -->
 
 	</ion-content>
 </ion-view>
