@@ -3,6 +3,19 @@ angular.module('groupeat.controllers', [])
 
 .controller('BottomTabsMenuController', function($scope, $state) {
 
+	$scope.bottomTab = [
+		{
+			'title'     : 'Commandes',
+			'iconName'  : 'ion-fork',
+			'action'    : 'onCommandTap()'
+		},
+		{
+			'title'     : 'Réglages',
+			'iconName'  : 'ion-gear-a',
+			'action'    : 'onSettingsTap()'
+		}
+	];
+
 	$scope.onCommandTap = function() {
 		$state.go('current-command');
 	};
@@ -122,10 +135,10 @@ angular.module('groupeat.controllers', [])
 						okType: 'button-energized',
 					});
 					$timeout(function() {
-					      alertInvalidEmail.close(); //close the popup after 2 seconds 
+					      alertInvalidEmail.close(); //close the popup after 2 seconds
 							}, 1000);
 				}
-				
+
 				else {
 					var alertPopup = $ionicPopup.alert({ // info to user : email sent
 						title: ' <i> Email sent to </i>' +  $scope.user.email  + '.',
@@ -133,7 +146,7 @@ angular.module('groupeat.controllers', [])
 						okType: 'button-energized',
 					});
 					$timeout(function() {
-					      alertPopup.close(); //close the popup after 3 seconds 
+					      alertPopup.close(); //close the popup after 3 seconds
 							}, 3000);
 				}
 			}

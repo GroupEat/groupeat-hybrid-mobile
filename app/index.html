@@ -26,7 +26,11 @@
           Additional attributes set its look, nav-bar animation and icons
           Icons provided by Ionicons: http://ionicons.com/
         -->
+
     <ion-nav-bar class="bar-energized bar-header">
+        <ion-nav-back-button class='button button-clear'>
+            Retour
+        </ion-nav-back-button>
     </ion-nav-bar>
 
         <!--
@@ -40,14 +44,9 @@
 
     <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuController" class="tabs tabs-energized tabs-icon-top">
 
-      <a on-tap="onCommandTap()" class="tab-item">
-        <i class="icon ion-fork"></i>
-        restaurants
-      </a>
-
-      <a on-tap="onSettingsTap()" class="tab-item">
-        <i class="icon ion-gear-a"></i>
-        Réglages
+      <a class="tab-item" ng-repeat="tabItem in bottomTab" on-tap="{{tabItem.action}}">
+          <i class="icon {{tabItem.iconName}}"></i>
+          {{tabItem.title}}
       </a>
     </div>
 

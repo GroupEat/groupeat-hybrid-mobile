@@ -1,4 +1,4 @@
-<ion-view ng-controller="CommandViewController" title="Commandes" >
+<ion-view ng-controller="CommandViewController" title="Commandes" hide-back-button="true" >
 
     <ion-content class="has-footer">
 
@@ -6,16 +6,16 @@
                   <text id="new-command-text"> Nouvelle Commande ! <text/>
           </button>
 
-          
+
             <div ng-repeat="group in groups">
               <div class="card">
                 <div class="item item-divider">
                   <i class="ion-clock assertive"></i>
-                  <b>5 min</b> 
+                  <b>5 min</b>
                   <i class="ion-pizza assertive"></i>
-                  <b>Pizza</b> 
+                  <b>Pizza</b>
                   <i class="ion-bag assertive"></i>
-                  <b>25€ (18%)</b> 
+                  <b>25€ (18%)</b>
                 </div>
                 <div class="item item-text-wrap">
                   <h2>Pizzeria : Di Genova</h2>
@@ -24,7 +24,7 @@
                 </div>
                 <a class="item item-icon-left assertive" on-tap="onNewCommandTap()">
                   <i class="icon ion-arrow-right-a"></i>
-                  Commander ! 
+                  Commander !
                 </a>
               </div>
             </div>
