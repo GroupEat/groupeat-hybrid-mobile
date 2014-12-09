@@ -66,7 +66,14 @@ angular.module('groupeat.controllers', [])
 
 .controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout) {
 
-	$scope.onAccessTap = function() {
+	$scope.ShowLoginSignUpButtons = true ;
+
+	$scope.onLoginTouch = function() {
+		$scope.ShowLoginSignUpButtons = false;
+		$scope.ShowLoginView = true ;
+	};
+
+	$scope.onAccessTouch = function() {
 		$state.go('current-command');
 	};
 
