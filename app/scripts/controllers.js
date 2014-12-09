@@ -68,9 +68,19 @@ angular.module('groupeat.controllers', [])
 
 	$scope.ShowLoginSignUpButtons = true ;
 
-	$scope.onLoginTouch = function() {
+	$scope.onLoginViewTouch = function() {
 		$scope.ShowLoginSignUpButtons = false;
 		$scope.ShowLoginView = true ;
+	};
+
+	$scope.onLoginBackButtonTouch = function() {
+		$scope.ShowLoginSignUpButtons = true;
+		$scope.ShowLoginView = false ;
+	};
+
+	$scope.onSignUpViewTouch = function() {
+		$scope.ShowLoginSignUpButtons = false;
+		$scope.ShowSignUpView = true ;
 	};
 
 	$scope.onAccessTouch = function() {

@@ -30,14 +30,25 @@
 	border-radius: 0 !important;
 }
 
-.forms-with-one-button{
-	position : absolute;
-    bottom : $button-height + 15px;
+.login-form{
+	position : fixed;
+    bottom : $button-height + 10px;
     margin-left : 0;
     width : 100%;
    	border-radius: 0 !important;
 
 }
+
+#sign-up-form{
+	position:absolute;
+	bottom: $button-height + 10px;
+	top : 25%;
+	display:block;
+	margin-left: 0;
+	border-radius: 0;
+    width : 100%;
+}
+
 
 .loginViewButtons{
 	display : block;

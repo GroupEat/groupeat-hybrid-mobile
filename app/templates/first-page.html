@@ -1,28 +1,27 @@
 <ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
 
-<div class="padding-vertical">
+<div ng-animate="'logo-first-page'" class="padding-vertical">
 	<img src="../images/logo-groupeat.png" alt="logo" id="logo-first-page" >
 </div>
 
 <div ng-show="ShowLoginSignUpButtons">
-	<button on-touch="onLoginTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
+	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
 
-	<button on-touch="onAccessTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
 	</button>
 </div>
 
-<div ng-show="ShowLoginView">
 
-	<div ng-show="ShowLoginView" class="list list-inset forms-with-one-button">
+	<div ng-show="ShowLoginView" class="list list-inset login-form">
 		
 		<div class="row">
 
-			<button class="button button-small button-clear button-assertive loginViewButtons"> Reset Password </button>
-			<button id="loginBackButton" class="button button-small button-assertive button-clear loginViewButtons"> Back </button>
+			<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-assertive loginViewButtons"> Reset Password </button>
+			<button on-touch="onLoginBackButtonTouch()" id="loginBackButton" class="button button-small button-assertive button-clear loginViewButtons"> Back </button>
 		</div>
 		<label class="item item-input">
-			<input type="text" placeholder="E-mail">
+			<input type="email" placeholder="E-mail">
 		</label>
 		<label class="item item-input">
 			<input type="password" placeholder="Password">
@@ -31,15 +30,50 @@
 		
 
 	</div>
-</div>
+
 <div ng-show="ShowLoginView">
 
 	<button on-touch="onAccessTouch()" class="button button-bottom button-full button-energized text-button-first-page">LOGIN
 	</button>
 </div>
 
+<ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="email" placeholder="Last Name">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="email" placeholder="First Name">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="email" placeholder="E-mail">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" placeholder="Phone number">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" placeholder="Adress">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" placeholder="Password">
+	</label>
+	<label class="item item-input">
+		<i class="icon ion-search placeholder-icon"></i>
+		<input type="text" placeholder="Confirm Password">
+	</label>
+  
+</ion-scroll>
 
+<div ng-show="ShowSignUpView">
+	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	</button>
 
+</div>
 
 
 </ion-view>
