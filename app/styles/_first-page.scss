@@ -57,9 +57,19 @@
 	margin-right:auto;
 }
 
-
-
 .text-button-first-page{
 	font-family : "Aventura";
 	src: url('../ressources/fonts/Aventura-Bold.otf') format('opentype');
+}
+
+.login-view-back-button {
+	margin-top:0;
+	margin-left:0;
+	position : absolute;
+	top : 5px;
+	left: 5px;
+}
+
+.assertive-color {
+	color: $assertive;
 }

@@ -4,6 +4,9 @@
 	<img src="../images/logo-groupeat.png" alt="logo" id="logo-first-page" >
 </div>
 
+
+
+
 <div ng-show="ShowLoginSignUpButtons">
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
@@ -13,29 +16,27 @@
 </div>
 
 
-	<div ng-show="ShowLoginView" class="list list-inset login-form">
-		
-		<div class="row">
+<div ng-show="ShowLoginView" class="list list-inset login-form">
 
-			<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-assertive loginViewButtons"> Reset Password </button>
-			<button on-touch="onLoginBackButtonTouch()" id="loginBackButton" class="button button-small button-assertive button-clear loginViewButtons"> Back </button>
-		</div>
-		<label class="item item-input">
-			<input type="email" placeholder="E-mail">
-		</label>
-		<label class="item item-input">
-			<input type="password" placeholder="Password">
-		</label>
 
-		
+	<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-assertive loginViewButtons"> Reset Password </button>
 
-	</div>
+	<label class="item item-input">
+		<input type="email" placeholder="E-mail">
+	</label>
+	<label class="item item-input">
+		<input type="password" placeholder="Password">
+	</label>
+</div>
 
 <div ng-show="ShowLoginView">
 
 	<button on-touch="onAccessTouch()" class="button button-bottom button-full button-energized text-button-first-page">LOGIN
 	</button>
 </div>
+
+
+
 
 <ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
 	<label class="item item-input">
@@ -66,7 +67,7 @@
 		<i class="icon ion-search placeholder-icon"></i>
 		<input type="text" placeholder="Confirm Password">
 	</label>
-  
+
 </ion-scroll>
 
 <div ng-show="ShowSignUpView">
@@ -74,6 +75,12 @@
 	</button>
 
 </div>
+
+
+
+<button ng-show="ShowLoginBackButton" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+	<a class="assertive-color"> Retour </a>
+</button>
 
 
 </ion-view>
