@@ -33,13 +33,13 @@ angular.module('groupeat.controllers', [])
 	settings list
 	*/
 	$scope.settings = [];
-	for (var i=0; i<4; i++) {
-		$scope.settings[i] = {
-			name: i,
+	for (var j=0; j<4; j++) {
+		$scope.settings[j] = {
+			name: j,
 			items: []
 		};
 
-		$scope.groups[i].items.push('Réglage ' + i);
+		$scope.groups[j].items.push('Réglage ' + j);
 	}
 
 	$scope.onNewCommandTap = function() {
@@ -120,19 +120,6 @@ angular.module('groupeat.controllers', [])
 							}, 3000);
 				}
 			}
-		});
-	};
-
-})
-
-
-.controller('GoogleLoginController', function($scope, $cordovaOauth) {
-
-	$scope.googleLogin = function() {
-		$cordovaOauth.google('CLIENT_ID_HERE', ['https://www.googleapis.com/auth/urlshortener', 'https://www.googleapis.com/auth/userinfo.email']).then(function(result) {
-			console.log(JSON.stringify(result));
-		}, function(error) {
-			console.log(error);
 		});
 	};
 

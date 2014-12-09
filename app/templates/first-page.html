@@ -1,80 +1,14 @@
-<ion-view hide-nav-bar="true" hide-tabs>
-	<ion-content ng-controller="FirstPageViewController">
+<ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
+		
 		<div class="padding-vertical">
 		<img src="../images/logo-groupeat.png" alt="logo" id="logo-first-page" >
-
-		<h2 class="login-text-first-page " style="text-align: center"> Commander en groupe </h2>
-		<h2 class="login-text-first-page " style="text-align: center"> Manger moins cher </h2>
 		</div>
 
-		<div class="padding">
-          <button class="button button-block button-positive" type="submit">
-          	<div class="row ">
-			  <div class="col col-10"><i class="ion-social-facebook"></i></div>
-			  <div class="col"  style="text-align: left"><b>Connection avec Facebook</b>
-			</div>
-          </button>
-          <button class="button button-block button-assertive" type="submit">
-          	<div class="row">
-			  <div class="col col-10"><i class="ion-social-google"></i></div>
-			  <div class="col"  style="text-align: left"><b>Connection avec Google</b>
-			</div>
-          </button>
-          <button on-touch="onAccessTap()" class="button button-block button-dark" type="submit">
-          	<div class="row">
-			  <div class="col col-10"><i class="ion-email"></i></div>
-			  <div class="col"  style="text-align: left"><b>Connection par Email</b>
-			</div>
-          </button>
-        </div>
 
-<!-- 		<h3 class="login-text-first-page "> Login </h3>
+	          <button on-touch="onAccessTap()" class="button button-full button-assertive">SIGN UP</button>
 
-			<div class="row">
-				<div class="col"></div>
-				<div class="col"></div>
+	          <button on-touch="onAccessTap()" class="button button-full button-energized">LOGIN</button>
 
-		    	<div class="col" ng-controller="GoogleLoginController">
-				<img ng-src="../images/logo-google-plus.png" class="one-all-icon"/>
-				</div>
-				<div class="col">
-				<img ng-src="../images/logo-facebook.png" class="one-all-icon"/>
-				</div>
 
-				<div class="col"></div>
-				<div class="col"></div>
-		 	</div>
 
-		
-		<div class="list list-inset border-less">
-			<h6 class="login-text-first-page"> OR </h6>
-		  <label class="item item-input">
-		    <span class="input-label">
-				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		    </span>
-		    <input type="text" placeholder="Email">
-		  </label>
-
-		  <label class="item item-input">
-		    <span class="input-label">
-		    	<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
-		    </span>
-		    <input type="password" placeholder="Password">
-		  </label>
-
-		  <button on-touch="onAccessTap()" class="button button-energized button-block">
-  		ACCESS
-		</button>
-
-		<div class = "row">
-                    <button class="button button-small button-light button-first-page-bottom" >
-                       <text class="text-bottom-button-first-page">&nbsp &nbsp SIGN UP &nbsp &nbsp </text> 
-                    </button>
-                    <button on-touch="showRestPasswordPopup()" class="button button-small button-light button-first-page-bottom">
-                      <text class="text-bottom-button-first-page"> &nbsp &nbsp RESET PASSWORD &nbsp &nbsp </text>
-                    </button>
-        </div>
-		</div> -->
-
-	</ion-content>
 </ion-view>
