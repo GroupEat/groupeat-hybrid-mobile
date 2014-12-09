@@ -40,6 +40,8 @@ Then run the following command to install the needed dependencies
     npm install
     bower install
     grunt serve
+    
+You might also need to install the fonts used by our app. To do that, browse into app/fonts and double click on each .otf and .ttf files to install them on your machine.
 
 ## Before Making a Commit
 
