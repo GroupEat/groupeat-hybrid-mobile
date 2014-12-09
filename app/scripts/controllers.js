@@ -5,7 +5,7 @@ angular.module('groupeat.controllers', [])
 
 	$scope.bottomTab = [
 		{
-			'title'     : 'Restaurants',
+			'title'     : 'Commandes',
 			'iconName'  : 'ion-fork',
 			'action'    : 'onCommandTap()'
 		},
