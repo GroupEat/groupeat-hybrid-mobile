@@ -45,7 +45,12 @@ You might also need to install the fonts used by our app. To do that, browse int
 
 ## Before Making a Commit
 
-Always run the following command before commiting, to make sure the code does not include
-parse errors or warnings, as well as to be sure unit tests pass.
+Always run the following commands before commiting :
 
     grunt
+ 
+ To make sure the code does not include parse errors or warnings, as well as to be sure unit tests pass.
+ 
+    ionic build android (ios) ; ionic emulate android (ios)
+    
+ To see what really happens on a real emulator.
