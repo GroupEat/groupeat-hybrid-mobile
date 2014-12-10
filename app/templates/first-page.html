@@ -1,6 +1,6 @@
 <ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
 
-<div ng-animate="'logo-first-page'" class="padding-vertical">
+<div class="padding-vertical">
 	<img src="../images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
 </div>
 
@@ -18,9 +18,9 @@
 
 <div ng-show="ShowLoginView" class="list list-inset login-form">
 
-
-	<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized loginViewButtons"> Reset Password </button>
-
+	<div class="loginViewButtons"> 
+		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> Reset Password </button>
+	</div>
 	<label class="item item-input">
 		<input type="email" placeholder="E-mail">
 	</label>
@@ -41,11 +41,11 @@
 <ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
 	<label class="item item-input">
 		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input type="email" placeholder="Last Name">
+		<input type="text" placeholder="Last Name">
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input type="email" placeholder="First Name">
+		<input type="text" placeholder="First Name">
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-email-outline placeholder-icon"></i>
@@ -53,11 +53,11 @@
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
-		<input type="text" placeholder="Phone number">
+		<input type="tel" placeholder="Phone number">
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-		<input type="text" placeholder="Adress">
+		<input type="text" placeholder="Address">
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
