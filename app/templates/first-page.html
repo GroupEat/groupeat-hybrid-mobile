@@ -19,7 +19,7 @@
 <div ng-show="ShowLoginView" class="list list-inset login-form">
 
 
-	<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-assertive loginViewButtons"> Reset Password </button>
+	<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized loginViewButtons"> Reset Password </button>
 
 	<label class="item item-input">
 		<input type="email" placeholder="E-mail">
@@ -77,9 +77,14 @@
 </div>
 
 
+<!-- Pas beau, duplication pour juste un changement de couleur, mais suffisant pour MVP pour le moment / A changer -->
 
-<button ng-show="ShowLoginBackButton" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
-	<a class="assertive-color"> Retour </a>
+<button ng-show="ShowLoginBackButtonEnergized" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+	 Retour 
+</button>
+
+<button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+	 Retour
 </button>
 
 
