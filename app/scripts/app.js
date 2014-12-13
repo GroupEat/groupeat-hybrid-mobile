@@ -7,10 +7,9 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat.services','groupeat.directives'])
-.run(function($ionicPlatform, $state) {
+.run(function($ionicPlatform) {
 
   $ionicPlatform.ready(function() {
-    $state.go('first-page'); // Initialize state at current command view
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -23,7 +22,7 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
   });
 })
 
-.config(function($stateProvider) {
+.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('first-page', {
     url:'/first-page',
@@ -41,4 +40,8 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
     url: '/settings',
     templateUrl: 'templates/settings.html'
   });
+
+
+  $urlRouterProvider.otherwise('/first-page');
+
 });

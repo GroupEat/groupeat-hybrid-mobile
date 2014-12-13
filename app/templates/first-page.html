@@ -1,91 +1,19 @@
 <ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
 
-<div class="padding-vertical">
+<div class="logoholder bg-grey">
 	<img src="../images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
 </div>
 
 
 
 
-<div ng-show="ShowLoginSignUpButtons">
-	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
+<div>
+	<button on-touch="openLoginModal()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
 
-	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	<button on-touch="openSignupModal()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
 	</button>
 </div>
-
-
-<div ng-show="ShowLoginView" class="list list-inset login-form">
-
-	<div class="loginViewButtons"> 
-		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> Reset Password </button>
-	</div>
-	<label class="item item-input">
-		<input type="email" placeholder="E-mail">
-	</label>
-	<label class="item item-input">
-		<input type="password" placeholder="Password">
-	</label>
-</div>
-
-<div ng-show="ShowLoginView">
-
-	<button on-touch="onAccessTouch()" class="button button-bottom button-full button-energized text-button-first-page">LOGIN
-	</button>
-</div>
-
-
-
-
-<ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
-	<label class="item item-input">
-		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input type="text" placeholder="Last Name">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input type="text" placeholder="First Name">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-email-outline placeholder-icon"></i>
-		<input type="email" placeholder="E-mail">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
-		<input type="tel" placeholder="Phone number">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-		<input type="text" placeholder="Address">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
-		<input type="password" placeholder="Password">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
-		<input type="password" placeholder="Confirm Password">
-	</label>
-
-</ion-scroll>
-
-<div ng-show="ShowSignUpView">
-	<button on-touch="onAccessTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
-	</button>
-
-</div>
-
-
-<!-- Pas beau, duplication pour juste un changement de couleur, mais suffisant pour MVP pour le moment / A changer -->
-
-<button ng-show="ShowLoginBackButtonEnergized" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
-	 Retour 
-</button>
-
-<button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
-	 Retour
-</button>
 
 
 </ion-view>

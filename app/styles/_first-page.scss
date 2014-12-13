@@ -5,12 +5,50 @@
 
 #logo-first-page{
 	width:60% ;
-	height:60% ;
-	display:block;
-	margin-left: auto;
-    margin-right: auto;
-    margin-top:20%;
 }
+
+.logoholder{
+  padding: 40px 0;
+  text-align: center;
+}
+
+.auth h3 {
+                color: #FFF;
+                font-size: 2.5em;
+                text-align: left;
+                font-weight: 300;
+                letter-spacing: 0.04em;
+                width: 100%;
+                display: inline-block;
+                font-family : "Aventura";
+				src: url('../ressources/fonts/Aventura-Bold.otf') format('opentype');
+				text-transform: uppercase;
+        }
+
+        .auth .auth-form {
+                display: inline-block;
+                margin: 20px auto;
+                width: 100%;
+        }
+
+        .auth .auth-form input {
+                font-size: 16px;
+                margin-bottom: 20px;
+                background-color: transparent;
+                border: none;
+                border-radius: none !important;
+                height: 40px;
+                border-bottom: 1px solid #FFF;
+                color: #FFF;
+        }
+        .auth input::-webkit-input-placeholder {
+    			color : rgba(255,255,255,.7)
+    	}
+    	.auth button {
+    		background-color: rgba(255,255,255,.7) !important;
+    		border-radius: 4px;
+    	}
+
 
 .button-bottom {
 	position : absolute;
@@ -30,32 +68,6 @@
 	border-radius: 0 !important;
 }
 
-.login-form{
-	position : fixed;
-    bottom : $button-height + 10px;
-    margin-left : 0;
-    width : 100%;
-   	border-radius: 0 !important;
-
-}
-
-#sign-up-form{
-	position:absolute;
-	bottom: $button-height + 10px;
-	top : 25%;
-	display:block;
-	margin-left: 0;
-	border-radius: 0;
-    width : 100%;
-}
-
-
-.loginViewButtons{
-	display : block;
-	text-align: center;
-	opacity : 0.7 ;
-
-}
 
 .text-button-first-page{
 	font-family : "Aventura";

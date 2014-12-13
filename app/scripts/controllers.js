@@ -77,87 +77,40 @@ angular.module('groupeat.controllers', [])
 
 })
 
-.controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout) {
+.controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout, $ionicModal) {
 
-	$scope.ShowLoginSignUpButtons = true ;
+	$ionicModal.fromTemplateUrl('templates/modal/login.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	})
+	.then(function(modal) {
+		$scope.loginModal = modal;
+	});
 
-	$scope.onLoginViewTouch = function() {
-		$scope.ShowLoginSignUpButtons = false;
-		$scope.ShowLoginView = true ;
-		$scope.ShowLoginBackButtonEnergized = true ;
-		$scope.ShowLoginBackButtonAssertive = false ;
+	$scope.openLoginModal = function() {
+		$scope.loginModal.show();
 	};
-
-	$scope.onLoginBackButtonTouch = function() {
-		$scope.ShowLoginSignUpButtons = true;
-		$scope.ShowLoginView = false ;
-		$scope.ShowSignUpView = false ;
-		$scope.ShowLoginBackButtonEnergized = false ;
-		$scope.ShowLoginBackButtonAssertive = false ;
+	$scope.closeLoginModal = function() {
+		$scope.loginModal.hide();
 	};
-
-	$scope.onSignUpViewTouch = function() {
-		$scope.ShowLoginSignUpButtons = false;
-		$scope.ShowSignUpView = true ;
-		$scope.ShowLoginBackButtonEnergized = false ;
-		$scope.ShowLoginBackButtonAssertive = true ;
-	};
-
-	$scope.onAccessTouch = function() {
+	$scope.login = function() {
+		$scope.loginModal.hide();
 		$state.go('current-command');
 	};
 
-	$scope.showRestPasswordPopup = function() {
-		$scope.user = {}; // data du user
-		$scope.tapChoice = {} ; // quel choix fait sur la popup : cancel ou send ?
+	$ionicModal.fromTemplateUrl('templates/modal/signup.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	})
+	.then(function(modal) {
+		$scope.signupModal = modal;
+	});
 
-
-		$ionicPopup.show({
-			title : '<h4 class="login-text-first-page border-less"> Reset Password </h4>' ,
-			template: '<input type="email" ng-model="user.email">', // écrit ici pour empêcher une bar blanche ignoble
-			templateUrl: 'templates/resetPasswordPopup.html',
-			scope: $scope,
-			buttons: [{
-				text: 'Cancel',
-				type: 'button-outline button-energized',
-				onTap: function() {
-					close();
-					$scope.tapChoice = 'Cancel';
-				}
-			}, {
-				text: 'Send',
-				type: 'button-energized',
-				onTap: function() {
-					console.log($scope.user.email); // test console
-					return $scope.user.email;
-				}
-			}]
-		}).then(function() {
-			if ($scope.tapChoice === 'Cancel') {} // la popup se ferme sans rien faire d'autre
-				else {
-				if($scope.user.email === undefined) { // alert : email invalid
-					var alertInvalidEmail = $ionicPopup.alert({
-						title: 'Invalid email.',
-						okText: 'OK',
-						okType: 'button-energized',
-					});
-					$timeout(function() {
-					      alertInvalidEmail.close(); //close the popup after 2 seconds
-							}, 1000);
-				}
-
-				else {
-					var alertPopup = $ionicPopup.alert({ // info to user : email sent
-						title: ' <i> Email sent to </i>' +  $scope.user.email  + '.',
-						okText: 'OK',
-						okType: 'button-energized',
-					});
-					$timeout(function() {
-					      alertPopup.close(); //close the popup after 3 seconds
-							}, 3000);
-				}
-			}
-		});
+	$scope.openSignupModal = function() {
+		$scope.signupModal.show();
+	};
+	$scope.closeSignupModal = function() {
+		$scope.signupModal.hide();
 	};
 
 });
