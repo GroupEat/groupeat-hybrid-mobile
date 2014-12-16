@@ -1,0 +1,24 @@
+<ion-modal-view>
+  <ion-header-bar class="bar-assertive"> <h3 class="title">Sign up</h3>
+    <ion-header-buttons side="left">
+      <button ng-click="closeSignUpModal()" class="button button-icon icon ion-ios7-close-empty"></button>
+    </ion-header-buttons>
+  </ion-header-bar>
+  <ion-content has-header-bar="true" class="center auth bg-assertive">
+
+          <div class="auth-form border-less">
+                    <input type="text" ng-model="userSignup.lastname" name="lastname" placeholder="Last Name">
+                    <input type="text" ng-model="userSignup.firstname" name="firstname" placeholder="First Name">
+                    <input type="email" ng-model="userSignup.email" name="email" placeholder="Email">
+                    <input type="tel" ng-model="userSignup.phonenumber" name="tel" placeholder="Phone Number">
+                    <input type="text" ng-model="userSignup.address" name="address" placeholder="Address">
+                    <input type="password" ng-model="userSignup.password" name="password" placeholder="Password">
+                    <input type="password" ng-model="userSignup.passwordConfirmed" name="passwordconfirmed" placeholder="Confirm Password">
+                    
+                    
+                    <div class="text-right">
+                            <button ng-click="onSignUpTouch()" class="button button-outline button-assertive">Sign Up</button>
+                    </div>
+           </div>
+  </ion-content>
+</ion-modal-view>

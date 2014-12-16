@@ -77,7 +77,7 @@ angular.module('groupeat.controllers', [])
 
 })
 
-.controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout) {
+.controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout, $ionicModal) {
 
 	$scope.ShowLoginSignUpButtons = true ;
 
@@ -86,6 +86,7 @@ angular.module('groupeat.controllers', [])
 		$scope.ShowLoginView = true ;
 		$scope.ShowLoginBackButtonEnergized = true ;
 		$scope.ShowLoginBackButtonAssertive = false ;
+		$scope.userLogin = {};
 	};
 
 	$scope.onLoginBackButtonTouch = function() {
@@ -106,13 +107,13 @@ angular.module('groupeat.controllers', [])
 	};
 
 	$scope.onLoginTouch = function() {
-		$scope.userLogin = {};
 
 		// test de base de donnée backend à faire
 		if (($scope.userLogin.email === 'groupeat@groupeat.fr') && ($scope.userLogin.password === 'groupeat')) {
 			$state.go('current-command');
 		}
 		else {
+			console.log($scope.userLogin.email); // test console
 			var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
 				title: 'Mauvaise combinaison e-mail/mot de passe. <br> Essaie groupeat@groupeat.fr et mdp : groupeat.',
 				okText: 'OK',
@@ -124,8 +125,28 @@ angular.module('groupeat.controllers', [])
 		}
 	};
 
+	$ionicModal.fromTemplateUrl('templates/modal/signUpModal.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	})
+	.then(function(modal) {
+		$scope.signUpModal = modal;
+	});
+
+	$scope.openSignUpModal = function() {
+		$scope.signUpModal.show();
+		$scope.userSignup = {};
+
+	};
+	$scope.closeSignUpModal = function() {
+		$scope.signUpModal.hide();
+	};
+
 	$scope.onSignUpTouch = function() {
-		
+		console.log('user email :' + $scope.userSignup.email); // test console
+		console.log('user password :' + $scope.userSignup.password); // test console
+		console.log('user passwordConfirmed :' + $scope.userSignup.passwordConfirmed); // test console
+
 		// test de quels champs l'user a rentré ////
 		if ($scope.userSignup.email === undefined) {
 			var alertEnterEmail = $ionicPopup.alert({

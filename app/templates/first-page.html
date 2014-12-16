@@ -11,8 +11,12 @@
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
 
-	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
-	</button>
+<!-- old signup view MbdM	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	</button> -->
+
+	<button on-touch="openSignUpModal()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	</button> 
+
 </div>
 
 
@@ -38,7 +42,7 @@
 
 
 
-<ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
+<!-- ancien sign MbdM <ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
 	<label class="item item-input">
 		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
 		<input ng-model="userSignup.lastName" type="text" placeholder="Last Name">
@@ -75,7 +79,7 @@
 	</button>
 
 </div>
-
+ -->
 
 <!-- Pas beau, duplication pour juste un changement de couleur, mais suffisant pour MVP pour le moment / A changer -->
 
@@ -83,8 +87,8 @@
 	 Retour 
 </button>
 
-<button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+<!-- ancien sign MbdM <button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
 	 Retour
-</button>
+</button> -->
 
 </ion-view>
