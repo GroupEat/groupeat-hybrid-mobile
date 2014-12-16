@@ -84,34 +84,130 @@ angular.module('groupeat.controllers', [])
 	$scope.onLoginViewTouch = function() {
 		$scope.ShowLoginSignUpButtons = false;
 		$scope.ShowLoginView = true ;
-		$scope.ShowLoginBackButton = true ;
+		$scope.ShowLoginBackButtonEnergized = true ;
+		$scope.ShowLoginBackButtonAssertive = false ;
 	};
 
 	$scope.onLoginBackButtonTouch = function() {
 		$scope.ShowLoginSignUpButtons = true;
 		$scope.ShowLoginView = false ;
-		$scope.ShowLoginBackButton = false ;
 		$scope.ShowSignUpView = false ;
+		$scope.ShowLoginBackButtonEnergized = false ;
+		$scope.ShowLoginBackButtonAssertive = false ;
 	};
 
 	$scope.onSignUpViewTouch = function() {
 		$scope.ShowLoginSignUpButtons = false;
 		$scope.ShowSignUpView = true ;
-		$scope.ShowLoginBackButton = true ;
+		$scope.ShowLoginBackButtonEnergized = false ;
+		$scope.ShowLoginBackButtonAssertive = true ;
+		// initialisation des variables signup du user
+		$scope.userSignup = {};
 	};
 
-	$scope.onAccessTouch = function() {
-		$state.go('current-command');
+	$scope.onLoginTouch = function() {
+		$scope.userLogin = {};
+
+		// test de base de donnée backend à faire
+		if (($scope.userLogin.email === 'groupeat@groupeat.fr') && ($scope.userLogin.password === 'groupeat')) {
+			$state.go('current-command');
+		}
+		else {
+			var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
+				title: 'Mauvaise combinaison e-mail/mot de passe. <br> Essaie groupeat@groupeat.fr et mdp : groupeat.',
+				okText: 'OK',
+				okType: 'button-energized',
+			});
+			$timeout(function() {
+					      alertWrongCombinaison.close(); //close the popup after 3 seconds
+							}, 4000);
+		}
+	};
+
+	$scope.onSignUpTouch = function() {
+		
+		// test de quels champs l'user a rentré ////
+		if ($scope.userSignup.email === undefined) {
+			var alertEnterEmail = $ionicPopup.alert({
+				title: 'Please enter an email.',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertEnterEmail.close(); //close the popup after 2 seconds
+							}, 2000);
+		}
+
+		else if ($scope.userSignup.password === undefined) {
+			var alertEnterPassword = $ionicPopup.alert({
+				title: 'Please enter a password.',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertEnterPassword.close(); //close the popup after 3 seconds
+							}, 2000);
+		}
+
+		else if ($scope.userSignup.passwordConfirmed === undefined) {
+			var alertConfirmPassword = $ionicPopup.alert({
+				title: 'Please confirm password.',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertConfirmPassword.close(); //close the popup after 3 seconds
+							}, 2000);
+		}
+
+		// Test password identique
+		else if ($scope.userSignup.password !== $scope.userSignup.passwordConfirmed ) {
+			var alertDifferentPasswords = $ionicPopup.alert({ // info to user : email sent
+				title: 'Password is not the same...',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertDifferentPasswords.close(); //close the popup after 3 seconds
+							}, 3000);
+		}
+		// Tests backend à faire
+		else if($scope.userSignup.email === 'groupeat@groupeat.fr') {
+			var alertEmailAlreadyUsed = $ionicPopup.alert({ // info to user : email sent
+				title: 'Email already used, try another',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertEmailAlreadyUsed.close(); //close the popup after 3 seconds
+							}, 2000);
+		}
+
+		
+
+		else { // tout est ok
+			var alertWelcome = $ionicPopup.alert({ // info to user : email sent
+				title: 'Welcome to Groupeat, be ready to eat for nothing...',
+				okText: 'OK',
+				okType: 'button-assertive',
+			});
+			$timeout(function() {
+					      alertWelcome.close(); //close the popup after 3 seconds
+							}, 3000);
+			$state.go('current-command');
+		}
+
+
 	};
 
 	$scope.showRestPasswordPopup = function() {
-		$scope.user = {}; // data du user
-		$scope.tapChoice = {} ; // quel choix fait sur la popup : cancel ou send ?
+		$scope.userReset = {}; // data reset du user
+		$scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
 
 
 		$ionicPopup.show({
 			title : '<h4 class="login-text-first-page border-less"> Reset Password </h4>' ,
-			template: '<input type="email" ng-model="user.email">', // écrit ici pour empêcher une bar blanche ignoble
+			template: null /*'<input type="email" ng-model="userReset.email">'*/, // écrit ici pour empêcher une bar blanche ignoble
 			templateUrl: 'templates/resetPasswordPopup.html',
 			scope: $scope,
 			buttons: [{
@@ -125,14 +221,15 @@ angular.module('groupeat.controllers', [])
 				text: 'Send',
 				type: 'button-energized',
 				onTap: function() {
-					console.log($scope.user.email); // test console
-					return $scope.user.email;
+					console.log($scope.userReset.email); // test console
+					return $scope.userReset.email;
 				}
 			}]
 		}).then(function() {
-			if ($scope.tapChoice === 'Cancel') {} // la popup se ferme sans rien faire d'autre
-				else {
-				if($scope.user.email === undefined) { // alert : email invalid
+			if ($scope.tapChoice === 'Cancel') {}  // la popup se ferme sans rien faire d'autre
+
+			else {
+				if($scope.userReset.email === undefined) { // alert : email invalid
 					var alertInvalidEmail = $ionicPopup.alert({
 						title: 'Invalid email.',
 						okText: 'OK',
@@ -140,12 +237,12 @@ angular.module('groupeat.controllers', [])
 					});
 					$timeout(function() {
 					      alertInvalidEmail.close(); //close the popup after 2 seconds
-							}, 1000);
+							}, 2000);
 				}
 
 				else {
 					var alertPopup = $ionicPopup.alert({ // info to user : email sent
-						title: ' <i> Email sent to </i>' +  $scope.user.email  + '.',
+						title: ' <i> Email sent to </i>' +  $scope.userReset.email  + '.',
 						okText: 'OK',
 						okType: 'button-energized',
 					});
@@ -157,4 +254,6 @@ angular.module('groupeat.controllers', [])
 		});
 	};
 
+	
 });
+
