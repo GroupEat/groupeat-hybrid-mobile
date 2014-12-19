@@ -5,23 +5,26 @@
 </div>
 
 
-
+<!--	-	-	- MENU VIEW -	-	-	-->
 
 <div ng-show="ShowLoginSignUpButtons">
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
 
-<!-- old signup view MbdM	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
-	</button> -->
+<!-- old signup view MbdM -->	
+	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
+	</button>
 
-	<button on-touch="openSignUpModal()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
-	</button> 
-
+<!-- 	<button on-touch="openSignUpModal()" class="button button-full button-assertive button-bottom text-button-first-page">REGISTER
+	</button>  -->
 </div>
 
+<!--	-	-	- END MENU VIEW -	-	-	-->
 
-<div ng-show="ShowLoginView" class="list list-inset login-form">
 
+<!--	-	-	- LOGIN VIEW -	-	-	-->
+
+<div ng-show="ShowLoginView" class="list list-inset register-form">
 	<div class="loginViewButtons"> 
 		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> Reset Password </button>
 	</div>
@@ -34,34 +37,23 @@
 </div>
 
 <div ng-show="ShowLoginView">
-
 	<button on-touch="onLoginTouch()" class="button button-bottom button-full button-energized text-button-first-page">LOGIN
 	</button>
 </div>
 
+<button ng-show="ShowLoginBackButtonEnergized" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+	 Retour 
+</button>
+
+<!--	-	-	- END LOGIN VIEW -	-	-	-->
 
 
+<!--	-	-	- REGISTER VIEW -	-	-	-->
 
-<!-- ancien sign MbdM <ion-scroll id="sign-up-form" has-footer="true" ng-show="ShowSignUpView" class="list list-inset">
-	<label class="item item-input">
-		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input ng-model="userSignup.lastName" type="text" placeholder="Last Name">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-		<input ng-model="userSignup.firstName" type="text" placeholder="First Name">
-	</label>
+<div ng-show="ShowSignUpView" class="list list-inset register-form">
 	<label class="item item-input">
 		<i class="icon ion-ios7-email-outline placeholder-icon"></i>
 		<input ng-model="userSignup.email" type="email" placeholder="E-mail">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
-		<input ng-model="userSignup.phoneNumber" type="tel" placeholder="Phone number">
-	</label>
-	<label class="item item-input">
-		<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-		<input ng-model="userSignup.address" type="text" placeholder="Address">
 	</label>
 	<label class="item item-input">
 		<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
@@ -71,24 +63,56 @@
 		<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
 		<input ng-model="userSignup.passwordConfirmed" type="password" placeholder="Confirm Password">
 	</label>
-
-</ion-scroll>
+</div>
 
 <div ng-show="ShowSignUpView">
 	<button on-touch="onSignUpTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
 	</button>
-
 </div>
- -->
 
-<!-- Pas beau, duplication pour juste un changement de couleur, mais suffisant pour MVP pour le moment / A changer -->
-
-<button ng-show="ShowLoginBackButtonEnergized" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
-	 Retour 
+<button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+	 Retour
 </button>
 
-<!-- ancien sign MbdM <button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
-	 Retour
-</button> -->
+<!--	-	-	- END REGISTER VIEW -	-	-	-->
+
+ 
+<!--	-	-	- SECOND FORM VIEW -	-	-	-->
+
+ <div ng-show="ShowSecondFormView">
+ 	<div ng-show="ShowSkipButton">
+		<button on-touch="onSkipSecondFormTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SKIP
+		</button>
+	</div>
+	<div ng-show="ShowSecondRegisterButton">
+		<button on-touch="onSecondRegisterTouch()" class="button button-full button-energized button-bottom text-button-first-page">REGISTER
+		</button>
+	</div>
+
+
+	<div class="list list-inset register-form">
+		<h6 class="login-text-first-page"> Want to add other informations now or SKIP ? </h6>
+		<label class="item item-input">
+			<i class="icon ion-ios7-email-outline placeholder-icon"></i>
+			<input ng-model="userSignup.firstName" type="text" placeholder="First Name">
+		</label>
+		<label class="item item-input">
+			<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
+			<input ng-model="userSignup.lastName" type="text" placeholder="Last Name">
+		</label>
+		<label class="item item-input">
+			<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
+			<input ng-model="userSignup.phoneNumber" type="tel" placeholder="Phone Number">
+		</label>
+		<label class="item item-input">
+			<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
+			<input ng-model="userSignup.address" type="text" placeholder="Address">
+		</label>
+	</div>
+</div>
+
+<!--	-	-	- END SECOND FORM VIEW -	-	-	-->
+
+
 
 </ion-view>

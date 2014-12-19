@@ -79,6 +79,12 @@ angular.module('groupeat.controllers', [])
 
 .controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout, $ionicModal) {
 
+	$scope.userSignup = {};
+
+	$scope.onAccessTouch = function (){
+		$state.go('current-command');
+	};
+
 	$scope.ShowLoginSignUpButtons = true ;
 
 	$scope.onLoginViewTouch = function() {
@@ -102,8 +108,6 @@ angular.module('groupeat.controllers', [])
 		$scope.ShowSignUpView = true ;
 		$scope.ShowLoginBackButtonEnergized = false ;
 		$scope.ShowLoginBackButtonAssertive = true ;
-		// initialisation des variables signup du user
-		$scope.userSignup = {};
 	};
 
 	$scope.onLoginTouch = function() {
@@ -125,6 +129,7 @@ angular.module('groupeat.controllers', [])
 		}
 	};
 
+
 	$ionicModal.fromTemplateUrl('templates/modal/signUpModal.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
@@ -141,6 +146,7 @@ angular.module('groupeat.controllers', [])
 	$scope.closeSignUpModal = function() {
 		$scope.signUpModal.hide();
 	};
+
 
 	$scope.onSignUpTouch = function() {
 		console.log('user email :' + $scope.userSignup.email); // test console
@@ -207,17 +213,15 @@ angular.module('groupeat.controllers', [])
 		
 
 		else { // tout est ok
-			var alertWelcome = $ionicPopup.alert({ // info to user : email sent
-				title: 'Welcome to Groupeat, be ready to eat for nothing...',
-				okText: 'OK',
-				okType: 'button-assertive',
-			});
-			$timeout(function() {
-					      alertWelcome.close(); //close the popup after 3 seconds
-							}, 3000);
-			$state.go('current-command');
+			
+			$scope.ShowLoginSignUpButtons = false;
+			$scope.ShowLoginView = false ;
+			$scope.ShowSignUpView = false ;
+			$scope.ShowLoginBackButtonEnergized = false ;
+			$scope.ShowLoginBackButtonAssertive = false ;
+			$scope.ShowSecondFormView = true ;
+			$scope.ShowSkipButton = true ;
 		}
-
 
 	};
 
@@ -275,6 +279,43 @@ angular.module('groupeat.controllers', [])
 		});
 	};
 
+	$scope.onSkipSecondFormTouch = function () {
+		$state.go('current-command') ;
+
+		var alertWelcome = $ionicPopup.alert({ // info to user : email sent
+			title: 'Welcome to Groupeat, be ready to eat for nothing...',
+			okText: 'OK',
+			okType: 'button-assertive',
+		});
+		$timeout(function() {
+		    alertWelcome.close(); //close the popup after 3 seconds
+			}, 3000);
+	};
+
+	$scope.$watch('[userSignup.firstName, userSignup.lastName, userSignup.phoneNumber, userSignup.address]', function () {
+		if ( ($scope.userSignup.firstName && $scope.userSignup.lastName && $scope.userSignup.phoneNumber && $scope.userSignup.address) ) {
+			$scope.ShowSecondRegisterButton = true;
+			$scope.ShowSkipButton = false ;
+		}
+		else {
+			$scope.ShowSecondRegisterButton = false;
+			$scope.ShowSkipButton = true ;
+		}
+	}, true);
+
+	$scope.onSecondRegisterTouch = function () {
+		$state.go('current-command') ;
+	
+		var alertWelcome = $ionicPopup.alert({ // info to user : email sent
+			title: 'Welcome to Groupeat, be ready to eat for nothing...',
+			okText: 'OK',
+			okType: 'button-energized',
+		});
+		$timeout(function() {
+		    alertWelcome.close(); //close the popup after 3 seconds
+			}, 3000);
+		
+	};
 	
 });
 
