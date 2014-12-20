@@ -1,8 +1,12 @@
 <ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
 
+<!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
+
 <div class="padding-vertical">
 	<img src="../images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
 </div>
+
+<!--	-	-	- END LOGO FOR ALL VIEWS -	-	-	-->
 
 
 <!--	-	-	- MENU VIEW -	-	-	-->
@@ -11,12 +15,8 @@
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">LOGIN
 	</button>
 
-<!-- old signup view MbdM -->	
 	<button on-touch="onSignUpViewTouch()" class="button button-full button-assertive button-bottom text-button-first-page">SIGN UP
 	</button>
-
-<!-- 	<button on-touch="openSignUpModal()" class="button button-full button-assertive button-bottom text-button-first-page">REGISTER
-	</button>  -->
 </div>
 
 <!--	-	-	- END MENU VIEW -	-	-	-->
@@ -41,7 +41,7 @@
 	</button>
 </div>
 
-<button ng-show="ShowLoginBackButtonEnergized" on-touch="onLoginBackButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+<button ng-show="ShowLoginBackButtonEnergized" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
 	 Retour 
 </button>
 
@@ -70,7 +70,7 @@
 	</button>
 </div>
 
-<button ng-show="ShowLoginBackButtonAssertive" on-touch="onLoginBackButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+<button ng-show="ShowLoginBackButtonAssertive" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
 	 Retour
 </button>
 
