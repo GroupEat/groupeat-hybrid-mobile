@@ -6,7 +6,12 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat.services','groupeat.directives'])
+angular.module('groupeat', [
+  'ionic', 'config', 'ngCookies',
+  'pascalprecht.translate',
+  'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
+])
+
 .run(function($ionicPlatform) {
 
   $ionicPlatform.ready(function() {
@@ -22,7 +27,7 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $translateProvider) {
   $stateProvider
   .state('first-page', {
     url:'/first-page',
@@ -41,7 +46,14 @@ angular.module('groupeat', ['ionic', 'config', 'groupeat.controllers', 'groupeat
     templateUrl: 'templates/settings.html'
   });
 
-
   $urlRouterProvider.otherwise('/first-page');
+
+  $translateProvider
+  .useStaticFilesLoader({
+    prefix: 'translations/',
+    suffix: '.json'
+  })
+  .preferredLanguage('fr')
+  .fallbackLanguage(['fr']).useLocalStorage();
 
 });

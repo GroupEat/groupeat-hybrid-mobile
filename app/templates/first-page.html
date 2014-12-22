@@ -26,7 +26,7 @@
 
 <div ng-show="ShowLoginView" class="list list-inset register-form">
 	<div class="loginViewButtons">
-		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> Reset Password </button>
+		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> {{ 'forgotPassword' | translate }} </button>
 	</div>
 	<label class="item item-input">
 		<input ng-model="userLogin.email" type="email" placeholder="E-mail">
