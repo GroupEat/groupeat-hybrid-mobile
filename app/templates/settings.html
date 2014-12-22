@@ -1,22 +1,14 @@
-
-<ion-view ng-controller="CommandViewCtrl" title="Réglages" >
+<ion-view ng-controller="SettingsCtrl" title="Réglages" >
 
   <!-- view for test -->
 
   <ion-content has-header="true">
-
-      <ul ng-repeat="setting in settings">
-        <li class="item item-stable">
-        Réglage {{setting.name}}
-              <label class="toggle toggle-assertive">
-           <input type="checkbox">
-           <div class="track">
-             <div class="handle"></div>
-           </div>
-         </label>
-        </li>
-      </ul>
-
-
+    <div class="list">
+      <a ng-repeat="setting in settingsList" on-tap="editSetting('{{setting.state}}')" class="item item-icon-right" href="#">
+      {{setting.name}}
+      <i class="icon ion-arrow-right-a"></i>
+      </a>
+    </div>
+    
   </ion-content>
 </ion-view>
