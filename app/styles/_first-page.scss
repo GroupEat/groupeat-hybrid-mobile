@@ -1,10 +1,69 @@
 .login-text-first-page{
-	color:grey;
-	text-align:center;
+    color:grey;
+    text-align:center;
 }
 
 #logo-first-page{
-	width:60% ;
+    width:60% ;
+    height:60% ;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:20%;
+}
+
+.button-bottom {
+    position : absolute;
+    bottom : 0;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    border-width: 0 !important;
+    border-radius: 0 !important;
+    }
+
+.button-upper-bottom {
+    position : absolute;
+    bottom : $button-height + 5px;
+    margin-bottom :0 !important;
+    margin-top: 0 !important;
+    border-width: 0 !important;
+    border-radius: 0 !important;
+}
+
+
+.text-button-first-page{
+    font-family : "Aventura";
+    src: url('../ressources/fonts/Aventura-Bold.otf') format('opentype');
+}
+
+.login-view-back-button {
+    margin-top:0;
+    margin-left:0;
+    position : absolute;
+    top : 5px;
+    left: 5px;
+}
+
+.border-less {
+    margin : 0;
+    padding : 0;	
+}
+
+.register-form{
+    position : absolute;
+    bottom : $button-height + 10px;
+    margin-left : 0;
+    width : 100%;
+    border-radius: 0 !important;
+
+}
+
+
+.loginViewButtons{
+    display : block;
+    text-align: center;
+    opacity : 0.7 ;
+
 }
 
 .logoholder{
@@ -12,22 +71,11 @@
   text-align: center;
 }
 
-.auth h3 {
-                color: #FFF;
-                font-size: 2.5em;
-                text-align: left;
-                font-weight: 300;
-                letter-spacing: 0.04em;
-                width: 100%;
-                display: inline-block;
-                font-family : "Aventura";
-				src: url('../ressources/fonts/Aventura-Bold.otf') format('opentype');
-				text-transform: uppercase;
-        }
+.auth {}
 
         .auth .auth-form {
                 display: inline-block;
-                margin: 20px auto;
+                margin: 10px auto;
                 width: 100%;
         }
 
@@ -42,47 +90,9 @@
                 color: #FFF;
         }
         .auth input::-webkit-input-placeholder {
-    			color : rgba(255,255,255,.7)
-    	}
-    	.auth button {
-    		background-color: rgba(255,255,255,.7) !important;
-    		border-radius: 4px;
-    	}
-
-
-.button-bottom {
-	position : absolute;
-    bottom : 0;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    border-width: 0 !important;
-	border-radius: 0 !important;
-}
-
-.button-upper-bottom {
-	position : absolute;
-    bottom : $button-height + 5px;
-    margin-bottom :0 !important;
-    margin-top: 0 !important;
-    border-width: 0 !important;
-	border-radius: 0 !important;
-}
-
-
-.text-button-first-page{
-	font-family : "Aventura";
-	src: url('../ressources/fonts/Aventura-Bold.otf') format('opentype');
-}
-
-.login-view-back-button {
-	margin-top:0;
-	margin-left:0;
-	position : absolute;
-	top : 5px;
-	left: 5px;
-}
-
-.border-less {
-	margin : 0;
-	padding : 0;	
-}
+                color : rgba(255,255,255,.7)
+        }
+        .auth button {
+            background-color: rgba(255,255,255,.7) !important;
+            border-radius: 4px;
+        }
