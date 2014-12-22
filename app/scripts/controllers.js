@@ -82,7 +82,7 @@ angular.module('groupeat.controllers', [])
 .controller('FirstPageViewController', function($scope, $state, $ionicPopup, $timeout, $ionicModal) {
 
 	/*
-	In first page, component are hide and show according to state where user is 
+	In first page, component are hide and show according to state where user is
 	There are three variables : userReset, userLogin, and userSignup for different uses
 	*/
 
@@ -267,10 +267,10 @@ angular.module('groupeat.controllers', [])
 							}, 2000);
 		}
 
-		
+
 
 		else { // tout est ok
-			
+
 			$scope.ShowLoginSignUpButtons = false;
 			$scope.ShowLoginView = false ;
 			$scope.ShowSignUpView = false ;
@@ -326,7 +326,7 @@ angular.module('groupeat.controllers', [])
 		$timeout(function() {
 		    alertWelcome.close(); //close the popup after 3 seconds
 			}, 3000);
-		
+
 	};
 
 /*
@@ -335,7 +335,7 @@ angular.module('groupeat.controllers', [])
 
 
 /*
----------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
+---------------- OTHERS, NOT USED FOR THE MOMENT, USEFUL LATER ---------------------
 */
 
 	$ionicModal.fromTemplateUrl('templates/modal/signUpModal.html', {
@@ -358,6 +358,5 @@ angular.module('groupeat.controllers', [])
 /*
 ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
 */
-	
-});
 
+});
