@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewController">
+<ion-view hide-nav-bar="true" hide-tabs ng-controller="FirstPageViewCtrl">
 
 <!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
 
@@ -25,7 +25,7 @@
 <!--	-	-	- LOGIN VIEW -	-	-	-->
 
 <div ng-show="ShowLoginView" class="list list-inset register-form">
-	<div class="loginViewButtons"> 
+	<div class="loginViewButtons">
 		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> Reset Password </button>
 	</div>
 	<label class="item item-input">
@@ -42,7 +42,7 @@
 </div>
 
 <button ng-show="ShowLoginBackButtonEnergized" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
-	 Retour 
+	 Retour
 </button>
 
 <!--	-	-	- END LOGIN VIEW -	-	-	-->
@@ -76,7 +76,7 @@
 
 <!--	-	-	- END REGISTER VIEW -	-	-	-->
 
- 
+
 <!--	-	-	- SECOND FORM VIEW -	-	-	-->
 
  <div ng-show="ShowSecondFormView">

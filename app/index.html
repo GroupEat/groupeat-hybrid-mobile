@@ -42,7 +42,7 @@
     </ion-nav-view>
 
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuController" class="tabs tabs-energized tabs-icon-top">
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuCtrl" class="tabs tabs-energized tabs-icon-top">
 
       <a class="tab-item" ng-repeat="tabItem in bottomTab" on-tap="{{tabItem.action}}">
           <i class="icon {{tabItem.iconName}}"></i>
@@ -73,10 +73,14 @@
         <!-- build:js scripts/scripts.js -->
         <script src="scripts/config.js"></script>
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers.js"></script>
-        <script src="scripts/services.js"></script>
-        <script src="scripts/directives.js"></script>
-
+        <script src="scripts/controllers/controllers.js"></script>
+        <script src="scripts/controllers/bottom-tabs-menu.js"></script>
+        <script src="scripts/controllers/command-view.js"></script>
+        <script src="scripts/controllers/first-page-view.js"></script>
+        <script src="scripts/services/services.js"></script>
+        <script src="scripts/services/lodash.js"></script>
+        <script src="scripts/directives/directives.js"></script>
+        <script src="scripts/directives/ge-hide-tabs.js"></script>
         <!-- endbuild -->
 </body>
 </html>
