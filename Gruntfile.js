@@ -35,6 +35,13 @@ module.exports = function (grunt) {
       images: 'images'
     },
 
+    gitpull: {
+      task: {
+        options: {
+        }
+      }
+    },
+
     // Environment Variables for Angular App
     // This creates an Angular Module that can be injected via ENV
     // Add any desired constants to the ENV objects below.
@@ -168,7 +175,7 @@ module.exports = function (grunt) {
       }
     },
 
-    
+
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
@@ -197,7 +204,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    
+
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
@@ -562,4 +569,6 @@ module.exports = function (grunt) {
     'karma:continuous',
     'compress'
   ]);
+
+  grunt.registerTask('pull', ['gitpull:task','npm-install']);
 };

@@ -1,19 +1,19 @@
 'use strict';
 
-describe('Controller: CommandViewController', function () {
+describe('Ctrl: CommandViewCtrl', function () {
 
   var should = chai.should();
 
   // load the controller's module
   beforeEach(module('groupeat'));
 
-  var CommandViewController,
+  var CommandViewCtrl,
   scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    CommandViewController = $controller('CommandViewController', {
+    CommandViewCtrl = $controller('CommandViewCtrl', {
       $scope: scope
     });
   }));
@@ -53,10 +53,6 @@ describe('Controller: CommandViewController', function () {
       assert.equal(scope.shownGroup, secondGroup);
     });
 
-  });
-
-  describe("#isGroupShown", function() {
-    
   });
 
 });
