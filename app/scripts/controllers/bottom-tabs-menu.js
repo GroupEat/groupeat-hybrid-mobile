@@ -6,12 +6,12 @@ angular.module('groupeat.controllers.bottom-tabs-menu', [])
 
   $scope.bottomTab = [
     {
-      'title'     : 'Commandes',
+      'title'     : 'orders',
       'iconName'  : 'ion-fork',
       'action'    : 'onCommandTap()'
     },
     {
-      'title'     : 'Réglages',
+      'title'     : 'settings',
       'iconName'  : 'ion-gear-a',
       'action'    : 'onSettingsTap()'
     }

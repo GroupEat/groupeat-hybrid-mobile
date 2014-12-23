@@ -1,4 +1,52 @@
 {
-  "forgotPassword": "Mot de passe oublié"
+  "forgotPassword": "Mot de passe oublié",
+  "login": "Se connecter",
+  "register": "S'inscrire",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "firstName": "Prénom",
+  "lastName": "Nom",
+  "phoneNumber": "Numéro de téléphone",
+  "address": "Adresse postale",
+  "confirmPassword": "Confirmation du mot de passe",
+  "skip": "Plus tard !",
+  "addMoreInformationOrSkip": "Ajoute plus d'informations ou fais le plus tard !",
+
+  "pleaseEnterEmail": "Veuillez entrer une adresse e-mail valide",
+  "pleaseEnterPassword": "Veuillez choisir un mot de passe",
+  "pleaseConfirmPassword": "Veuillez confirmer le mot de passe",
+
+  "passwordDoNotMatch": "Les mots de passes entrés ne correspondent pas",
+  "emailAlreadyInUse": "L'email entré est déjà utilisé",
+
+  "wrongEmailPasswordCombination": "Mauvaise combinaison e-mail/mot de passe. <br> Essaie groupeat@groupeat.fr et mdp : groupeat.",
+  "resetPassword": "Réinitialiser le mot de passe",
+  "emailSentTo": "E-mail envoyé à",
+  "welcomeMessage": "Bienvenue sur GroupEat !",
+
+  "cancel": "Annuler",
+  "send": "Envoyer",
+  "back": "Retour",
+
+  "orders": "Commandes",
+  "newOrder": "Nouvelle commande",
+  "pizza": "Pizza",
+  "pizzeria": "Pizzeria",
+  "joinThisOrder": "Rejoindre cette commande",
+  "toOrder": "Commander",
+  "seniorPizza": "Pizza senior",
+
+  "settings": "Réglages",
+  "editProfile": "Editer mon profil",
+  "pushSettings": "Réglages des notifications",
+
+  "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
+  "japanese": "Japonais",
+  "chinese": "Chinois",
+  "lebanese": "Libanais",
+  "pizzeriaDishes": "Pâtes, Sandwichs, Plats, Tex Mex, Boissons,...",
+  "japaneseDishes": "Sushis, Makis, Sashimi, Soupe,...",
+  "chineseDishes": "Nems, Riz cantonnais, Nouilles, Raviolis vapeurs,...",
+  "lebaneseDishes": "Falafel, Kébbé, Rikakat, Chawarma,..."
 
 }

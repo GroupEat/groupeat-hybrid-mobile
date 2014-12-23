@@ -7,14 +7,14 @@
   <ion-content has-header-bar="true" class="center auth bg-assertive">
 
           <div class="auth-form border-less">
-                    <input type="text" ng-model="userSignup.lastname" name="lastname" placeholder="Last Name">
-                    <input type="text" ng-model="userSignup.firstname" name="firstname" placeholder="First Name">
-                    <input type="tel" ng-model="userSignup.phonenumber" name="tel" placeholder="Phone Number">
-                    <input type="text" ng-model="userSignup.address" name="address" placeholder="Address">
-                    
-                    
+                    <input type="text" ng-model="userSignup.lastname" name="lastname" placeholder="{{ 'lastName' | translate }}">
+                    <input type="text" ng-model="userSignup.firstname" name="firstname" placeholder="{{ 'firstName' | translate }}">
+                    <input type="tel" ng-model="userSignup.phonenumber" name="tel" placeholder="{{ 'phoneNumber' | translate }}">
+                    <input type="text" ng-model="userSignup.address" name="address" placeholder="{{ 'address' | translate }}">
+
+
                     <div class="text-right">
-                            <button ng-click="onAccessTouch()" class="button button-outline button-assertive">Sign Up</button>
+                            <button ng-click="onAccessTouch()" class="button button-outline button-assertive">{{ 'register' | translate }}</button>
                     </div>
            </div>
   </ion-content>

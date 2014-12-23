@@ -13,8 +13,8 @@ angular.module('groupeat.controllers.settings', [])
 	};
 
 	$scope.settingsList = [
-	    { name: 'Editer mon profil', onTap: 'editProfile()', state:'food-choice'},
-	    { name: 'Réglages des notifications', onTap: 'editNotifications()' , state:'food-choice'}
+	    { name: 'editProfile', onTap: 'editProfile()', state:'food-choice'},
+	    { name: 'pushSettings', onTap: 'editNotifications()' , state:'food-choice'}
 		];
 
 

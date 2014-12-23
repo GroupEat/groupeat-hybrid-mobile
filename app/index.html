@@ -29,7 +29,7 @@
 
     <ion-nav-bar class="bar-energized bar-header">
         <ion-nav-back-button class='button button-clear'>
-            Retour
+          {{ 'back' | translate }}
         </ion-nav-back-button>
     </ion-nav-bar>
 
@@ -46,7 +46,7 @@
 
       <a class="tab-item" ng-repeat="tabItem in bottomTab" on-tap="{{tabItem.action}}">
           <i class="icon {{tabItem.iconName}}"></i>
-          {{tabItem.title}}
+          {{tabItem.title | translate}}
       </a>
     </div>
 

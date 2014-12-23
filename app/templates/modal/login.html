@@ -5,12 +5,12 @@
     </ion-header-buttons>
   </ion-header-bar>
   <ion-content class="center auth bg-energized padding">
-          <h3>Login</h3>
+          <h3>{{ 'login' | translate }}</h3>
             <div class="auth-form">
-                    <input type="text" ng-model="loginModal.email" name="email" placeholder="Email Address">
-                    <input type="password" ng-model="loginModal.password" name="password" placeholder="Password">
+                    <input type="text" ng-model="loginModal.email" name="email" placeholder="{{ 'email' | translate }}">
+                    <input type="password" ng-model="loginModal.password" name="password" placeholder="{{ 'password' | translate }}">
                     <div class="text-right">
-                            <button ng-click="login()" class="button button-outline button-energized">Sign In</button>
+                            <button ng-click="login()" class="button button-outline button-energized">{{ 'login' | translate }}</button>
                     </div>
             </div>
   </ion-content>

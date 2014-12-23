@@ -1,9 +1,9 @@
-<ion-view ng-controller="CommandViewCtrl" title="Commandes" hide-back-button="true" >
+<ion-view ng-controller="CommandViewCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
 
     <ion-content class="has-footer">
 
           <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-full button-outline no-margin">
-                  <text id="new-command-text"> Nouvelle Commande ! <text/>
+                  <text id="new-command-text">{{ 'newOrder' | translate }} !<text/>
           </button>
 
             <div ng-repeat="group in groups">
@@ -12,18 +12,18 @@
                   <i class="ion-clock assertive"></i>
                   <b>5 min</b>
                   <i class="ion-pizza assertive"></i>
-                  <b>Pizza</b>
+                  <b>{{ 'pizza' | translate }}</b>
                   <i class="ion-bag assertive"></i>
                   <b>25€ (18%)</b>
                 </div>
                 <div class="item item-text-wrap">
-                  <h2>Pizzeria : Di Genova</h2>
-                  <div>Joignez cette commande : 18% -> 23% ! </div>
-                  <div>Pizza medium : 8€</div>
+                  <h2>{{ 'pizzeria' | translate }} : Di Genova</h2>
+                  <div>{{ 'joinThisOrder' | translate }} : 18% -> 23% ! </div>
+                  <div>{{ 'seniorPizza' | translate }} : 8€</div>
                 </div>
                 <a class="item item-icon-left assertive" on-tap="onNewCommandTap()">
                   <i class="icon ion-arrow-right-a"></i>
-                  Commander !
+                  {{ 'toOrder' | translate }} !
                 </a>
               </div>
             </div>

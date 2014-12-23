@@ -2,8 +2,9 @@
 
 angular.module('groupeat.controllers.first-page-view', [])
 
-.controller('FirstPageViewCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal) {
+.controller('FirstPageViewCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter) {
 
+  var $translate = $filter('translate');
   /*
   In first page, component are hide and show according to state where user is
   There are three variables : userReset, userLogin, and userSignup for different uses
@@ -54,7 +55,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     else {
       console.log($scope.userLogin.email); // test console
       var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
-        title: 'Mauvaise combinaison e-mail/mot de passe. <br> Essaie groupeat@groupeat.fr et mdp : groupeat.',
+        title: $translate('wrongEmailPasswordCombination'),
         okText: 'OK',
         okType: 'button-energized',
       });
@@ -70,19 +71,19 @@ angular.module('groupeat.controllers.first-page-view', [])
 
 
     $ionicPopup.show({
-      title : '<h4 class="login-text-first-page border-less"> Reset Password </h4>' ,
+      title : '<h4 class="login-text-first-page border-less">'+$translate('resetPassword')+'</h4>' ,
       template: null,
       templateUrl: 'templates/resetPasswordPopup.html',
       scope: $scope,
       buttons: [{
-        text: 'Cancel',
+        text: $translate('cancel'),
         type: 'button-outline button-energized',
         onTap: function() {
           close();
-          $scope.tapChoice = 'Cancel';
+          $scope.tapChoice = $translate('cancel');
         }
       }, {
-        text: 'Send',
+        text: $translate('send'),
         type: 'button-energized',
         onTap: function() {
           console.log($scope.userReset.email); // test console
@@ -91,13 +92,13 @@ angular.module('groupeat.controllers.first-page-view', [])
       }]
     })
     .then(function() {
-      if ($scope.tapChoice === 'Cancel') {
+      if ($scope.tapChoice === $translate('cancel')) {
 
       }  // la popup se ferme sans rien faire d'autre
       else {
         if($scope.userReset.email === undefined) { // alert : email invalid
           var alertInvalidEmail = $ionicPopup.alert({
-            title: 'Invalid email.',
+            title: $translate('invalidEmail'),
             okText: 'OK',
             okType: 'button-energized',
           });
@@ -108,7 +109,7 @@ angular.module('groupeat.controllers.first-page-view', [])
 
         else {
           var alertPopup = $ionicPopup.alert({ // info to user : email sent
-            title: ' <i> Email sent to </i>' +  $scope.userReset.email  + '.',
+            title: ' <i>'+$translate('emailSentTo')+'</i> ' +  $scope.userReset.email  + '.',
             okText: 'OK',
             okType: 'button-energized',
           });
@@ -138,7 +139,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     // test de quels champs l'user a rentré ////
     if ($scope.userSignup.email === undefined) {
       var alertEnterEmail = $ionicPopup.alert({
-        title: 'Please enter an email.',
+        title: $translate('pleaseEnterEmail'),
         okText: 'OK',
         okType: 'button-assertive',
       });
@@ -149,7 +150,7 @@ angular.module('groupeat.controllers.first-page-view', [])
 
     else if ($scope.userSignup.password === undefined) {
       var alertEnterPassword = $ionicPopup.alert({
-        title: 'Please enter a password.',
+        title: $translate('pleaseEnterPassword'),
         okText: 'OK',
         okType: 'button-assertive',
       });
@@ -160,7 +161,7 @@ angular.module('groupeat.controllers.first-page-view', [])
 
     else if ($scope.userSignup.passwordConfirmed === undefined) {
       var alertConfirmPassword = $ionicPopup.alert({
-        title: 'Please confirm password.',
+        title: $translate('pleaseConfirmPassword'),
         okText: 'OK',
         okType: 'button-assertive',
       });
@@ -172,7 +173,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     // Test password identique
     else if ($scope.userSignup.password !== $scope.userSignup.passwordConfirmed ) {
       var alertDifferentPasswords = $ionicPopup.alert({
-        title: 'Password is not the same...',
+        title: $translate('passwordDoNotMatch'),
         okText: 'OK',
         okType: 'button-assertive',
       });
@@ -183,7 +184,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     // Tests backend à faire
     else if($scope.userSignup.email === 'groupeat@groupeat.fr') {
       var alertEmailAlreadyUsed = $ionicPopup.alert({
-        title: 'Email already used, try another',
+        title: $translate('emailAlreadyInUse'),
         okText: 'OK',
         okType: 'button-assertive',
       });
@@ -220,7 +221,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     $state.go('current-command') ;
 
     var alertWelcome = $ionicPopup.alert({
-      title: 'Welcome to Groupeat, be ready to eat for nothing...',
+      title: $translate('welcomeMessage'),
       okText: 'OK',
       okType: 'button-assertive',
     });
@@ -244,7 +245,7 @@ angular.module('groupeat.controllers.first-page-view', [])
     $state.go('current-command') ;
 
     var alertWelcome = $ionicPopup.alert({
-      title: 'Welcome to Groupeat, be ready to eat for nothing...',
+      title: $translate('welcomeMessage'),
       okText: 'OK',
       okType: 'button-energized',
     });

@@ -5,19 +5,19 @@
     </ion-header-buttons>
   </ion-header-bar>
   <ion-content class="center auth bg-assertive padding">
-          <h3>Sign Up</h3>
+          <h3>{{ 'register' | translate }}</h3>
           <div class="auth-form">
-                    <input type="text" ng-model="SignupModal.lastname" name="lastname" placeholder="Last Name">
-                    <input type="text" ng-model="SignupModal.firstname" name="firstname" placeholder="First Name">
-                    <input type="text" ng-model="SignupModal.email" name="email" placeholder="Email Address">
-                    <input type="number" ng-model="SignupModal.number" name="number" placeholder="Phone Number">
-                    <input type="text" ng-model="SignupModal.adress" name="adress" placeholder="Adress">
-                    <input type="password" ng-model="SignupModal.password" name="password" placeholder="Password">
-                    <input type="password" ng-model="SignupModal.confirmpassword" name="confirmpassword" placeholder="Confirm Password">
-                    
-                    
+                    <input type="text" ng-model="SignupModal.lastname" name="lastname" placeholder="{{ 'lastName' | translate }}">
+                    <input type="text" ng-model="SignupModal.firstname" name="firstname" placeholder="{{ 'firstName' | translate }}">
+                    <input type="text" ng-model="SignupModal.email" name="email" placeholder="{{ 'email' | translate }}">
+                    <input type="number" ng-model="SignupModal.number" name="number" placeholder="{{ 'phoneNumber' | translate }}">
+                    <input type="text" ng-model="SignupModal.adress" name="adress" placeholder="{{ 'address' | translate }}">
+                    <input type="password" ng-model="SignupModal.password" name="password" placeholder="{{ 'password' | translate }}">
+                    <input type="password" ng-model="SignupModal.confirmpassword" name="confirmpassword" placeholder="{{ 'confirmPassword' | translate }}">
+
+
                     <div class="text-right">
-                            <button ng-click="signup()" class="button button-outline button-assertive">Sign Up</button>
+                            <button ng-click="signup()" class="button button-outline button-assertive">{{ 'register' | translate }}</button>
                     </div>
            </div>
   </ion-content>
