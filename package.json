@@ -80,6 +80,7 @@
     "https://github.com/driftyco/ionic-plugins-keyboard.git",
     "org.apache.cordova.statusbar",
     "org.apache.cordova.console",
-    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git"
+    "https://git-wip-us.apache.org/repos/asf/cordova-plugin-inappbrowser.git",
+    "org.apache.cordova.globalization"
   ]
 }
