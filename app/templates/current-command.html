@@ -1,36 +1,46 @@
 <ion-view ng-controller="CommandViewCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
 
-    <ion-content class="has-footer">
+  <ion-content class="has-footer">
 
-          <button id="new-command-button" on-tap="onNewCommandTap()" class="button button-full button-outline no-margin">
-                  <text id="new-command-text">{{ 'newOrder' | translate }} !<text/>
-          </button>
+    <button id="new-command-button" ui-sref="restaurant-list" class="button button-full button-outline no-margin">
+      <text id="new-command-text">{{ 'newOrder' | translate }} !<text/>
+    </button>
 
-            <div ng-repeat="group in groups">
-              <div class="card">
-                <div class="item item-divider">
-                  <i class="ion-clock assertive"></i>
-                  <b>5 min</b>
-                  <i class="ion-pizza assertive"></i>
-                  <b>{{ 'pizza' | translate }}</b>
-                  <i class="ion-bag assertive"></i>
-                  <b>25€ (18%)</b>
-                </div>
-                <div class="item item-text-wrap">
-                  <h2>{{ 'pizzeria' | translate }} : Di Genova</h2>
-                  <div>{{ 'joinThisOrder' | translate }} : 18% -> 23% ! </div>
-                  <div>{{ 'seniorPizza' | translate }} : 8€</div>
-                </div>
-                <a class="item item-icon-left assertive" on-tap="onNewCommandTap()">
-                  <i class="icon ion-arrow-right-a"></i>
-                  {{ 'toOrder' | translate }} !
-                </a>
-              </div>
-            </div>
+    <div ng-repeat="group in groups">
+      <div class="card">
+        <div class="item item-divider">
+          <i class="ion-clock assertive"></i>
+          <b>5 min</b>
+          <i class="ion-pizza assertive"></i>
+          <b>{{ 'pizza' | translate }}</b>
+          <i class="ion-bag assertive"></i>
+          <b>25€ (18%)</b>
+        </div>
+        <div class="item item-text-wrap">
+          <h2>{{ 'pizzeria' | translate }} : Di Genova</h2>
+          <div>{{ 'joinThisOrder' | translate }} : 18% -> 23% ! </div>
+          <div>{{ 'seniorPizza' | translate }} : 8€</div>
+        </div>
+        <a class="item item-icon-left assertive" on-tap="onNewCommandTap()">
+          <i class="icon ion-arrow-right-a"></i>
+          {{ 'toOrder' | translate }} !
+        </a>
+      </div>
+    </div>
 
+    
 
+  </ion-content>
+<!-- 
+  Pour le futur bouton flottant swag
 
-    </ion-content>
+  <div class="float-button">
+    <span class="height-fix">
+      <a ui-sref="add-trip" class="content">
+        <i class="ion-plus-round"> </i>
+      </a>
+    </span>
+  </div> -->
 
 
 </ion-view>

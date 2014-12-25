@@ -8,13 +8,10 @@ angular.module('groupeat.controllers.settings', [])
 	settings list
 	*/
 
-	$scope.editSetting = function(state) {
-		$state.go(state);
-	};
 
 	$scope.settingsList = [
-	    { name: 'editProfile', onTap: 'editProfile()', state:'food-choice'},
-	    { name: 'pushSettings', onTap: 'editNotifications()' , state:'food-choice'}
+	    { name: 'editProfile', state:'settings-profile'},
+	    { name: 'pushSettings', state:'settings-notifications'}
 		];
 
 

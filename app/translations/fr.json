@@ -41,10 +41,12 @@
   "pushSettings": "Réglages des notifications",
 
   "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
+  "chooseARestaurant": "Choisissez un restaurant",
+  "restaurantCarte": "Carte du restaurant",
   "japanese": "Japonais",
   "chinese": "Chinois",
   "lebanese": "Libanais",
-  "pizzeriaDishes": "Pâtes, Sandwichs, Plats, Tex Mex, Boissons,...",
+  "pizzeriaDishes": "Pizza, Pâtes, Sandwichs, Plats, Tex Mex, Boissons,...",
   "japaneseDishes": "Sushis, Makis, Sashimi, Soupe,...",
   "chineseDishes": "Nems, Riz cantonnais, Nouilles, Raviolis vapeurs,...",
   "lebaneseDishes": "Falafel, Kébbé, Rikakat, Chawarma,..."

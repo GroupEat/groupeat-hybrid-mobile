@@ -18,17 +18,41 @@ angular.module('groupeat', [
     url:'/first-page',
     templateUrl: 'templates/first-page.html'
   })
+
+  // States of restaurants
   .state('current-command', {
     url: '/current-command',
     templateUrl: 'templates/current-command.html'
+  })
+  .state('restaurant-list', {
+    url: '/restaurant-list',
+    templateUrl: 'templates/restaurant-list.html'
+  })
+  .state('restaurant-menu', {
+    url: '/restaurant-menu',
+    templateUrl: 'templates/restaurant-menu.html'
+  })
+  .state('restaurant-menu-section', {
+    url: '/restaurant-menu-section',
+    templateUrl: 'templates/restaurant-menu-section.html'
   })
   .state('food-choice', {
     url: '/food-choice',
     templateUrl: 'templates/food-choice.html'
   })
+
+  // states of settings
   .state('settings', {
     url: '/settings',
     templateUrl: 'templates/settings.html'
+  })
+  .state('settings-notifications', {
+    url: '/settings/settings-notifications',
+    templateUrl: 'templates/settings/settings-notifications.html'
+  })
+  .state('settings-profile', {
+    url: '/settings-profile',
+    templateUrl: 'templates/settings/settings-profile.html'
   });
 
   $urlRouterProvider.otherwise('/first-page');
@@ -48,7 +72,7 @@ angular.module('groupeat', [
   $ionicPlatform.ready(function() {
     if(typeof navigator.globalization !== 'undefined') {
       navigator.globalization.getPreferredLanguage(function(language) {
-        $translate.use((language.value).split("-")[0]).then(function(data) {
+        $translate.use((language.value).split('-')[0]).then(function(data) {
           console.log('SUCCESS -> ' + data);
         }, function(error) {
           console.log('ERROR -> ' + error);

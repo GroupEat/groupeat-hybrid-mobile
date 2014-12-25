@@ -1,0 +1,24 @@
+<ion-view ng-controller="SettingsCtrl" title="{{'profileSettings'| translate }}">
+	<ion-content has-header="true">
+
+		<div class="list">
+			<label class="item item-input">
+				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
+				<input ng-model="userSignup.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
+			</label>
+			<label class="item item-input">
+				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
+				<input ng-model="userSignup.lastName" type="text" placeholder="{{ 'lastName' | translate }}">
+			</label>
+			<label class="item item-input">
+				<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
+				<input ng-model="userSignup.phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}">
+			</label>
+			<label class="item item-input">
+				<i class="icon ion-ios7-location-outline placeholder-icon"></i>
+				<input ng-model="userSignup.address" type="text" placeholder="{{ 'address' | translate }}">
+			</label>
+		</div>
+
+	</ion-content>
+</ion-view>

@@ -4,7 +4,7 @@
 
   <ion-content has-header="true">
     <div class="list">
-      <a ng-repeat="setting in settingsList" on-tap="editSetting('{{setting.state}}')" class="item item-icon-right" href="#">
+      <a ng-repeat="setting in settingsList" ui-sref='{{setting.state}}' class="item item-icon-right">
       {{ setting.name | translate }}
       <i class="icon ion-arrow-right-a"></i>
       </a>
