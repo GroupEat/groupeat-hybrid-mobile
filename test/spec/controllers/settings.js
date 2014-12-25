@@ -30,3 +30,4 @@ describe('Controller: SettingsCtrl', function () {
       })
     })
   });
+});
