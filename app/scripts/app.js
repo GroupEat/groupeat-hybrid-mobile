@@ -35,6 +35,7 @@ angular.module('groupeat', [
   .state('restaurant-menu-section', {
     url: '/restaurant-menu-section',
     templateUrl: 'templates/restaurant-menu-section.html'
+    // controller: 'controllers/restaurant-menu.js'
   })
   .state('food-choice', {
     url: '/food-choice',

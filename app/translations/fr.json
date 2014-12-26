@@ -27,6 +27,8 @@
   "cancel": "Annuler",
   "send": "Envoyer",
   "back": "Retour",
+  "save": "Sauvegarder",
+  "disconnect": "Se déconnecter",
 
   "orders": "Commandes",
   "newOrder": "Nouvelle commande",
@@ -38,7 +40,15 @@
 
   "settings": "Réglages",
   "editProfile": "Editer mon profil",
-  "pushSettings": "Réglages des notifications",
+  "profileSettings": "Profil",
+  "pushSettings": "Notifications",
+  "pushActivation": "Activer les notifications",
+  "dontPushAfter": "Ne pas me notifier après",
+  "afterACommand": "Après une commande",
+  "atNight": "Le soir",
+  "dontPushFor": "Ne pas me notifier pendant",
+  "day": "jour",
+  "days": "jours",
 
   "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
   "chooseARestaurant": "Choisissez un restaurant",

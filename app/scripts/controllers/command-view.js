@@ -19,18 +19,7 @@ angular.module('groupeat.controllers.command-view', [])
     $scope.groups[i].items.push('infos sur le restaurant ' + i);
   }
 
-  /*
-  settings list
-  */
-  $scope.settings = [];
-  for (var j=0; j<4; j++) {
-    $scope.settings[j] = {
-      name: j,
-      items: []
-    };
-
-    $scope.groups[j].items.push('Réglage ' + j);
-  }
+  
 
   $scope.onNewCommandTap = function() {
     $state.go('food-choice');
