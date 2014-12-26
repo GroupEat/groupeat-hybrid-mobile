@@ -23,7 +23,7 @@ describe('Controller: SettingsCtrl', function () {
     it("should create a list of 2 settings", function () {
       scope.settingsList.should.have.length(2);
     });
-    it("should have a name and onTap fields", function () {
+    it("should have a name and state fields", function () {
       _.forEach(scope.settingsList, function(setting) {
         setting.should.have.property('name');
         setting.should.have.property('state');
