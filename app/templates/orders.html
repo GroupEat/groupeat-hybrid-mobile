@@ -18,7 +18,7 @@
           <h2>{{ 'pizzeria' | translate }} : {{ order.restaurant.name }}</h2>
           <div>{{ 'margharitaForTwo' | translate }} : {{ order.restaurant.mediumMargharitaPrice }}€</div>
         </div>
-        <a class="item item-icon-left assertive" on-tap="onNewOrderTap()">
+        <a class="item item-icon-left assertive" ui-sref="restaurant-menu"{('restaurant')}>
           <i class="icon ion-arrow-right-a"></i>
           {{ 'toOrder' | translate }} !
         </a>

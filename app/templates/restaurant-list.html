@@ -1,22 +1,22 @@
-<ion-view title="{{ 'chooseARestaurant' | translate }}" >
+<ion-view ng-controller="RestaurantListCtrl" title="{{ 'chooseARestaurant' | translate }}" >
 	<ion-content has-header="true">
 		<div class="list">
 
-		    <a class="item item-avatar" ui-sref="restaurant-menu"({restaurant:"le restaurant en question"})>
+		    <a ng-repeat="restaurant in restaurants" class="item item-avatar" ng-click="goRestaurantMenu(restaurant.restaurantsections)">
 		      <img src="">
-		      <h2>Piza Di Genova</h2>
+		      <h2>{{restaurant.restaurantname}}</h2>
 		      <p>un super restaurant de pizza reducmax=40%</p>
 		    </a>
 
 		    <a class="item item-avatar" ui-sref="restaurant-menu">
 		      <img src="">
-		      <h2>Piza Di Genova</h2>
+		      <h2>Pizza Di Genova</h2>
 		      <p>un super restaurant de pizza reducmax=40%</p>
 		    </a>
 
 		    <a class="item item-avatar" ui-sref="restaurant-menu">
 		      <img src="">
-		      <h2>Piza Di Genova</h2>
+		      <h2>Pizza Di Genova</h2>
 		      <p>un super restaurant de pizza reducmax=40%</p>
 		    </a>
 

@@ -1,20 +1,11 @@
 
-<ion-view  title="{{ 'restaurantCarte' | translate }}" >
+<ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantCarte' | translate }}" >
   <ion-content class="has-header has-footer">
 
   <ul class="list">
-    <li class="item" ui-sref="restaurant-menu-section">
-      Pizza base tomate
+    <li ng-repeat="section in sections" class="item" ui-sref="restaurant-menu-section"({section:"{{section}}"})>
+      {{section.name}}
     </li>
-    <li class="item">
-      Pizza base crème fraiche
-    </li> 
-    <li class="item">
-      Pasta
-    </li>  
-    <li class="item">
-      Boisson
-    </li> 
   <ul>
     
 	</ion-content>

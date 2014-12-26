@@ -14,5 +14,10 @@ angular.module('groupeat.controllers.settings', [])
 	    { name: 'pushSettings', state:'settings-notifications'}
 		];
 
-
+	$scope.user = {profile: {
+		firstName:   'Phillipe',
+		lastName:    'Fessier',
+		phoneNumber: '0685958687',
+		adress:      'Palaiseau',
+	}};
 });

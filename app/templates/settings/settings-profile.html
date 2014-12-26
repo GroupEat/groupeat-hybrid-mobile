@@ -1,24 +1,31 @@
 <ion-view ng-controller="SettingsCtrl" title="{{'profileSettings'| translate }}">
 	<ion-content has-header="true">
 
-		<div class="list">
+		<div class="no-margin list">
 			<label class="item item-input">
 				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-				<input ng-model="userSignup.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
+				<input ng-model="userSignup.firstName" type="text" placeholder="{{user.profile.firstName}}">
 			</label>
 			<label class="item item-input">
 				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-				<input ng-model="userSignup.lastName" type="text" placeholder="{{ 'lastName' | translate }}">
+				<input ng-model="userSignup.lastName" type="text" placeholder="{{user.profile.lastName}}">
 			</label>
 			<label class="item item-input">
 				<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
-				<input ng-model="userSignup.phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}">
+				<input ng-model="userSignup.phoneNumber" type="tel" placeholder="{{user.profile.phoneNumber}}">
 			</label>
 			<label class="item item-input">
 				<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-				<input ng-model="userSignup.address" type="text" placeholder="{{ 'address' | translate }}">
+				<input ng-model="userSignup.address" type="text" placeholder="{{user.profile.adress}}">
 			</label>
 		</div>
 
+		<button ui-sref='settings' class="button button-full button-outline no-margin">
+   		   <text id="new-command-text">{{ 'save' | translate }}<text/>
+   		</button>
+
+   		<button ui-sref='first-page' class="button button-full button-outline no-margin">
+   		   <text id="new-command-text">{{ 'disconnect' | translate }}<text/>
+   		</button>
 	</ion-content>
 </ion-view>
