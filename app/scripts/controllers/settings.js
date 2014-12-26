@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers.settings', [])
 
-.controller('SettingsCtrl', function($scope, $state) {
+.controller('SettingsCtrl', function($scope) {
 
 	/*
 	settings list

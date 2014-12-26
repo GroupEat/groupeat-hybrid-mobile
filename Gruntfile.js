@@ -96,6 +96,10 @@ module.exports = function (grunt) {
       translations: {
         files: ['<%= yeoman.app %>/translations/*.json'],
         tasks: ['newer:copy:app']
+      },
+      data: {
+        files: ['<%= yeoman.app %>/data/*.json'],
+        tasks: ['newer:copy:app']
       }
     },
 
@@ -385,6 +389,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-cookies/angular-cookies.js',
           '<%= yeoman.app %>/lib/angular-ui-router/release/angular-ui-router.js',
           '<%= yeoman.app %>/lib/angular-mocks/angular-mocks.js',
+          '<%= yeoman.app %>/lib/angular-resource/angular-resource.min.js',
           '<%= yeoman.app %>/lib/angular-translate/angular-translate.js',
           '<%= yeoman.app %>/lib/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
           '<%= yeoman.app %>/lib/angular-translate-storage-local/angular-translate-storage-local.js',
@@ -392,6 +397,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
           '<%= yeoman.app %>/lib/lodash/dist/lodash.min.js',
+          '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'test/mock/**/*.js',
           'test/spec/**/*.js'

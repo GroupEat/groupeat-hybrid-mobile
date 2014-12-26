@@ -7,22 +7,22 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
-  'ionic', 'config', 'ngCookies',
+  'ionic', 'config', 'ngCordova', 'ngCookies',
   'pascalprecht.translate',
   'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
 .config(function($stateProvider, $urlRouterProvider, $translateProvider) {
+
   $stateProvider
   .state('first-page', {
     url:'/first-page',
     templateUrl: 'templates/first-page.html'
   })
 
-  // States of restaurants
-  .state('current-command', {
-    url: '/current-command',
-    templateUrl: 'templates/current-command.html'
+  .state('orders', {
+    url: '/orders',
+    templateUrl: 'templates/orders.html'
   })
   .state('restaurant-list', {
     url: '/restaurant-list',
@@ -55,7 +55,7 @@ angular.module('groupeat', [
     templateUrl: 'templates/settings/settings-profile.html'
   });
 
-  $urlRouterProvider.otherwise('/first-page');
+  $urlRouterProvider.otherwise('/orders');
 
   $translateProvider
   .useStaticFilesLoader({
@@ -67,7 +67,7 @@ angular.module('groupeat', [
 
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $translate) {
 
   $ionicPlatform.ready(function() {
     if(typeof navigator.globalization !== 'undefined') {
@@ -79,6 +79,7 @@ angular.module('groupeat', [
         });
       }, null);
     }
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {

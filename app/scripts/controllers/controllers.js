@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers', [
   'groupeat.controllers.bottom-tabs-menu',
-  'groupeat.controllers.command-view',
+  'groupeat.controllers.orders',
   'groupeat.controllers.first-page-view',
   'groupeat.controllers.settings'
 ]);

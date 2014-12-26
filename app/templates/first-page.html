@@ -12,6 +12,14 @@
 <!--	-	-	- MENU VIEW -	-	-	-->
 
 <div ng-show="ShowLoginSignUpButtons">
+	<oauth
+		site="http://oauth-ng-server.herokuapp.com"
+		template="lib/oauth-ng/dist/views/templates/default.html"
+		client-id="017b9f702a904869a6e52bd39b147bb912"
+		redirect-uri="http://localhost:8100/#/current-command"
+		profile-uri="http://oauth-ng-server.herokuapp.com/api/v1/me"
+		scope="public">
+	</oauth>
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">{{ 'login' | translate | uppercase }}
 	</button>
 

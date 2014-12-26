@@ -8,7 +8,9 @@
     "angular-translate": "~2.5.2",
     "angular-translate-loader-static-files": "~2.5.2",
     "angular-translate-storage-local": "~2.5.2",
-    "angular-cookies": "~1.2.26"
+    "angular-cookies": "~1.2.26",
+    "angular-resource": "~1.2.26",
+    "ngCordova": "~0.1.9-alpha"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.26",

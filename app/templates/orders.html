@@ -1,4 +1,4 @@
-<ion-view ng-controller="CommandViewCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
+<ion-view ng-controller="OrdersCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
 
   <ion-content class="has-footer">
 
@@ -6,32 +6,29 @@
       <text id="new-command-text">{{ 'newOrder' | translate }} !<text/>
     </button>
 
-    <div ng-repeat="group in groups">
+    <div ng-repeat="order in orders">
       <div class="card">
         <div class="item item-divider">
           <i class="ion-clock assertive"></i>
-          <b>5 min</b>
-          <i class="ion-pizza assertive"></i>
-          <b>{{ 'pizza' | translate }}</b>
-          <i class="ion-bag assertive"></i>
-          <b>25€ (18%)</b>
+          <b>{{ order.timeLeft }} min</b>
+          <i class="ion-cash assertive"></i>
+          <b>{{ order.currentDiscount }}%</b>
         </div>
         <div class="item item-text-wrap">
-          <h2>{{ 'pizzeria' | translate }} : Di Genova</h2>
-          <div>{{ 'joinThisOrder' | translate }} : 18% -> 23% ! </div>
-          <div>{{ 'seniorPizza' | translate }} : 8€</div>
+          <h2>{{ 'pizzeria' | translate }} : {{ order.restaurant.name }}</h2>
+          <div>{{ 'margharitaForTwo' | translate }} : {{ order.restaurant.mediumMargharitaPrice }}€</div>
         </div>
-        <a class="item item-icon-left assertive" on-tap="onNewCommandTap()">
+        <a class="item item-icon-left assertive" on-tap="onNewOrderTap()">
           <i class="icon ion-arrow-right-a"></i>
           {{ 'toOrder' | translate }} !
         </a>
       </div>
     </div>
 
-    
+
 
   </ion-content>
-<!-- 
+<!--
   Pour le futur bouton flottant swag
 
   <div class="float-button">
