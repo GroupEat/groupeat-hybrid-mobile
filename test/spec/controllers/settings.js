@@ -26,7 +26,7 @@ describe('Controller: SettingsCtrl', function () {
     it("should have a name and onTap fields", function () {
       _.forEach(scope.settingsList, function(setting) {
         setting.should.have.property('name');
-        setting.should.have.property('onTap');
+        setting.should.have.property('state');
       })
     })
   });
