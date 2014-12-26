@@ -33,7 +33,7 @@ angular.module('groupeat', [
     templateUrl: 'templates/restaurant-menu.html'
   })
   .state('restaurant-menu-section', {
-    url: '/restaurant-menu-section',
+    url: '/restaurant-menu-section:sectionid',
     templateUrl: 'templates/restaurant-menu-section.html'
     // controller: 'controllers/restaurant-menu.js'
   })

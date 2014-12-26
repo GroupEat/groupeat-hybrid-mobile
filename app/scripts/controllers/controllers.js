@@ -6,6 +6,5 @@ angular.module('groupeat.controllers', [
   'groupeat.controllers.first-page-view',
   'groupeat.controllers.settings',
   'groupeat.controllers.restaurant-list',
-  'groupeat.controllers.restaurant-menu',
-  'groupeat.controllers.restaurant-menu-section'
+  'groupeat.controllers.restaurant-menu'
 ]);
