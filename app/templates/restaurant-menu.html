@@ -3,9 +3,17 @@
   <ion-content class="has-header has-footer">
 
   <ul class="list">
-    <li ng-repeat="section in sections" class="item" ui-sref="restaurant-menu-section"({section:"{{section}}"})>
-      {{section.name}}
-    </li>
+    <div ng-repeat="product in products" ng-click="addToBasketPopup(product)" class="row" >
+      <div class="col col-80">
+        <h3>{{product.name}}</h2>
+        <p style="display:block">{{product.description}}</p>
+      </div>
+      <div class="col col-20 col-center">
+      <strike>{{product.price | number : 2}} €</strike>
+      <br>
+      {{product.price*discount | number : 2}} €
+      </div>
+    </div>
   <ul>
     
 	</ion-content>
