@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "timeLeft": 5,
     "currentDiscount": 15,
     "restaurant":
@@ -9,6 +10,7 @@
     }
   },
   {
+    "id": 2,
     "timeLeft": 7,
     "currentDiscount": 45,
     "restaurant":

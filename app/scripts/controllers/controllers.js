@@ -5,6 +5,6 @@ angular.module('groupeat.controllers', [
   'groupeat.controllers.orders',
   'groupeat.controllers.first-page-view',
   'groupeat.controllers.settings',
-  'groupeat.controllers.restaurant-list',
+  'groupeat.controllers.restaurants',
   'groupeat.controllers.restaurant-menu'
 ]);

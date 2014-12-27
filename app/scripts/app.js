@@ -24,18 +24,13 @@ angular.module('groupeat', [
     url: '/orders',
     templateUrl: 'templates/orders.html'
   })
-  .state('restaurant-list', {
-    url: '/restaurant-list',
-    templateUrl: 'templates/restaurant-list.html'
+  .state('restaurants', {
+    url: '/restaurants',
+    templateUrl: 'templates/restaurants.html'
   })
   .state('restaurant-menu', {
-    url: '/restaurant-menu',
+    url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html'
-  })
-  .state('restaurant-menu-section', {
-    url: '/restaurant-menu-section:sectionid',
-    templateUrl: 'templates/restaurant-menu-section.html'
-    // controller: 'controllers/restaurant-menu.js'
   })
   .state('food-choice', {
     url: '/food-choice',

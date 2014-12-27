@@ -1,20 +1,18 @@
-
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantCarte' | translate }}" >
   <ion-content class="has-header has-footer">
-
   <ul class="list">
-    <div ng-repeat="product in products" ng-click="addToBasketPopup(product)" class="row" >
+    <div ng-repeat="pizza in pizzas" ng-click="addToBasketPopup(pizza)" class="row" >
       <div class="col col-80">
-        <h3>{{product.name}}</h2>
-        <p style="display:block">{{product.description}}</p>
+        <h3>{{ pizza.name }}</h2>
+        <p style="display:block">{{ pizza.description }}</p>
       </div>
       <div class="col col-20 col-center">
-      <strike>{{product.price | number : 2}} €</strike>
+      <strike>{{ pizza.price | number : 2 }} €</strike>
       <br>
-      {{product.price*discount | number : 2}} €
+      {{ pizza.price*discount | number : 2 }} €
       </div>
     </div>
   <ul>
-    
+
 	</ion-content>
 </ion-view>

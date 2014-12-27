@@ -1,35 +1,14 @@
 'use strict';
 
-angular.module('groupeat.controllers.restaurant-menu', [])
+angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza'])
 
-.controller('RestaurantMenuCtrl', function($scope, $ionicPopup, $timeout, $state, $stateParams) {
+.controller('RestaurantMenuCtrl', function($scope, $ionicPopup, $timeout, $state, $stateParams, $filter, Pizza) {
+
+  var $translate = $filter('translate');
 
   $scope.discount = 0.8;
 
-  $scope.products =
-    [
-      {
-        name:'Pizza 1',
-        price:10,
-        description:'Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras',
-      },
-      {
-        name:'Pizza 2',
-        price:10,
-        description:'plein de choses',
-      },
-      {
-        name:'Pizza 3',
-        price:10,
-        description:'plein de choses',
-      },
-      {
-        name:'Pizza 4',
-        price:8.5,
-        description:'plein de choses',
-      },
-
-    ];
+  $scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
 
   $scope.addToBasketPopup = function(product) {
     $scope.data = product;
@@ -40,21 +19,21 @@ angular.module('groupeat.controllers.restaurant-menu', [])
       scope: $scope,
       title: $scope.data.name,
       buttons: [
-        { text: 'Cancel' },
+        { text: $translate('cancel') },
         {
-          text: '<b>Ajouter</b>',
-          type: 'button-positive',
-          onTap: function(e) {
-            if (!$scope.data.wifi) {
-              //don't allow the user to close unless he enters wifi password
-              e.preventDefault();
-            } else {
-              return $scope.data.wifi;
+            text: '<b>'+$translate('add')+'</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+              if (!$scope.data.wifi) {
+                //don't allow the user to close unless he enters wifi password
+                e.preventDefault();
+              } else {
+                return $scope.data.wifi;
+              }
             }
           }
-        }
-      ]
-    });
+        ]
+      });
     myPopup.then(function(res) {
       console.log('Tapped!', res);
     });
