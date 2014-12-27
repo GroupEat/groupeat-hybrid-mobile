@@ -18,7 +18,7 @@ angular.module('groupeat.controllers.bottom-tabs-menu', [])
   ];
 
   $scope.onCommandTap = function() {
-    $state.go('current-command');
+    $state.go('orders');
   };
 
   $scope.onSettingsTap = function() {
