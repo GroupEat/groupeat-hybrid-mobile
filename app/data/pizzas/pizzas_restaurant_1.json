@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Pizza 1",
+    "price": 10,
+    "description": "Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras"
+  },
+  {
+    "name": "Pizza 2",
+    "price": 10,
+    "description": "plein de choses"
+  },
+  {
+    "name": "Pizza 3",
+    "price": 10,
+    "description": "plein de choses"
+  },
+  {
+    "name": "Pizza 4",
+    "price": 8.5,
+    "description": "plein de choses"
+  }
+]
