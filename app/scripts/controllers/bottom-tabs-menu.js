@@ -8,20 +8,20 @@ angular.module('groupeat.controllers.bottom-tabs-menu', [])
     {
       'title'     : 'orders',
       'iconName'  : 'ion-fork',
-      'action'    : 'onCommandTap()'
+      'action'    : 'onOrdersTabTouch()'
     },
     {
       'title'     : 'settings',
       'iconName'  : 'ion-gear-a',
-      'action'    : 'onSettingsTap()'
+      'action'    : 'onSettingsTabTouch()'
     }
   ];
 
-  $scope.onCommandTap = function() {
+  $scope.onOrdersTabTouch = function() {
     $state.go('orders');
   };
 
-  $scope.onSettingsTap = function() {
+  $scope.onSettingsTabTouch = function() {
     $state.go('settings');
   };
 });
