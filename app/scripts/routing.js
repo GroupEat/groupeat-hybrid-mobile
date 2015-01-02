@@ -41,6 +41,6 @@ angular.module('routing', [])
     templateUrl: 'templates/settings/settings-profile.html'
   });
 
-  $urlRouterProvider.otherwise('/authentication');
+  $urlRouterProvider.otherwise('/orders');
 
 });
