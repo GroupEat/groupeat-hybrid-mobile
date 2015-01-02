@@ -9,49 +9,10 @@
 angular.module('groupeat', [
   'ionic', 'config', 'ngCordova', 'ngCookies',
   'pascalprecht.translate',
-  'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
+  'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
-.config(function($stateProvider, $urlRouterProvider, $translateProvider) {
-
-  $stateProvider
-  .state('first-page', {
-    url:'/first-page',
-    templateUrl: 'templates/first-page.html'
-  })
-
-  .state('orders', {
-    url: '/orders',
-    templateUrl: 'templates/orders.html'
-  })
-  .state('restaurants', {
-    url: '/restaurants',
-    templateUrl: 'templates/restaurants.html'
-  })
-  .state('restaurant-menu', {
-    url: '/restaurant/:restaurantId/menu',
-    templateUrl: 'templates/restaurant-menu.html'
-  })
-  .state('food-choice', {
-    url: '/food-choice',
-    templateUrl: 'templates/food-choice.html'
-  })
-
-  // states of settings
-  .state('settings', {
-    url: '/settings',
-    templateUrl: 'templates/settings.html'
-  })
-  .state('settings-notifications', {
-    url: '/settings/settings-notifications',
-    templateUrl: 'templates/settings/settings-notifications.html'
-  })
-  .state('settings-profile', {
-    url: '/settings-profile',
-    templateUrl: 'templates/settings/settings-profile.html'
-  });
-
-  $urlRouterProvider.otherwise('/orders');
+.config(function($translateProvider) {
 
   $translateProvider
   .useStaticFilesLoader({
