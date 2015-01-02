@@ -12,7 +12,11 @@ angular.module('groupeat', [
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
-.config(function($translateProvider) {
+.config(function($httpProvider, $translateProvider) {
+
+  $httpProvider.defaults.headers.common = {
+    'Accept': 'application/vnd.groupeat.v1+json'
+  };
 
   $translateProvider
   .useStaticFilesLoader({
@@ -24,18 +28,21 @@ angular.module('groupeat', [
 
 })
 
-.run(function($ionicPlatform, $translate) {
+.run(function($ionicPlatform, $localStorage, $translate) {
+
+  $localStorage.set('devAPIPath', 'https://groupeat.dev/api');
+
+  if(typeof navigator.globalization !== 'undefined') {
+    navigator.globalization.getPreferredLanguage(function(language) {
+      $translate.use((language.value).split('-')[0]).then(function(data) {
+        console.log('SUCCESS -> ' + data);
+      }, function(error) {
+        console.log('ERROR -> ' + error);
+      });
+    }, null);
+  }
 
   $ionicPlatform.ready(function() {
-    if(typeof navigator.globalization !== 'undefined') {
-      navigator.globalization.getPreferredLanguage(function(language) {
-        $translate.use((language.value).split('-')[0]).then(function(data) {
-          console.log('SUCCESS -> ' + data);
-        }, function(error) {
-          console.log('ERROR -> ' + error);
-        });
-      }, null);
-    }
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

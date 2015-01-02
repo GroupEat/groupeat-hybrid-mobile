@@ -24,20 +24,20 @@
 
 <!--	-	-	- LOGIN VIEW -	-	-	-->
 
-<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm.$valid)" novalidate>
+<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm)" novalidate>
 	<div class="list list-inset register-form">
 		<div class="loginViewButtons">
 			<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> {{ 'forgotPassword' | translate }} </button>
 		</div>
 		<label class="item item-input">
-			<input ng-model="email" type="email" name="email" placeholder="{{ 'email' | translate }}" required ge-campus-email >
+			<input ng-model="loginUser.email" type="email" name="email" placeholder="{{ 'email' | translate }}" required ge-campus-email>
 		</label>
 		<label class="item item-input">
-			<input ng-model="userLogin.password" name="password" type="password" placeholder="{{ 'password' | translate }}" required>
+			<input ng-model="loginUser.password" name="password" type="password" placeholder="{{ 'password' | translate }}" required ng-minlength="6">
 		</label>
 	</div>
 
-	<button type="submit" class="button button-bottom button-full button-energized text-button-first-page" ng-disabled="loginForm.$invalid">{{ 'login' | translate | uppercase }}
+	<button type="submit" class="button button-bottom button-full button-energized text-button-first-page">{{ 'login' | translate | uppercase }}
 	</button>
 </form>
 

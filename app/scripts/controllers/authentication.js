@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.controllers.authentication', [])
+angular.module('groupeat.controllers.authentication', ['groupeat.services.customer'])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter, Customer) {
 
   var $translate = $filter('translate');
 
@@ -38,9 +38,9 @@ angular.module('groupeat.controllers.authentication', [])
     $scope.showLoginBackButtonAssertive = false ;
   };
 
-  $scope.submitLoginForm = function(isValid) {
+  $scope.submitLoginForm = function(form) {
     // test de base de donnée backend à faire en plus de ceux faits en front
-    if (isValid && $scope.userLogin.email === 'groupeat@groupeat.fr' && $scope.userLogin.password === 'groupeat') {
+    if (form.$valid) {
       $state.go('orders');
     }
     else {
@@ -186,6 +186,8 @@ angular.module('groupeat.controllers.authentication', [])
 
 
     else { // tout est ok
+      var customer = new Customer($scope.userSignup);
+      customer.$save();
 
       $scope.showLoginSignUpButtons = false;
       $scope.showLoginView = false ;
