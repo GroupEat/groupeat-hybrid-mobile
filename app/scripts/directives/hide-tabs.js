@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.directives.ge-hide-tabs', [])
+angular.module('groupeat.directives.hide-tabs', [])
 
 .directive('geHideTabs', function($rootScope) {
   return {
