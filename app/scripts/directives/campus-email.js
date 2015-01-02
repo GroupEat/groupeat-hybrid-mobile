@@ -8,7 +8,7 @@ angular.module('groupeat.directives.campus-email', [])
     link: function(scope, elm, attrs, ctrl) {
       ctrl.$parsers.unshift(function(viewValue) {
 
-        var domains = ['ensta-paristech.fr', 'ensta.fr', 'polytechnique.edu'];
+        var domains = ['ensta-paristech.fr', 'ensta.fr', 'polytechnique.edu', 'institutoptique.fr'];
 
         // Basic email matching
         var regex = /^[\w-]+(?:\.[\w-]+)*@(.*)$/i;
