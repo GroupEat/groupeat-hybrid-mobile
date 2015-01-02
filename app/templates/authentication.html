@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true" ge-hide-tabs ng-controller="FirstPageViewCtrl">
+<ion-view hide-nav-bar="true" ge-hide-tabs ng-controller="AuthenticationCtrl">
 
 <!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
 
@@ -11,15 +11,7 @@
 
 <!--	-	-	- MENU VIEW -	-	-	-->
 
-<div ng-show="ShowLoginSignUpButtons">
-	<oauth
-		site="http://oauth-ng-server.herokuapp.com"
-		template="lib/oauth-ng/dist/views/templates/default.html"
-		client-id="017b9f702a904869a6e52bd39b147bb912"
-		redirect-uri="http://localhost:8100/#/current-command"
-		profile-uri="http://oauth-ng-server.herokuapp.com/api/v1/me"
-		scope="public">
-	</oauth>
+<div ng-show="showLoginSignUpButtons">
 	<button on-touch="onLoginViewTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">{{ 'login' | translate | uppercase }}
 	</button>
 
@@ -32,24 +24,25 @@
 
 <!--	-	-	- LOGIN VIEW -	-	-	-->
 
-<div ng-show="ShowLoginView" class="list list-inset register-form">
-	<div class="loginViewButtons">
-		<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> {{ 'forgotPassword' | translate }} </button>
+<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm.$valid)" novalidate>
+	<div class="list list-inset register-form">
+		<div class="loginViewButtons">
+			<button on-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized"> {{ 'forgotPassword' | translate }} </button>
+		</div>
+		<label class="item item-input">
+			<input ng-model="email" type="email" name="email" placeholder="{{ 'email' | translate }}" required ge-campus-email >
+		</label>
+		<label class="item item-input">
+			<input ng-model="userLogin.password" name="password" type="password" placeholder="{{ 'password' | translate }}" required>
+		</label>
 	</div>
-	<label class="item item-input">
-		<input ng-model="userLogin.email" type="email" placeholder="{{ 'email' | translate }}">
-	</label>
-	<label class="item item-input">
-		<input ng-model="userLogin.password" type="password" placeholder="{{ 'password' | translate }}">
-	</label>
-</div>
 
-<div ng-show="ShowLoginView">
-	<button on-touch="onLoginTouch()" class="button button-bottom button-full button-energized text-button-first-page">{{ 'login' | translate | uppercase }}
+	<button type="submit" class="button button-bottom button-full button-energized text-button-first-page" ng-disabled="loginForm.$invalid">{{ 'login' | translate | uppercase }}
 	</button>
-</div>
+</form>
 
-<button ng-show="ShowLoginBackButtonEnergized" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+
+<button ng-show="showLoginBackButtonEnergized" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
 	{{ 'back' | translate }}
 </button>
 
@@ -58,7 +51,7 @@
 
 <!--	-	-	- REGISTER VIEW -	-	-	-->
 
-<div ng-show="ShowSignUpView" class="list list-inset register-form">
+<div ng-show="showSignUpView" class="list list-inset register-form">
 	<label class="item item-input">
 		<i class="icon ion-ios7-email-outline placeholder-icon"></i>
 		<input ng-model="userSignup.email" type="email" placeholder="{{ 'email' | translate }}">
@@ -73,12 +66,12 @@
 	</label>
 </div>
 
-<div ng-show="ShowSignUpView">
+<div ng-show="showSignUpView">
 	<button on-touch="onSignUpTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 	</button>
 </div>
 
-<button ng-show="ShowLoginBackButtonAssertive" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+<button ng-show="showLoginBackButtonAssertive" on-touch="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
 	 Retour
 </button>
 
@@ -87,12 +80,12 @@
 
 <!--	-	-	- SECOND FORM VIEW -	-	-	-->
 
- <div ng-show="ShowSecondFormView">
- 	<div ng-show="ShowSkipButton">
+ <div ng-show="showSecondFormView">
+ 	<div ng-show="showSkipButton">
 		<button on-touch="onSkipSecondFormTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'skip' | translate | uppercase }}
 		</button>
 	</div>
-	<div ng-show="ShowSecondRegisterButton">
+	<div ng-show="showSecondRegisterButton">
 		<button on-touch="onSecondRegisterTouch()" class="button button-full button-energized button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 		</button>
 	</div>

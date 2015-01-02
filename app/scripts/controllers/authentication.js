@@ -1,59 +1,49 @@
 'use strict';
 
-angular.module('groupeat.controllers.first-page-view', [])
+angular.module('groupeat.controllers.authentication', [])
 
-.controller('FirstPageViewCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter) {
 
   var $translate = $filter('translate');
-  /*
-  In first page, component are hide and show according to state where user is
-  There are three variables : userReset, userLogin, and userSignup for different uses
-  */
-
 
   /*
-  ----------------------    MAIN VIEW    --------------------------
+  ----------------------    Initial View Controller    --------------------------
   */
-  $scope.ShowLoginSignUpButtons = true ;
+  $scope.showLoginSignUpButtons = true ;
 
   $scope.onSignUpViewTouch = function() {
-    $scope.ShowLoginSignUpButtons = false;
-    $scope.ShowSignUpView = true ;
-    $scope.ShowLoginBackButtonEnergized = false ;
-    $scope.ShowLoginBackButtonAssertive = true ;
+    $scope.showLoginSignUpButtons = false;
+    $scope.showSignUpView = true ;
+    $scope.showLoginBackButtonEnergized = false ;
+    $scope.showLoginBackButtonAssertive = true ;
   };
 
   $scope.onLoginViewTouch = function() {
-    $scope.ShowLoginSignUpButtons = false;
-    $scope.ShowLoginView = true ;
-    $scope.ShowLoginBackButtonEnergized = true ;
-    $scope.ShowLoginBackButtonAssertive = false ;
+    $scope.showLoginSignUpButtons = false;
+    $scope.showLoginView = true ;
+    $scope.showLoginBackButtonEnergized = true ;
+    $scope.showLoginBackButtonAssertive = false ;
     $scope.userLogin = {};
   };
-  /*
-  ----------------------    END MAIN VIEW    --------------------------
-  */
-
 
   /*
-  ----------------------    LOGIN VIEW    --------------------------
+  ----------------------    Login View Controller    --------------------------
   */
   /* onBackToMainViewButtonTouch is reused in First Register View */
   $scope.onBackToMainViewButtonTouch = function() {
-    $scope.ShowLoginSignUpButtons = true;
-    $scope.ShowLoginView = false ;
-    $scope.ShowSignUpView = false ;
-    $scope.ShowLoginBackButtonEnergized = false ;
-    $scope.ShowLoginBackButtonAssertive = false ;
+    $scope.showLoginSignUpButtons = true;
+    $scope.showLoginView = false ;
+    $scope.showSignUpView = false ;
+    $scope.showLoginBackButtonEnergized = false ;
+    $scope.showLoginBackButtonAssertive = false ;
   };
 
-  $scope.onLoginTouch = function() {
+  $scope.submitLoginForm = function(isValid) {
     // test de base de donnée backend à faire en plus de ceux faits en front
-    if (($scope.userLogin.email === 'groupeat@groupeat.fr') && ($scope.userLogin.password === 'groupeat')) {
-      $state.go('current-command');
+    if (isValid && $scope.userLogin.email === 'groupeat@groupeat.fr' && $scope.userLogin.password === 'groupeat') {
+      $state.go('orders');
     }
     else {
-      console.log($scope.userLogin.email); // test console
       var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
         title: $translate('wrongEmailPasswordCombination'),
         okText: 'OK',
@@ -197,13 +187,13 @@ angular.module('groupeat.controllers.first-page-view', [])
 
     else { // tout est ok
 
-      $scope.ShowLoginSignUpButtons = false;
-      $scope.ShowLoginView = false ;
-      $scope.ShowSignUpView = false ;
-      $scope.ShowLoginBackButtonEnergized = false ;
-      $scope.ShowLoginBackButtonAssertive = false ;
-      $scope.ShowSecondFormView = true ;
-      $scope.ShowSkipButton = true ;
+      $scope.showLoginSignUpButtons = false;
+      $scope.showLoginView = false ;
+      $scope.showSignUpView = false ;
+      $scope.showLoginBackButtonEnergized = false ;
+      $scope.showLoginBackButtonAssertive = false ;
+      $scope.showSecondFormView = true ;
+      $scope.showSkipButton = true ;
     }
 
   };
@@ -232,12 +222,12 @@ angular.module('groupeat.controllers.first-page-view', [])
 
   $scope.$watch('[userSignup.firstName, userSignup.lastName, userSignup.phoneNumber, userSignup.address]', function () {
     if ( ($scope.userSignup.firstName && $scope.userSignup.lastName && $scope.userSignup.phoneNumber && $scope.userSignup.address) ) {
-      $scope.ShowSecondRegisterButton = true;
-      $scope.ShowSkipButton = false ;
+      $scope.showSecondRegisterButton = true;
+      $scope.showSkipButton = false ;
     }
     else {
-      $scope.ShowSecondRegisterButton = false;
-      $scope.ShowSkipButton = true ;
+      $scope.showSecondRegisterButton = false;
+      $scope.showSkipButton = true ;
     }
   }, true);
 
