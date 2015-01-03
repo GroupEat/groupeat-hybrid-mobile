@@ -7,9 +7,17 @@
 }
 
 #new-command-text {
-	color:$energized;
+	color: $energized;
 	font-weight: bold;
 }
+
+#confirmCommandButton {
+	display:block;
+	margin-top : 10px;
+	margin-left : auto !important;
+	margin-right : auto !important;
+}
+
 
 
 
