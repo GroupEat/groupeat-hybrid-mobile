@@ -15,9 +15,11 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	};
 
 	$scope.onConfirmCommandTouch = function() {
-		console.log(cartTotalPrice);
+		console.log($scope.cartTotalPrice);
 	};
 	
+	$scope.onItemDelete = function(index) {
+	    $scope.cart.splice(index, 1);
+		};
 	
-
 });
