@@ -42,5 +42,8 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
     }, 3000);
   };
 
+  $scope.onCartTouch = function() {
+    $state.go('cart');
+  };
 
 });
