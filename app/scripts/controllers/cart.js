@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	});
 
 	$scope.data = {
-		showDeleteItem: false
+		showDeleteList: false
 	};
 
 	$scope.onConfirmCommandTouch = function() {
@@ -21,16 +21,8 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 		console.log($scope.cartTotalNumber);
 	};
 	
-	$scope.onItemDelete = function(index) {
+	$scope.onItemDelete = function(index) { // Backend request to delete item
 	    $scope.cart.splice(index, 1);
 		};
-
-	$scope.onSwipeRightItem = function() {
-		$scope.data.showDeleteItem = true ;
-	};
-
-	$scope.onSwipeLeftItem = function() {
-		$scope.data.showDeleteItem = false ;
-	};
 	
 });
