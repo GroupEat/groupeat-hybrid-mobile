@@ -7,6 +7,7 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	$scope.cart = Cart.query(function(cart) {
 		_.forEach(cart, function(product) {
 			$scope.cartTotalPrice += product.price*product.number;
+			$scope.cartTotalNumber += product.number;
 		});
 	});
 
@@ -16,10 +17,19 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 
 	$scope.onConfirmCommandTouch = function() {
 		console.log($scope.cartTotalPrice);
+		console.log($scope.cartTotalNumber);
 	};
 	
 	$scope.onItemDelete = function(index) {
 	    $scope.cart.splice(index, 1);
 		};
+
+	$scope.onSwipeRightItem = function() {
+		$scope.data.showDeleteItem = true ;
+	};
+
+	$scope.onSwipeLeftItem = function() {
+		$scope.data.showDeleteItem = false ;
+	};
 	
 });
