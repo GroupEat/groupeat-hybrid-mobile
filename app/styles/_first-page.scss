@@ -3,6 +3,36 @@
     text-align:center;
 }
 
+.add-horizontal-margin {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.add-vertical-margin {
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+
+.add-top-margin {
+    margin-top: 10%;
+}
+
+.add-bottom-margin {
+    margin-bottom: 10%;
+}
+
+.no-bottom-margin {
+    margin-bottom: 0%;
+}
+
+.no-top-margin {
+    margin-top: 0%;
+}
+
+.no-border {
+    border-style: none;
+}
+
 #logo-first-page{
     width:60% ;
     height:60% ;

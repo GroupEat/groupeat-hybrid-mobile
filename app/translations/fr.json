@@ -65,5 +65,9 @@
   "yourCart": "Votre panier",
   "confirmCommand": "Valider ma Commande",
   "Total": "Total",
-  "emptyCart": "Votre panier est vide."
+  "emptyCart": "Votre panier est vide.",
+  "howLongFoodRush" : "Quelle durée souhaitez-vous pour le",
+  "min": "min",
+  
+  "commandOrdered": "Votre commande a été passée."
 }
