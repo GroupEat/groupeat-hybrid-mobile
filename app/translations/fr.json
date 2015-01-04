@@ -64,5 +64,6 @@
 
   "yourCart": "Votre panier",
   "confirmCommand": "Valider ma Commande",
-  "Total": "Total"
+  "Total": "Total",
+  "emptyCart": "Votre panier est vide."
 }

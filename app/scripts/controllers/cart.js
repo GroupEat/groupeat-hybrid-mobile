@@ -9,6 +9,7 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 			$scope.cartTotalPrice += product.price*product.number;
 			$scope.cartTotalNumber += product.number;
 		});
+		$scope.isCartEmpty = _.isEmpty(cart);
 	});
 
 	$scope.data = {
