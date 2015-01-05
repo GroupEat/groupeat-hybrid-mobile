@@ -4,8 +4,7 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 
 .controller('CartCtrl', function($scope, $state, Cart, _) {
 
-	//var $translate = $filter('translate');
-
+	
 	$scope.cart = Cart.query(function(cart) {
 		_.forEach(cart, function(product) {
 			$scope.cartTotalPrice += product.price*product.number;
@@ -19,6 +18,10 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	};
 
 	$scope.onConfirmCommandTouch = function() {
+	};
+
+	$scope.onItemDelete = function(index) { // Backend request to delete item
+	    $scope.cart.splice(index, 1);
 	};
 	
 });
