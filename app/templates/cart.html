@@ -1,17 +1,13 @@
 <ion-view ng-controller="CartCtrl" title="{{ 'yourCart' | translate }}" ge-hide-tabs>
 
+<!-- - - - - - - - - - - -  CART NOT EMPTY :  - - - - - - - - - - - - -->
+
 	<ion-nav-buttons side="right">
-    	<button class="button button-clear ion-ios7-compose-outline" on-touch="data.showDeleteList = !data.showDeleteList">
+    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline" on-touch="data.showDeleteList = !data.showDeleteList">
     	</button>
   	</ion-nav-buttons>
-	
-	<ion-nav-buttons side="left">
-  		<ion-nav-back-button class='button button-clear'>
-          {{ 'back' | translate }}
-    	</ion-nav-back-button>
-    </ion-nav-buttons>
 
-  	<ion-content has-header="true">
+	<ion-content has-header="true" ng-hide="isCartEmpty">
 
 	  	<ion-list show-delete="data.showDeleteList" can-swipe=true>
 	  		<ion-item ng-repeat="item in cart">
@@ -46,48 +42,58 @@
 
 		<ion-list>
 	  		<ion-item>
-	  			<div ng-hide="isCartEmpty" class="border-less center">
+	  			<div class="border-less center">
 		  			<b>{{ 'Total' | translate}} :</b> &nbsp{{cartTotalNumber}} pizzas, {{cartTotalPrice}}€.  
 				</div>
-				<div ng-show="isCartEmpty" class="border-less center">
-		  			<b> {{'emptyCart' | translate}} </b>  
-				</div>
-
 	  		</ion-item>
 	  	</ion-list>
 
-	  	<h5 ng-hide="isEmptyCart" class="login-text-first-page add-horizontal-margin no-bottom-margin">
+	  	<h5 class="login-text-first-page add-horizontal-margin no-bottom-margin">
 	  	 {{'howLongFoodRush' | translate}} <a class="energized">Food</a><a class="assertive">Rush</a> ? 
 	  	</h5>
 
-	  	<div ng-hide="isEmptyCart" class="row border-less">
+	  	<div class="row border-less">
 	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border" ng-model="is5MinChecked"></ion-checkbox>
-	  			<h5 class="border-less center">5 {{'min' | translate}}</h5>
+	  			<ion-checkbox class="no-border checkbox-assertive center" ng-model="FoodRushTime" ng-true-value="5"></ion-checkbox>
+	  			<h5 class="border-less">&nbsp  5 {{'min' | translate}}</h5>
 	  		</div>
 	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border" ng-model="is10MinChecked"></ion-checkbox>
-	  			<h5 class="border-less center">10 {{'min' | translate}}</h5>
+	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="10"></ion-checkbox>
+	  			<h5 class="border-less">&nbsp  10 {{'min' | translate}}</h5>
 	  		</div>
 	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border" ng-model="is15MinChecked"></ion-checkbox>
-	  			<h5 class="border-less center">15 {{'min' | translate}}</h5>
+	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="15"></ion-checkbox>
+	  			<h5 class="border-less">&nbsp  15 {{'min' | translate}}</h5>
 	  		</div>
 	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border" ng-model="is30MinChecked"></ion-checkbox>
-	  			<h5 class="border-less center">30 {{'min' | translate}}</h5>
+	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="30"></ion-checkbox>
+	  			<h5 class="border-less">&nbsp  30 {{'min' | translate}}</h5>
 	  		</div>
 	  	</div>
 	  	
-		<button ng-hide="isCartEmpty" id="confirmCommandButton" class="button button-assertive button-outline button-center" on-touch="onConfirmCommandTouch()">
+		<button id="confirmCommandButton" class="button button-assertive button-outline button-center" on-touch="onConfirmCommandTouch()">
 			{{ 'confirmCommand' | translate}}
 		</button>
 
-
-
 	</ion-content>
+<!-- - - - - - - - - - - -  END CART NOT EMPTY :  - - - - - - - - - - - - -->
 
-	<ion-footer-bar align-title="left" class="bar-energized ">
+
+
+<!-- - - - - - - - - - - -  CART EMPTY :  - - - - - - - - - - - - -->
+	<ion-content has-header="true" ng-show="isCartEmpty">
+		<ion-list>
+	  		<ion-item>
+				<div class="border-less center">
+		  			<b> {{'emptyCart' | translate}} </b>  
+				</div>
+	  		</ion-item>
+	  	</ion-list>
+	</ion-content>
+<!-- - - - - - - - - - - -  END CART EMPTY :  - - - - - - - - - - - - -->
+
+
+	<ion-footer-bar class="bar-energized ">
 	 	<div class="row border-less">
 	  		<div class="col col-offset-80">
 				<i ng-init="cartTotalPrice=0; cartTotalNumber=0" class="icon ion-ios7-cart-outline"> {{cartTotalPrice}}€</i>
