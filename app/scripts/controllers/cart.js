@@ -22,6 +22,6 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 
 	$scope.onItemDelete = function(index) { // Backend request to delete item
 	    $scope.cart.splice(index, 1);
-	};
+		};
 	
 });

@@ -68,6 +68,10 @@
   "emptyCart": "Votre panier est vide.",
   "howLongFoodRush" : "Quelle durée souhaitez-vous pour le",
   "min": "min",
+  "Quantity" : "Quantité",
+  "Size" : "Taille",
+  "Price" : "Prix",
+  "Description" : "Description",
   
   "commandOrdered": "Votre commande a été passée."
 }
