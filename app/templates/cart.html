@@ -3,7 +3,7 @@
 <!-- - - - - - - - - - - -  CART NOT EMPTY :  - - - - - - - - - - - - -->
 
 	<ion-nav-buttons side="right">
-    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline" on-touch="data.showDeleteList = !data.showDeleteList">
+    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline right-header-bar-icon" on-touch="data.showDeleteList = !data.showDeleteList">
     	</button>
   	</ion-nav-buttons>
 
@@ -96,7 +96,7 @@
 	<ion-footer-bar class="bar-energized ">
 	 	<div class="row border-less">
 	  		<div class="col col-offset-80">
-				<i ng-init="cartTotalPrice=0; cartTotalNumber=0" class="icon ion-ios7-cart-outline"> {{cartTotalPrice}}€</i>
+				<i ng-init="cartTotalPrice=0; cartTotalNumber=0" class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{cartTotalPrice}}€
 			</div>
 		</div>
 	</ion-footer-bar>
