@@ -10,18 +10,28 @@
 	<ion-content has-header="true" ng-hide="isCartEmpty">
 
 	  	<ion-list show-delete="data.showDeleteList" can-swipe=true>
+
+	  		<div class="item item-divider">
+	  			<div class="row border-less">
+		  			<div class="col col-70">
+		  				<b>{{'Description' | translate}}</b>
+		  			</div>
+		  			<div class="col col-20">
+		  				{{'Prix' | translate}}
+		  			</div>
+		  			<div class="col col-10">
+		  			</div>
+				</div>
+  			</div>
+
 	  		<ion-item ng-repeat="item in cart">
 	  			<div class="row border-less">
-		  			
-		  			<div class="col col-60">
+		  			<div class="col col-80 border-less">
 		  				<b>{{item.name}}</b>
+		  				<p>{{'Quantity' | translate}} : {{item.number}} <br/>
+		  				{{'Size' | translate}} : {{item.size}} </p>
 		  			</div>
-		  			<div class="col col-10">
-		  				<h2 >{{item.number}}</h2>
-		  			</div>
-		  			<div class="col col-10">
-		  				{{item.size}}
-		  			</div>
+		  			
 		  			<div class="col col-10">
 		  				{{item.price*item.number}}€
 		  			</div>
@@ -30,7 +40,7 @@
 				</div>
 	  	
 	  			<ion-option-button class="button button-clear button-full" on-touch="onItemDelete($index)">
-	  				<a class="ion-ios7-trash-outline assertive"></a>     
+	  				<a id="trash-icon-swipe-cart-cell" class="ion-ios7-trash-outline assertive"></a>     
 	    		</ion-option-button>
 
 				<ion-delete-button class="ion-ios7-trash-outline"
@@ -42,7 +52,7 @@
 
 		<ion-list>
 	  		<ion-item>
-	  			<div class="border-less center">
+	  			<div class="center">
 		  			<b>{{ 'Total' | translate}} :</b> &nbsp{{cartTotalNumber}} pizzas, {{cartTotalPrice}}€.  
 				</div>
 	  		</ion-item>
