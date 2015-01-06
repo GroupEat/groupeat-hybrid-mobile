@@ -1,22 +1,74 @@
 [
   {
-    "name": "Pizza 1",
-    "price": 10,
-    "description": "Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras"
+    "name": "Margherita",
+    "mediumprice": 10,
+    "description": "Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras",
+    "formats":
+      [
+        {
+          "size":"Junior",
+          "price":8
+        },
+        {
+          "size":"Senior",
+          "price":10
+        },
+        {
+          "size":"Mega",
+          "price":12
+        }
+      ]
   },
   {
-    "name": "Pizza 2",
-    "price": 10,
-    "description": "plein de choses"
+    "name": "4 Fromages",
+    "mediumprice": 10,
+    "description": "plein de fromages",
+    "formats":
+      [
+        {
+          "size":"Junior",
+          "price":8
+        },
+        {
+          "size":"Senior",
+          "price":10
+        },
+        {
+          "size":"Mega",
+          "price":12
+        }
+      ]
   },
   {
     "name": "Pizza 3",
-    "price": 10,
-    "description": "plein de choses"
+    "mediumprice": 10,
+    "description": "plein de choses",
+    "formats":
+      [
+        {
+          "size":"Junior",
+          "price":8
+        },
+        {
+          "size":"Senior",
+          "price":10
+        }
+      ]
   },
   {
     "name": "Pizza 4",
-    "price": 8.5,
-    "description": "plein de choses"
+    "mediumprice": 8.5,
+    "description": "plein de choses",
+    "formats":
+      [
+        {
+          "size":"Junior",
+          "price":8
+        },
+        {
+          "size":"Senior",
+          "price":10
+        }
+      ]
   }
 ]
