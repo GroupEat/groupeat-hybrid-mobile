@@ -14,20 +14,8 @@ angular.module('groupeat.directives.campus-email', [])
         var regex = /^[\w-]+(?:\.[\w-]+)*@(.*)$/i;
         var matches = regex.exec(viewValue);
 
-        // Assert that address starts as an email address
-        if (matches === null) {
-          ctrl.$setValidity('geCampusEmail', false);
-          return undefined;
-        }
-
-        // Returns true if domain is in whitelist, false otherwise
-        if (domains.indexOf(matches[1]) !== -1) {
-          ctrl.$setValidity('geCampusEmail', true);
-          return viewValue;
-        } else {
-          ctrl.$setValidity('geCampusEmail', false);
-          return undefined;
-        }
+        ctrl.$setValidity('geCampusEmail', matches !== null && domains.indexOf(matches[1]) !== -1);
+        return viewValue;
       });
     }
   };
