@@ -1,29 +1,36 @@
 'use strict';
 
-angular.module('groupeat.controllers.authentication', ['groupeat.services.customer'])
+angular.module('groupeat.controllers.authentication', ['groupeat.services.customer', 'groupeat.services.element-modifier'])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter, Customer) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter, Customer, ElementModifier) {
 
   var $translate = $filter('translate');
 
   /*
   ----------------------    Initial View Controller    --------------------------
   */
-  $scope.showLoginSignUpButtons = true ;
+  $scope.showLoginSignUpButtons = true;
+  $scope.showRegisterView = false;
+  $scope.showLoginBackButtonEnergized = false;
+  $scope.showLoginBackButtonAssertive = false;
 
-  $scope.onSignUpViewTouch = function() {
+  $scope.userRegister = {};
+  $scope.userLogin = {};
+  $scope.userReset = {};
+  $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
+
+  $scope.onRegisterButtonTouch = function() {
     $scope.showLoginSignUpButtons = false;
-    $scope.showSignUpView = true ;
-    $scope.showLoginBackButtonEnergized = false ;
-    $scope.showLoginBackButtonAssertive = true ;
+    $scope.showRegisterView = true;
+    $scope.showLoginBackButtonEnergized = false;
+    $scope.showLoginBackButtonAssertive = true;
   };
 
-  $scope.onLoginViewTouch = function() {
+  $scope.onLoginButtonTouch = function() {
     $scope.showLoginSignUpButtons = false;
-    $scope.showLoginView = true ;
-    $scope.showLoginBackButtonEnergized = true ;
-    $scope.showLoginBackButtonAssertive = false ;
-    $scope.userLogin = {};
+    $scope.showLoginView = true;
+    $scope.showLoginBackButtonEnergized = true;
+    $scope.showLoginBackButtonAssertive = false;
   };
 
   /*
@@ -33,32 +40,30 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   $scope.onBackToMainViewButtonTouch = function() {
     $scope.showLoginSignUpButtons = true;
     $scope.showLoginView = false ;
-    $scope.showSignUpView = false ;
+    $scope.showRegisterView = false ;
     $scope.showLoginBackButtonEnergized = false ;
     $scope.showLoginBackButtonAssertive = false ;
   };
 
   $scope.submitLoginForm = function(form) {
-    // test de base de donnée backend à faire en plus de ceux faits en front
-    if (form.$valid) {
-      $state.go('orders');
-    }
-    else {
+    if (form.$invalid) {
       var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
-        title: $translate('wrongEmailPasswordCombination'),
+        title: ElementModifier.errorMsg(),
         okText: 'OK',
         okType: 'button-energized',
       });
       $timeout(function() {
-        alertWrongCombinaison.close(); //close the popup after 3 seconds
+        alertWrongCombinaison.close(); // close the popup after 3 seconds
       }, 4000);
+    }
+    else {
+      $state.go('orders');
     }
   };
 
   $scope.showRestPasswordPopup = function() {
     $scope.userReset = {};
     $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
-
 
     $ionicPopup.show({
       title : '<h4 class="login-text-first-page border-less">'+$translate('resetPassword')+'</h4>' ,
@@ -68,23 +73,22 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
       buttons: [{
         text: $translate('cancel'),
         type: 'button-outline button-energized',
-        onTap: function() {
+        onTouch: function() {
           close();
-          $scope.tapChoice = $translate('cancel');
+          $scope.tapChoice = 'cancel';
         }
       }, {
         text: $translate('send'),
         type: 'button-energized',
-        onTap: function() {
-          console.log($scope.userReset.email); // test console
+        onTouch: function() {
           return $scope.userReset.email;
         }
       }]
     })
     .then(function() {
-      if ($scope.tapChoice === $translate('cancel')) {
+      if ($scope.tapChoice === 'cancel') {
 
-      }  // la popup se ferme sans rien faire d'autre
+      }
       else {
         if($scope.userReset.email === undefined) { // alert : email invalid
           var alertInvalidEmail = $ionicPopup.alert({
@@ -119,85 +123,32 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   /*
   -------------------    FIRST REGISTER VIEW  (UNSKIPPABLE INFORMATIONS) -------------------------
   */
-  $scope.userSignup = {};
 
-  $scope.onSignUpTouch = function() {
-    console.log('user email :' + $scope.userSignup.email); // test console
-    console.log('user password :' + $scope.userSignup.password); // test console
-    console.log('user passwordConfirmed :' + $scope.userSignup.passwordConfirmed); // test console
+  $scope.submitRegisterForm = function(form) {
 
-    // test de quels champs l'user a rentré ////
-    if ($scope.userSignup.email === undefined) {
-      var alertEnterEmail = $ionicPopup.alert({
-        title: $translate('pleaseEnterEmail'),
+    if (form.$invalid) {
+      var alertWrongCombinaison = $ionicPopup.alert({
+        title: ElementModifier.errorMsg(),
         okText: 'OK',
-        okType: 'button-assertive',
+        okType: 'button-energized',
       });
       $timeout(function() {
-        alertEnterEmail.close(); //close the popup after 2 seconds
-      }, 2000);
+        alertWrongCombinaison.close();
+      }, 4000);
     }
 
-    else if ($scope.userSignup.password === undefined) {
-      var alertEnterPassword = $ionicPopup.alert({
-        title: $translate('pleaseEnterPassword'),
-        okText: 'OK',
-        okType: 'button-assertive',
-      });
-      $timeout(function() {
-        alertEnterPassword.close(); //close the popup after 3 seconds
-      }, 2000);
-    }
-
-    else if ($scope.userSignup.passwordConfirmed === undefined) {
-      var alertConfirmPassword = $ionicPopup.alert({
-        title: $translate('pleaseConfirmPassword'),
-        okText: 'OK',
-        okType: 'button-assertive',
-      });
-      $timeout(function() {
-        alertConfirmPassword.close(); //close the popup after 3 seconds
-      }, 2000);
-    }
-
-    // Test password identique
-    else if ($scope.userSignup.password !== $scope.userSignup.passwordConfirmed ) {
-      var alertDifferentPasswords = $ionicPopup.alert({
-        title: $translate('passwordDoNotMatch'),
-        okText: 'OK',
-        okType: 'button-assertive',
-      });
-      $timeout(function() {
-        alertDifferentPasswords.close(); //close the popup after 3 seconds
-      }, 3000);
-    }
-    // Tests backend à faire
-    else if($scope.userSignup.email === 'groupeat@groupeat.fr') {
-      var alertEmailAlreadyUsed = $ionicPopup.alert({
-        title: $translate('emailAlreadyInUse'),
-        okText: 'OK',
-        okType: 'button-assertive',
-      });
-      $timeout(function() {
-        alertEmailAlreadyUsed.close(); //close the popup after 3 seconds
-      }, 2000);
-    }
-
-
-
-    else { // tout est ok
-      var customer = new Customer($scope.userSignup);
+    else {
+      var customer = new Customer($scope.userRegister);
       customer.$save();
 
       $scope.showLoginSignUpButtons = false;
       $scope.showLoginView = false ;
-      $scope.showSignUpView = false ;
+      $scope.showRegisterView = false ;
       $scope.showLoginBackButtonEnergized = false ;
       $scope.showLoginBackButtonAssertive = false ;
       $scope.showSecondFormView = true ;
       $scope.showSkipButton = true ;
     }
-
   };
 
 
@@ -210,7 +161,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   -------------------    SECOND REGISTER VIEW  (SKIPPABLE INFORMATIONS) -------------------------
   */
   $scope.onSkipSecondFormTouch = function () {
-    $state.go('current-command') ;
+    $state.go('orders') ;
 
     var alertWelcome = $ionicPopup.alert({
       title: $translate('welcomeMessage'),
@@ -222,8 +173,8 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     }, 3000);
   };
 
-  $scope.$watch('[userSignup.firstName, userSignup.lastName, userSignup.phoneNumber, userSignup.address]', function () {
-    if ( ($scope.userSignup.firstName && $scope.userSignup.lastName && $scope.userSignup.phoneNumber && $scope.userSignup.address) ) {
+  $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.address]', function () {
+    if ( ($scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
       $scope.showSecondRegisterButton = true;
       $scope.showSkipButton = false ;
     }
@@ -234,7 +185,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   }, true);
 
   $scope.onSecondRegisterTouch = function () {
-    $state.go('current-command') ;
+    $state.go('orders') ;
 
     var alertWelcome = $ionicPopup.alert({
       title: $translate('welcomeMessage'),
@@ -256,25 +207,25 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
   */
 
-  $ionicModal.fromTemplateUrl('templates/modal/signUpModal.html', {
+  $ionicModal.fromTemplateUrl('templates/modal/register.html', {
     scope: $scope,
     animation: 'slide-in-up'
   })
   .then(function(modal) {
-    $scope.signUpModal = modal;
+    $scope.registerModal = modal;
   });
 
-  $scope.openSignUpModal = function() {
-    $scope.signUpModal.show();
-    $scope.userSignup = {};
+  $scope.openRegisterModal = function() {
+    $scope.registerModal.show();
+    $scope.userRegister = {};
 
   };
-  $scope.closeSignUpModal = function() {
-    $scope.signUpModal.hide();
+  $scope.closeRegisterModal = function() {
+    $scope.registerModal.hide();
   };
 
   /*
-  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
+  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFUL LATER ---------------------
   */
 
 });

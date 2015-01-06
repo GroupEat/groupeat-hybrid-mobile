@@ -8,7 +8,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
   'ionic', 'config', 'ngCordova', 'ngCookies',
-  'pascalprecht.translate',
+  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match',
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
@@ -28,9 +28,18 @@ angular.module('groupeat', [
 
 })
 
-.run(function($ionicPlatform, $localStorage, $translate) {
+.run([
+  'validator',
+  'ElementModifier',
+  'ErrorMessageResolver',
+  function (validator, ElementModifier, ErrorMessageResolver) {
+    validator.registerDomModifier(ElementModifier.key, ElementModifier);
+    validator.setDefaultElementModifier(ElementModifier.key);
+    validator.setErrorMessageResolver(ErrorMessageResolver.resolve);
+  }
+])
 
-  $localStorage.set('devAPIPath', 'https://groupeat.dev/api');
+.run(function($ionicPlatform, $translate) {
 
   if(typeof navigator.globalization !== 'undefined') {
     navigator.globalization.getPreferredLanguage(function(language) {
@@ -54,4 +63,5 @@ angular.module('groupeat', [
       StatusBar.styleDefault();
     }
   });
-});
+}
+);
