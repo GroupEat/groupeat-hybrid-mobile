@@ -57,7 +57,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'development',
-            apiEndpoint: 'http://dev.yoursite.com:10000/'
+            apiEndpoint: 'https://groupeat.dev/api'
           }
         }
       },
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://api.yoursite.com/'
+            apiEndpoint: 'https://groupeat.fr/api'
           }
         }
       }
