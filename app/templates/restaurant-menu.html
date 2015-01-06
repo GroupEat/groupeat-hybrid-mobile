@@ -13,9 +13,9 @@
           <p style="display:block">{{ pizza.description }}</p>
         </div>
         <div class="col col-20 col-center">
-        <strike>{{ pizza.price | number : 2 }} €</strike>
+        <strike>{{ pizza.mediumPrice | number : 2 }} €</strike>
         <br>
-        {{ pizza.price*discount | number : 2 }} €
+        {{ pizza.mediumPrice*discount | number : 2 }} €
         </div>
       </div>
     <ul>

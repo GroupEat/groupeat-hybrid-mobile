@@ -6,32 +6,12 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
   var $translate = $filter('translate');
 
-  $scope.cart = [{
-    "id": 10,    
-    "name": "Une sacrée pizza",
-    "formats":
-      [
-        {
-          "size":"Junior",
-          "price":8
-        },
-        {
-          "size":"Senior",
-          "price":10
-        },
-        {
-          "size":"Mega",
-          "price":12
-        }
-      ]
-  }];
-
   $scope.discount = 0.8;
 
   $scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
 
   $scope.onCartTouch = function() {
-    
+    $state.go('cart');
   };
 
   $scope.addToBasketPopup = function(product) {
