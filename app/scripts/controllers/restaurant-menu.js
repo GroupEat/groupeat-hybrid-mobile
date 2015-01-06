@@ -10,9 +10,6 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
   $scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
 
-  $scope.onCartTouch = function() {
-    $state.go('cart');
-  };
 
   $scope.addToBasketPopup = function(product) {
     $scope.data = product;
