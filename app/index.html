@@ -42,7 +42,7 @@
     </ion-nav-view>
 
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuCtrl" class="tabs tabs-energized tabs-icon-top">
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
 
       <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
           <i class="icon {{tab.iconName}}"></i>
