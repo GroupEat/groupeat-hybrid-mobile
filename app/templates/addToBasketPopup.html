@@ -2,13 +2,13 @@
 	<div class="col col-30">
 		{{ format.size }}
 	</div>
-	<button ge-touch="removefromcart(format)" class="col col-10">
+	<button ng-disabled="format.quantity > 0" ge-touch="format.quantity = format.quantity - 1" class="col col-10">
 		-
 	</button>
 	<div class="col col-10">
 		{{ format.quantity }}
 	</div>
-	<button ge-touch="addtocart(format)" class="col col-10">
+	<button ge-touch="format.quantity = format.quantity + 1" class="col col-10">
 		+
 	</button>
 	<div class="col col-40">
@@ -17,5 +17,9 @@
 		{{ format.price*discount | number: 2 }}€	
 	</div>
 
+</div>
+
+<div ng-show="getTotal(data.formats)>0"> Total : <strike>{{ getTotal(data.formats) }}€</strike>
+			{{ getTotal(data.formats)*discount | number: 2 }}€
 </div>
 
