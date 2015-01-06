@@ -55,14 +55,12 @@ describe('Directive: geCampusEmail', function () {
   it('should not pass with an invalid email', function() {
     form.campusEmail.$setViewValue('invalidEmail');
     scope.$digest();
-    expect(scope.model.campusEmail).to.be.undefined;
     expect(form.campusEmail.$valid).to.be.false;
   });
 
   it('should not pass with an email not from campus', function() {
     form.campusEmail.$setViewValue('test@gmail.com');
     scope.$digest();
-    expect(scope.model.campusEmail).to.be.undefined;
     expect(form.campusEmail.$valid).to.be.false;
   });
 

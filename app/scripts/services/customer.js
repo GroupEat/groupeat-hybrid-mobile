@@ -2,6 +2,6 @@
 
 angular.module('groupeat.services.customer', ['ngResource'])
 
-.factory('Customer', function($resource, $localStorage) {
-  return $resource($localStorage.get('devAPIPath')+'/customers');
+.factory('Customer', function($resource, ENV) {
+  return $resource(ENV.apiEndpoint+'/customers');
 });

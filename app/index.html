@@ -42,7 +42,7 @@
     </ion-nav-view>
 
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuCtrl" class="tabs tabs-energized tabs-icon-top">
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
 
       <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
           <i class="icon {{tab.iconName}}"></i>
@@ -73,6 +73,8 @@
     <script src="lib/angular-translate-storage-local/angular-translate-storage-local.js"></script>
     <script src="lib/angular-resource/angular-resource.js"></script>
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
+    <script src="lib/angular-validation-match/dist/angular-input-match.min.js"></script>
+    <script src="lib/angular-auto-validate/dist/jcs-auto-validate.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -83,7 +85,7 @@
         <script src="scripts/routing.js"></script>
         <script src="scripts/controllers/controllers.js"></script>
         <script src="scripts/controllers/settings.js"></script>
-        <script src="scripts/controllers/bottom-tabs-menu.js"></script>
+        <script src="scripts/controllers/bottom-tabs.js"></script>
         <script src="scripts/controllers/orders.js"></script>
         <script src="scripts/controllers/authentication.js"></script>
         <script src="scripts/controllers/restaurants.js"></script>
@@ -93,16 +95,17 @@
         <script src="scripts/services/services.js"></script>
         <script src="scripts/services/lodash.js"></script>
         <script src="scripts/services/utils.js"></script>
+        <script src="scripts/services/cart.js"></script>
         <script src="scripts/services/customer.js"></script>
         <script src="scripts/services/order.js"></script>
         <script src="scripts/services/restaurant.js"></script>
         <script src="scripts/services/pizza.js"></script>
-        <script src="scripts/services/cart.js"></script>
-
+        <script src="scripts/services/element-modifier.js"></script>
+        <script src="scripts/services/error-message-resolver.js"></script>
         <script src="scripts/directives/directives.js"></script>
         <script src="scripts/directives/campus-email.js"></script>
         <script src="scripts/directives/hide-tabs.js"></script>
-
+        <script src="scripts/directives/touch.js"></script>
         <!-- endbuild -->
 </body>
 </html>

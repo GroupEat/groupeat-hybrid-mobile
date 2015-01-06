@@ -10,7 +10,9 @@
     "angular-translate-storage-local": "~2.5.2",
     "angular-cookies": "~1.2.26",
     "angular-resource": "~1.2.26",
-    "ngCordova": "~0.1.9-alpha"
+    "ngCordova": "~0.1.9-alpha",
+    "angular-validation-match": "~1.2.0",
+    "angular-auto-validate": "~1.13.22"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.26",

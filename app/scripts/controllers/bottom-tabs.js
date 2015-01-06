@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.controllers.bottom-tabs-menu', [])
+angular.module('groupeat.controllers.bottom-tabs', [])
 
-.controller('BottomTabsMenuCtrl', function($scope, $state) {
+.controller('BottomTabsCtrl', function($scope) {
 
   $scope.bottomTabs = [
     {

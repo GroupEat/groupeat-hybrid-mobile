@@ -16,7 +16,7 @@
         </div>
         <div class="item item-text-wrap">
           <h2>{{ 'pizzeria' | translate }} : {{ order.restaurant.name }}</h2>
-          <div>{{ 'margharitaForTwo' | translate }} : {{ order.restaurant.mediumMargharitaPrice }}€</div>
+          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ order.restaurant.mediumMargharitaPrice }}€</strike> {{ order.restaurant.mediumMargharitaPrice*(100-order.currentDiscount)/100 | number : 2}}€ </div>
         </div>
         <a class="item item-icon-left assertive" ui-sref="restaurant-menu({restaurantId: order.restaurant.id})">
           <i class="icon ion-arrow-right-a"></i>

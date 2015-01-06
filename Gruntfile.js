@@ -57,7 +57,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'development',
-            apiEndpoint: 'http://dev.yoursite.com:10000/'
+            apiEndpoint: 'https://groupeat.dev/api'
           }
         }
       },
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://api.yoursite.com/'
+            apiEndpoint: 'https://groupeat.fr/api'
           }
         }
       }
@@ -394,6 +394,8 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
           '<%= yeoman.app %>/lib/angular-translate-storage-local/angular-translate-storage-local.js',
           '<%= yeoman.app %>/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+          '<%= yeoman.app %>/lib/angular-validation-match/dist/angular-input-match.min.js',
+          '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.min.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
           '<%= yeoman.app %>/lib/lodash/dist/lodash.min.js',
