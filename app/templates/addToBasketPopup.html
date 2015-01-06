@@ -1,21 +1,20 @@
-<div ng-repeat="format in product" class="row">
+<div ng-repeat="format in data.formats" class="row">
 	<div class="col col-30">
-		{{format.size}}
+		{{ format.size }}
 	</div>
-	<button class="col col-10">
+	<button ge-touch="removefromcart(format)" class="col col-10">
 		-
 	</button>
 	<div class="col col-10">
-		0
+		{{ format.quantity }}
 	</div>
-	<button class="col col-10">
+	<button ge-touch="addtocart(format)" class="col col-10">
 		+
 	</button>
-	<div class="col col-20">
-		10 €
-	</div>
-	<div class="col col-20">
-		8 €	
+	<div class="col col-40">
+		<strike>{{ format.price }}€</strike>
+
+		{{ format.price*discount | number: 2 }}€	
 	</div>
 
 </div>
