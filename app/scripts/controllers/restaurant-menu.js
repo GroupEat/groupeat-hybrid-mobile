@@ -41,6 +41,5 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
       myPopup.close(); //close the popup after 3 seconds for some reason
     }, 3000);
   };
-
-
+  
 });

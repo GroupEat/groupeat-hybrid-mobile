@@ -14,6 +14,10 @@ angular.module('routing', [])
     url: '/orders',
     templateUrl: 'templates/orders.html'
   })
+  .state('cart', {
+    url: '/cart',
+    templateUrl: 'templates/cart.html'
+  })
   .state('restaurants', {
     url: '/restaurants',
     templateUrl: 'templates/restaurants.html'

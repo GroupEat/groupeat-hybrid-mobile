@@ -42,9 +42,9 @@
     </ion-nav-view>
 
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuCtrl" class="tabs tabs-energized tabs-icon-top">
+    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
 
-      <a class="tab-item" ng-repeat="tab in bottomTabs" on-tap="{{tab.action}}">
+      <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
           <i class="icon {{tab.iconName}}"></i>
           {{tab.title | translate}}
       </a>
@@ -90,9 +90,12 @@
         <script src="scripts/controllers/authentication.js"></script>
         <script src="scripts/controllers/restaurants.js"></script>
         <script src="scripts/controllers/restaurant-menu.js"></script>
+        <script src="scripts/controllers/cart.js"></script>
+
         <script src="scripts/services/services.js"></script>
         <script src="scripts/services/lodash.js"></script>
         <script src="scripts/services/utils.js"></script>
+        <script src="scripts/services/cart.js"></script>
         <script src="scripts/services/customer.js"></script>
         <script src="scripts/services/order.js"></script>
         <script src="scripts/services/restaurant.js"></script>

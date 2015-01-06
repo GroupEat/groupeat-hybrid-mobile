@@ -62,6 +62,18 @@
   "chineseDishes": "Nems, Riz cantonnais, Nouilles, Raviolis vapeurs,...",
   "lebaneseDishes": "Falafel, Kébbé, Rikakat, Chawarma,...",
 
+  "yourCart": "Votre panier",
+  "confirmCommand": "Valider ma Commande",
+  "Total": "Total",
+  "emptyCart": "Votre panier est vide.",
+  "howLongFoodRush" : "Quelle durée souhaitez-vous pour le",
+  "min": "min",
+  "Quantity" : "Quantité",
+  "Size" : "Taille",
+  "Price" : "Prix",
+  "Description" : "Description",
+
+  "commandOrdered": "Votre commande a été passée.",
 
   "emailFieldName": "e-mail",
   "passwordFieldName": "mot de passe",
@@ -71,5 +83,4 @@
   "maxlengthErrorKey": "Le champ {{fieldName}} doit comporter au maximum {0} caractères",
   "emailErrorKey": "Veuillez entrer une adresse e-mail valide",
   "geCampusEmailErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu"
-
 }

@@ -1,13 +1,14 @@
 'use strict';
 
-describe('Ctrl: BottomTabsMenuCtrl', function () {
+describe('Ctrl: RestaurantMenuCtrl', function () {
 
+    var expect = chai.expect;
     var should = chai.should();
 
     // Load the controller's module
     beforeEach(module('groupeat'));
 
-    var BottomTabsMenuCtrl,
+    var RestaurantMenuCtrl,
     httpBackend,
     scope,
     state;
@@ -16,30 +17,30 @@ describe('Ctrl: BottomTabsMenuCtrl', function () {
         httpBackend = $httpBackend;
         state = $state;
         scope = $rootScope.$new();
-        BottomTabsMenuCtrl = $controller('BottomTabsMenuCtrl', {
+        RestaurantMenuCtrl = $controller('RestaurantMenuCtrl', {
             $scope: scope, $state: state
         });
+        var mockData = [{key:"test"},{key:"test2"}];
+        var url = 'data/pizzas/pizzas_restaurant_.json';
+        httpBackend.whenGET(url).respond(mockData);
         httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
         httpBackend.whenGET(/^translations\/.*/).respond('{}');
     }));
 
-    describe("State Change", function() {
+    describe("Constructor", function() {
 
         beforeEach(function() {
             httpBackend.flush();
         });
 
-        it("state should change to orders view", function () {
-            scope.onOrdersTabTouch();
-            scope.$apply();
-            state.current.name.should.equal('orders');
+        it("discount should be between 0 & 1", function () {
+            expect(scope.discount).to.be.within(0,1);
         });
 
-        it("state should change to settings view", function () {
-            scope.onSettingsTabTouch();
-            scope.$apply();
-            state.current.name.should.equal('settings');
+        it("should load a list of 2 pizzas", function () {
+            scope.pizzas.should.have.length(2);
         });
 
     });
+
 });
