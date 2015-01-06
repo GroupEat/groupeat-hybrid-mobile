@@ -44,7 +44,7 @@
 
     <div ng-hide="$root.hideTabs" ng-controller="BottomTabsMenuCtrl" class="tabs tabs-energized tabs-icon-top">
 
-      <a class="tab-item" ng-repeat="tab in bottomTabs" on-tap="{{tab.action}}">
+      <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
           <i class="icon {{tab.iconName}}"></i>
           {{tab.title | translate}}
       </a>

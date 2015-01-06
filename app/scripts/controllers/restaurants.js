@@ -6,8 +6,4 @@ angular.module('groupeat.controllers.restaurants', ['groupeat.services.restauran
 
   $scope.restaurants = Restaurant.query();
 
-  $scope.goRestaurantMenu = function(restaurantId) {
-	  $state.go('restaurant-menu', {restaurantId: restaurantId});
-  };
-
 });

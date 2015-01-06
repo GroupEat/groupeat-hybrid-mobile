@@ -13,9 +13,9 @@ describe('Ctrl: RestaurantsCtrl', function () {
     state;
 
     beforeEach(inject(function ($controller, $rootScope, $state, $httpBackend) {
-        httpBackend = $httpBackend;
-        state = $state;
         scope = $rootScope.$new();
+        state = $state;
+        httpBackend = $httpBackend;
         RestaurantsCtrl = $controller('RestaurantsCtrl', {
             $scope: scope, $state: state
         });
@@ -26,18 +26,4 @@ describe('Ctrl: RestaurantsCtrl', function () {
         httpBackend.whenGET(/^translations\/.*/).respond('{}');
     }));
 
-    describe("State Change", function() {
-
-        beforeEach(function() {
-            httpBackend.flush();
-        });
-
-        it("state should change to restaurant menu view", function () {
-            var restaurantId = 1;
-            scope.goRestaurantMenu(restaurantId);
-            scope.$apply();
-            state.current.name.should.equal('restaurant-menu');
-        });
-
-    });
 });

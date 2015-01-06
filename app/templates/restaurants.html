@@ -2,7 +2,7 @@
 	<ion-content has-header="true">
 
 		<div class="list">
-			<a ng-repeat="restaurant in restaurants" class="item item-avatar" ng-click="goRestaurantMenu(restaurant.id)">
+			<a ng-repeat="restaurant in restaurants" class="item item-avatar" ui-sref="restaurant-menu({restaurantId: order.restaurant.id})">
 				<img src="">
 				<h2>{{ restaurant.name }}</h2>
 				<p>un super restaurant de pizza reducmax=40%</p>
@@ -11,4 +11,3 @@
 
 	</ion-content>
 </ion-view>
-

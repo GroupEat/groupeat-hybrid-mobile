@@ -1,11 +1,11 @@
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" >
   <ion-nav-buttons side="right">
-    <button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" on-touch="onCartTouch()">
+    <button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-refs="cart">
     </button>
   </ion-nav-buttons>
 
   <ion-content class="has-header has-footer">
-  
+
     <ul class="list">
       <div ng-repeat="pizza in pizzas" ng-click="addToBasketPopup(pizza)" class="row" >
         <div class="col col-80">
