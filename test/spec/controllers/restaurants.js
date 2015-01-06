@@ -26,4 +26,16 @@ describe('Ctrl: RestaurantsCtrl', function () {
         httpBackend.whenGET(/^translations\/.*/).respond('{}');
     }));
 
+    describe("Constructor", function() {
+
+        beforeEach(function() {
+            httpBackend.flush();
+        });
+
+        it("should load a list of 2 restaurants", function () {
+            scope.restaurants.should.have.length(2);
+        });
+
+    });
+
 });
