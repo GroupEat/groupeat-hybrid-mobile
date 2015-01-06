@@ -22,6 +22,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
       templateUrl: 'templates/addToBasketPopup.html',
       scope: $scope,
       title: $scope.data.name,
+      'product' : $scope.data,
       buttons: [
         { text: $translate('cancel') },
         {
@@ -41,9 +42,6 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
     myPopup.then(function(res) {
       console.log('Tapped!', res);
     });
-    $timeout(function() {
-      myPopup.close(); //close the popup after 3 seconds for some reason
-    }, 3000);
   };
   
 });
