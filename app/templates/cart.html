@@ -3,7 +3,7 @@
 <!-- - - - - - - - - - - -  CART NOT EMPTY :  - - - - - - - - - - - - -->
 
 	<ion-nav-buttons side="right">
-    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline right-header-bar-icon" on-touch="">
+    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline right-header-bar-icon" ge-touch="onEditCartTouch()">
     	</button>
   	</ion-nav-buttons>
 
@@ -13,7 +13,7 @@
 
 	  		<div class="item item-divider">
 	  			<div class="row border-less">
-		  			<div class="col col-70">
+		  			<div class="col col-80">
 		  				<b>{{ 'Description' | translate }}</b>
 		  			</div>
 		  			<div class="col col-20">

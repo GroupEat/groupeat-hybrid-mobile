@@ -2,12 +2,13 @@
 
 angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat.services.lodash' ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart) {
+.controller('CartCtrl', function($scope, $state, _, Cart, $timeout, $filter, $ionicPopup) {
 
 	$scope.cart = Cart.getCart() ;
 	$scope.data = {
 		showDeleteList: false
 	};
+	var $translate = $filter('translate');
 
 	$scope.refreshCart = function() {
 		$scope.cartTotalPrice = 0 ;
@@ -54,6 +55,17 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 
 	$scope.onProductAdd = function(productIndex, formatIndex) {
 		Cart.addProductToCart(productIndex, formatIndex);
+	};
+
+	$scope.onEditCartTouch = function() {
+		var alertEditCart = $ionicPopup.alert({
+        title: $translate('alertEditCart'),
+        okText: 'OK',
+        okType: 'button-energized',
+      });
+		$timeout(function() {
+			alertEditCart.close();
+		}, 4000);
 	};
 	
 });
