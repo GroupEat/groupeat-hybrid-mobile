@@ -38,13 +38,6 @@ describe('Ctrl: CartCtrl', function () {
       httpBackend.flush();
     });
 
-    it("number of cart's item should decrease by one ", function () {
-      var numberOfItemBefore = scope.cart.length ;
-      scope.onItemDelete();
-      scope.$apply();
-      expect(numberOfItemBefore -  scope.cart.length).to.equal(1);
-    });
-
     it("nothing should happen on confirm command touch ", function () {
       scope.onConfirmCommandTouch();
       scope.$apply();

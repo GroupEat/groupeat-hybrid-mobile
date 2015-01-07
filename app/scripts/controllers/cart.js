@@ -9,10 +9,6 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 		showDeleteList: false
 	};
 
-
-	console.log($scope.cart);
-
-
 	$scope.refreshCart = function() {
 		$scope.cartTotalPrice = 0 ;
 		$scope.cartTotalQuantity = 0 ;
@@ -28,13 +24,26 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	$scope.refreshCart() ; // for init onload
 	$scope.$watch('cart', $scope.refreshCart, true);
 
+	$scope.toggleDetails = function(product) {
+	    if ($scope.isDetailsShown(product)) {
+	      $scope.shownDetails = null;
+	    } else {
+	      $scope.shownDetails = product;
+	    }
+		};
+	$scope.isDetailsShown = function(product) {
+	  return $scope.shownDetails === product;
+	};
+
 	$scope.onConfirmCommandTouch = function() {
 	};
 
-	$scope.onItemDelete = function(index) { // Backend request to delete item
-	    Cart.removeProductFromCart(index);
-	    console.log($scope.cart);
-	    console.log($scope.isCartEmpty);
-		};
+	$scope.onProductDelete = function(productIndex, formatIndex) {
+		Cart.removeProductFromCart(productIndex, formatIndex);
+	};
+
+	$scope.onProductAdd = function(productIndex, formatIndex) {
+		Cart.addProductToCart(productIndex, formatIndex);
+	};
 	
 });
