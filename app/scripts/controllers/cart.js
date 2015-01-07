@@ -12,12 +12,22 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 	$scope.refreshCart = function() {
 		$scope.cartTotalPrice = 0 ;
 		$scope.cartTotalQuantity = 0 ;
+
 		$scope.isCartEmpty = _.isEmpty($scope.cart);
+
 		_.forEach($scope.cart, function(product) {
-			_.forEach(product.formats, function(formats) {
-				$scope.cartTotalPrice += formats.price*formats.quantity;
-				$scope.cartTotalQuantity +=  formats.quantity ;
+			product.totalQuantity = 0 ;
+			product.totalPrice = 0 ;
+			_.forEach(product.formats, function(productFormats) {
+				product.totalPrice += productFormats.price*productFormats.quantity ;
+				product.totalQuantity += productFormats.quantity ;
 			});
+			
+			$scope.cartTotalPrice += product.totalPrice ;
+			$scope.cartTotalQuantity += product.totalQuantity ;
+			if (product.totalQuantity === 0) {
+				$scope.cart.splice(_.indexOf(product) - 1, 1);
+			}
 		});
 	};
 
