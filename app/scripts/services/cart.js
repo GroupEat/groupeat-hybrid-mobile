@@ -60,6 +60,21 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 		}
 	];
 
+	var refreshCart = function() {
+		_.forEach(cart, function(product) {
+			product.totalQuantity = 0 ;
+			product.totalPrice = 0 ;
+			_.forEach(product.formats, function(productFormats) {
+				product.totalQuantity = product.totalQuantity + productFormats.quantity ;
+				product.totalPrice += productFormats.quantity * productFormats.price ;
+			});
+
+			if (product.totalQuantity === 0) {
+				cart.splice(_.indexOf(product) - 1, 1);
+			}
+		});
+	};
+
 	var addProductToCart = function() {
 /*      cart.splice(-1, 0, newObj);*/
 	};
@@ -71,8 +86,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 	var removeProductFromCart = function(productIndex, formatIndex) {
 
 		_.forEach(cart, function(product) {
-			if (product.id === productIndex)
-			{
+			if (product.id === productIndex) {
 				_.forEach(product.formats, function(productFormats) {
 					if(productFormats.id === formatIndex && productFormats.quantity > 0)
 					{
@@ -84,6 +98,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			else {}
 		});
 
+		refreshCart();
 	};
 
 	return {
