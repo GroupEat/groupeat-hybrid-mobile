@@ -28,12 +28,12 @@
 	  			<div class="row border-less">
 		  			<div class="col col-80 border-less">
 		  				<b>{{ item.name }}</b>
-		  				<p>{{ 'Quantity' | translate }} : {{ item.quantity }} <br/>
-		  				{{ 'Size' | translate }} : {{ item.size }} </p>
+		  				<p ng-show="formats.quantity" ng-repeat="formats in item.formats" class="border-less">{{ formats.quantity }} {{ formats.size }} ({{formats.quantity*formats.price}}€)
+		  				 </p>
 		  			</div>
 		  			
 		  			<div class="col col-10">
-		  				{{ item.price*item.number }}€
+		  				{{ item.totalPrice }}€
 		  			</div>
 		  			<div class="col col-10">
 		  			</div>
@@ -53,7 +53,7 @@
 		<ion-list>
 	  		<ion-item>
 	  			<div class="center">
-		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cartTotalNumber }} pizzas, {{ cartTotalPrice }}€.  
+		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cartTotalQuantity }} pizzas, {{ cartTotalPrice }}€.  
 				</div>
 	  		</ion-item>
 	  	</ion-list>
@@ -106,7 +106,7 @@
 	<ion-footer-bar class="bar-energized ">
 	 	<div class="row border-less">
 	  		<div class="col col-offset-80">
-				<i ng-init="cartTotalPrice=0; cartTotalNumber=0" class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cartTotalPrice }}€
+				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cartTotalPrice }}€
 			</div>
 		</div>
 	</ion-footer-bar>
