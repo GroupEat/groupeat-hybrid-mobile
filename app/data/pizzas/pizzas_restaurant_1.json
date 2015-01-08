@@ -1,22 +1,102 @@
 [
   {
-    "name": "Pizza 1",
-    "price": 10,
-    "description": "Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras"
+    "name": "Margherita",
+    "id": 1,
+    "mediumPrice": 10,
+    "quantity":0,
+    "description": "Tomate, mozzarella di bufala, roquette, tomate cerise, parmesan, foie gras",
+    "formats":
+      [
+        {
+          "id": 1,
+          "size":"Junior",
+          "quantity":0,
+          "price":8
+        },
+        {
+          "id": 2,
+          "size":"Senior",
+          "quantity":0,
+          "price":10
+        },
+        {
+          "id": 3,
+          "size":"Mega",
+          "quantity":0,
+          "price":12
+        }
+      ]
   },
   {
-    "name": "Pizza 2",
-    "price": 10,
-    "description": "plein de choses"
+    "name": "4 Fromages",
+    "id": 2,
+    "mediumPrice": 10,
+    "quantity":0,
+    "description": "plein de fromages",
+    "formats":
+      [
+        {
+          "id": 4,
+          "size":"Junior",
+          "quantity":0,
+          "price":8
+        },
+        {
+          "id": 5,
+          "size":"Senior",
+          "quantity":0,
+          "price":10
+        },
+        {
+          "id": 6,
+          "size":"Mega",
+          "quantity":0,
+          "price":12
+        }
+      ]
   },
   {
     "name": "Pizza 3",
-    "price": 10,
-    "description": "plein de choses"
+    "id": 3,
+    "mediumPrice": 10,
+    "quantity":0,
+    "description": "plein de choses",
+    "formats":
+      [
+        {
+          "id": 7,
+          "size":"Junior",
+          "quantity":0,
+          "price":8
+        },
+        {
+          "id": 8,
+          "size":"Senior",
+          "quantity":0,
+          "price":10
+        }
+      ]
   },
   {
     "name": "Pizza 4",
-    "price": 8.5,
-    "description": "plein de choses"
+    "id": 4,
+    "mediumPrice": 8.5,
+    "quantity":0,
+    "description": "plein de choses",
+    "formats":
+      [
+        {
+          "id": 9,
+          "size":"Junior",
+          "quantity":0,
+          "price":8
+        },
+        {
+          "id": 10,
+          "size":"Senior",
+          "quantity":0,
+          "price":10
+        }
+      ]
   }
 ]

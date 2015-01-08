@@ -2,26 +2,70 @@
 
 angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat.services.lodash' ])
 
-.controller('CartCtrl', function($scope, $state, Cart, _) {
+.controller('CartCtrl', function($scope, $state, _, Cart, $timeout, $filter, $ionicPopup) {
 
-	
-	$scope.cart = Cart.query(function(cart) {
-		_.forEach(cart, function(product) {
-			$scope.cartTotalPrice += product.price*product.number;
-			$scope.cartTotalNumber += product.number;
-		});
-		$scope.isCartEmpty = _.isEmpty(cart);
-	});
-
+	$scope.cart = Cart.getCart() ;
 	$scope.data = {
 		showDeleteList: false
+	};
+	var $translate = $filter('translate');
+
+	$scope.refreshCart = function() {
+		$scope.cartTotalPrice = 0 ;
+		$scope.cartTotalQuantity = 0 ;
+
+		$scope.isCartEmpty = _.isEmpty($scope.cart);
+
+		_.forEach($scope.cart, function(product) {
+			product.totalQuantity = 0 ;
+			product.totalPrice = 0 ;
+			_.forEach(product.formats, function(productFormats) {
+				product.totalPrice += productFormats.price*productFormats.quantity ;
+				product.totalQuantity += productFormats.quantity ;
+			});
+			
+			$scope.cartTotalPrice += product.totalPrice ;
+			$scope.cartTotalQuantity += product.totalQuantity ;
+			if (product.totalQuantity === 0) {
+				$scope.cart.splice(_.indexOf(product) - 1, 1);
+			}
+		});
+	};
+
+	$scope.refreshCart() ; // for init onload
+	$scope.$watch('cart', $scope.refreshCart, true);
+
+	$scope.toggleDetails = function(product) {
+	    if ($scope.isDetailsShown(product)) {
+	      $scope.shownDetails = null;
+	    } else {
+	      $scope.shownDetails = product;
+	    }
+		};
+	$scope.isDetailsShown = function(product) {
+	  return $scope.shownDetails === product;
 	};
 
 	$scope.onConfirmCommandTouch = function() {
 	};
 
-	$scope.onItemDelete = function(index) { // Backend request to delete item
-	    $scope.cart.splice(index, 1);
-		};
+	$scope.onProductDelete = function(productIndex, formatIndex) {
+		Cart.removeProductFromCart(productIndex, formatIndex);
+	};
+
+	$scope.onProductAdd = function(productIndex, formatIndex) {
+		Cart.addProductToCart(productIndex, formatIndex);
+	};
+
+	$scope.onEditCartTouch = function() {
+		var alertEditCart = $ionicPopup.alert({
+        title: $translate('alertEditCart'),
+        okText: 'OK',
+        okType: 'button-energized',
+      });
+		$timeout(function() {
+			alertEditCart.close();
+		}, 4000);
+	};
 	
 });

@@ -10,6 +10,15 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
   $scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
 
+  $scope.getTotal = function(product){
+    var total = 0;
+    for(var i = 0; i < product.length; i++){
+      var format = product[i];
+      total += (format.price * format.quantity);
+    }
+    return total;
+  };
+
   $scope.addToBasketPopup = function(product) {
     $scope.data = product;
 
@@ -21,15 +30,9 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
       buttons: [
         { text: $translate('cancel') },
         {
-            text: '<b>'+$translate('add')+'</b>',
+            text: 'ajouter',
             type: 'button-positive',
-            onTap: function(e) {
-              if (!$scope.data.wifi) {
-                //don't allow the user to close unless he enters wifi password
-                e.preventDefault();
-              } else {
-                return $scope.data.wifi;
-              }
+            onTap: function() {
             }
           }
         ]
@@ -37,9 +40,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
     myPopup.then(function(res) {
       console.log('Tapped!', res);
     });
-    $timeout(function() {
-      myPopup.close(); //close the popup after 3 seconds for some reason
-    }, 3000);
   };
-  
+
+
 });

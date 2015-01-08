@@ -72,7 +72,7 @@
   "Size" : "Taille",
   "Price" : "Prix",
   "Description" : "Description",
-
+  "alertEditCart": "Pour éditer un produit, appuyer dessus",
   "commandOrdered": "Votre commande a été passée.",
 
   "emailFieldName": "e-mail",
