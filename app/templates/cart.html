@@ -13,52 +13,50 @@
 
 	  		<div class="item item-divider">
 	  			<div class="row border-less">
-		  			<div class="col col-80">
-		  				<b>{{ 'Description' | translate }}</b>
-		  			</div>
-		  			<div class="col col-20">
-		  				{{ 'Price' | translate }}
-		  			</div>
-		  			<div class="col col-10">
-		  			</div>
+			  			<div class="col col-80 center">
+			  				<b>{{ 'Description' | translate }}</b>
+			  			</div>
+			  			<div class="col col-20">
+			  				{{ 'Price' | translate }}
+			  			</div>
+			  			<div class="col col-10">
+			  			</div>
 				</div>
   			</div>
 
   			<div ng-repeat="product in cart">
 		  		<ion-item ng-click="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
 		  			<div class="row border-less" ng-class="isDetailsShown(product)">
-
-			  			<div class="col col-80 border-less">
-			  				<b>{{ product.name }}</b>
-			  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.size }}
-			  				 </p>
-			  			</div>
-			  			
-			  			<div class="col col-10">
-			  				{{ product.totalPrice }}€
-			  			</div>
-			  			<div class="col col-10">
-			  			</div>
+				  			<div class="col col-80 border-less">
+				  				<b>{{ product.name }}</b>
+				  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.size }}
+				  				 </p>
+				  			</div>
+				  			
+				  			<div class="col col-10">
+				  				{{ product.totalPrice }}€
+				  			</div>
+				  			<div class="col col-10">
+				  			</div>
 					</div>
 
 				</ion-item>	
 				<ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
 					<div class="row border-less">
-	            		<div class="col col-60 border-less">
-	            			{{ format.size }} ({{ format.price }} €)
-	            		</div>
-	            		<div class="col col-10 ">
-	            			<a class="ion-ios7-minus-outline assertive icon-cart-add-delete" ge-touch="onProductDelete(product.id, format.id)"></a>
-	            		</div>
-	            		<div class="col col-10">
-	            			<a class="center">{{ format.quantity }} </a>
-	            		</div>
-	            		<div class="col col-10 ">
-	            			<a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" ge-touch="onProductAdd(product.id, format.id)"></a>
-	            		</div>
-	            		<div class="col col-10 ">
-						</div>
-	            		
+		            		<div class="col col-60 border-less">
+		            			{{ format.size }} ({{ format.price }} €)
+		            		</div>
+		            		<div class="col col-10 ">
+		            			<a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ge-touch="onProductDelete(product.id, format.id)"></a>
+		            		</div>
+		            		<div class="col col-10">
+		            			<a class="center">{{ format.quantity }} </a>
+		            		</div>
+		            		<div class="col col-10 ">
+		            			<a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" ge-touch="onProductAdd(product.id, format.id)"></a>
+		            		</div>
+		            		<div class="col col-10 ">
+							</div>
 	            	</div>
 	          	</ion-item>
 	        </div>
@@ -77,22 +75,30 @@
 	  	</h5>
 
 	  	<div class="row border-less">
-	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border checkbox-assertive center" ng-model="FoodRushTime" ng-true-value="5"></ion-checkbox>
-	  			<h5 class="border-less"> &nbsp  5 {{ 'min' | translate }}</h5>
-	  		</div>
-	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="10"></ion-checkbox>
-	  			<h5 class="border-less"> &nbsp  10 {{ 'min' | translate }}</h5>
-	  		</div>
-	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="15"></ion-checkbox>
-	  			<h5 class="border-less"> &nbsp  15 {{ 'min' | translate }}</h5>
-	  		</div>
-	  		<div class="col col-25">
-	  			<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="30"></ion-checkbox>
-	  			<h5 class="border-less"> &nbsp  30 {{ 'min' | translate }}</h5>
-	  		</div>
+		  		<div class="col col-25">
+		  			<a class="center">
+		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="5"></ion-checkbox>
+		  			</a>
+		  			<h5 class="border-less center">5 {{ 'min' | translate }}  &nbsp &nbsp  </h5>
+		  		</div>
+		  		<div class="col col-25">
+		  			<a class="center">
+		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="10"></ion-checkbox>
+		  			</a>
+		  			<h5 class="border-less center">10 {{ 'min' | translate }} &nbsp &nbsp  </h5>
+		  		</div>
+		  		<div class="col col-25">
+		  			<a class="center">
+		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="15"></ion-checkbox>
+		  			</a>
+		  			<h5 class="border-less center">15 {{ 'min' | translate }} &nbsp &nbsp  </h5>
+		  		</div>
+		  		<div class="col col-25">
+		  			<a class="center">
+		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="30"></ion-checkbox>
+		  			</a>
+		  			<h5 class="border-less center"> 30 {{ 'min' | translate }} &nbsp &nbsp  </h5>
+		  		</div>
 	  	</div>
 	  	
 		<button id="confirmCommandButton" class="button button-assertive button-outline button-center" on-touch="onConfirmCommandTouch()">
