@@ -26,10 +26,6 @@ angular.module('routing', [])
     url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html'
   })
-  .state('food-choice', {
-    url: '/food-choice',
-    templateUrl: 'templates/food-choice.html'
-  })
 
   // states of settings
   .state('settings', {

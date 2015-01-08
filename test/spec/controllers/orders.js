@@ -43,18 +43,4 @@ describe('Ctrl: OrdersCtrl', function () {
 
   });
 
-  describe("State Change", function() {
-
-    beforeEach(function() {
-      httpBackend.flush();
-    });
-
-    it("state should change to food choice", function () {
-      scope.onNewOrderTap();
-      scope.$apply();
-      state.current.name.should.equal('food-choice');
-    });
-
-  });
-
 });

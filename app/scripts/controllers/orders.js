@@ -6,8 +6,4 @@ angular.module('groupeat.controllers.orders', ['groupeat.services.order'])
 
   $scope.orders = Order.query();
 
-  $scope.onNewOrderTap = function() {
-    $state.go('food-choice');
-  };
-
 });
