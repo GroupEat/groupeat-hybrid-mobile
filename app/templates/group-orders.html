@@ -1,4 +1,4 @@
-<ion-view ng-controller="OrdersCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
+<ion-view ng-controller="GroupOrdersCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
 
   <ion-content class="has-footer">
 
@@ -6,25 +6,24 @@
       <text id="new-command-text">{{ 'newOrder' | translate }} !<text/>
     </button>
 
-    <div ng-repeat="order in orders">
+    <div ng-repeat="groupOrder in groupOrders">
       <div class="card">
         <div class="item item-divider">
           <i class="ion-clock assertive"></i>
-          <b>{{ order.timeLeft }} min</b>
+          <b>{{ groupOrder.timeLeft }} min</b>
           <i class="ion-cash assertive"></i>
-          <b>{{ order.currentDiscount }}%</b>
+          <b>{{ groupOrder.currentDiscount }}%</b>
         </div>
         <div class="item item-text-wrap">
-          <h2>{{ 'pizzeria' | translate }} : {{ order.restaurant.name }}</h2>
-          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ order.restaurant.mediumMargharitaPrice }}€</strike> {{ order.restaurant.mediumMargharitaPrice*(100-order.currentDiscount)/100 | number : 2}}€ </div>
+          <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.name }}</h2>
+          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
         </div>
-        <a class="item item-icon-left assertive" ui-sref="restaurant-menu({restaurantId: order.restaurant.id})">
+        <a class="item item-icon-left assertive" ui-sref="restaurant-menu({restaurantId: groupOrder.restaurant.id})">
           <i class="icon ion-arrow-right-a"></i>
           {{ 'toOrder' | translate }} !
         </a>
       </div>
     </div>
-
 
 
   </ion-content>

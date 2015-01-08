@@ -8,7 +8,7 @@ angular.module('groupeat.controllers.bottom-tabs', [])
     {
       'title'     : 'orders',
       'iconName'  : 'ion-fork',
-      'stateTarget'    : 'orders'
+      'stateTarget'    : 'group-orders'
     },
     {
       'title'     : 'settings',
