@@ -83,5 +83,6 @@
   "minlengthErrorKey": "Le champ {{fieldName}} doit comporter au minimum {0} caractères",
   "maxlengthErrorKey": "Le champ {{fieldName}} doit comporter au maximum {0} caractères",
   "emailErrorKey": "Veuillez entrer une adresse e-mail valide",
-  "geCampusEmailErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu"
+  "geCampusEmailErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu",
+  "matchErrorKey": "Les mots de passe doivent correspondre"
 }

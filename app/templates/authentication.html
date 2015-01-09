@@ -61,7 +61,7 @@
 		</label>
 		<label class="item item-input">
 			<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
-			<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" placeholder="{{ 'confirmPassword' | translate }}" required ng-minlength="6" match="userRegister.password">
+			<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" placeholder="{{ 'confirmPassword' | translate }}" match="registerForm.password">
 		</label>
 	</div>
 	<button type="submit" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
