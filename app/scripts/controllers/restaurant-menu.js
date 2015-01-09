@@ -24,7 +24,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
     // An elaborate, custom popup
     var myPopup = $ionicPopup.show({
-      templateUrl: 'templates/addToBasketPopup.html',
+      templateUrl: 'templates/popups/cart.html',
       scope: $scope,
       title: $scope.data.name,
       buttons: [

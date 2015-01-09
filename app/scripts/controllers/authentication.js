@@ -17,7 +17,6 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   $scope.userRegister = {};
   $scope.userLogin = {};
   $scope.userReset = {};
-  $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
 
   $scope.onRegisterButtonTouch = function() {
     $scope.showLoginSignUpButtons = false;
@@ -36,7 +35,6 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   /*
   ----------------------    Login View Controller    --------------------------
   */
-  /* onBackToMainViewButtonTouch is reused in First Register View */
   $scope.onBackToMainViewButtonTouch = function() {
     $scope.showLoginSignUpButtons = true;
     $scope.showLoginView = false ;
@@ -48,7 +46,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   $scope.submitLoginForm = function(form) {
     if (form.$invalid) {
       var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
-        title: ElementModifier.errorMsg(),
+        title: ElementModifier.errorMsg(form.$name),
         okText: 'OK',
         okType: 'button-energized',
       });
@@ -61,57 +59,31 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     }
   };
 
-  $scope.showRestPasswordPopup = function() {
+  $scope.showResetPasswordPopup = function() {
     $scope.userReset = {};
-    $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
+    $scope.validationError = undefined;
 
     $ionicPopup.show({
-      title : '<h4 class="login-text-first-page border-less">'+$translate('resetPassword')+'</h4>' ,
+      title : $translate('resetPassword'),
       template: null,
-      templateUrl: 'templates/resetPasswordPopup.html',
+      templateUrl: 'templates/popups/reset-password.html',
       scope: $scope,
-      buttons: [{
-        text: $translate('cancel'),
-        type: 'button-outline button-energized',
-        onTouch: function() {
-          close();
-          $scope.tapChoice = 'cancel';
+      buttons: [
+        { text: $translate('cancel') },
+        {
+          text: '<b>'+$translate('ok')+'</b>',
+          type: 'button-outline button-energized',
+          onTap: function(e) {
+            if (ElementModifier.errorMsg('resetForm')) {
+              $scope.validationError = ElementModifier.errorMsg('resetForm');
+              e.preventDefault();
+            } else {
+              // TODO Run Back-End Request
+              return $scope.userReset.email;
+            }
+          }
         }
-      }, {
-        text: $translate('send'),
-        type: 'button-energized',
-        onTouch: function() {
-          return $scope.userReset.email;
-        }
-      }]
-    })
-    .then(function() {
-      if ($scope.tapChoice === 'cancel') {
-
-      }
-      else {
-        if($scope.userReset.email === undefined) { // alert : email invalid
-          var alertInvalidEmail = $ionicPopup.alert({
-            title: $translate('invalidEmail'),
-            okText: 'OK',
-            okType: 'button-energized',
-          });
-          $timeout(function() {
-            alertInvalidEmail.close(); //close the popup after 2 seconds
-          }, 2000);
-        }
-
-        else {
-          var alertPopup = $ionicPopup.alert({ // info to user : email sent
-            title: ' <i>'+$translate('emailSentTo')+'</i> ' +  $scope.userReset.email  + '.',
-            okText: 'OK',
-            okType: 'button-energized',
-          });
-          $timeout(function() {
-            alertPopup.close(); //close the popup after 3 seconds
-          }, 3000);
-        }
-      }
+      ]
     });
   };
 
@@ -128,7 +100,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
 
     if (form.$invalid) {
       var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(),
+        title: ElementModifier.errorMsg(form.$name),
         okText: 'OK',
         okType: 'button-energized',
       });
@@ -207,7 +179,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
   */
 
-  $ionicModal.fromTemplateUrl('templates/modal/register.html', {
+  $ionicModal.fromTemplateUrl('templates/modals/register.html', {
     scope: $scope,
     animation: 'slide-in-up'
   })

@@ -24,13 +24,13 @@
 
 <!--	-	-	- LOGIN VIEW -	-	-	-->
 
-<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm);" novalidate>
+<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
 	<div class="list list-inset register-form">
 		<div class="loginViewButtons">
-			<button ge-touch="showRestPasswordPopup()" class="button button-small button-clear button-energized">{{ 'forgotPassword' | translate }}</button>
+			<button ge-touch="showResetPasswordPopup()" class="button button-small button-clear button-energized">{{ 'forgotPassword' | translate }}</button>
 		</div>
 		<label class="item item-input">
-			<input ng-model="userLogin.email" ng-init="userLogin.email='ts'" name="email" type="email" placeholder="{{ 'email' | translate }}" ge-campus-email required ge-campus-email-err-type="campusEmail">
+			<input ng-model="userLogin.email" name="email" type="email" placeholder="{{ 'email' | translate }}" ge-campus-email required ge-campus-email-err-type="campusEmail">
 		</label>
 		<label class="item item-input">
 			<input ng-model="userLogin.password" name="password" type="password" placeholder="{{ 'password' | translate }}" required ng-minlength="6">
@@ -49,7 +49,7 @@
 
 <!--	-	-	- REGISTER VIEW -	-	-	-->
 
-<form name="registerForm" ng-show="showRegisterView" ng-submit="submitRegisterForm(registerForm)" novalidate>
+<form name="registerForm" ng-show="showRegisterView" ng-submit="submitRegisterForm(registerForm)" ng-submit-force="true" novalidate>
 	<div class="list list-inset register-form">
 		<label class="item item-input">
 			<i class="icon ion-ios7-email-outline placeholder-icon"></i>
