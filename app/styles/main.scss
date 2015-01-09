@@ -70,9 +70,7 @@
         align-items: center ;
 }
 
-
-
 // Importing ionic in order to possible override variables
 @import "../lib/ionic/scss/ionic";
 
-@import "first-page", "icon-ge";
+@import "authentication", "icon-ge";
