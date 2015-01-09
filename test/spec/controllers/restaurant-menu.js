@@ -33,10 +33,6 @@ describe('Ctrl: RestaurantMenuCtrl', function () {
             httpBackend.flush();
         });
 
-        it("discount should be between 0 & 1", function () {
-            expect(scope.discount).to.be.within(0,1);
-        });
-
         it("should load a list of 2 pizzas", function () {
             scope.pizzas.should.have.length(2);
         });

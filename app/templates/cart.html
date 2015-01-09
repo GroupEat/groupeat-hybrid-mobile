@@ -3,7 +3,7 @@
 <!-- - - - - - - - - - - -  CART NOT EMPTY :  - - - - - - - - - - - - -->
 
 	<ion-nav-buttons side="right">
-    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-compose-outline right-header-bar-icon" ge-touch="onEditCartTouch()">
+    	<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-checkmark-empty right-header-bar-icon" ge-touch="onConfirmOrderTouch()">
     	</button>
   	</ion-nav-buttons>
 
@@ -24,9 +24,9 @@
 				</div>
   			</div>
 
-  			<div ng-repeat="product in cart">
-		  		<ion-item ng-click="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
-		  			<div class="row border-less" ng-class="isDetailsShown(product)">
+  			<div ng-repeat="product in cart.productsItems">
+		  		<ion-item>
+		  			<div class="row border-less">
 				  			<div class="col col-80 border-less">
 				  				<b>{{ product.name }}</b>
 				  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.size }}
@@ -41,31 +41,13 @@
 					</div>
 
 				</ion-item>	
-				<ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
-					<div class="row border-less">
-		            		<div class="col col-60 border-less">
-		            			{{ format.size }} ({{ format.price }} €)
-		            		</div>
-		            		<div class="col col-10 ">
-		            			<a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ge-touch="onProductDelete(product.id, format.id)"></a>
-		            		</div>
-		            		<div class="col col-10">
-		            			<a class="center">{{ format.quantity }} </a>
-		            		</div>
-		            		<div class="col col-10 ">
-		            			<a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" ge-touch="onProductAdd(product.id, format.id)"></a>
-		            		</div>
-		            		<div class="col col-10 ">
-							</div>
-	            	</div>
-	          	</ion-item>
 	        </div>
 		</ion-list>
 
 		<ion-list>
 	  		<ion-item>
 	  			<div class="center">
-		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cartTotalQuantity }} pizzas, {{ cartTotalPrice }}€.  
+		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cart.cartTotalQuantity }} pizzas, {{ cart.cartTotalPrice }}€.  
 				</div>
 	  		</ion-item>
 	  	</ion-list>
@@ -101,7 +83,7 @@
 		  		</div>
 	  	</div>
 	  	
-		<button id="confirmCommandButton" class="button button-assertive button-outline button-center" on-touch="onConfirmCommandTouch()">
+		<button id="confirmCommandButton" class="button button-assertive button-outline button-center" ge-touch="onConfirmOrderTouch()">
 			{{ 'confirmCommand' | translate }}
 		</button>
 
@@ -125,9 +107,12 @@
 
 	<ion-footer-bar class="bar-energized ">
 	 	<div class="row border-less">
-	  		<div class="col">
-				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cartTotalPrice }}€
+	  		<div class="col col-25">
+				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice }}€
 			</div>
+			<div class="col col-25">
+         		<i> {{ cart.cartTotalQuantity }} Pizza </i>
+        	</div>
 		</div>
 	</ion-footer-bar>
 
