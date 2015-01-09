@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers', [
   'groupeat.controllers.bottom-tabs',
-  'groupeat.controllers.orders',
+  'groupeat.controllers.group-orders',
   'groupeat.controllers.authentication',
   'groupeat.controllers.settings',
   'groupeat.controllers.restaurants',

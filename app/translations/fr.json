@@ -46,7 +46,7 @@
   "pushSettings": "Notifications",
   "pushActivation": "Activer les notifications",
   "dontPushAfter": "Ne pas me notifier après",
-  "afterACommand": "Après une commande",
+  "afterAnOrder": "Après une commande",
   "atNight": "Le soir",
   "dontPushFor": "Ne pas me notifier pendant",
   "day": "jour",
@@ -64,7 +64,7 @@
   "lebaneseDishes": "Falafel, Kébbé, Rikakat, Chawarma,...",
 
   "yourCart": "Votre panier",
-  "confirmCommand": "Valider ma Commande",
+  "confirmOrder": "Valider ma Commande",
   "Total": "Total",
   "emptyCart": "Votre panier est vide.",
   "howLongFoodRush" : "Quelle durée souhaitez-vous pour le",
@@ -74,7 +74,7 @@
   "Price" : "Prix",
   "Description" : "Description",
   "alertEditCart": "Pour éditer un produit, appuyer dessus",
-  "commandOrdered": "Votre commande a été passée.",
+  "ordered": "Votre commande a été passée.",
 
   "emailFieldName": "e-mail",
   "passwordFieldName": "mot de passe",

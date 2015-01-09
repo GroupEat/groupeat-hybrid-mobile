@@ -1,17 +1,17 @@
 @import "variables" ;
 
 
-#new-command-button {
+#new-order-button {
 	display: block;
 	position:relative;
 }
 
-#new-command-text {
+#new-order-text {
 	color: $energized;
 	font-weight: bold;
 }
 
-#confirmCommandButton {
+#confirmOrderButton {
 	display:block;
 	margin-top : 25px;
 	margin-left : auto !important;
@@ -28,5 +28,3 @@
 	padding-right: 0px;
 	text-align: right;
 }
-
-

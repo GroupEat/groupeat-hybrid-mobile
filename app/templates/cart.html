@@ -32,7 +32,7 @@
 				  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.size }}
 				  				 </p>
 				  			</div>
-				  			
+
 				  			<div class="col col-10">
 				  				{{ product.totalPrice }}€
 				  			</div>
@@ -40,7 +40,7 @@
 				  			</div>
 					</div>
 
-				</ion-item>	
+				</ion-item>
 				<ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
 					<div class="row border-less">
 		            		<div class="col col-60 border-less">
@@ -65,13 +65,13 @@
 		<ion-list>
 	  		<ion-item>
 	  			<div class="center">
-		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cartTotalQuantity }} pizzas, {{ cartTotalPrice }}€.  
+		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cartTotalQuantity }} pizzas, {{ cartTotalPrice }}€.
 				</div>
 	  		</ion-item>
 	  	</ion-list>
 
 	  	<h5 class="login-text-first-page add-horizontal-margin no-bottom-margin">
-	  	 {{ 'howLongFoodRush' | translate }} <a class="energized">Food</a><a class="assertive">Rush</a> ? 
+	  	 {{ 'howLongFoodRush' | translate }} <a class="energized">Food</a><a class="assertive">Rush</a> ?
 	  	</h5>
 
 	  	<div class="row border-less">
@@ -100,9 +100,9 @@
 		  			<h5 class="border-less center"> 30 {{ 'min' | translate }} &nbsp &nbsp  </h5>
 		  		</div>
 	  	</div>
-	  	
-		<button id="confirmCommandButton" class="button button-assertive button-outline button-center" on-touch="onConfirmCommandTouch()">
-			{{ 'confirmCommand' | translate }}
+
+		<button id="confirmOrderButton" class="button button-assertive button-outline button-center" on-touch="onConfirmOrderTouch()">
+			{{ 'confirmOrder' | translate }}
 		</button>
 
 	</ion-content>
@@ -115,7 +115,7 @@
 		<ion-list>
 	  		<ion-item>
 				<div class="border-less center">
-		  			<b> {{'emptyCart' | translate}} </b>  
+		  			<b> {{'emptyCart' | translate}} </b>
 				</div>
 	  		</ion-item>
 	  	</ion-list>
@@ -132,4 +132,3 @@
 	</ion-footer-bar>
 
 </ion-view>
-
