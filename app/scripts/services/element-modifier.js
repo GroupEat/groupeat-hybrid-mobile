@@ -15,10 +15,14 @@ angular.module('groupeat.services.element-modifier', [])
     *
     * @param {Element} el - The input control element that is the target of the validation.
     */
-    /*jshint unused: false */
     makeValid = function (el) {
-      var elName = el[0].name;
-      delete scopeErrorMsg[elName];
+      var domElement = el[0];
+      var formName = domElement.form.name;
+      var elName = domElement.name;
+      if (formName in scopeErrorMsg)
+      {
+        delete scopeErrorMsg[formName][elName];
+      }
     },
 
     /**
@@ -33,8 +37,15 @@ angular.module('groupeat.services.element-modifier', [])
     * @param {String} errorMsg - The validation error message to display to the user.
     */
     makeInvalid = function (el, errorMsg) {
-      var elName = el[0].name;
-      scopeErrorMsg[elName] = errorMsg;
+      var domElement = el[0];
+      var formName = domElement.form.name;
+      var elName = domElement.name;
+
+      if (!(formName in scopeErrorMsg))
+      {
+        scopeErrorMsg[formName] = {};
+      }
+      scopeErrorMsg[formName][elName] = errorMsg;
     },
 
 
@@ -49,14 +60,24 @@ angular.module('groupeat.services.element-modifier', [])
     * @param {Element} el - The input control element that is the target of the validation.
     */
     makeDefault = function (el) {
-      var elName = el[0].name;
-      delete scopeErrorMsg[elName];
+      makeValid(el);
     },
 
-    getErrorMsg = function() {
-      for (var prop in scopeErrorMsg) {
-        return scopeErrorMsg[prop];
+    /**
+    * @ngdoc function
+    * @name ElementModifier#getErrorMsg
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns the first error message of a form, undefined if there is none
+    *
+    * @param {String} formName - The name of the form whose error is to be fetched
+    */
+    getErrorMsg = function(formName) {
+      for (var fieldName in scopeErrorMsg[formName]) {
+        return scopeErrorMsg[formName][fieldName];
       }
+      return undefined;
     };
 
     return {

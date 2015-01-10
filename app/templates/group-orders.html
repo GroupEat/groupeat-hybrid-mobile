@@ -1,0 +1,42 @@
+<ion-view ng-controller="GroupOrdersCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
+
+  <ion-content class="has-footer">
+
+    <button id="new-order-button" ui-sref="restaurants" class="button button-full button-outline no-margin">
+      <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
+    </button>
+
+    <div ng-repeat="groupOrder in groupOrders">
+      <div class="card">
+        <div class="item item-divider">
+          <i class="ion-clock assertive"></i>
+          <b>{{ groupOrder.timeLeft }} min</b>
+          <i class="ion-cash assertive"></i>
+          <b>{{ groupOrder.currentDiscount }}%</b>
+        </div>
+        <div class="item item-text-wrap">
+          <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.name }}</h2>
+          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
+        </div>
+        <a class="item item-icon-left assertive" ui-sref="restaurant-menu({restaurantId: groupOrder.restaurant.id})">
+          <i class="icon ion-arrow-right-a"></i>
+          {{ 'joinThisOrder' | translate }} !
+        </a>
+      </div>
+    </div>
+
+
+  </ion-content>
+<!--
+  Pour le futur bouton flottant swag
+
+  <div class="float-button">
+    <span class="height-fix">
+      <a ui-sref="add-trip" class="content">
+        <i class="ion-plus-round"> </i>
+      </a>
+    </span>
+  </div> -->
+
+
+</ion-view>

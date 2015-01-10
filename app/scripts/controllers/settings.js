@@ -2,12 +2,11 @@
 
 angular.module('groupeat.controllers.settings', [])
 
-.controller('SettingsCtrl', function($scope) {
+.controller('SettingsCtrl', function($scope, $ionicModal) {
 
 	/*
-	settings list
+	Settings list
 	*/
-
 
 	$scope.settingsList = [
 	    { name: 'editProfile', state:'settings-profile'},
@@ -20,4 +19,26 @@ angular.module('groupeat.controllers.settings', [])
 		phoneNumber: '0685958687',
 		adress:      'Palaiseau',
 	}};
+
+	/*
+	---------------- Profile Editing ----------------------------------
+	*/
+
+	$ionicModal.fromTemplateUrl('templates/modals/register.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	})
+	.then(function(modal) {
+		$scope.registerModal = modal;
+	});
+
+	$scope.openRegisterModal = function() {
+		$scope.registerModal.show();
+		$scope.userRegister = {};
+
+	};
+	$scope.closeRegisterModal = function() {
+		$scope.registerModal.hide();
+	};
+
 });

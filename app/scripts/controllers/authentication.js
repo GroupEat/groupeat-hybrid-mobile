@@ -6,129 +6,65 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
 
   var $translate = $filter('translate');
 
-  /*
-  ----------------------    Initial View Controller    --------------------------
-  */
-  $scope.showLoginSignUpButtons = true;
-  $scope.showRegisterView = false;
-  $scope.showLoginBackButtonEnergized = false;
-  $scope.showLoginBackButtonAssertive = false;
+  /**
+  Scope Initializations
+  **/
 
-  $scope.userRegister = {};
+  /* Showing DOM Elements */
+  // Buttons
+  $scope.showLoginAndRegisterButtons = true;
+  $scope.showLoginEnergizedBackButton = false;
+  $scope.showLoginAssertiveBackButton = false;
+  $scope.showSkipFurtherRegisterButton = false ;
+  $scope.showSubmitFurtherRegisterButton = false ;
+  // Forms
+  $scope.showLoginForm = false;
+  $scope.showRegisterForm = false;
+
+  /* Models */
   $scope.userLogin = {};
   $scope.userReset = {};
-  $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
+  $scope.userRegister = {};
+
+  $scope.validationError = undefined;
+
+  /*
+  ---------------------- Initial --------------------------
+  */
 
   $scope.onRegisterButtonTouch = function() {
-    $scope.showLoginSignUpButtons = false;
-    $scope.showRegisterView = true;
-    $scope.showLoginBackButtonEnergized = false;
-    $scope.showLoginBackButtonAssertive = true;
+    $scope.showLoginAndRegisterButtons = false;
+    $scope.showRegisterForm = true;
+    $scope.showLoginEnergizedBackButton = false;
+    $scope.showLoginAssertiveBackButton = true;
   };
 
   $scope.onLoginButtonTouch = function() {
-    $scope.showLoginSignUpButtons = false;
-    $scope.showLoginView = true;
-    $scope.showLoginBackButtonEnergized = true;
-    $scope.showLoginBackButtonAssertive = false;
+    $scope.showLoginAndRegisterButtons = false;
+    $scope.showLoginForm = true;
+    $scope.showLoginEnergizedBackButton = true;
+    $scope.showLoginAssertiveBackButton = false;
   };
 
   /*
-  ----------------------    Login View Controller    --------------------------
+  -------------------    End Initial   -------------------------
   */
-  /* onBackToMainViewButtonTouch is reused in First Register View */
+
+  /*
+  ----------------------    Login    --------------------------
+  */
   $scope.onBackToMainViewButtonTouch = function() {
-    $scope.showLoginSignUpButtons = true;
-    $scope.showLoginView = false ;
+    $scope.showLoginAndRegisterButtons = true;
+    $scope.showLoginForm = false ;
     $scope.showRegisterView = false ;
-    $scope.showLoginBackButtonEnergized = false ;
-    $scope.showLoginBackButtonAssertive = false ;
+    $scope.showLoginEnergizedBackButton = false ;
+    $scope.showLoginAssertiveBackButton = false ;
   };
 
   $scope.submitLoginForm = function(form) {
     if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
-        title: ElementModifier.errorMsg(),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWrongCombinaison.close(); // close the popup after 3 seconds
-      }, 4000);
-    }
-    else {
-      $state.go('orders');
-    }
-  };
-
-  $scope.showRestPasswordPopup = function() {
-    $scope.userReset = {};
-    $scope.tapChoice = {}; // quel choix fait sur la popup : cancel ou send ?
-
-    $ionicPopup.show({
-      title : '<h4 class="login-text-first-page border-less">'+$translate('resetPassword')+'</h4>' ,
-      template: null,
-      templateUrl: 'templates/resetPasswordPopup.html',
-      scope: $scope,
-      buttons: [{
-        text: $translate('cancel'),
-        type: 'button-outline button-energized',
-        onTouch: function() {
-          close();
-          $scope.tapChoice = 'cancel';
-        }
-      }, {
-        text: $translate('send'),
-        type: 'button-energized',
-        onTouch: function() {
-          return $scope.userReset.email;
-        }
-      }]
-    })
-    .then(function() {
-      if ($scope.tapChoice === 'cancel') {
-
-      }
-      else {
-        if($scope.userReset.email === undefined) { // alert : email invalid
-          var alertInvalidEmail = $ionicPopup.alert({
-            title: $translate('invalidEmail'),
-            okText: 'OK',
-            okType: 'button-energized',
-          });
-          $timeout(function() {
-            alertInvalidEmail.close(); //close the popup after 2 seconds
-          }, 2000);
-        }
-
-        else {
-          var alertPopup = $ionicPopup.alert({ // info to user : email sent
-            title: ' <i>'+$translate('emailSentTo')+'</i> ' +  $scope.userReset.email  + '.',
-            okText: 'OK',
-            okType: 'button-energized',
-          });
-          $timeout(function() {
-            alertPopup.close(); //close the popup after 3 seconds
-          }, 3000);
-        }
-      }
-    });
-  };
-
-  /*
-  -------------------    END LOGIN VIEW   -------------------------
-  */
-
-
-  /*
-  -------------------    FIRST REGISTER VIEW  (UNSKIPPABLE INFORMATIONS) -------------------------
-  */
-
-  $scope.submitRegisterForm = function(form) {
-
-    if (form.$invalid) {
       var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(),
+        title: ElementModifier.errorMsg(form.$name),
         okText: 'OK',
         okType: 'button-energized',
       });
@@ -136,32 +72,85 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
         alertWrongCombinaison.close();
       }, 4000);
     }
+    else {
+      $state.go('group-orders');
+    }
+  };
 
+  $scope.showResetPasswordPopup = function() {
+    // Resetting the relevant scope elements each time such a popup is created
+    $scope.userReset = {};
+    $scope.validationError = undefined;
+
+    $ionicPopup.show({
+      title : $translate('resetPassword'),
+      template: null,
+      templateUrl: 'templates/popups/reset-password.html',
+      scope: $scope,
+      buttons: [
+        { text: $translate('cancel') },
+        {
+          text: '<b>'+$translate('ok')+'</b>',
+          type: 'button-outline button-energized',
+          onTap: function(e) {
+            if (ElementModifier.errorMsg('resetForm')) {
+              $scope.validationError = ElementModifier.errorMsg('resetForm');
+              e.preventDefault();
+            } else {
+              // TODO Run Back-End Request
+              return $scope.userReset.email;
+            }
+          }
+        }
+      ]
+    });
+  };
+
+  /*
+  -------------------    End Login   -------------------------
+  */
+
+  /*
+  -------------------    Registering  (Mandatory) -------------------------
+  */
+
+  $scope.submitRegisterForm = function(form) {
+    if (form.$invalid) {
+      var alertWrongCombinaison = $ionicPopup.alert({
+        title: ElementModifier.errorMsg(form.$name),
+        okText: 'OK',
+        okType: 'button-energized',
+      });
+      $timeout(function() {
+        alertWrongCombinaison.close();
+      }, 4000);
+    }
     else {
       var customer = new Customer($scope.userRegister);
       customer.$save();
 
-      $scope.showLoginSignUpButtons = false;
-      $scope.showLoginView = false ;
-      $scope.showRegisterView = false ;
-      $scope.showLoginBackButtonEnergized = false ;
-      $scope.showLoginBackButtonAssertive = false ;
-      $scope.showSecondFormView = true ;
-      $scope.showSkipButton = true ;
+      $scope.showLoginAndRegisterButtons = false;
+      $scope.showLoginForm = false;
+      $scope.showRegisterForm = false;
+      $scope.showLoginEnergizedBackButton = false;
+      $scope.showLoginAssertiveBackButton = false;
+      $scope.showFurtherRegisterForm = true;
+      $scope.showSubmitFurtherRegisterButton = false;
+      $scope.showSkipFurtherRegisterButton = true;
     }
   };
 
 
   /*
-  -------------------    END FIRST REGISTER VIEW  (UNSKIPPABLE INFORMATIONS) -------------------------
+  -------------------    End Registering -------------------------
   */
 
 
   /*
-  -------------------    SECOND REGISTER VIEW  (SKIPPABLE INFORMATIONS) -------------------------
+  -------------------    Further Registering (Skippable) -------------------------
   */
-  $scope.onSkipSecondFormTouch = function () {
-    $state.go('orders') ;
+  $scope.onSkipFurtherRegisterButtonTouch = function () {
+    $state.go('group-orders') ;
 
     var alertWelcome = $ionicPopup.alert({
       title: $translate('welcomeMessage'),
@@ -169,63 +158,46 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
       okType: 'button-assertive',
     });
     $timeout(function() {
-      alertWelcome.close(); //close the popup after 3 seconds
+      alertWelcome.close();
     }, 3000);
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.address]', function () {
     if ( ($scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
-      $scope.showSecondRegisterButton = true;
-      $scope.showSkipButton = false ;
+      $scope.showSubmitFurtherRegisterButton = true;
+      $scope.showSkipFurtherRegisterButton = false ;
     }
     else {
-      $scope.showSecondRegisterButton = false;
-      $scope.showSkipButton = true ;
+      $scope.showSubmitFurtherRegisterButton = false;
+      $scope.showSkipFurtherRegisterButton = true ;
     }
   }, true);
 
-  $scope.onSecondRegisterTouch = function () {
-    $state.go('orders') ;
-
-    var alertWelcome = $ionicPopup.alert({
-      title: $translate('welcomeMessage'),
-      okText: 'OK',
-      okType: 'button-energized',
-    });
-    $timeout(function() {
-      alertWelcome.close(); //close the popup after 3 seconds
-    }, 3000);
-
+  $scope.submitFurtherRegisterForm = function(form) {
+    if (form.$invalid) {
+      var alertWrongCombinaison = $ionicPopup.alert({
+        title: ElementModifier.errorMsg(form.$name),
+        okText: 'OK',
+        okType: 'button-energized',
+      });
+      $timeout(function() {
+        alertWrongCombinaison.close();
+      }, 4000);
+    }
+    else {
+      $state.go('group-orders') ;
+      var alertWelcome = $ionicPopup.alert({
+        title: $translate('welcomeMessage'),
+        okText: 'OK',
+        okType: 'button-energized',
+      });
+      $timeout(function() {
+        alertWelcome.close();
+      }, 3000);
+    }
   };
 
   /*
-  -------------------    END SECOND REGISTER VIEW  (SKIPPABLE INFORMATIONS) -------------------------
+  -------------------    End Further Registering -------------------------
   */
-
-
-  /*
-  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
-  */
-
-  $ionicModal.fromTemplateUrl('templates/modal/register.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  })
-  .then(function(modal) {
-    $scope.registerModal = modal;
-  });
-
-  $scope.openRegisterModal = function() {
-    $scope.registerModal.show();
-    $scope.userRegister = {};
-
-  };
-  $scope.closeRegisterModal = function() {
-    $scope.registerModal.hide();
-  };
-
-  /*
-  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFUL LATER ---------------------
-  */
-
 });

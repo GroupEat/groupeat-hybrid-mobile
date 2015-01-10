@@ -10,9 +10,9 @@ angular.module('routing', [])
     templateUrl: 'templates/authentication.html'
   })
 
-  .state('orders', {
-    url: '/orders',
-    templateUrl: 'templates/orders.html'
+  .state('group-orders', {
+    url: '/group-orders',
+    templateUrl: 'templates/group-orders.html'
   })
   .state('cart', {
     url: '/cart',
@@ -25,10 +25,6 @@ angular.module('routing', [])
   .state('restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html'
-  })
-  .state('food-choice', {
-    url: '/food-choice',
-    templateUrl: 'templates/food-choice.html'
   })
 
   // states of settings
@@ -45,6 +41,6 @@ angular.module('routing', [])
     templateUrl: 'templates/settings/settings-profile.html'
   });
 
-  $urlRouterProvider.otherwise('/orders');
+  $urlRouterProvider.otherwise('/group-orders');
 
 });
