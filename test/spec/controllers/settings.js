@@ -2,8 +2,6 @@
 
 describe('Controller: SettingsCtrl', function () {
 
-  var should = chai.should();
-
   // load the controller's module
   beforeEach(module('groupeat'));
 

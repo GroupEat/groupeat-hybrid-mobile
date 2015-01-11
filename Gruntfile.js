@@ -381,7 +381,7 @@ module.exports = function (grunt) {
     karma: {
       options: {
         basePath: '',
-        frameworks: ['mocha', 'chai'],
+        frameworks: ['mocha', 'chai', 'chai-as-promised'],
         files: [
           '<%= yeoman.app %>/lib/angular/angular.js',
           '<%= yeoman.app %>/lib/angular-animate/angular-animate.js',
@@ -399,6 +399,8 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
           '<%= yeoman.app %>/lib/lodash/dist/lodash.min.js',
+          '<%= yeoman.app %>/lib/sprintf/dist/sprintf.min.js',
+          '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
           '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'test/mock/**/*.js',
