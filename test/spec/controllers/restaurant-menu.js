@@ -1,10 +1,7 @@
 'use strict';
 
 describe('Ctrl: RestaurantMenuCtrl', function () {
-
-    var expect = chai.expect;
-    var should = chai.should();
-
+  
     // Load the controller's module
     beforeEach(module('groupeat'));
 

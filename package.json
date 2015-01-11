@@ -67,7 +67,8 @@
     "orchestrator": "~0.3.7",
     "ripple-emulator": "~0.9.23",
     "grunt-git": "^0.3.2",
-    "grunt-npm-install": "^0.1.0"
+    "grunt-npm-install": "^0.1.0",
+    "karma-chai-plugins": "^0.2.4"
   },
   "engines": {
     "node": ">=0.10.0"
