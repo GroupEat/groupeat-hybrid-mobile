@@ -35,11 +35,6 @@ describe('Ctrl: CartCtrl', function () {
     beforeEach(function() {
       httpBackend.flush();
     });
-
-    it("nothing should happen on confirm command touch ", function () {
-      scope.onConfirmCommandTouch();
-      scope.$apply();
-    });
   });
 
 });
