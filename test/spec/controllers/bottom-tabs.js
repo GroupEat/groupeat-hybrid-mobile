@@ -2,9 +2,6 @@
 
 describe('Ctrl: BottomTabsCtrl', function () {
 
-    var expect = chai.expect;
-    var should = chai.should();
-
     // Load the controller's module
     beforeEach(module('groupeat'));
 
@@ -20,9 +17,7 @@ describe('Ctrl: BottomTabsCtrl', function () {
         BottomTabsCtrl = $controller('BottomTabsCtrl', {
             $scope: scope, $state: state
         });
-        // var mockData = [{key:"test"},{key:"test2"}];
-        // var url = 'data/pizzas/pizzas_restaurant_.json';
-        // httpBackend.whenGET(url).respond(mockData);
+
         httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
         httpBackend.whenGET(/^translations\/.*/).respond('{}');
     }));

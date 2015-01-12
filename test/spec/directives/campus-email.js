@@ -2,8 +2,6 @@
 
 describe('Directive: geCampusEmail', function () {
 
-  var expect = chai.expect;
-
   // Load the controller's module
   beforeEach(module('groupeat'));
 
