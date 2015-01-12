@@ -30,13 +30,22 @@ describe('Ctrl: CartCtrl', function () {
       httpBackend.flush();
     });
 
-  });
+    it("cart should have been created", function() {
+      scope.cart.should.have.property('cartTotalPrice');
+      scope.cart.should.have.property('cartTotalQuantity');
+      scope.cart.should.have.property('productsItems');
+    });
+      
 
-  describe("State Change", function() {
-
-    beforeEach(function() {
-      httpBackend.flush();
+    it("cart should be empty if no productsItems have been added", function() {
+      if (_.isEmpty(scope.cart.productsItems)) {
+        expect(scope.isCartEmpty).to.be.true;
+      }
+      else {
+        expect(scope.isCartEmpty).to.be.false;
+      }
     });
   });
+
 
 });
