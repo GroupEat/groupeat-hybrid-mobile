@@ -64,7 +64,6 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 				}
 			});
 
-
 			if ( IsInProducts ) {
 				// If productTo<Add already exists in products, just increment its quantity
 				_.forEach(products.productsItems, function(product) {
@@ -106,6 +105,13 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 						'totalPrice': format.price,
 						'formats': formatToAddInProduct
 					};
+
+				/*console.log('productToAddInProducts.id = ' + productToAddInProducts.id);
+				console.log('productToAddInProducts.name = ' + productToAddInProducts.name);
+				console.log('productToAddInProducts.totalQuantity = ' + productToAddInProducts.totalQuantity);
+				console.log('productToAddInProducts.totalPrice = ' + productToAddInProducts.totalPrice);*/
+
+
 				products.productsItems.splice(1, 0, productToAddInProducts);
 			}
 
