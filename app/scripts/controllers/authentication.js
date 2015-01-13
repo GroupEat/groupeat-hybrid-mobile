@@ -46,6 +46,14 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     $scope.showLoginAssertiveBackButton = false;
   };
 
+  $scope.onBackToMainViewButtonTouch = function() {
+    $scope.showLoginAndRegisterButtons = true;
+    $scope.showLoginForm = false ;
+    $scope.showRegisterForm = false ;
+    $scope.showLoginEnergizedBackButton = false ;
+    $scope.showLoginAssertiveBackButton = false ;
+  };
+
   /*
   -------------------    End Initial   -------------------------
   */
@@ -53,13 +61,6 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   /*
   ----------------------    Login    --------------------------
   */
-  $scope.onBackToMainViewButtonTouch = function() {
-    $scope.showLoginAndRegisterButtons = true;
-    $scope.showLoginForm = false ;
-    $scope.showRegisterView = false ;
-    $scope.showLoginEnergizedBackButton = false ;
-    $scope.showLoginAssertiveBackButton = false ;
-  };
 
   $scope.submitLoginForm = function(form) {
     if (form.$invalid) {
