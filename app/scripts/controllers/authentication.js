@@ -62,18 +62,30 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   ----------------------    Login    --------------------------
   */
 
-  $scope.submitLoginForm = function(form) {
-    if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(form.$name),
-        okText: 'OK',
-        okType: 'button-energized',
+  $scope.validateForm = function(form) {
+    setTimeout(function(){
+      $scope.$apply(function() {
+        if (form.$invalid)
+        {
+          var errorMessage = ElementModifier.errorMsg(form.$name);
+          var alertWrongCombinaison = $ionicPopup.alert({
+            title: errorMessage,
+            okText: 'OK',
+            okType: 'button-energized',
+          });
+          $timeout(function() {
+            alertWrongCombinaison.close();
+          }, 4000);
+          return errorMessage;
+        }
+        return true;
       });
-      $timeout(function() {
-        alertWrongCombinaison.close();
-      }, 4000);
-    }
-    else {
+    });
+  };
+
+  $scope.submitLoginForm = function(form) {
+    if ($scope.validateForm(form) === true)
+    {
       $state.go('group-orders');
     }
   };
@@ -116,17 +128,8 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   */
 
   $scope.submitRegisterForm = function(form) {
-    if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(form.$name),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWrongCombinaison.close();
-      }, 4000);
-    }
-    else {
+    if ($scope.validateForm(form) === true)
+    {
       var customer = new Customer($scope.userRegister);
       customer.$save();
 
@@ -175,26 +178,9 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   }, true);
 
   $scope.submitFurtherRegisterForm = function(form) {
-    if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(form.$name),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWrongCombinaison.close();
-      }, 4000);
-    }
-    else {
-      $state.go('group-orders') ;
-      var alertWelcome = $ionicPopup.alert({
-        title: $translate('welcomeMessage'),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWelcome.close();
-      }, 3000);
+    if ($scope.validateForm(form) === true)
+    {
+      $scope.onSkipFurtherRegisterButtonTouch();
     }
   };
 
