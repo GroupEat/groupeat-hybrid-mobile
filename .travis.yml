@@ -10,5 +10,4 @@ before_script:
   - grunt init
 after_script:
   - npm install -g codeclimate-test-reporter
-  - grunt coverage
   - CODECLIMATE_REPO_TOKEN=a3d17e89ce9838fc779c7b88522cc25db043e31d1529ff9b17d11b26509d00df codeclimate < coverage/lcov/*/lcov.info
