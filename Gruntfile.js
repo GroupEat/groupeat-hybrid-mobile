@@ -119,7 +119,7 @@ module.exports = function (grunt) {
         options: {
           port: 9002,
           open: true,
-          base: ['coverage']
+          base: ['coverage/html']
         }
       }
     },
@@ -416,7 +416,8 @@ module.exports = function (grunt) {
         },
         coverageReporter: {
           reporters: [
-            { type: 'html', dir: 'coverage/' },
+            { type: 'html', dir: 'coverage/html' },
+            { type: 'lcov', dir: 'coverage/lcov' },
             { type: 'text-summary' }
           ]
         }
