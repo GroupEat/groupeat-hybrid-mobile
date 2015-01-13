@@ -48,6 +48,17 @@ angular.module('groupeat.controllers.settings', [])
 		{name: '1 semaine', id:6}
 	];
 
+	// Model declaration
+	$scope.select = {};
+	$scope.select.pushActivation = $scope.user.settings.pushActivation;
+	$scope.select.dontPushAfter = $scope.settings.dontPushAfter[$scope.user.settings.dontPushAfter];
+	$scope.select.dontPushFor = $scope.settings.dontPushFor[$scope.user.settings.dontPushFor];
+
+	$scope.saveSettings = function() {
+		console.log($scope.select.pushActivation);
+		console.log($scope.select.dontPushFor);
+		console.log($scope.select.dontPushAfter);
+	};
 
 	/*
 	---------------- Profile Editing ----------------------------------
