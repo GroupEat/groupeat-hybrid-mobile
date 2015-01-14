@@ -6,28 +6,53 @@ describe('Ctrl: AuthenticationCtrl', function () {
   beforeEach(module('groupeat'));
 
   var AuthenticationCtrl,
-  httpBackend,
   scope,
-  state,
-  form,
-  compile,
-  debounce;
+  $state,
+  $compile,
+  $httpBackend,
+  $timeout,
+  $q,
+  sandbox,
+  debounce,
+  debounceStub,
+  validationManager,
+  elementUtils,
+  formElement;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $compile, $rootScope, $state, $httpBackend, $ionicPopup, $timeout, $ionicModal, $filter, Customer, ElementModifier, $injector) {
-    httpBackend = $httpBackend;
-    state = $state;
+  beforeEach(inject(function ($rootScope, $controller, $injector) {
+    sandbox = sinon.sandbox.create();
+    $httpBackend = $injector.get('$httpBackend');
     scope = $rootScope.$new();
-    compile = $injector.get('$compile');
+
+    $state = $injector.get('$state');
+    sandbox.stub($state, 'go');
+
+    $q = $injector.get('$q');
+
+    $compile = $injector.get('$compile');
+    $timeout = $injector.get('$timeout');
     AuthenticationCtrl = $controller('AuthenticationCtrl', {
-      $scope: scope, $state: state, $ionicPopup: $ionicPopup, $timeout: $timeout, $ionicModal: $ionicModal, $filter: $filter, Customer: Customer, ElementModifier: ElementModifier
+      $scope: scope, $state: $state, $ionicPopup: $injector.get('$ionicPopup'), $timeout: $injector.get('$timeout'), $ionicModal: $injector.get('$ionicModal'), $filter: $injector.get('$filter'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier')
     });
 
-    debounce = $injector.get('jcs-debounce');
+    validationManager = $injector.get('validationManager');
+    sandbox.spy(validationManager, 'validateElement');
 
-    httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
-    httpBackend.whenGET(/^translations\/.*/).respond('{}');
+    elementUtils = $injector.get('jcs-elementUtils');
+    sandbox.stub(elementUtils, 'isElementVisible').returns(true);
+
+    debounce = $injector.get('jcs-debounce');
+    debounceStub = sandbox.stub();
+    sandbox.stub(debounce, 'debounce').returns(debounceStub);
+
+    $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
+    $httpBackend.whenGET(/^translations\/.*/).respond('{}');
   }));
+
+  afterEach(function () {
+    sandbox.restore();
+  });
 
   describe("Constructor", function() {
 
@@ -102,36 +127,103 @@ describe('Ctrl: AuthenticationCtrl', function () {
   describe('Logging in', function() {
 
     beforeEach(function() {
-      var element = angular.element(
-        '<form name="loginForm">'+
-        '<input ng-model="userLogin.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail" />'+
-        '<input ng-model="userLogin.password" name="password" type="password" required ng-minlength="6" />'+
+      formElement = angular.element(
+        '<form style="width: 500px, height:200px" name="loginForm" ng-submit="submitFn()">'+
+        '<input style="width: 500px, height:200px" ng-model="userLogin.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail" />'+
+        '<input  style="width: 500px, height:200px" ng-model="userLogin.password" name="password" type="password" required ng-minlength="6" />'+
         '</form>'
       );
-      compile(element)(scope);
+      $compile(formElement)(scope);
       scope.$digest();
-      form = scope.loginForm;
     });
 
     it('the form should be initially invalid and pristine', function(){
+      var form = scope.loginForm;
       form.$valid.should.be.false;
       form.$invalid.should.be.true;
       form.$pristine.should.be.true;
       form.$dirty.should.be.false;
-
     });
 
-    it('the form should be invalid and have the proper error message when required fields are not given', function(){
-      /*form.email.$setViewValue('email');
-      var el = angular.element(form.email);
-      el.triggerHandler('change');
-      expect(debounce.debounce.args[0][0]).to.not.equal(undefined);
-      expect(debounce.debounce.args[0][1]).to.equal(100);
-      debounce.debounce.args[0][0]();
-      expect(validationManager.validateElement.calledOnce).to.equal(true);
+    it('the validateForm promise should initially reject a requiredErrorKey Error either if the email field is empty or the email field is valid and the password field empty', function(){
+      var form = scope.loginForm;
+      // Both fields are empty
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey');
+      $timeout.flush();
 
-      form.email.$valid.should.be.false;
-      scope.validateForm(form).should.equal('wdddaa');*/
+      // The email field is present and valid
+      form.email.$setViewValue('campusemail@ensta.fr');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey');
+      $timeout.flush();
+
+      // The password field is present and valid
+      form.email.$setViewValue('');
+      form.password.$setViewValue('validpassword');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey');
+      $timeout.flush();
+    });
+
+    it('the validateForm promise should reject an emailErrorKey Error if the view value is not an email', function(){
+      var form = scope.loginForm;
+      form.email.$setViewValue('not a valid email');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'emailErrorKey');
+      $timeout.flush();
+    });
+
+    it('the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', function(){
+      var form = scope.loginForm;
+      form.email.$setViewValue('notacampusemail@gmail.com');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'geCampusEmailErrorKey');
+      $timeout.flush();
+    });
+
+    it('the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', function(){
+      var form = scope.loginForm;
+      form.email.$setViewValue('campusemail@ensta.fr');
+      form.password.$setViewValue('short');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.rejectedWith(Error, 'minlengthErrorKey');
+      $timeout.flush();
+    });
+
+    it('the validateForm promise should be resolved if both fields are valid', function(){
+      var form = scope.loginForm;
+      form.email.$setViewValue('campusemail@ensta.fr');
+      form.password.$setViewValue('longer');
+      window.browserTrigger(formElement, 'submit');
+      scope.validateForm(form).should.be.resolved;
+      $timeout.flush();
+    });
+
+    it('if there is a validation error, the state should not change on form submit', function() {
+      // We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')));
+
+      window.browserTrigger(formElement, 'submit');
+      scope.submitLoginForm(scope.loginForm);
+      $timeout.flush();
+      // The state should not change
+      $state.go.should.have.not.been.called;
+    });
+
+    it('if there is no validation error, the state should not change on form submit', function() {
+      // We use a stub to make sure the validateForm promise is resolved
+      sandbox.stub(scope, 'validateForm', function(form) {
+        var deferred = $q.defer();
+        deferred.resolve();
+        return deferred.promise;
+      });
+
+      window.browserTrigger(formElement, 'submit');
+      scope.submitLoginForm(scope.loginForm);
+      $timeout.flush();
+      // The state should change to group-orders
+      $state.go.should.have.been.calledWith('group-orders');
     });
 
   });

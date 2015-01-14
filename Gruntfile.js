@@ -381,7 +381,7 @@ module.exports = function (grunt) {
     karma: {
       options: {
         basePath: '',
-        frameworks: ['mocha', 'chai', 'chai-as-promised'],
+        frameworks: ['mocha', 'chai', 'sinon-chai', 'chai-as-promised'],
         files: [
           '<%= yeoman.app %>/lib/angular/angular.js',
           '<%= yeoman.app %>/lib/angular-animate/angular-animate.js',
@@ -395,7 +395,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-translate-storage-local/angular-translate-storage-local.js',
           '<%= yeoman.app %>/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
           '<%= yeoman.app %>/lib/angular-validation-match/dist/angular-input-match.min.js',
-          '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.min.js',
+          '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
           '<%= yeoman.app %>/lib/lodash/dist/lodash.min.js',
@@ -403,6 +403,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
           '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
+          'test/utils/**/*.js',
           'test/mock/**/*.js',
           'test/spec/**/*.js'
         ],

@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers.authentication', ['groupeat.services.customer', 'groupeat.services.element-modifier'])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $ionicModal, $filter, Customer, ElementModifier) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier) {
 
   var $translate = $filter('translate');
 
@@ -63,8 +63,8 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   */
 
   $scope.validateForm = function(form) {
-    setTimeout(function(){
-      $scope.$apply(function() {
+    var deferred = $q.defer();
+    $timeout(function() {
         if (form.$invalid)
         {
           var errorMessage = ElementModifier.errorMsg(form.$name);
@@ -76,18 +76,20 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
           $timeout(function() {
             alertWrongCombinaison.close();
           }, 4000);
-          return errorMessage;
+          deferred.reject(new Error(errorMessage));
         }
-        return true;
+        else
+        {
+          deferred.resolve();
+        }
       });
-    });
+    return deferred.promise;
   };
 
   $scope.submitLoginForm = function(form) {
-    if ($scope.validateForm(form) === true)
-    {
+    $scope.validateForm(form).then(function() {
       $state.go('group-orders');
-    }
+    });
   };
 
   $scope.showResetPasswordPopup = function() {
@@ -128,8 +130,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   */
 
   $scope.submitRegisterForm = function(form) {
-    if ($scope.validateForm(form) === true)
-    {
+    $scope.validateForm(form).then(function() {
       var customer = new Customer($scope.userRegister);
       customer.$save();
 
@@ -141,7 +142,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
       $scope.showFurtherRegisterForm = true;
       $scope.showSubmitFurtherRegisterButton = false;
       $scope.showSkipFurtherRegisterButton = true;
-    }
+    });
   };
 
 
@@ -178,10 +179,9 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   }, true);
 
   $scope.submitFurtherRegisterForm = function(form) {
-    if ($scope.validateForm(form) === true)
-    {
+    $scope.validateForm(form).then(function() {
       $scope.onSkipFurtherRegisterButtonTouch();
-    }
+    });
   };
 
   /*
