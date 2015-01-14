@@ -8,5 +8,6 @@ angular.module('groupeat.services', [
   'groupeat.services.pizza',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
-  'groupeat.services.cart'
+  'groupeat.services.cart',
+  'groupeat.services.push'
 ]);
