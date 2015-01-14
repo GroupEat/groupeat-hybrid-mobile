@@ -4,7 +4,7 @@
 
 angular.module('groupeat.services.push', [])
 
-.service('Push', ['$q', '$rootScope', '$ionicPlatform', '$cordovaPush', '$cordovaDialogs', function ($q, $rootScope, $ionicPlatform, $cordovaPush, $cordovaDialogs) {
+.factory('Push', ['$q', '$rootScope', '$ionicPlatform', '$cordovaPush', '$cordovaDialogs', function ($q, $rootScope, $ionicPlatform, $cordovaPush, $cordovaDialogs) {
 
   var deferred;
 
