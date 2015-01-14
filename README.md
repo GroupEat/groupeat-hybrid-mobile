@@ -1,6 +1,8 @@
 # GroupEat Hybrid Mobile Application
 
-[![Build Status](https://api.shippable.com/projects/546a96c3d46935d5fbbddccc/badge?branchName=master)](https://app.shippable.com/projects/546a96c3d46935d5fbbddccc/builds/latest)
+[![Build Status](https://api.shippable.com/projects/546a96c3d46935d5fbbddccc/badge?branchName=master)](https://app.shippable.com/projects/546a96c3d46935d5fbbddccc/builds/latest)    [![Code Climate](https://codeclimate.com/repos/54ad15d4695680573000abb4/badges/eff72be7b75e406f0908/gpa.svg)](https://codeclimate.com/repos/54ad15d4695680573000abb4/feed)    [![Test Coverage](https://codeclimate.com/repos/54ad15d4695680573000abb4/badges/eff72be7b75e406f0908/coverage.svg)](https://codeclimate.com/repos/54ad15d4695680573000abb4/feed)
+
+
 
 ## Prerequisites
 
