@@ -51,6 +51,13 @@
   "dontPushFor": "Ne pas me notifier pendant",
   "day": "jour",
   "days": "jours",
+  "1day": "1 jour",
+  "2days": "2 jours",
+  "3days": "3 jours",
+  "4days": "4 jours",
+  "5days": "5 jours",
+  "6days": "6 jours",
+  "1week": "1 semaine",
 
   "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
   "chooseARestaurant": "Choisissez un restaurant",
