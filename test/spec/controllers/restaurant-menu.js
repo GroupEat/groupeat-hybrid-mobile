@@ -55,41 +55,7 @@ describe('Ctrl: RestaurantMenuCtrl', function () {
     });
 
     it("should call Cart service function add product", function() {
-        /*var quantityOfProductItems = scope.cart.totalQuantity ;
-
-        var format = {
-            'id': 444,
-            'size': 'format test',
-            'price': 10,
-            'quantity': 1
-        };
-
-        var product = {
-            'id': 188,
-            'name': 'test name',
-            'totalQuantity': 1,
-            'totalPrice': 12,
-            'formats': [{
-                'id': 555,
-                'size': 'other format test',
-                'price': 8,
-                'quantity': 0
-            },
-            format
-            ]
-        };
-        
-        scope.onProductAdd(product, format);
-        scope.$apply();
-        expect(scope.cart.totalQuantity).to.equal(quantityOfProductItems + 1);
-    */
-
-        /*var product = {};
-        var format= {};
-
-        scope.onProductAdd(product, format);
-        expect(Cart.addProductToCart).to.have.been.called();*/
-
+        // to do : test if Cart service function has been called
     });
 
     it("should toggle product if asking", function() {
