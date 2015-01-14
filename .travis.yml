@@ -12,4 +12,4 @@ before_script:
   - grunt init
 after_script:
   - npm install -g codeclimate-test-reporter
-  - codeclimate < coverage/lcov/*/lcov.info
+  - codeclimate < coverage/lcov/**/lcov.info
