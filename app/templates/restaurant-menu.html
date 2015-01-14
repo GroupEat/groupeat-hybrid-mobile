@@ -1,24 +1,55 @@
-<ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" >
-  <ion-nav-buttons side="right">
-    <button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
-    </button>
-  </ion-nav-buttons>
+<ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" ge-hide-tabs>
+<ion-nav-buttons side="right">
+<button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
+</button>
+</ion-nav-buttons>
 
-  <ion-content class="has-header has-footer">
+<ion-content has-header="true" ng-hide="isCartEmpty">
 
-    <ul class="list">
-      <div ng-repeat="pizza in pizzas" ng-click="addToBasketPopup(pizza)" class="row" >
-        <div class="col col-80">
-          <h3>{{ pizza.name }}</h2>
-          <p style="display:block">{{ pizza.description }}</p>
+<ion-list>
+
+
+<div ng-repeat="product in pizzas">
+  <ion-item ng-click="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
+  <div class="border-less" ng-class="isDetailsShown(product)">
+      <b> {{ product.name }} </b>
+      <p> {{ product.description }} </p>
+  </div>
+</ion-item> 
+
+<ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
+<div class="row border-less">
+  <div class="col col-60 border-less">
+    {{ format.size }} ({{ format.price }} €)
+  </div>
+  <div class="col col-10 ">
+    <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ge-touch="onProductDelete(product, format.id)"></a>
+  </div>
+  <div class="col col-10">
+    <a class="center"> {{ cart.productsItems[0].formats[$index].quantity }} </a>
+  </div>
+  <div class="col col-10 ">
+    <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" ge-touch="onProductAdd(product, format)"></a>
+  </div>
+  <div class="col col-10 ">
+  </div>
+</div>
+</ion-item>
+</div>
+</ion-list>
+
+
+</ion-content>
+
+<ion-footer-bar class="bar-energized ">
+    <div class="row border-less">
+        <div class="col col-25">
+        <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice }}€
         </div>
-        <div class="col col-20 col-center">
-        <strike>{{ pizza.mediumPrice | number : 2 }} €</strike>
-        <br>
-        {{ pizza.mediumPrice*discount | number : 2 }} €
+        <div class="col col-25">
+          <i> {{ cart.cartTotalQuantity }} Pizza </i>
         </div>
-      </div>
-    <ul>
+    </div>
+ </ion-footer-bar>
 
-	</ion-content>
 </ion-view>

@@ -11,7 +11,7 @@
 
 <!--	-	-	- MENU VIEW -	-	-	-->
 
-<div ng-show="showLoginSignUpButtons">
+<div ng-show="showLoginAndRegisterButtons">
 	<button ge-touch="onLoginButtonTouch()" class="button button-full button-energized  button-upper-bottom text-button-first-page">{{ 'login' | translate | uppercase }}
 	</button>
 
@@ -24,7 +24,7 @@
 
 <!--	-	-	- LOGIN VIEW -	-	-	-->
 
-<form name="loginForm" ng-show="showLoginView" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
+<form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
 	<div class="list list-inset register-form">
 		<div class="loginViewButtons">
 			<button ge-touch="showResetPasswordPopup()" class="button button-small button-clear button-energized">{{ 'forgotPassword' | translate }}</button>
@@ -40,7 +40,7 @@
 	</button>
 </form>
 
-<button ng-show="showLoginBackButtonEnergized" ge-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
+<button ng-show="showLoginEnergizedBackButton" ge-touch="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
 	{{ 'back' | translate }}
 </button>
 
@@ -49,7 +49,7 @@
 
 <!--	-	-	- REGISTER VIEW -	-	-	-->
 
-<form name="registerForm" ng-show="showRegisterView" ng-submit="submitRegisterForm(registerForm)" ng-submit-force="true" novalidate>
+<form name="registerForm" ng-show="showRegisterForm" ng-submit="submitRegisterForm(registerForm)" ng-submit-force="true" novalidate>
 	<div class="list list-inset register-form">
 		<label class="item item-input">
 			<i class="icon ion-ios7-email-outline placeholder-icon"></i>
@@ -61,14 +61,14 @@
 		</label>
 		<label class="item item-input">
 			<i class="icon ion-ios7-locked-outline placeholder-icon"></i>
-			<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" placeholder="{{ 'confirmPassword' | translate }}" required ng-minlength="6" match="userRegister.password">
+			<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" placeholder="{{ 'confirmPassword' | translate }}" match="registerForm.password">
 		</label>
 	</div>
 	<button type="submit" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 	</button>
 </form>
 
-<button ng-show="showLoginBackButtonAssertive" ge-touch="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
+<button ng-show="showLoginAssertiveBackButton" ge-touch="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
 	{{ 'back' | translate }}
 </button>
 
@@ -77,16 +77,7 @@
 
 <!--	-	-	- SECOND FORM VIEW -	-	-	-->
 
- <div ng-show="showSecondFormView">
- 	<div ng-show="showSkipButton">
-		<button ge-touch="onSkipSecondFormTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'skip' | translate | uppercase }}
-		</button>
-	</div>
-	<div ng-show="showSecondRegisterButton">
-		<button ge-touch="onSecondRegisterTouch()" class="button button-full button-energized button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
-		</button>
-	</div>
-
+<form name="furtherRegisterForm" ng-show="showFurtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)" ng-submit-force="true" novalidate>
 	<div class="list list-inset register-form">
 		<h6 class="login-text-first-page"> {{ 'addMoreInformationOrSkip' | translate }}</h6>
 		<label class="item item-input">
@@ -106,7 +97,16 @@
 			<input ng-model="userRegister.address" type="text" placeholder="{{ 'address' | translate }}">
 		</label>
 	</div>
-</div>
+	<div ng-show="showSkipFurtherRegisterButton">
+		<button ge-touch="onSkipFurtherRegisterButtonTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'skip' | translate | uppercase }}
+		</button>
+	</div>
+	<div ng-show="showSubmitFurtherRegisterButton">
+		<button type="submit" class="button button-full button-energized button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
+		</button>
+	</div>
+</form>
+
 
 <!--	-	-	- END SECOND FORM VIEW -	-	-	-->
 </ion-view>

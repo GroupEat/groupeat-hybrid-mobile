@@ -6,60 +6,92 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
 
   var $translate = $filter('translate');
 
-  /*
-  ----------------------    Initial View Controller    --------------------------
-  */
-  $scope.showLoginSignUpButtons = true;
-  $scope.showRegisterView = false;
-  $scope.showLoginBackButtonEnergized = false;
-  $scope.showLoginBackButtonAssertive = false;
+  /**
+  Scope Initializations
+  **/
 
-  $scope.userRegister = {};
+  /* Showing DOM Elements */
+  // Buttons
+  $scope.showLoginAndRegisterButtons = true;
+  $scope.showLoginEnergizedBackButton = false;
+  $scope.showLoginAssertiveBackButton = false;
+  $scope.showSkipFurtherRegisterButton = false ;
+  $scope.showSubmitFurtherRegisterButton = false ;
+  // Forms
+  $scope.showLoginForm = false;
+  $scope.showRegisterForm = false;
+
+  /* Models */
   $scope.userLogin = {};
   $scope.userReset = {};
+  $scope.userRegister = {};
+
+  $scope.validationError = undefined;
+
+  /*
+  ---------------------- Initial --------------------------
+  */
 
   $scope.onRegisterButtonTouch = function() {
-    $scope.showLoginSignUpButtons = false;
-    $scope.showRegisterView = true;
-    $scope.showLoginBackButtonEnergized = false;
-    $scope.showLoginBackButtonAssertive = true;
+    $scope.showLoginAndRegisterButtons = false;
+    $scope.showRegisterForm = true;
+    $scope.showLoginEnergizedBackButton = false;
+    $scope.showLoginAssertiveBackButton = true;
   };
 
   $scope.onLoginButtonTouch = function() {
-    $scope.showLoginSignUpButtons = false;
-    $scope.showLoginView = true;
-    $scope.showLoginBackButtonEnergized = true;
-    $scope.showLoginBackButtonAssertive = false;
+    $scope.showLoginAndRegisterButtons = false;
+    $scope.showLoginForm = true;
+    $scope.showLoginEnergizedBackButton = true;
+    $scope.showLoginAssertiveBackButton = false;
+  };
+
+  $scope.onBackToMainViewButtonTouch = function() {
+    $scope.showLoginAndRegisterButtons = true;
+    $scope.showLoginForm = false ;
+    $scope.showRegisterForm = false ;
+    $scope.showLoginEnergizedBackButton = false ;
+    $scope.showLoginAssertiveBackButton = false ;
   };
 
   /*
-  ----------------------    Login View Controller    --------------------------
+  -------------------    End Initial   -------------------------
   */
-  $scope.onBackToMainViewButtonTouch = function() {
-    $scope.showLoginSignUpButtons = true;
-    $scope.showLoginView = false ;
-    $scope.showRegisterView = false ;
-    $scope.showLoginBackButtonEnergized = false ;
-    $scope.showLoginBackButtonAssertive = false ;
+
+  /*
+  ----------------------    Login    --------------------------
+  */
+
+  $scope.validateForm = function(form) {
+    setTimeout(function(){
+      $scope.$apply(function() {
+        if (form.$invalid)
+        {
+          var errorMessage = ElementModifier.errorMsg(form.$name);
+          var alertWrongCombinaison = $ionicPopup.alert({
+            title: errorMessage,
+            okText: 'OK',
+            okType: 'button-energized',
+          });
+          $timeout(function() {
+            alertWrongCombinaison.close();
+          }, 4000);
+          return errorMessage;
+        }
+        return true;
+      });
+    });
   };
 
   $scope.submitLoginForm = function(form) {
-    if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({ // info to user : email sent
-        title: ElementModifier.errorMsg(form.$name),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWrongCombinaison.close(); // close the popup after 3 seconds
-      }, 4000);
-    }
-    else {
-      $state.go('orders');
+    if ($scope.validateForm(form) === true)
+    {
+      $state.go('group-orders');
     }
   };
 
   $scope.showResetPasswordPopup = function() {
+    // Resetting the relevant scope elements each time such a popup is created
     $scope.userReset = {};
     $scope.validationError = undefined;
 
@@ -88,52 +120,41 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   };
 
   /*
-  -------------------    END LOGIN VIEW   -------------------------
+  -------------------    End Login   -------------------------
   */
 
-
   /*
-  -------------------    FIRST REGISTER VIEW  (UNSKIPPABLE INFORMATIONS) -------------------------
+  -------------------    Registering  (Mandatory) -------------------------
   */
 
   $scope.submitRegisterForm = function(form) {
-
-    if (form.$invalid) {
-      var alertWrongCombinaison = $ionicPopup.alert({
-        title: ElementModifier.errorMsg(form.$name),
-        okText: 'OK',
-        okType: 'button-energized',
-      });
-      $timeout(function() {
-        alertWrongCombinaison.close();
-      }, 4000);
-    }
-
-    else {
+    if ($scope.validateForm(form) === true)
+    {
       var customer = new Customer($scope.userRegister);
       customer.$save();
 
-      $scope.showLoginSignUpButtons = false;
-      $scope.showLoginView = false ;
-      $scope.showRegisterView = false ;
-      $scope.showLoginBackButtonEnergized = false ;
-      $scope.showLoginBackButtonAssertive = false ;
-      $scope.showSecondFormView = true ;
-      $scope.showSkipButton = true ;
+      $scope.showLoginAndRegisterButtons = false;
+      $scope.showLoginForm = false;
+      $scope.showRegisterForm = false;
+      $scope.showLoginEnergizedBackButton = false;
+      $scope.showLoginAssertiveBackButton = false;
+      $scope.showFurtherRegisterForm = true;
+      $scope.showSubmitFurtherRegisterButton = false;
+      $scope.showSkipFurtherRegisterButton = true;
     }
   };
 
 
   /*
-  -------------------    END FIRST REGISTER VIEW  (UNSKIPPABLE INFORMATIONS) -------------------------
+  -------------------    End Registering -------------------------
   */
 
 
   /*
-  -------------------    SECOND REGISTER VIEW  (SKIPPABLE INFORMATIONS) -------------------------
+  -------------------    Further Registering (Skippable) -------------------------
   */
-  $scope.onSkipSecondFormTouch = function () {
-    $state.go('orders') ;
+  $scope.onSkipFurtherRegisterButtonTouch = function () {
+    $state.go('group-orders') ;
 
     var alertWelcome = $ionicPopup.alert({
       title: $translate('welcomeMessage'),
@@ -141,63 +162,29 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
       okType: 'button-assertive',
     });
     $timeout(function() {
-      alertWelcome.close(); //close the popup after 3 seconds
+      alertWelcome.close();
     }, 3000);
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.address]', function () {
     if ( ($scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
-      $scope.showSecondRegisterButton = true;
-      $scope.showSkipButton = false ;
+      $scope.showSubmitFurtherRegisterButton = true;
+      $scope.showSkipFurtherRegisterButton = false ;
     }
     else {
-      $scope.showSecondRegisterButton = false;
-      $scope.showSkipButton = true ;
+      $scope.showSubmitFurtherRegisterButton = false;
+      $scope.showSkipFurtherRegisterButton = true ;
     }
   }, true);
 
-  $scope.onSecondRegisterTouch = function () {
-    $state.go('orders') ;
-
-    var alertWelcome = $ionicPopup.alert({
-      title: $translate('welcomeMessage'),
-      okText: 'OK',
-      okType: 'button-energized',
-    });
-    $timeout(function() {
-      alertWelcome.close(); //close the popup after 3 seconds
-    }, 3000);
-
+  $scope.submitFurtherRegisterForm = function(form) {
+    if ($scope.validateForm(form) === true)
+    {
+      $scope.onSkipFurtherRegisterButtonTouch();
+    }
   };
 
   /*
-  -------------------    END SECOND REGISTER VIEW  (SKIPPABLE INFORMATIONS) -------------------------
+  -------------------    End Further Registering -------------------------
   */
-
-
-  /*
-  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFULL LATER ---------------------
-  */
-
-  $ionicModal.fromTemplateUrl('templates/modals/register.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  })
-  .then(function(modal) {
-    $scope.registerModal = modal;
-  });
-
-  $scope.openRegisterModal = function() {
-    $scope.registerModal.show();
-    $scope.userRegister = {};
-
-  };
-  $scope.closeRegisterModal = function() {
-    $scope.registerModal.hide();
-  };
-
-  /*
-  ---------------- OTHERS, NOT USED FOR THE MOMENT, USEFUL LATER ---------------------
-  */
-
 });

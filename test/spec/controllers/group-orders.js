@@ -2,8 +2,6 @@
 
 describe('Ctrl: GroupOrdersCtrl', function () {
 
-  var should = chai.should();
-
   // Load the controller's module
   beforeEach(module('groupeat'));
 

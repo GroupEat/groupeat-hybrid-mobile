@@ -1,4 +1,6 @@
 language: node_js
+env:
+  - CODECLIMATE_REPO_TOKEN=a3d17e89ce9838fc779c7b88522cc25db043e31d1529ff9b17d11b26509d00df
 node_js:
   - "0.10.26"
 before_script:
@@ -8,3 +10,6 @@ before_script:
   - gem install compass
   - npm install -g grunt-cli
   - grunt init
+after_script:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate < coverage/lcov/*/lcov.info

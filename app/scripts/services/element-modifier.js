@@ -15,7 +15,6 @@ angular.module('groupeat.services.element-modifier', [])
     *
     * @param {Element} el - The input control element that is the target of the validation.
     */
-    /*jshint unused: false */
     makeValid = function (el) {
       var domElement = el[0];
       var formName = domElement.form.name;
@@ -64,10 +63,21 @@ angular.module('groupeat.services.element-modifier', [])
       makeValid(el);
     },
 
+    /**
+    * @ngdoc function
+    * @name ElementModifier#getErrorMsg
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns the first error message of a form, undefined if there is none
+    *
+    * @param {String} formName - The name of the form whose error is to be fetched
+    */
     getErrorMsg = function(formName) {
       for (var fieldName in scopeErrorMsg[formName]) {
         return scopeErrorMsg[formName][fieldName];
       }
+      return undefined;
     };
 
     return {

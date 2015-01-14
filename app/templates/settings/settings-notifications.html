@@ -1,7 +1,7 @@
 <ion-view ng-controller="SettingsCtrl" title="{{'pushSettings'| translate }}">
 	<ion-content has-header="true">
 
-		<ion-toggle ng-model="item.checked" ng-checked="item.checked">
+		<ion-toggle ng-model="select.pushActivation" ng-checked="select.pushActivation">
           {{ 'pushActivation' | translate }}
         </ion-toggle>
 
@@ -13,38 +13,27 @@
 		    <div class="input-label">
 		      {{ 'dontPushAfter' | translate }} :</p>
 		    </div>
-		    <select>
-		      <option >21h00</option>
-		      <option >22h00</option>
-		      <option >23h00</option>
-		      <option >00h00</option>
-		      <option selected>1h00</option>
-		    </select>
+		    <select ng-model="select.dontPushAfter" ng-options="item.name for item in settings.dontPushAfter">
+      		</select>
 		</label>
 
 		<div class="item item-divider"> 
-          {{ 'afterACommand' | translate }} :
+          {{ 'afterAnOrder' | translate }} :
         </div>
         
         <label class="item item-input item-select">
 		    <div class="input-label">
 		    {{ 'dontPushFor' | translate }} :
 		    </div>
-		    <select class="center">
-		      <option selected>1 jour</option>
-		      <option >2 jours</option>
-		      <option >2 jours</option>
-		      <option >2 jours</option>
-		      <option >2 jours</option>
-		      <option >2 jours</option>
-		    </select>
+		    <select ng-model="select.dontPushFor" ng-options="item.name for item in settings.dontPushFor">
+      		</select>
 		</label>
         
 
 
 		
-		<button ui-sref='settings' class="button button-full button-outline no-margin">
-	   		   <text id="new-command-text">{{ 'save' | translate }}<text/>
+		<button ge-touch="saveSettings()" class="button button-full button-outline no-margin">
+	   		   <text>{{ 'save' | translate }}<text/>
 	   	</button>
 	</ion-content>
 </ion-view>
