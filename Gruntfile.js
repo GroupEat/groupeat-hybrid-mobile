@@ -417,8 +417,8 @@ module.exports = function (grunt) {
         },
         coverageReporter: {
           reporters: [
-            { type: 'html', dir: 'coverage/html' },
-            { type: 'lcov', dir: 'coverage/lcov' },
+            { type: 'html', dir: 'coverage/html', subdir: '.' },
+            { type: 'lcov', dir: 'coverage/lcov', subdir: '.' },
             { type: 'text-summary' }
           ]
         }
