@@ -4,7 +4,7 @@ angular.module('groupeat.controllers.cart', ['groupeat.services.cart', 'groupeat
 
 .controller('CartCtrl', function($scope, $state, _, Cart) {
 
-  $scope.cart = Cart.getCart();
+	$scope.cart = Cart.getCart();
 	$scope.isCartEmpty = _.isEmpty($scope.cart.productsItems);
 	
 });

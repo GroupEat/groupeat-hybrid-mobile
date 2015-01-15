@@ -2,8 +2,7 @@
 
 angular.module('groupeat.services.notifications-settings', ['ngResource'])
 
-.factory('notificationsSettings', function($resource, ENV) {
-  // settings = $resource(ENV.apiEndpoint+'/notifications-settings')
+.factory('notificationsSettings', function() {
 
   var settings = {
 		pushActivation : true,
