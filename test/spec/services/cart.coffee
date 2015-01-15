@@ -7,13 +7,14 @@ describe 'Service: Cart', ->
   Cart = scope = $httpBackend = {}
 
   # Initialize the controller and a mock scope
-  beforeEach inject ($rootScope, $injector) ->
-    scope = $rootScope.$new()
-    $httpBackend = $injector.get('$httpBackend')
-    $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-    $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
-    Cart = $injector.get('Cart')
-    _ = $injector.get('_')
+  beforeEach ->
+    inject ($rootScope, $injector) ->
+      scope = $rootScope.$new()
+      $httpBackend = $injector.get('$httpBackend')
+      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
+      Cart = $injector.get('Cart')
+      _ = $injector.get('_')
 
   describe "Cart Service contents :", ->
     it "should create an objet of products", ->
@@ -40,39 +41,49 @@ describe 'Service: Cart', ->
 
     it "refreshCart should update prices and quantities of cart and childrens", ->
       testCart = Cart.getCart()
-      testCart.productsItems = [{
-        'id': 12,
-        'name': 'test name',
-        'totalQuantity': 2222,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 1,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 2,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 1
-          }]
-      },{
-        'id': 5,
-        'name': 'test name',
-        'totalQuantity': 2222,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 6,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 7,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 2
-          }]
-      }]
+      testCart.productsItems = [
+        {
+          id: 12,
+          name: 'test name',
+          totalQuantity: 2222,
+          totalPrice: 1222,
+          formats: [
+            {
+              id: 1,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            }
+            ,
+            {
+              id: 2,
+              size: 'test size 2',
+              price: 15,
+              quantity: 1
+            }
+          ]
+        },
+        {
+        id: 5,
+        name: 'test name',
+        totalQuantity: 2222,
+        totalPrice: 1222,
+        formats: [
+            {
+              id: 6,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            },
+            {
+              id: 7,
+              size: 'test size 2',
+              price: 15,
+              quantity: 2
+            }
+          ]
+        }
+      ]
 
       Cart.refreshCart()
 
@@ -87,39 +98,48 @@ describe 'Service: Cart', ->
     it "should delete productsItems when a product total quantity equals 0", ->
       testCart = Cart.getCart()
 
-      testCart.productsItems = [{
-        'id': 12,
-        'name': 'test name',
-        'totalQuantity': 22,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 1,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 0
-          }, {
-            'id': 2,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 0
-          }]
-      },{
-        'id': 5,
-        'name': 'test name',
-        'totalQuantity': 2222,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 6,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 7,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 2
-          }]
-      }]
+      testCart.productsItems = [
+        {
+        id: 12,
+        name: 'test name',
+        totalQuantity: 22,
+        totalPrice: 1222,
+        formats: [
+            {
+              id: 1,
+              size: 'test size 1',
+              price: 10,
+              quantity: 0
+            },
+            {
+              id: 2,
+              size: 'test size 2',
+              price: 15,
+              quantity: 0
+            }
+          ]
+        },
+        {
+          id: 5,
+          name: 'test name',
+          totalQuantity: 2222,
+          totalPrice: 1222,
+          formats: [
+            {
+              id: 6,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            },
+            {
+              id: 7,
+              size: 'test size 2',
+              price: 15,
+              quantity: 2
+            }
+          ]
+        }
+      ]
 
       Cart.refreshCart()
 
@@ -128,39 +148,48 @@ describe 'Service: Cart', ->
     it "should remove product by decreasing quantity", ->
       testCart = Cart.getCart()
 
-      testCart.productsItems = [{
-        'id': 12,
-        'name': 'test name',
-        'totalQuantity': 22,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 1,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 2,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 1
-          }]
-      },{
-        'id': 5,
-        'name': 'test name',
-        'totalQuantity': 2222,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 6,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 7,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 2 # quantity to decrease
-          }]
-      }]
+      testCart.productsItems = [
+        {
+          id: 12,
+          name: 'test name',
+          totalQuantity: 22,
+          totalPrice: 1222,
+          formats: [
+            {
+              id: 1,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            },
+            {
+              id: 2,
+              size: 'test size 2',
+              price: 15,
+              quantity: 1
+            }
+          ]
+        },
+        {
+          id: 5,
+          name: 'test name',
+          totalQuantity: 2222,
+          totalPrice: 1222,
+          formats: [
+            {
+              id: 6,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            },
+            {
+              id: 7,
+              size: 'test size 2',
+              price: 15,
+              quantity: 2 # quantity to decrease
+            }
+          ]
+        }
+      ]
 
       Cart.removeProductFromCart(testCart.productsItems[1], testCart.productsItems[1].formats[1].id)
       expect(testCart.productsItems[1].formats[1].quantity).to.equal(1)
@@ -169,39 +198,39 @@ describe 'Service: Cart', ->
       testCart = Cart.getCart()
       testCart.cartTotalPrice = 111
       testCart.cartTotalQuantity = 555
-      testCart.productsItems = [{
+      testCart.productsItems = [
         'id': 12,
         'name': 'test name',
         'totalQuantity': 22,
         'totalPrice': 1222,
-        'formats': [{
+        'formats': [
             'id': 1,
             'size': 'test size 1',
             'price': 10,
             'quantity': 2
-          }, {
+            ,
             'id': 2,
             'size': 'test size 2',
             'price': 15,
             'quantity': 1
-          }]
-      },{
+          ]
+        ,
         'id': 5,
         'name': 'test name',
         'totalQuantity': 2222,
         'totalPrice': 1222,
-        'formats': [{
+        'formats': [
             'id': 6,
             'size': 'test size 1',
             'price': 10,
             'quantity': 2
-          }, {
+            ,
             'id': 7,
             'size': 'test size 2',
             'price': 15,
             'quantity': 2 # quantity to decrease
-          }]
-      }]
+          ]
+      ]
 
       Cart.resetCart()
 
@@ -211,58 +240,65 @@ describe 'Service: Cart', ->
 
     it "should add an existing product", ->
       testCart = Cart.getCart()
-      testCart.productsItems = [{
-        'id': 12,
-        'name': 'test name',
-        'totalQuantity': 22,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 1,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 2,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 1
-          }]
-      },{
-        'id': 5,
-        'name': 'test name',
-        'totalQuantity': 2222,
-        'totalPrice': 1222,
-        'formats': [{
-            'id': 6,
-            'size': 'test size 1',
-            'price': 10,
-            'quantity': 2
-          }, {
-            'id': 7,
-            'size': 'test size 2',
-            'price': 15,
-            'quantity': 2 # quantity to increase
-          }]
-      }]
-
-      productToAdd = { # data coming from restaurant menu alias pizzas*.json
-        'name': 'test name',
-        'id': 5, # same product id as above
-        'description': 'test description',
-        'formats':
-          [
+      testCart.productsItems = [
+        {
+          id: 12,
+          name: 'test name',
+          totalQuantity: 22,
+          totalPrice: 1222,
+          formats: [
             {
-              'id': 10,
-              'size':'Junior',
-              'price':8
+              id: 1,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
             },
             {
-              'id': 7, # same format id as above
-              'size':'Senior',
-              'price':10
+              id: 2,
+              size: 'test size 2',
+              price: 15,
+              quantity: 1
             }
           ]
-      }
+        },
+        {
+          id: 5,
+          name: 'test name',
+          totalQuantity: 2222,
+          totalPrice: 1222,
+          formats: [
+            {
+              id: 6,
+              size: 'test size 1',
+              price: 10,
+              quantity: 2
+            },
+            {
+              id: 7,
+              size: 'test size 2',
+              price: 15,
+              quantity: 2 # quantity to increase
+            }
+          ]
+        }
+      ]
+
+      productToAdd = # data coming from restaurant menu alias pizzas*.json
+        name: 'test name',
+        id: 5, # same product id as above
+        description: 'test description',
+        formats:[
+            {
+              id: 10,
+              size:'Junior',
+              price:8
+            },
+            {
+              id: 7, # same format id as above
+              size:'Senior',
+              price:10
+            }
+        ]
 
       Cart.addProductToCart(productToAdd, productToAdd.formats[1])
       expect(testCart.productsItems[1].formats[1].quantity).to.equal(3)
@@ -270,24 +306,23 @@ describe 'Service: Cart', ->
     it "should add a new product in cart", ->
       testCart = Cart.getCart()
 
-      productToAdd = { # data coming from restaurant menu alias pizzas*.json
-        'name': 'test name',
-        'id': 5,
-        'description': 'test description',
-        'formats':
+      productToAdd = # data coming from restaurant menu alias pizzas*.json
+        name: 'test name',
+        id: 5,
+        description: 'test description',
+        formats:
           [
             {
-              'id': 10,
-              'size':'Junior',
-              'price':8
+              id: 10,
+              size:'Junior',
+              price:8
             },
             {
-              'id': 7, # format to add for test
-              'size':'Senior',
-              'price':10
+              id: 7, # format to add for test
+              size:'Senior',
+              price:10
             }
           ]
-      }
 
       Cart.addProductToCart(productToAdd, productToAdd.formats[1])
 
