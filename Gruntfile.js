@@ -441,7 +441,6 @@ module.exports = function (grunt) {
           },
           // transforming the filenames
           transformPath: function(path) {
-            console.log(path);
             return path.replace(/\.coffee$/, '.tmp/.js');
           }
         },
