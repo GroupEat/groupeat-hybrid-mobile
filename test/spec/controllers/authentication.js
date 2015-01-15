@@ -13,9 +13,6 @@ describe('Ctrl: AuthenticationCtrl', function () {
   $timeout,
   $q,
   sandbox,
-  debounce,
-  debounceStub,
-  validationManager,
   elementUtils,
   formElement;
 
@@ -36,15 +33,11 @@ describe('Ctrl: AuthenticationCtrl', function () {
       $scope: scope, $state: $state, $ionicPopup: $injector.get('$ionicPopup'), $timeout: $injector.get('$timeout'), $ionicModal: $injector.get('$ionicModal'), $filter: $injector.get('$filter'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier')
     });
 
-    validationManager = $injector.get('validationManager');
-    sandbox.spy(validationManager, 'validateElement');
-
+    // Hack to validate elements
+    // Angular auto validate does not validate mock html elements
+    // as it considers they are not visible (offset properties are 0)
     elementUtils = $injector.get('jcs-elementUtils');
     sandbox.stub(elementUtils, 'isElementVisible').returns(true);
-
-    debounce = $injector.get('jcs-debounce');
-    debounceStub = sandbox.stub();
-    sandbox.stub(debounce, 'debounce').returns(debounceStub);
 
     $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
     $httpBackend.whenGET(/^translations\/.*/).respond('{}');
@@ -229,7 +222,7 @@ describe('Ctrl: AuthenticationCtrl', function () {
   });
 
   describe('Resetting password', function() {
-
+    //scope.showResetPasswordPopup();
   });
 
   describe('Registering (First Step)', function() {

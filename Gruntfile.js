@@ -85,6 +85,10 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'],
         tasks: ['newer:copy:app', 'newer:jshint:all']
       },
+      coffee: {
+        files: ['test/**/*.coffee'],
+        tasks: ['newer:copy:app', 'newer:coffeelint:tests']
+      },
       compass: {
         files: ['<%= yeoman.app %>/<%= yeoman.styles %>/**/*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer', 'newer:copy:tmp']
@@ -139,6 +143,19 @@ module.exports = function (grunt) {
           jshintrc: 'test/.jshintrc'
         },
         src: ['test/unit/**/*.js']
+      }
+    },
+
+    coffeelint: {
+      tests: {
+        files: {
+          src: ['test/**/*.coffee']
+        },
+        options: {
+          'max_line_length': {
+            'level': 'ignore'
+          }
+        }
       }
     },
 
@@ -403,10 +420,9 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
           '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
-          'test/utils/**/*.js',
-          'test/mock/**/*.js',
-          'test/spec/**/*.coffee',
-          'test/spec/**/*.js'
+          'test/utils/**/*.coffee',
+          'test/mock/**/*.coffee',
+          'test/spec/**/*.coffee'
         ],
         autoWatch: false,
         reporters: ['dots', 'coverage'],
@@ -421,11 +437,12 @@ module.exports = function (grunt) {
           // options passed to the coffee compiler
           options: {
             bare: true,
-            sourceMap: false
+            sourceMap: true
           },
           // transforming the filenames
           transformPath: function(path) {
-            return path.replace(/\.coffee$/, '.js');
+            console.log(path);
+            return path.replace(/\.coffee$/, '.tmp/.js');
           }
         },
         coverageReporter: {
@@ -527,7 +544,7 @@ module.exports = function (grunt) {
       ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
       'test/spec/**/*.js',
       'test/spec/**/*.coffee'],
-      tasks: ['newer:jshint:test', 'karma:unit:run']
+      tasks: ['newer:coffeelint:tests', 'newer:jshint:test', 'karma:unit:run']
     };
     grunt.config.set('watch', karma);
     return grunt.task.run(['watch']);
@@ -604,6 +621,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', [
     'newer:jshint',
+    'newer:coffeelint:tests',
     'karma:continuous',
     'compress'
   ]);
