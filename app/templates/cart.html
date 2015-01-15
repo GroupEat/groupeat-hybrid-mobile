@@ -47,7 +47,7 @@
 		<ion-list>
 	  		<ion-item>
 	  			<div class="center">
-		  			<b>{{ 'Total' | translate }} :</b> &nbsp {{ cart.cartTotalQuantity }} pizzas, {{ cart.cartTotalPrice }}€.  
+		  			<b>{{ 'Total' | translate }} :&nbsp</b> <ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>, {{ cart.cartTotalPrice }}€.  
 				</div>
 	  		</ion-item>
 	  	</ion-list>
@@ -111,7 +111,7 @@
 				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice }}€
 			</div>
 			<div class="col col-25">
-         		<i> {{ cart.cartTotalQuantity }} Pizza </i>
+         		<ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>
         	</div>
 		</div>
 	</ion-footer-bar>
