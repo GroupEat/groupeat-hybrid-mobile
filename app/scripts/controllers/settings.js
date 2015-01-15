@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.controllers.settings', [])
+angular.module('groupeat.controllers.settings', ['groupeat.services.notifications-settings'])
 
-.controller('SettingsCtrl', function($scope, $ionicModal) {
+.controller('SettingsCtrl', function($scope, $ionicModal, notificationsSettings) {
 
 	/*
 	Settings list
@@ -19,34 +19,30 @@ angular.module('groupeat.controllers.settings', [])
 			lastName:    'Fessier',
 			phoneNumber: '0685958687',
 			adress:      'Palaiseau',
-		},
-		settings: {
-			pushActivation : true,
-			dontPushAfter : 4,
-			dontPushFor : 6,
 		}
 	};
 
+	$scope.user.settings = notificationsSettings.settings;
 
-	$scope.settings = {};
+	$scope.settings = notificationsSettings.pivotTableSettings;
 
-	$scope.settings.dontPushAfter = [
-		{name: '21h00', id:0},
-		{name: '22h00', id:1},
-		{name: '23h00', id:2},
-		{name: '00h00', id:3},
-		{name: '1h00', id:4}
-	];
+	// $scope.settings.dontPushAfter = [
+	// 	{name: '21h00', id:0},
+	// 	{name: '22h00', id:1},
+	// 	{name: '23h00', id:2},
+	// 	{name: '00h00', id:3},
+	// 	{name: '1h00', id:4}
+	// ];
 
-	$scope.settings.dontPushFor = [
-		{name: '1 jour', id:0},
-		{name: '2 jours', id:1},
-		{name: '3 jours', id:2},
-		{name: '4 jours', id:3},
-		{name: '5 jours', id:4},
-		{name: '6 jours', id:5},
-		{name: '1 semaine', id:6}
-	];
+	// $scope.settings.dontPushFor = [
+	// 	{name: '1 jour', id:0},
+	// 	{name: '2 jours', id:1},
+	// 	{name: '3 jours', id:2},
+	// 	{name: '4 jours', id:3},
+	// 	{name: '5 jours', id:4},
+	// 	{name: '6 jours', id:5},
+	// 	{name: '1 semaine', id:6}
+	// ];
 
 	// Model declaration
 	$scope.select = {};
@@ -55,9 +51,13 @@ angular.module('groupeat.controllers.settings', [])
 	$scope.select.dontPushFor = $scope.settings.dontPushFor[$scope.user.settings.dontPushFor];
 
 	$scope.saveSettings = function() {
-		console.log($scope.select.pushActivation);
-		console.log($scope.select.dontPushFor);
-		console.log($scope.select.dontPushAfter);
+		//console.log(typeof $scope.select.pushActivation === "boolean");
+		//console.log(typeof $scope.user.settings.dontPushFor );
+		//console.log($scope.select.dontPushAfter);
+		//console.log($scope.user.settings.dontPushFor < $scope.settings.dontPushFor.length);
+		$scope.user.settings.pushActivation = $scope.select.pushActivation;
+		$scope.user.settings.dontPushFor = $scope.select.dontPushFor.id;
+		$scope.user.settings.dontPushAfter = $scope.select.dontPushAfter.id;
 	};
 
 	/*
