@@ -420,7 +420,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
           '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
-          'test/utils/**/*.coffee',
+          'test/utils/**/*.js',
           'test/mock/**/*.coffee',
           'test/spec/**/*.coffee'
         ],
