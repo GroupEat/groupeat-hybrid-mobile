@@ -14,8 +14,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/group-orders.json'
       httpBackend.whenGET(url).respond(mockData)
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
-      httpBackend.whenGET(/^translations\/.*/).respond('{}');
+      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
 
   describe 'Constructor', ->

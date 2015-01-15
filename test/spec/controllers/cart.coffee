@@ -11,8 +11,8 @@ describe 'Ctrl: CartCtrl', ->
       httpBackend = $httpBackend
       state = $state
       ctrl = $controller('CartCtrl', ($scope:scope, $state:state, _:_, Cart: Cart))
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
-      httpBackend.whenGET(/^translations\/.*/).respond('{}');
+      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
   describe 'Constructor', ->
 
