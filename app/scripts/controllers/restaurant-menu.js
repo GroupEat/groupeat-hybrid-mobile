@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart'])
+angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart', 'groupeat.services.lodash'])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _) {
 
 /*  var $translate = $filter('translate');
 */
@@ -15,13 +15,38 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 	$scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
 
 
+	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
+		$scope.productToShowValue = 0;
+		if (_.isEmpty($scope.cart.productsItems)) {
+			// nothing to do...
+		}
+		else {
+			_.forEach($scope.cart.productsItems, function(product) {
+				if (product.id === productToShow.id) {
+					_.forEach(product.formats, function(productFormats) {
+						if(productFormats.id === formatIndex) {
+							$scope.productToShowValue = productFormats.quantity ;
+						}
+						else {}
+					});
+				}
+				else {}
+			});
+		}
+		
+	};
+
 	$scope.toggleDetails = function(product) {
 	    if ($scope.isDetailsShown(product)) {
 	      $scope.shownDetails = null;
-	    } else {
+	    }
+	    else {
 	      $scope.shownDetails = product;
 	    }
 		};
+
+	
+
 	$scope.isDetailsShown = function(product) {
 		return $scope.shownDetails === product;
 	};
