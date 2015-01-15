@@ -8,5 +8,6 @@ angular.module('groupeat.services', [
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.cart',
-  'groupeat.services.push'
+  'groupeat.services.push',
+  'groupeat.services.notifications-settings'
 ]);

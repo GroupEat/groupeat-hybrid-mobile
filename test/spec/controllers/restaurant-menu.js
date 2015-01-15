@@ -8,22 +8,31 @@ describe('Ctrl: RestaurantMenuCtrl', function () {
     var RestaurantMenuCtrl,
     httpBackend,
     scope,
+    $q,
+    sandbox,
     Cart,
     state;
 
-    beforeEach(inject(function ($controller, $rootScope, $state, $httpBackend, Pizza, Cart) {
-        httpBackend = $httpBackend;
-        state = $state;
+    beforeEach(inject(function ($controller, $rootScope, $injector) {
+        sandbox = sinon.sandbox.create();
+        state = $injector.get('$state');
+        httpBackend = $injector.get('$httpBackend');
         scope = $rootScope.$new();
+        Cart = $injector.get('Cart');
         RestaurantMenuCtrl = $controller('RestaurantMenuCtrl', {
-            $scope: scope, $state: state, Pizza: Pizza, Cart: Cart  
+            $scope: scope, $state: state, Pizza: $injector.get('Pizza'), Cart: $injector.get('Cart')
         });
+
         var mockData = [{key:"test"},{key:"test2"}];
         var url = 'data/pizzas/pizzas_restaurant_.json';
         httpBackend.whenGET(url).respond(mockData);
         httpBackend.whenGET(/^templates\/.*/).respond('<html></html>');
         httpBackend.whenGET(/^translations\/.*/).respond('{}');
     }));
+
+    afterEach(function () {
+    sandbox.restore();
+    });
 
     describe("Constructor", function() {
 
@@ -55,7 +64,35 @@ describe('Ctrl: RestaurantMenuCtrl', function () {
     });
 
     it("should call Cart service function add product", function() {
-        // to do : test if Cart service function has been called
+        var product = {
+            'name': 'test',
+            'id': 1,
+            'description': 'for test',
+            'formats':
+              [
+                {
+                  'id': 10,
+                  'size':'Junior',
+                  'price':8
+                },
+                {
+                  'id': 11,
+                  'size':'test',
+                  'price':10
+                },
+                {
+                  'id': 12,
+                  'size':'test1',
+                  'price':12
+                }
+              ]
+        };
+
+        var callback = sandbox.stub(Cart, 'addProductToCart');
+
+        scope.onProductAdd(product, product.formats[0]);
+        assert(callback.calledOnce);
+        assert(callback.calledWithExactly(product, product.formats[0]));
     });
 
     it("should toggle product if asking", function() {
