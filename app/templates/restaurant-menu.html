@@ -7,7 +7,7 @@
 </ion-nav-buttons>
 
 <ion-nav-buttons side="left">
-<button class="button button-clear ion-ios7-arrow-back" ge-touch="onLeaveRestaurantTouch()"> Retour
+<button class="button button-clear ion-ios7-arrow-back" ge-touch="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
 </button>
 </ion-nav-buttons>
 
@@ -54,7 +54,7 @@
         <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice }}€
         </div>
         <div class="col col-25">
-          <i> {{ cart.cartTotalQuantity }} Pizza </i>
+          <ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>
         </div>
     </div>
  </ion-footer-bar>

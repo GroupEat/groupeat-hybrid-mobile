@@ -3,7 +3,7 @@
 angular.module('groupeat.services.notifications-settings', ['ngResource'])
 
 .factory('NotificationsSettings', function() {
-  // settings = $resource(ENV.apiEndpoint+'/notifications-settings')
+
 
   //get settings from backend
   var settingsLabel = {

@@ -83,6 +83,9 @@
   "alertEditCart": "Pour éditer un produit, appuyer dessus",
   "ordered": "Votre commande a été passée.",
 
+  "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
+  "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
+
   "emailFieldName": "e-mail",
   "passwordFieldName": "mot de passe",
   "passwordConfirmFieldName": "de confirmation de mot de passe",
