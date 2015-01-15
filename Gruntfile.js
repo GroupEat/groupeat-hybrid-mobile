@@ -405,6 +405,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'test/utils/**/*.js',
           'test/mock/**/*.js',
+          'test/spec/**/*.coffee',
           'test/spec/**/*.js'
         ],
         autoWatch: false,
@@ -413,7 +414,19 @@ module.exports = function (grunt) {
         singleRun: false,
         preprocessors: {
           // Update this if you change the yeoman config path
+          'test/spec/**/*.coffee': ['coffee'],
           'app/scripts/**/*.js': ['coverage']
+        },
+        coffeePreprocessor: {
+          // options passed to the coffee compiler
+          options: {
+            bare: true,
+            sourceMap: false
+          },
+          // transforming the filenames
+          transformPath: function(path) {
+            return path.replace(/\.coffee$/, '.js');
+          }
         },
         coverageReporter: {
           reporters: [
@@ -510,7 +523,10 @@ module.exports = function (grunt) {
   // we don't have to run the karma test server as part of `grunt serve`
   grunt.registerTask('watch:karma', function () {
     var karma = {
-      files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js', 'test/spec/**/*.js'],
+      files:
+      ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
+      'test/spec/**/*.js',
+      'test/spec/**/*.coffee'],
       tasks: ['newer:jshint:test', 'karma:unit:run']
     };
     grunt.config.set('watch', karma);
