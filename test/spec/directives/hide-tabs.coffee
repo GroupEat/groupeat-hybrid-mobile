@@ -27,7 +27,7 @@ describe 'Directive: geHideTabs', ->
       scope.$digest()
       expect(rootScope.hideTabs).to.be.true
 
-    it 'should  to true', ->
+    it 'should show tabs', ->
       scope.$digest()
       rootScope.$broadcast('$destroy')
       expect(rootScope.hideTabs).to.be.false
