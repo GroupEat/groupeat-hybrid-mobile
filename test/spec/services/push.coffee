@@ -2,10 +2,9 @@
 
 describe 'Service: Push', ->
 
-  beforeEach(module('groupeat'))
+  beforeEach module 'groupeat', ->
 
-  scope = {}
-  Push = {}
+  scope = Push = {}
 
   beforeEach inject ($rootScope, _Push_) ->
     scope = $rootScope.$new()
