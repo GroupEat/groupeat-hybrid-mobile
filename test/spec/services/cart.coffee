@@ -1,7 +1,8 @@
 describe 'Service: Cart', ->
 
   # Load the controller's module
-  beforeEach module 'groupeat', ->
+  beforeEach ->
+    module 'groupeat'
 
   Cart = scope = $httpBackend = {}
 
