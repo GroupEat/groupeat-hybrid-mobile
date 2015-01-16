@@ -7,12 +7,12 @@ angular.module('groupeat.controllers.bottom-tabs', [])
   $scope.bottomTabs = [
     {
       'title'     : 'orders',
-      'iconName'  : 'ion-fork',
+      'iconClasses'  : 'ion-fork',
       'stateTarget'    : 'group-orders'
     },
     {
       'title'     : 'settings',
-      'iconName'  : 'ion-gear-a',
+      'iconClasses'  : 'ion-gear-a',
       'stateTarget'    : 'settings'
     }
   ];

@@ -3,14 +3,22 @@ describe 'Ctrl: BottomTabsCtrl', ->
   beforeEach ->
     module 'groupeat'
 
-  ctrl = httpBackend = scope = state = {}
+  ctrl = scope = $state = _ = {}
 
   beforeEach ->
-    inject ($controller, $rootScope, $state, $httpBackend) ->
+    inject ($rootScope, $controller, $injector) ->
       scope = $rootScope.$new()
-      httpBackend = $httpBackend
-      state = $state
-      ctrl = $controller('BottomTabsCtrl', ($scope:scope, $state:state))
+      $state = $injector.get('$state')
+      ctrl = $controller('BottomTabsCtrl', ($scope: scope, $state: $state))
+      _ = $injector.get('_')
 
   it 'should load a list of 2 tabs', ->
     scope.bottomTabs.should.have.length(2)
+
+  it 'should include the admissible keys for each tab', ->
+    expect(tab).to.include.keys('title', 'iconClasses', 'stateTarget') for tab in scope.bottomTabs
+
+
+  it 'should include one of the valid states as stateTarget', ->
+    validStateNames = _.pluck($state.get(), 'name')
+    expect(validStateNames).to.contain(tab.stateTarget) for tab in scope.bottomTabs
