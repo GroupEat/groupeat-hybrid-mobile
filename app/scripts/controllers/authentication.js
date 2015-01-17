@@ -20,6 +20,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   // Forms
   $scope.showLoginForm = false;
   $scope.showRegisterForm = false;
+  $scope.showFurtherRegisterForm = false;
 
   /* Models */
   $scope.userLogin = {};
@@ -96,8 +97,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     // Resetting the relevant scope elements each time such a popup is created
     $scope.userReset = {};
     $scope.validationError = undefined;
-
-    $ionicPopup.show({
+    return $ionicPopup.show({
       title : $translate('resetPassword'),
       template: null,
       templateUrl: 'templates/popups/reset-password.html',
@@ -130,7 +130,7 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   */
 
   $scope.submitRegisterForm = function(form) {
-    $scope.validateForm(form).then(function() {
+    return $scope.validateForm(form).then(function() {
       var customer = new Customer($scope.userRegister);
       customer.$save();
 
@@ -165,14 +165,15 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     $timeout(function() {
       alertWelcome.close();
     }, 3000);
+    return alertWelcome;
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.address]', function () {
-    if ( ($scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
+    if ( ($scope.showFurtherRegisterForm && $scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
       $scope.showSubmitFurtherRegisterButton = true;
       $scope.showSkipFurtherRegisterButton = false ;
     }
-    else {
+    else if ($scope.showFurtherRegisterForm) {
       $scope.showSubmitFurtherRegisterButton = false;
       $scope.showSkipFurtherRegisterButton = true ;
     }

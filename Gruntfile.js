@@ -420,8 +420,8 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
           '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
+          'app/templates/**/*.html',
           'test/utils/**/*.js',
-          'test/mock/**/*.coffee',
           'test/spec/**/*.coffee'
         ],
         autoWatch: false,
@@ -430,6 +430,7 @@ module.exports = function (grunt) {
         singleRun: false,
         preprocessors: {
           // Update this if you change the yeoman config path
+          'app/templates/**/*.html': ['html2js'],
           'test/spec/**/*.coffee': ['coffee'],
           'app/scripts/**/*.js': ['coverage']
         },
@@ -441,8 +442,11 @@ module.exports = function (grunt) {
           },
           // transforming the filenames
           transformPath: function(path) {
-            return path.replace(/\.coffee$/, '.tmp/.js');
+            return path.replace(/\.coffee$/, '.js');
           }
+        },
+        ngHtml2JsPreprocessor: {
+          stripPrefix: 'app/'
         },
         coverageReporter: {
           reporters: [
