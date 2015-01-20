@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers.authentication', ['groupeat.services.customer', 'groupeat.services.element-modifier'])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier, ResidencyUtils) {
 
   var $translate = $filter('translate');
 
@@ -133,6 +133,8 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     return $scope.validateForm(form).then(function() {
       var customer = new Customer($scope.userRegister);
       customer.$save();
+
+      $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
 
       $scope.showLoginAndRegisterButtons = false;
       $scope.showLoginForm = false;
