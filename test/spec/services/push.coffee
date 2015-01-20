@@ -1,11 +1,11 @@
-'use strict'
-
 describe 'Service: Push', ->
 
-  beforeEach module 'groupeat', ->
+  beforeEach ->
+    module 'groupeat'
 
-  scope = Push = {}
+  Push = scope = $httpBackend = {}
 
-  beforeEach inject ($rootScope, _Push_) ->
-    scope = $rootScope.$new()
-    Push = _Push_
+  beforeEach ->
+    inject ($rootScope, $injector) ->
+      scope = $rootScope.$new()
+      Push = $injector.get('Push')

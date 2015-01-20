@@ -4,13 +4,14 @@ describe 'Ctrl: AuthenticationCtrl',->
   beforeEach ->
     module 'groupeat'
 
-  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = {}
+  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
     inject ($rootScope, $controller, $injector) ->
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
+      $ionicPopup = $injector.get('$ionicPopup')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -30,11 +31,20 @@ describe 'Ctrl: AuthenticationCtrl',->
       elementUtils = $injector.get('jcs-elementUtils')
       sandbox.stub(elementUtils, 'isElementVisible').returns(true)
 
+      Cusomter = $injector.get('Customer')
+      ENV = $injector.get('ENV')
+
       $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond([{
+                        id:7,
+                        token: 'jklhkjhlkhl'
+                      }])
 
   afterEach ->
     sandbox.restore()
+    document.body.classList.remove('popup-open');
 
   describe "Constructor", ->
 
@@ -95,13 +105,29 @@ describe 'Ctrl: AuthenticationCtrl',->
       scope.showLoginForm.should.be.false
       scope.showRegisterForm.should.be.false
 
+  describe 'Validate form popup', ->
+
+    it 'should not show a popup when a valid form is being validated', ->
+      # TODO : Missing test
+
+    it 'should show a popup when a valid form is being validated', ->
+      # TODO : Missing test
+
   describe 'Logging in', ->
+
+    submitFormWithViewValues = (email, password) ->
+      form = scope.loginForm
+      form.email.$setViewValue(email) if email?
+      form.password.$setViewValue(password) if password?
+      scope.$apply()
+      window.browserTrigger(formElement, 'submit')
+      return form
 
     beforeEach ->
       formElement = angular.element(
-        '<form style="width: 500px, height:200px" name="loginForm" ng-submit="submitFn()">'+
-        '<input style="width: 500px, height:200px" ng-model="userLogin.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail" />'+
-        '<input  style="width: 500px, height:200px" ng-model="userLogin.password" name="password" type="password" required ng-minlength="6" />'+
+        '<form name="loginForm" ng-submit="submitLoginForm(loginForm)">'+
+        '<input ng-model="userLogin.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail" />'+
+        '<input ng-model="userLogin.password" name="password" type="password" required ng-minlength="6" />'+
         '</form>'
       )
       $compile(formElement)(scope)
@@ -115,53 +141,39 @@ describe 'Ctrl: AuthenticationCtrl',->
       form.$dirty.should.be.false
 
     it 'the validateForm promise should initially reject a requiredErrorKey Error either if the email field is empty or the email field is valid and the password field empty', ->
-      form = scope.loginForm
       # Both fields are empty
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues()
       scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
       $timeout.flush()
 
       # The email field is present and valid
-      form.email.$setViewValue('campusemail@ensta.fr')
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues('campusemail@ensta.fr')
       scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
       $timeout.flush()
 
       # The password field is present and valid
-      form.email.$setViewValue('')
-      form.password.$setViewValue('validpassword')
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues('', 'validpassword')
       scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject an emailErrorKey Error if the view value is not an email', ->
-      form = scope.loginForm
-      form.email.$setViewValue('not a valid email')
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues('not a valid email')
       scope.validateForm(form).should.be.rejectedWith(Error, 'emailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
-      form = scope.loginForm
-      form.email.$setViewValue('notacampusemail@gmail.com')
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues('notacampusemail@gmail.com')
       scope.validateForm(form).should.be.rejectedWith(Error, 'geCampusEmailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', ->
-      form = scope.loginForm
-      form.email.$setViewValue('campusemail@ensta.fr')
-      form.password.$setViewValue('short')
-      window.browserTrigger(formElement, 'submit')
+      form = submitFormWithViewValues('campusemail@ensta.fr', 'short')
       scope.validateForm(form).should.be.rejectedWith(Error, 'minlengthErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
-      form = scope.loginForm
-      form.email.$setViewValue('campusemail@ensta.fr')
-      form.password.$setViewValue('longer')
-      window.browserTrigger(formElement, 'submit')
-      scope.validateForm(form).should.be.resolved
+      form = submitFormWithViewValues('campusemail@ensta.fr', 'longer')
+      scope.validateForm(form).should.be.fulfilled
       $timeout.flush()
 
     it 'if there is a validation error, the state should not change on form submit', ->
@@ -170,9 +182,130 @@ describe 'Ctrl: AuthenticationCtrl',->
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
-      $timeout.flush()
+      scope.$apply()
       # The state should not change
       $state.go.should.have.not.been.called
+
+    it 'if there is no validation error, the state should change to group-orders on form submit', ->
+      # We use a stub to make sure the validateForm promise is resolved
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      window.browserTrigger(formElement, 'submit')
+      scope.submitLoginForm(scope.loginForm)
+      scope.$apply()
+      # The state should change to group-orders
+      $state.go.should.have.been.calledWith('group-orders')
+
+  describe 'Forgot password', ->
+
+    # TODO : This test does not run the tests in the then block...
+    it 'should show the popup when the showResetPasswordPopup method is called', ->
+      expect(angular.element(document.body).hasClass('popup-open')).to.be.false
+      scope.showResetPasswordPopup().then( ->
+        expect(angular.element(document.body).hasClass('popup-open')).to.be.true
+      )
+      scope.$digest()
+
+    it 'should close the popup if the cancel button is selected', ->
+      # TODO : Missing test
+
+    it 'the validateForm promise should reject a requiredErrorKe Error if the view value is empty', ->
+      # TODO : Missing test
+
+    it 'the validateForm promise should reject a emailErrorKey Error if the view value is not a valid email', ->
+      # TODO : Missing test
+
+    it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
+      # TODO : Missing test
+
+  describe 'Registering (First Step)', ->
+
+    submitFormWithViewValues = (email, password, passwordConfirm) ->
+      form = scope.registerForm
+      form.email.$setViewValue(email) if email?
+      form.password.$setViewValue(password) if password?
+      form.passwordConfirm.$setViewValue(passwordConfirm) if passwordConfirm?
+      scope.$apply()
+      window.browserTrigger(formElement, 'submit')
+      return form
+
+    beforeEach ->
+      scope.onRegisterButtonTouch()
+      formElement = angular.element(
+        '<form name="registerForm" ng-submit="submitRegisterForm(registerForm)">'+
+        '<input ng-model="userRegister.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail">'+
+        '<input ng-model="userRegister.password" name="password" type="password" required ng-minlength="6">'+
+        '<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" match="registerForm.password">'+
+        '</form>'
+      )
+      $compile(formElement)(scope)
+      scope.$digest()
+
+    it 'the form should be initially invalid and pristine', ->
+      form = scope.registerForm
+      form.$valid.should.be.false
+      form.$invalid.should.be.true
+      form.$pristine.should.be.true
+      form.$dirty.should.be.false
+
+    it 'the validateForm promise should initially reject a requiredErrorKey Error either if the email field is empty or the email field is valid and the password field empty', ->
+      form = submitFormWithViewValues()
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      $timeout.flush()
+
+      # The email field is present and valid
+      form = submitFormWithViewValues('campusemail@ensta.fr')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      $timeout.flush()
+
+      # No email, password valid, passwordConfirm dirty
+      form = submitFormWithViewValues('', 'validPassword', 'dirty')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      $timeout.flush()
+
+    it 'the validateForm promise should reject an emailErrorKey Error if the view value is not an email', ->
+      form = submitFormWithViewValues('not a valid email')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'emailErrorKey')
+      $timeout.flush()
+
+    it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
+      form = submitFormWithViewValues('notacampusemail@gmail.com')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'geCampusEmailErrorKey')
+      $timeout.flush()
+
+    it 'the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', ->
+      form = submitFormWithViewValues('campusemail@ensta.fr', 'short')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'minlengthErrorKey')
+      $timeout.flush()
+
+    it 'the validateForm promise should reject a matchErrorKey Error if the password fields do not match and the email is valid', ->
+      # Valid email, password valid, passwordConfirm dirty
+      form = submitFormWithViewValues('campusemail@ensta.fr', 'validpassword', 'dirty')
+      scope.validateForm(form).should.be.rejectedWith(Error, 'matchErrorKey')
+      $timeout.flush()
+
+    it 'the validateForm promise should be resolved if all fields are valid', ->
+      form = submitFormWithViewValues('campusemail@ensta.fr', 'validpassword', 'validpassword')
+      scope.validateForm(form).should.be.fulfilled
+      scope.$apply()
+
+    it "if there is a validation error, the shown dom elements should be the register form's", ->
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
+
+      window.browserTrigger(formElement, 'submit')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
+
+      scope.showRegisterForm.should.be.true
+      scope.showLoginAssertiveBackButton.should.be.true
+      scope.showFurtherRegisterForm.should.be.false
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.false
 
     it 'if there is no validation error, the state should not change on form submit', ->
       # We use a stub to make sure the validateForm promise is resolved
@@ -183,13 +316,42 @@ describe 'Ctrl: AuthenticationCtrl',->
       )
 
       window.browserTrigger(formElement, 'submit')
-      scope.submitLoginForm(scope.loginForm)
-      $timeout.flush()
-      # The state should change to group-orders
-      $state.go.should.have.been.calledWith('group-orders')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
 
-  describe 'Resetting password', ->
-
-  describe 'Registering (First Step)', ->
+      scope.showRegisterForm.should.be.false
+      scope.showLoginAssertiveBackButton.should.be.false
+      scope.showFurtherRegisterForm.should.be.true
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.true
 
   describe 'Registering (Second Optional Step)', ->
+
+    beforeEach ->
+      scope.onRegisterButtonTouch()
+      formElement = angular.element(
+        '<form name="furtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)">'+
+        '<input ng-model="userRegister.firstName" type="text">'+
+        '<input ng-model="userRegister.lastName" type="text>'+
+        '<input ng-model="userRegister.phoneNumber" type="tel">'+
+        '<input ng-model="userRegister.address" type="text">'+
+        '</form>'
+      )
+      $compile(formElement)(scope)
+      scope.$digest()
+
+    it 'should take the state to group-orders when skipping further registering, and show a welcome popup', ->
+      scope.onSkipFurtherRegisterButtonTouch()
+      $state.go.should.have.been.calledWith('group-orders')
+
+    it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
+      sandbox.useFakeTimers()
+
+      expect(angular.element(document.body).hasClass('popup-open')).to.be.false
+      # TODO : This test does not run the tests in the then block...
+      scope.onSkipFurtherRegisterButtonTouch().then( ->
+        expect(angular.element(document.body).hasClass('popup-open')).to.be.true
+        sandbox.clock.tick(5000)
+        expect(angular.element(document.body).hasClass('popup-open')).to.be.false
+      )
+      scope.$digest()
