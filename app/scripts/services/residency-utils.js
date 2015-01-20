@@ -17,7 +17,7 @@ angular.module('groupeat.services.residency-utils', [])
     * @param {String} suffit - The suffix to check
     */
     _endsWith = function (str, suffix) {
-      if (typeof str == 'string' || str instanceof String)
+      if (typeof str === 'string' || str instanceof String)
       {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
       }
