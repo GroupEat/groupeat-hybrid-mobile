@@ -3,12 +3,11 @@ describe 'Directive: geCampusEmail', ->
   beforeEach ->
     module 'groupeat'
 
-  scope = form = httpBackend = {}
+  scope = form = $httpBackend = {}
 
   beforeEach ->
-    inject ($compile, $rootScope, $httpBackend) ->
+    inject ($compile, $rootScope, $injector) ->
       scope = $rootScope.$new()
-      httpBackend = $httpBackend
       element = angular.element(
         '<form name="form">' +
         '<input ng-model="model.campusEmail" name="campusEmail" ge-campus-email />' +
@@ -16,8 +15,9 @@ describe 'Directive: geCampusEmail', ->
       )
       $compile(element)(scope)
       form = scope.form
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      $httpBackend = $injector.get('$httpBackend')
+      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
 
   it 'should pass with valid ENSTA emails', ->
