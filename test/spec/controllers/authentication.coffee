@@ -307,7 +307,7 @@ describe 'Ctrl: AuthenticationCtrl',->
       scope.showSubmitFurtherRegisterButton.should.be.false
       scope.showSkipFurtherRegisterButton.should.be.false
 
-    it 'if there is no validation error, the state should not change on form submit', ->
+    it 'if there is no validation error, the shown dom elements should change to display the further registration form', ->
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -324,6 +324,24 @@ describe 'Ctrl: AuthenticationCtrl',->
       scope.showFurtherRegisterForm.should.be.true
       scope.showSubmitFurtherRegisterButton.should.be.false
       scope.showSkipFurtherRegisterButton.should.be.true
+
+    it 'if there is no validation error and the email given was not an ENSTA email, the residency should be given a default value', ->
+      # We use a stub to make sure the validateForm promise is resolved
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      # The given email is an email from supoptique
+      scope.registerForm.email.$setViewValue('stuff@institutoptique.fr')
+
+      window.browserTrigger(formElement, 'submit')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
+
+      # The residency value should match supoptique's, hence 2
+      scope.userRegister.residency.should.equal(2)
 
   describe 'Registering (Second Optional Step)', ->
 
