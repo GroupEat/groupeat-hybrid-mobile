@@ -3,21 +3,22 @@ describe 'Ctrl: CartCtrl', ->
   beforeEach ->
     module 'groupeat'
 
-  ctrl = httpBackend = scope = state = {}
+  ctrl = scope = $state = $httpBackend = {}
 
   beforeEach ->
-    inject ($controller, $rootScope, $state, $httpBackend, Cart, _) ->
+    inject ($controller, $rootScope, $injector) ->
       scope = $rootScope.$new()
-      httpBackend = $httpBackend
-      state = $state
-      ctrl = $controller('CartCtrl', ($scope:scope, $state:state, _:_, Cart: Cart))
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      $state = $injector.get('$state')
+      ctrl = $controller('CartCtrl', ($scope: scope, $state: $state, _: $injector.get('_'), Cart: $injector.get('Cart')))
+      $httpBackend = $injector.get('$httpBackend')
+      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+
 
   describe 'Constructor', ->
 
     beforeEach ->
-      httpBackend.flush()
+      $httpBackend.flush()
 
     it 'cart should have been created', ->
       scope.cart.should.have.property('cartTotalPrice')

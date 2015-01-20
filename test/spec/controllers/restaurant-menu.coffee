@@ -3,21 +3,21 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   beforeEach ->
     module 'groupeat'
 
-  ctrl = httpBackend = scope = state = q = sandbox = Cart = {}
+  ctrl = scope = $state = Cart = $httpBackend = $q = sandbox = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       scope = $rootScope.$new()
-      httpBackend = $injector.get('$httpBackend')
-      state = $injector.get('$state')
+      $state = $injector.get('$state')
       Cart = $injector.get('Cart')
-      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: state, Pizza: $injector.get('Pizza'), Cart: $injector.get('Cart')))
-      sandbox = sinon.sandbox.create()
+      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, Pizza: $injector.get('Pizza'), Cart: Cart))
+      $httpBackend = $injector.get('$httpBackend')
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/pizzas/pizzas_restaurant_.json'
-      httpBackend.whenGET(url).respond(mockData)
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      $httpBackend.whenGET(url).respond(mockData)
+      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      sandbox = sinon.sandbox.create()
 
   afterEach ->
     sandbox.restore()
@@ -26,7 +26,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'Constructor', ->
 
     beforeEach ->
-      httpBackend.flush()
+      $httpBackend.flush()
 
     it 'should load a list of 2 pizzas', ->
       scope.pizzas.should.have.length(2)
@@ -42,7 +42,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'State change', ->
 
     beforeEach ->
-      httpBackend.flush()
+      $httpBackend.flush()
 
     it 'should call Cart service function add product', ->
       product =

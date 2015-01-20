@@ -4,9 +4,6 @@ describe 'Ctrl: AuthenticationCtrl',->
   beforeEach ->
     module 'groupeat'
 
-  beforeEach ->
-    module 'templates/settings.html'
-
   AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
 
   # Initialize the controller and a mock scope
