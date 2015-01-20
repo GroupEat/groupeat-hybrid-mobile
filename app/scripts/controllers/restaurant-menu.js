@@ -17,6 +17,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
 	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
 		$scope.productToShowValue = 0;
+
 		if (_.isEmpty($scope.cart.productsItems)) {
 			// nothing to do...
 		}
@@ -25,6 +26,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 				if (product.id === productToShow.id) {
 					_.forEach(product.formats, function(productFormats) {
 						if(productFormats.id === formatIndex) {
+							
 							$scope.productToShowValue = productFormats.quantity ;
 						}
 						else {}
