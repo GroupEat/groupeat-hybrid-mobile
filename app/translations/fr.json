@@ -95,5 +95,5 @@
   "emailErrorKey": "Veuillez entrer une adresse e-mail valide",
   "geCampusEmailErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu",
   "matchErrorKey": "Les mots de passe doivent correspondre",
-  "gePhoneFormatErrorKey" : "Le format du numéro de téléphone n'est pas valide"
+  "gePhoneFormatErrorKey" : "Le format du numéro de téléphone n'est pas valide<br>ex: 0612345678"
 }
