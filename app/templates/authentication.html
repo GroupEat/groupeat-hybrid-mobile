@@ -92,9 +92,15 @@
 			<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
 			<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}" required ge-phone-format ge-phone-format-err-type="phoneFormat">
 		</label>
-		<label class="item item-input">
-			<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-			<input ng-model="userRegister.address" type="text" placeholder="{{ 'address' | translate }}">
+		<label class="item item-input item-select">
+			<div class="input-label">
+				<i class="icon ion-ios7-location-outline placeholder-icon"> Résidence</i>
+			</div>
+			<select name="residency" ng-model="userRegister.residency">
+				<option selected value="0">ENSTA ParisTech</option>
+				<option value="1">Polytechnique</option>
+				<option value="2">Supoptique</option>
+			</select>
 		</label>
 	</div>
 	<div ng-show="showSkipFurtherRegisterButton">
