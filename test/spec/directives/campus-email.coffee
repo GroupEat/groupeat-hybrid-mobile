@@ -44,11 +44,15 @@ describe 'Directive: geCampusEmail', ->
     expect(form.campusEmail.$valid).to.be.true
 
 
-  it 'should not pass with an invalid email', ->
+  it 'should pass with a value which is not an email (email validation is extra)', ->
     form.campusEmail.$setViewValue('invalidEmail')
     scope.$digest()
-    expect(form.campusEmail.$valid).to.be.false
+    expect(form.campusEmail.$valid).to.be.true
 
+  it 'should pass with a empty values', ->
+    form.campusEmail.$setViewValue('')
+    scope.$digest()
+    expect(form.campusEmail.$valid).to.be.true
 
   it 'should not pass with an email not from campus', ->
     form.campusEmail.$setViewValue('test@gmail.com')

@@ -159,8 +159,10 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
   $scope.onSkipFurtherRegisterButtonTouch = function () {
     $state.go('group-orders') ;
 
+    var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
+
     var alertWelcome = $ionicPopup.alert({
-      title: $translate('welcomeMessage'),
+      title: $translate('welcome', {firstName: firstName}),
       okText: 'OK',
       okType: 'button-assertive',
     });
@@ -170,8 +172,8 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     return alertWelcome;
   };
 
-  $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.address]', function () {
-    if ( ($scope.showFurtherRegisterForm && $scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.address) ) {
+  $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
+    if ( ($scope.showFurtherRegisterForm && $scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.residency) ) {
       $scope.showSubmitFurtherRegisterButton = true;
       $scope.showSkipFurtherRegisterButton = false ;
     }

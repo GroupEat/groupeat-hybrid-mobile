@@ -75,8 +75,7 @@ angular.module('groupeat.services.error-message-resolver', ['sprintf'])
       var defer = $q.defer();
       if (!el[0].name)
       {
-        console.log('Error : Invoked input tag misses attribute "name"');
-        defer.reject(new Error('missingFieldNameError'));
+        return $q.reject(new Error($translate('missingFieldNameError')));
       }
       else
       {

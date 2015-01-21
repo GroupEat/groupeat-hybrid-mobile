@@ -38,9 +38,8 @@
           Templates are in the /templates folder (but you could also
           have templates inline in this html file if you'd like).
         -->
-    <ion-nav-view class="has-footer" animation="fade-in">
+    <ion-nav-view ng-class="{has-footer: !$root.hideTabs}" animation="fade-in">
     </ion-nav-view>
-
 
     <div ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
 
@@ -49,8 +48,6 @@
           {{tab.title | translate}}
       </a>
     </div>
-
-
 
 <!-- ------------------------------------------- -->
 
@@ -61,7 +58,6 @@
     <script src="lib/angular-animate/angular-animate.js"></script>
     <script src="lib/angular-sanitize/angular-sanitize.js"></script>
     <script src="lib/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="lib/collide/collide.js"></script>
     <script src="lib/ionic/release/js/ionic.js"></script>
     <script src="lib/ionic/release/js/ionic-angular.js"></script>
     <script src="lib/lodash/dist/lodash.compat.js"></script>

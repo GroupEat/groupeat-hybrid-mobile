@@ -14,7 +14,7 @@ angular.module('groupeat.services.residency-utils', [])
     * (Private Method) Checks if the given string ends with a given suffix
     *
     * @param {String} str - The string to check
-    * @param {String} suffit - The suffix to check
+    * @param {String} suffix - The suffix to check
     */
     _endsWith = function (str, suffix) {
       if (typeof str === 'string' || str instanceof String)
@@ -38,13 +38,13 @@ angular.module('groupeat.services.residency-utils', [])
     getDefaultResidencyValueFromEmail = function (email) {
       if (_endsWith(email, 'polytechnique.edu'))
       {
-        return 1;
+        return 2;
       }
       else if (_endsWith(email, 'institutoptique.fr'))
       {
-        return 2;
+        return 3;
       }
-      return 0;
+      return 1;
     };
 
     return {
