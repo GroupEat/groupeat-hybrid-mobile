@@ -10,6 +10,7 @@
     <!-- <link rel="stylesheet" href="vendor/some.contrib.css"> -->
     <!-- bower:css -->
     <link rel="stylesheet" href="lib/ionic/release/css/ionic.css" />
+    <link rel="stylesheet" href="lib/angular-material/angular-material.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -41,7 +42,7 @@
     <ion-nav-view ng-class="{has-footer: !$root.hideTabs}" animation="fade-in">
     </ion-nav-view>
 
-    <div ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
+    <div id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
 
       <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
           <i class="icon {{tab.iconClasses}}"></i>
@@ -73,6 +74,9 @@
     <script src="lib/angular-auto-validate/dist/jcs-auto-validate.min.js"></script>
     <script src="lib/sprintf/src/sprintf.js"></script>
     <script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="lib/angular-aria/angular-aria.js"></script>
+    <script src="lib/hammerjs/hammer.js"></script>
+    <script src="lib/angular-material/angular-material.js"></script>
     <!-- endbower -->
     <script src="lib/sprintf/src/angular-sprintf.js"></script>
     <!-- endbuild -->
