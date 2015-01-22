@@ -10,5 +10,6 @@ angular.module('groupeat.services', [
   'groupeat.services.cart',
   'groupeat.services.push',
   'groupeat.services.notifications-settings',
-  'groupeat.services.residency-utils'
+  'groupeat.services.residency-utils',
+  'groupeat.services.order'
 ]);
