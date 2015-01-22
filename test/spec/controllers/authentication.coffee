@@ -1,4 +1,4 @@
-describe 'Ctrl: AuthenticationCtrl',->
+describe 'Ctrl: AuthenticationCtrl', ->
 
   # Load the controller's module
   beforeEach ->
