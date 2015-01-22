@@ -1,4 +1,4 @@
-describe 'Ctrl: AuthenticationCtrl',->
+describe 'Ctrl: AuthenticationCtrl', ->
 
   # Load the controller's module
   beforeEach ->
@@ -340,8 +340,8 @@ describe 'Ctrl: AuthenticationCtrl',->
       scope.submitRegisterForm(scope.registerForm)
       scope.$apply()
 
-      # The residency value should match supoptique's, hence 2
-      scope.userRegister.residency.should.equal(2)
+      # The residency value should match supoptique's, hence 3
+      scope.userRegister.residency.should.equal(3)
 
   describe 'Registering (Second Optional Step)', ->
 
@@ -363,6 +363,8 @@ describe 'Ctrl: AuthenticationCtrl',->
       $state.go.should.have.been.calledWith('group-orders')
 
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
+      scope.$digest()
+
       sandbox.useFakeTimers()
 
       expect(angular.element(document.body).hasClass('popup-open')).to.be.false
