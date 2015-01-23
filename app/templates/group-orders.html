@@ -10,7 +10,7 @@
       <div class="card">
         <div class="item item-divider">
           <i class="ion-clock assertive"></i>
-          <b>{{ groupOrder.timeLeft }} min</b>
+          <b><timer countdown="groupOrder.timeLeft" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}} </timer></b>
           <i class="ion-cash assertive"></i>
           <b>{{ groupOrder.currentDiscount }}%</b>
         </div>
@@ -19,13 +19,11 @@
           <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
         </div>
         <a class="item item-icon-left assertive" ge-touch="onJoinOrderTouch(groupOrder)">
-          <!-- {restaurantId: groupOrder.restaurant.id} -->
           <i class="icon ion-arrow-right-a"></i>
           {{ 'joinThisOrder' | translate }} !
         </a>
       </div>
     </div>
-
 
   </ion-content>
 <!--

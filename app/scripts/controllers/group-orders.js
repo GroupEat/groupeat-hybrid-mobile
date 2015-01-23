@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.controllers.group-orders', ['groupeat.services.group-order', 'groupeat.services.order'])
+angular.module('groupeat.controllers.group-orders', ['groupeat.services.group-order', 'groupeat.services.order', 'timer', 'ngMaterial'])
 
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order) {
 
