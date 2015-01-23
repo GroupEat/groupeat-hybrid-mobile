@@ -12,8 +12,9 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 		showDeleteList: false
 	};
 
-	$scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
-
+	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
+	console.log($scope.pizzas);
+	
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
 

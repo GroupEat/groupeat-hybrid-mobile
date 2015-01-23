@@ -5,6 +5,5 @@ angular.module('groupeat.controllers.restaurants', ['groupeat.services.restauran
 .controller('RestaurantsCtrl', function($scope, $state, Restaurant) {
 
   $scope.restaurants = Restaurant.get();
-  console.log($scope.restaurants);
 
 });

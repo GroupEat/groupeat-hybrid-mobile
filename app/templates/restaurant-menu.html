@@ -16,7 +16,7 @@
 <ion-list>
 
 
-<div ng-repeat="product in pizzas">
+<div ng-repeat="product in pizzas.data">
   <ion-item ng-click="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
   <div class="border-less" ng-class="isDetailsShown(product)">
       <b> {{ product.name }} </b>
