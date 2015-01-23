@@ -2,8 +2,9 @@
 
 angular.module('groupeat.controllers.restaurants', ['groupeat.services.restaurant'])
 
-.controller('RestaurantsCtrl', function($rootScope, $scope, $state, Restaurant) {
+.controller('RestaurantsCtrl', function($scope, $state, Restaurant) {
 
-  $scope.restaurants = Restaurant.query();
+  $scope.restaurants = Restaurant.get();
+  console.log($scope.restaurants);
 
 });

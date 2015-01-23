@@ -15,7 +15,8 @@ angular.module('groupeat', [
 .config(function($httpProvider, $translateProvider) {
 
   $httpProvider.defaults.headers.common = {
-    'Accept': 'application/vnd.groupeat.v1+json'
+    'Accept': 'application/vnd.groupeat.v1+json',
+    'Authorization': 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZnJcL2FwaVwvY3VzdG9tZXJzIiwic3ViIjoyNCwiaWF0IjoxNDIyMDI4NDczLCJleHAiOjIwNTI3NDg0NzN9.vJb2gPGStVHW_-ybxOXj3KBo4AKEd_uFskdccUA0kCQ'
   };
 
   $translateProvider
