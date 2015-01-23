@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart', 'groupeat.services.lodash', 'groupeat.services.order'])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup, Order) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
@@ -66,7 +66,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 	$scope.onLeaveRestaurantTouch = function() {
 		if (_.isEmpty($scope.cart.productsItems)) {
 			Order.resetCurrentOrder();
-			$ionicNavBarDelegate.back();
+			$ionicHistory.goBack();
 		}
 		else {
 			var leaveOrder = $ionicPopup.confirm({
@@ -79,7 +79,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 				if(confirmation) {
 					Cart.resetCart();
 					Order.resetCurrentOrder();
-					$ionicNavBarDelegate.back();
+					$ionicHistory.goBack();
 				} else {
 				}
 			});
