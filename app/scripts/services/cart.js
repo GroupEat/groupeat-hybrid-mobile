@@ -8,17 +8,16 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 		var products = {
 				'cartTotalPrice': 0,
 				'cartTotalQuantity': 0,
+				'cartDiscount': 0,
 				'productsItems': []
 			};
 
 		var refreshCart = function() {
-
 			// create index variable to store index of product to be potentially removed from cart
 			var indexOfProductToBeDeleted = [false, 0];
 			// update cart
 			products.cartTotalPrice = 0 ;
 			products.cartTotalQuantity = 0 ;
-			
 
 			_.forEach(products.productsItems, function(product) {
 				product.totalQuantity = 0 ;
@@ -71,12 +70,10 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 					IsInProducts = true;
 				}
 			});
-
 			if ( IsInProducts ) {
 				// If productTo<Add already exists in products, just increment its quantity
 				_.forEach(products.productsItems, function(product) {
 					if (product.id === productToAdd.id) {
-
 						_.forEach(product.formats, function(productFormats) {
 							if(productFormats.id === format.id) {
 								productFormats.quantity += 1 ;
@@ -86,9 +83,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 					}
 				});
 			}
-
 			else {
-
 				// Else, create new product to add in products.productsItems
 				
 				// First the formats array
@@ -97,7 +92,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 					formatToAddInProduct[i] = {
 						'id': productToAdd.formats[i].id,
 						'size': productToAdd.formats[i].size,
-						'price': productToAdd.formats[i].price,
+						'price': productToAdd.formats[i].price*((100-products.cartDiscount)/100),
 						'quantity': 0
 					};
 					if (formatToAddInProduct[i].id === format.id) {
@@ -115,12 +110,6 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 						'formats': formatToAddInProduct
 					};
 
-				/*console.log('productToAddInProducts.id = ' + productToAddInProducts.id);
-				console.log('productToAddInProducts.name = ' + productToAddInProducts.name);
-				console.log('productToAddInProducts.totalQuantity = ' + productToAddInProducts.totalQuantity);
-				console.log('productToAddInProducts.totalPrice = ' + productToAddInProducts.totalPrice);*/
-
-
 				products.productsItems.splice(1, 0, productToAddInProducts);
 			}
 
@@ -130,9 +119,9 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 		var resetCart = function() {
 			products.cartTotalQuantity = 0 ;
 			products.cartTotalPrice = 0 ;
+			products.cartDiscount = 0;
 			products.productsItems = [];
 		};
-
 
 		return {
 			addProductToCart: addProductToCart,

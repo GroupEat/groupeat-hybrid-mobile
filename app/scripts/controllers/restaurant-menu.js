@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart', 'groupeat.services.lodash'])
+angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart', 'groupeat.services.lodash', 'groupeat.services.order'])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
@@ -12,8 +12,11 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 		showDeleteList: false
 	};
 
-	$scope.pizzas = Pizza.query({restaurantId: $stateParams.restaurantId});
-
+	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
+	console.log($scope.pizzas);
+	
+	$scope.currentOrder = Order.getCurrentOrder();
+	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
 
 	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
 		$scope.productToShowValue = 0;
@@ -63,7 +66,8 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 
 	$scope.onLeaveRestaurantTouch = function() {
 		if (_.isEmpty($scope.cart.productsItems)) {
-			$state.go('restaurants');
+			Order.resetCurrentOrder();
+			$ionicHistory.goBack();
 		}
 		else {
 			var leaveOrder = $ionicPopup.confirm({
@@ -75,7 +79,8 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 			leaveOrder.then(function(confirmation) {
 				if(confirmation) {
 					Cart.resetCart();
-					$state.go('restaurants');
+					Order.resetCurrentOrder();
+					$ionicHistory.goBack();
 				} else {
 				}
 			});

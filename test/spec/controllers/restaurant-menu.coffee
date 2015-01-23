@@ -75,6 +75,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/pizzas/pizzas_restaurant_.json'
+      $httpBackend.expectGET('https://groupeat.fr/api/restaurants/products').respond(401)
       $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -88,9 +89,6 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
     beforeEach ->
       $httpBackend.flush()
-
-    it 'should load a list of 2 pizzas', ->
-      scope.pizzas.should.have.length(2)
 
     it 'should create an empty cart', ->
       expect(scope.cart).not.to.equal(null)

@@ -16,7 +16,7 @@
 <ion-list>
 
 
-<div ng-repeat="product in pizzas">
+<div ng-repeat="product in pizzas.data">
   <ion-item ng-click="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
   <div class="border-less" ng-class="isDetailsShown(product)">
       <b> {{ product.name }} </b>
@@ -26,9 +26,13 @@
 
 <ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
 <div class="row border-less">
-  <div class="col col-60 border-less">
+  <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
     {{ format.size }} ({{ format.price }} €)
   </div>
+  <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
+    {{ format.size }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
+  </div>
+
   <div class="col col-10 ">
     <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" ge-touch="onProductDelete(product, format.id)"></a>
   </div>
@@ -51,10 +55,13 @@
 <ion-footer-bar class="bar-energized ">
     <div class="row border-less">
         <div class="col col-25">
-        <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice }}€
+        <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice | number : 2}}€
         </div>
         <div class="col col-25">
           <ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>
+        </div>
+        <div ng-show="currentOrder.groupOrderId" class="col col-25">
+          {{ currentOrder.currentDiscount }} %
         </div>
     </div>
  </ion-footer-bar>

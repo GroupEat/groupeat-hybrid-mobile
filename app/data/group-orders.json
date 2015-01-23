@@ -1,7 +1,7 @@
 [
   {
-    "id": 1,
-    "timeLeft": 5,
+    "groupOrderId": 1,
+    "timeLeft": 500,
     "currentDiscount": 15,
     "restaurant":
     {
@@ -11,8 +11,8 @@
     }
   },
   {
-    "id": 2,
-    "timeLeft": 7,
+    "groupOrderId": 2,
+    "timeLeft": 700,
     "currentDiscount": 45,
     "restaurant":
     {
