@@ -1,8 +1,6 @@
 // Your application styles go here
 @import "variables", "buttons-ge";
 
-
-
 .list {
   .item.item-accordion {
     line-height: 64px;
@@ -72,5 +70,9 @@
 
 // Importing ionic in order to possible override variables
 @import "../lib/ionic/scss/ionic";
+
+md-input-container.md-default-theme input {
+  border-bottom: 1px solid;
+}
 
 @import "authentication", "icon-ge", "form-validation";

@@ -6,7 +6,7 @@ angular.module('groupeat.directives.phone-format', [])
   return {
     require: 'ngModel',
     link: function(scope, elm, attrs, ctrl) {
-      ctrl.$validators.geCampusEmail = function(modelValue, viewValue) {
+      ctrl.$validators.gePhoneFormat = function(modelValue, viewValue) {
 
         if (ctrl.$isEmpty(modelValue)) {
           return true;

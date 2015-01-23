@@ -25,3 +25,11 @@ label.item.valid-lr {
   padding: 2px 0 2px 16px;
   color: red;
 }
+
+md-input-container.md-default-theme input {
+  border-bottom: 1px solid;
+}
+
+md-input-container.no-validation-messages {
+  padding-bottom: 0px;
+}
