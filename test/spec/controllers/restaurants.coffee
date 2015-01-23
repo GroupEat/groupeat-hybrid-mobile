@@ -13,6 +13,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $httpBackend = $injector.get('$httpBackend')
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/restaurants.json'
+      $httpBackend.expectGET('https://groupeat.fr/api/restaurants').respond('problem having products from restaurants BE')
       $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -22,8 +23,3 @@ describe 'Ctrl: RestaurantsCtrl', ->
     beforeEach ->
       $httpBackend.flush()
 
-    it 'current state should be group-orders', ->
-      $state.current.name.should.equal('group-orders')
-
-    it 'should load a list of 2 restaurants', ->
-      scope.restaurants.should.have.length(2)
