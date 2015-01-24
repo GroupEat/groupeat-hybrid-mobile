@@ -7,7 +7,7 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
-  'ionic', 'config', 'ngCordova', 'ngCookies',
+  'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMaterial', 'ngMessages',
   'pascalprecht.translate', 'jcs-autoValidate', 'validation.match',
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
@@ -27,6 +27,11 @@ angular.module('groupeat', [
   .preferredLanguage('fr')
   .fallbackLanguage(['fr']).useLocalStorage();
 
+})
+
+.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+  .primaryPalette('orange');
 })
 
 .run([
