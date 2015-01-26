@@ -13,7 +13,6 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 	};
 
 	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
-	console.log($scope.pizzas);
 	
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;

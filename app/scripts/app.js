@@ -16,7 +16,7 @@ angular.module('groupeat', [
 
   $httpProvider.defaults.headers.common = {
     'Accept': 'application/vnd.groupeat.v1+json',
-    'Authorization': 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZnJcL2FwaVwvY3VzdG9tZXJzIiwic3ViIjoyNCwiaWF0IjoxNDIyMDI4NDczLCJleHAiOjIwNTI3NDg0NzN9.vJb2gPGStVHW_-ybxOXj3KBo4AKEd_uFskdccUA0kCQ'
+    'Authorization': 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZnJcL2FwaVwvYXV0aFwvdG9rZW4iLCJzdWIiOjUxLCJpYXQiOjE0MjIyNzk5MTQsImV4cCI6MjA1Mjk5OTkxNH0.o4Bz3OugB30Ce58bA6eAWkWC8rhlH5Z79DyD42XapA'
   };
 
   $translateProvider

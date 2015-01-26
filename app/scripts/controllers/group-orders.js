@@ -11,7 +11,6 @@ angular.module('groupeat.controllers.group-orders', ['groupeat.services.group-or
   });
 
   $scope.$watch('UserCurrentPosition', function(){
-		console.log($scope.UserCurrentPosition);
   });
   
 
