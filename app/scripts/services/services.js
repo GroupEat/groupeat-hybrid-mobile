@@ -11,5 +11,7 @@ angular.module('groupeat.services', [
   'groupeat.services.push',
   'groupeat.services.notifications-settings',
   'groupeat.services.residency-utils',
-  'groupeat.services.order'
+  'groupeat.services.order',
+  'groupeat.services.authentication',
+  'groupeat.services.http-provider-interceptor'
 ]);

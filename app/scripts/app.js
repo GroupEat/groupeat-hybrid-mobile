@@ -8,16 +8,13 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
   'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMaterial', 'ngMessages',
-  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match',
+  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match', 'LocalStorageModule',
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
 .config(function($httpProvider, $translateProvider) {
 
-  $httpProvider.defaults.headers.common = {
-    'Accept': 'application/vnd.groupeat.v1+json',
-    'Authorization': 'bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvZ3JvdXBlYXQuZnJcL2FwaVwvYXV0aFwvdG9rZW4iLCJzdWIiOjUxLCJpYXQiOjE0MjIyNzk5MTQsImV4cCI6MjA1Mjk5OTkxNH0.o4Bz3OugB30Ce58bA6eAWkWC8rhlH5Z79DyD42XapA'
-  };
+  $httpProvider.interceptors.push('HttpProviderInterceptor');
 
   $translateProvider
   .useStaticFilesLoader({
@@ -32,6 +29,11 @@ angular.module('groupeat', [
 .config(function($mdThemingProvider) {
   $mdThemingProvider.theme('default')
   .primaryPalette('orange');
+})
+
+.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+  .setPrefix('groupeat');
 })
 
 .run([

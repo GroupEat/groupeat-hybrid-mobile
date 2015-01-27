@@ -88,6 +88,7 @@
   "emailFieldName": "e-mail",
   "passwordFieldName": "mot de passe",
   "passwordConfirmFieldName": "de confirmation de mot de passe",
+
   "requiredErrorKey": "Le champ {{fieldName}} est obligatoire",
   "requiredShortErrorKey": "Requis!",
   "minlengthErrorKey": "Le champ {{fieldName}} doit comporter au minimum %s caractères",
