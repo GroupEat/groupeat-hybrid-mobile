@@ -71,11 +71,11 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
       ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, Pizza: $injector.get('Pizza'), Cart: Cart, $ionicPopup: $ionicPopup))
-      
 
+      ENV = $injector.get('ENV')
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/pizzas/pizzas_restaurant_.json'
-      $httpBackend.expectGET('https://groupeat.fr/api/restaurants/products').respond(401)
+      $httpBackend.expectGET(ENV.apiEndpoint+'/restaurants/products').respond(401)
       $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -148,5 +148,5 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     it 'should alert user when leaving restaurant menu cell if cart is not empty', ->
 
     it 'should reset cart if user confirms leaving restaurant menu cell if cart is not empty', ->
-    
+
     it 'should not reset cart if user cancels its will to leave restaurant menu if cart is not empty', ->
