@@ -3,6 +3,7 @@ describe 'Service: Notifications-Settings', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   NotificationSettings = scope = {}
 

@@ -2,6 +2,7 @@ describe 'Directive: geCampusEmail', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   scope = form = $httpBackend = {}
 
@@ -16,7 +17,6 @@ describe 'Directive: geCampusEmail', ->
       $compile(element)(scope)
       form = scope.form
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
 

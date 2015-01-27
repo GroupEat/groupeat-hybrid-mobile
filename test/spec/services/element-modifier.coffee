@@ -3,6 +3,7 @@ describe 'Service: ElementModifier', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ElementModifier = scope = $httpBackend = {}
 
@@ -11,7 +12,6 @@ describe 'Service: ElementModifier', ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
       ElementModifier = $injector.get('ElementModifier')
 

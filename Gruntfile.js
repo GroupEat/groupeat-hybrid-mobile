@@ -426,6 +426,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-messages/angular-messages.js',
           '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
           '<%= yeoman.app %>/lib/hammerjs/hammer.js',
+          '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'app/templates/**/*.html',
           'test/utils/**/*.js',
@@ -453,7 +454,11 @@ module.exports = function (grunt) {
           }
         },
         ngHtml2JsPreprocessor: {
-          stripPrefix: 'app/'
+          moduleName: 'templates',
+          stripPrefix: 'app/',
+          cacheIdFromPath: function(filePath) {
+            return filePath.match(/templates\/.*/)[0];
+          }
         },
         coverageReporter: {
           reporters: [

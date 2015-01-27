@@ -2,6 +2,7 @@ describe 'Directive: gePhoneFormat', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   scope = form = $httpBackend = {}
 
@@ -16,7 +17,6 @@ describe 'Directive: gePhoneFormat', ->
       $compile(element)(scope)
       form = scope.form
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
 
@@ -36,7 +36,7 @@ describe 'Directive: gePhoneFormat', ->
     scope.$digest()
     expect(scope.model.phoneFormat).to.equal('01-23-45-67-98')
     expect(form.phoneFormat.$valid).to.be.true
-    
+
 
   it 'should not pass with an invalid phone format', ->
 

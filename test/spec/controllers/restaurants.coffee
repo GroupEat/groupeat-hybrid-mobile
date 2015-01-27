@@ -2,6 +2,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ctrl = scope = $state = $httpBackend = {}
 
@@ -15,11 +16,9 @@ describe 'Ctrl: RestaurantsCtrl', ->
       url = 'data/restaurants.json'
       $httpBackend.expectGET('https://groupeat.fr/api/restaurants').respond('problem having products from restaurants BE')
       $httpBackend.whenGET(url).respond(mockData)
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
   describe 'Constructor', ->
 
     beforeEach ->
       $httpBackend.flush()
-

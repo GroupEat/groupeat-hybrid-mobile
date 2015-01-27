@@ -3,6 +3,7 @@ describe 'Service: ErrorMessageResolver', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ErrorMessageResolver = scope = $httpBackend = $q = $timeout = {}
 
@@ -13,7 +14,6 @@ describe 'Service: ErrorMessageResolver', ->
       $q = $injector.get('$q')
       $timeout = $injector.get('$timeout')
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
       ErrorMessageResolver = $injector.get('ErrorMessageResolver')
 

@@ -3,6 +3,7 @@ describe 'Service: Cart', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   Cart = scope = $httpBackend = {}
 
@@ -11,8 +12,7 @@ describe 'Service: Cart', ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       Cart = $injector.get('Cart')
       _ = $injector.get('_')
 

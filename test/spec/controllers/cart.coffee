@@ -2,6 +2,7 @@ describe 'Ctrl: CartCtrl', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ctrl = scope = $state = $httpBackend = {}
 
@@ -11,9 +12,7 @@ describe 'Ctrl: CartCtrl', ->
       $state = $injector.get('$state')
       ctrl = $controller('CartCtrl', ($scope: scope, $state: $state, _: $injector.get('_'), Cart: $injector.get('Cart')))
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-
 
   describe 'Constructor', ->
 

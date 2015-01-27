@@ -2,6 +2,7 @@ describe 'Directive: geHideTabs', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   rootScope = scope = httpBackend = elm = {}
 
@@ -15,7 +16,6 @@ describe 'Directive: geHideTabs', ->
       )
       $compile(element)(scope)
       rootScope = $rootScope
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
   describe 'Constructor', ->

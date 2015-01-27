@@ -18,7 +18,6 @@ describe 'Ctrl: BottomTabsCtrl', ->
   it 'should include the admissible keys for each tab', ->
     expect(tab).to.include.keys('title', 'iconClasses', 'stateTarget') for tab in scope.bottomTabs
 
-
   it 'should include one of the valid states as stateTarget', ->
     validStateNames = _.pluck($state.get(), 'name')
     expect(validStateNames).to.contain(tab.stateTarget) for tab in scope.bottomTabs

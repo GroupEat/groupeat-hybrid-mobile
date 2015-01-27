@@ -2,6 +2,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ctrl = scope = $state = $httpBackend = {}
 
@@ -14,7 +15,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/group-orders.json'
       $httpBackend.whenGET(url).respond(mockData)
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
 
@@ -22,9 +22,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     beforeEach ->
       $httpBackend.flush()
-
-    it 'current state should be group-orders', ->
-      $state.current.name.should.equal('group-orders')
 
     it 'should load a list of 2 group-order', ->
       scope.groupOrders.should.have.length(2)

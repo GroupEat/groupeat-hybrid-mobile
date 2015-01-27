@@ -2,6 +2,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = $ionicPopup = {}
 
@@ -77,7 +78,6 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       url = 'data/pizzas/pizzas_restaurant_.json'
       $httpBackend.expectGET(ENV.apiEndpoint+'/restaurants/products').respond(401)
       $httpBackend.whenGET(url).respond(mockData)
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       sandbox = sinon.sandbox.create()
 

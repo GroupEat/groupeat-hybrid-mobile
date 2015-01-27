@@ -3,6 +3,7 @@ describe 'Service: ResidencyUtils', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   ResidencyUtils = scope = $httpBackend = {}
 
@@ -11,7 +12,6 @@ describe 'Service: ResidencyUtils', ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
       ResidencyUtils = $injector.get('ResidencyUtils')
 

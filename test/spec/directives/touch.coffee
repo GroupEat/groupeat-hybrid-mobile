@@ -2,6 +2,7 @@ describe 'Directive: geTouch', ->
 
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   scope = httpBackend = element = sandbox = {}
 
@@ -12,7 +13,6 @@ describe 'Directive: geTouch', ->
       sandbox = sinon.sandbox.create()
       element = angular.element('<button ge-touch="callbackFunction"></button>')
       $compile(element)(scope)
-      httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
   afterEach ->

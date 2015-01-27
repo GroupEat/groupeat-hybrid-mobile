@@ -3,6 +3,7 @@ describe 'Service: Customer', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   Customer = scope = $httpBackend = ENV = {}
 
@@ -11,8 +12,7 @@ describe 'Service: Customer', ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       Customer = $injector.get('Customer')
       ENV = $injector.get('ENV')
 

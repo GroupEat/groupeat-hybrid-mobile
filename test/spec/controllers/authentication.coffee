@@ -3,6 +3,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
 
@@ -34,13 +35,13 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Cusomter = $injector.get('Customer')
       ENV = $injector.get('ENV')
 
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
-                      .respond({
-                        id:7,
-                        token: 'jklhkjhlkhl'
-                      })
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
 
   afterEach ->
     sandbox.restore()

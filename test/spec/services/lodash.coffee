@@ -3,6 +3,7 @@ describe 'Service: _', ->
   # Load the controller's module
   beforeEach ->
     module 'groupeat'
+    module 'templates'
 
   _ = scope = $httpBackend = {}
 
@@ -11,8 +12,7 @@ describe 'Service: _', ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
-      $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
-      $httpBackend.whenGET(/^translations\/.*/).respond('<html></html>')
+      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       _ = $injector.get('_')
 
   it 'Lodash service should equal html window._', ->
