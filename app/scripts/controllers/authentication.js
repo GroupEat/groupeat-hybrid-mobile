@@ -2,7 +2,7 @@
 
 angular.module('groupeat.controllers.authentication', ['groupeat.services.customer', 'groupeat.services.element-modifier'])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier, ResidencyUtils) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $mdDialog, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
 
@@ -131,19 +131,36 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
 
   $scope.submitRegisterForm = function(form) {
     return $scope.validateForm(form).then(function() {
-      var customer = new Customer($scope.userRegister);
-      customer.$save();
 
-      $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
+      // TODO : Fetch proper locale
+      var parameters = _.merge($scope.userRegister, {'locale': 'fr'});
 
-      $scope.showLoginAndRegisterButtons = false;
-      $scope.showLoginForm = false;
-      $scope.showRegisterForm = false;
-      $scope.showLoginEnergizedBackButton = false;
-      $scope.showLoginAssertiveBackButton = false;
-      $scope.showFurtherRegisterForm = true;
-      $scope.showSubmitFurtherRegisterButton = false;
-      $scope.showSkipFurtherRegisterButton = true;
+      var customer = new Customer(parameters);
+      customer.$save().then(function(response) {
+        $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
+
+        $scope.showLoginAndRegisterButtons = false;
+        $scope.showLoginForm = false;
+        $scope.showRegisterForm = false;
+        $scope.showLoginEnergizedBackButton = false;
+        $scope.showLoginAssertiveBackButton = false;
+        $scope.showFurtherRegisterForm = true;
+        $scope.showSubmitFurtherRegisterButton = false;
+        $scope.showSkipFurtherRegisterButton = true;
+
+        return response;
+      }, function(errorResponse) {
+        $mdDialog.show(
+          $mdDialog.alert()
+          .title($translate('whoops'))
+          .content(ElementModifier.errorMsgFromBackend(errorResponse))
+          .ok($translate('ok'))
+        );
+        $timeout(function() {
+          $mdDialog.hide();
+        }, 3000);
+        return errorResponse;
+      });
     });
   };
 
@@ -160,16 +177,16 @@ angular.module('groupeat.controllers.authentication', ['groupeat.services.custom
     $state.go('group-orders') ;
 
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
-
-    var alertWelcome = $ionicPopup.alert({
-      title: $translate('welcome', {firstName: firstName}),
-      okText: 'OK',
-      okType: 'button-assertive',
-    });
+    var dialog = $mdDialog.show(
+      $mdDialog.alert()
+      .title($translate('welcome', {firstName: firstName}))
+      .ok($translate('ok'))
+    );
     $timeout(function() {
-      alertWelcome.close();
+      $mdDialog.hide();
     }, 3000);
-    return alertWelcome;
+
+    return dialog;
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {

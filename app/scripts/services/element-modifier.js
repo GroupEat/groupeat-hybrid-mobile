@@ -78,6 +78,13 @@ angular.module('groupeat.services.element-modifier', [])
         return scopeErrorMsg[formName][fieldName];
       }
       return undefined;
+    },
+
+    getErrorMsgFromBackend = function(response) {
+      for (var field in response.data.errors) {
+        return response.data.errors[field][0];
+      }
+      return undefined;
     };
 
     return {
@@ -85,6 +92,7 @@ angular.module('groupeat.services.element-modifier', [])
       makeInvalid: makeInvalid,
       makeDefault: makeDefault,
       errorMsg: getErrorMsg,
+      errorMsgFromBackend: getErrorMsgFromBackend,
       key: 'ElementModifier'
     };
   }

@@ -37,10 +37,10 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $httpBackend.whenGET(/^templates\/.*/).respond('<html></html>')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
-                      .respond([{
+                      .respond({
                         id:7,
                         token: 'jklhkjhlkhl'
-                      }])
+                      })
 
   afterEach ->
     sandbox.restore()
@@ -317,7 +317,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       window.browserTrigger(formElement, 'submit')
       scope.submitRegisterForm(scope.registerForm)
-      scope.$apply()
+
+      $httpBackend.flush()
 
       scope.showRegisterForm.should.be.false
       scope.showLoginAssertiveBackButton.should.be.false
@@ -338,7 +339,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       window.browserTrigger(formElement, 'submit')
       scope.submitRegisterForm(scope.registerForm)
-      scope.$apply()
+
+      $httpBackend.flush()
 
       # The residency value should match supoptique's, hence 3
       scope.userRegister.residency.should.equal(3)
