@@ -17,7 +17,9 @@ function (localStorageService) {
   */
   setCredentials = function (id, token) {
     if (id !== parseInt(id, 10))
+    {
       throw new Error('The customer id is not an integer');
+    }
     localStorageService.set('id', id);
     localStorageService.set('token', token);
   },
@@ -47,7 +49,9 @@ function (localStorageService) {
   */
   getCredentials = function() {
     if (!localStorageService.get('id') || !localStorageService.get('token'))
-      return undefined
+    {
+      return undefined;
+    }
     return {id: localStorageService.get('id'), token: localStorageService.get('token')};
   };
 

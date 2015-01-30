@@ -8,7 +8,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
   'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMaterial', 'ngMessages',
-  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match', 'LocalStorageModule',
+  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match', 'LocalStorageModule', 'permission',
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 
@@ -47,7 +47,12 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function($ionicPlatform, $translate) {
+.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication) {
+
+  Permission.defineRole('customer', function () {
+    // If the returned value is *truthy* then the user has the role, otherwise they don't
+    return Authentication.getCredentials();
+  });
 
   if(typeof navigator.globalization !== 'undefined') {
     navigator.globalization.getPreferredLanguage(function(language) {

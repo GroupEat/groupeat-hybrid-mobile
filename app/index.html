@@ -42,13 +42,10 @@
     <ion-nav-view ng-class="{has-footer: !$root.hideTabs}" animation="fade-in">
     </ion-nav-view>
 
-    <div id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs tabs-energized tabs-icon-top">
-
-      <a class="tab-item" ng-repeat="tab in bottomTabs" ui-sref="{{tab.stateTarget}}">
-          <i class="icon {{tab.iconClasses}}"></i>
-          {{tab.title | translate}}
-      </a>
-    </div>
+    <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
+      <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
+      </ion-tab>
+    </ion-tabs>
 
 <!-- ------------------------------------------- -->
 
@@ -79,6 +76,7 @@
     <script src="lib/angular-messages/angular-messages.js"></script>
     <script src="lib/angular-timer/dist/angular-timer.js"></script>
     <script src="lib/ngGeolocation/ngGeolocation.js"></script>
+    <script src="lib/angular-permission/dist/angular-permission.js"></script>
     <!-- endbower -->
     <script src="lib/sprintf/src/angular-sprintf.js"></script>
 

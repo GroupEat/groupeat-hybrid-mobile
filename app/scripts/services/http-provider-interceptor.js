@@ -7,10 +7,12 @@ angular.module('groupeat.services.http-provider-interceptor', ['groupeat.service
     config.headers.Accept = 'application/vnd.groupeat.v1+json';
     var credentials = Authentication.getCredentials();
     if (credentials && credentials.token)
+    {
       config.headers.Authorization = 'bearer ' + credentials.token;
+    }
     return config;
   };
   return {
     request: request
-  }
+  };
 });
