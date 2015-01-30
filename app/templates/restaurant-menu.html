@@ -7,7 +7,7 @@
 </ion-nav-buttons>
 
 <ion-nav-buttons side="left">
-<button class="button button-clear ion-ios7-arrow-back" ge-touch="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
+<button class="button button-clear ion-ios7-arrow-back" on-tap="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
 </button>
 </ion-nav-buttons>
 
@@ -22,7 +22,7 @@
       <b> {{ product.name }} </b>
       <p> {{ product.description }} </p>
   </div>
-</ion-item> 
+</ion-item>
 
 <ion-item ng-repeat="format in product.formats" ng-show="isDetailsShown(product)">
 <div class="row border-less">
@@ -34,13 +34,13 @@
   </div>
 
   <div class="col col-10 ">
-    <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" ge-touch="onProductDelete(product, format.id)"></a>
+    <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" on-tap="onProductDelete(product, format.id)"></a>
   </div>
   <div class="col col-10">
     <a class="center"> {{ productToShowValue }} </a>
   </div>
   <div class="col col-10 ">
-    <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" ge-touch="onProductAdd(product, format)"></a>
+    <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
   </div>
   <div class="col col-10 ">
   </div>

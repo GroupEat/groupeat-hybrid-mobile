@@ -5,7 +5,7 @@
           {{ 'pushActivation' | translate }}
         </ion-toggle>
 
-        <div class="item item-divider"> 
+        <div class="item item-divider">
           {{ 'atNight' | translate }} :
         </div>
 
@@ -17,10 +17,10 @@
       		</select>
 		</label>
 
-		<div class="item item-divider"> 
+		<div class="item item-divider">
           {{ 'afterAnOrder' | translate }} :
         </div>
-        
+
         <label class="item item-input item-select">
 		    <div class="input-label">
 		    {{ 'dontPushFor' | translate }} :
@@ -28,11 +28,11 @@
 		    <select ng-model="select.dontPushFor" ng-options="item.name for item in settings.dontPushFor">
       		</select>
 		</label>
-        
 
 
-		
-		<button ge-touch="saveSettings()" class="button button-full button-outline no-margin">
+
+
+		<button on-tap="saveSettings()" class="button button-full button-outline no-margin">
 	   		   <text>{{ 'save' | translate }}<text/>
 	   	</button>
 	</ion-content>

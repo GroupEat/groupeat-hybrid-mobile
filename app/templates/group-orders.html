@@ -18,7 +18,7 @@
           <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.name }}</h2>
           <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
         </div>
-        <a class="item item-icon-left assertive" ge-touch="onJoinOrderTouch(groupOrder)">
+        <a class="item item-icon-left assertive" on-tap="onJoinOrderTouch(groupOrder)">
           <i class="icon ion-arrow-right-a"></i>
           {{ 'joinThisOrder' | translate }} !
         </a>
