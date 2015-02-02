@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.authentication', [])
+angular.module('groupeat.services.authentication', ['LocalStorageModule'])
 
 .factory('Authentication',
 function (localStorageService) {

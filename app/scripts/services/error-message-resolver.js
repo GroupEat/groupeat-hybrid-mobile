@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.error-message-resolver', ['sprintf'])
+angular.module('groupeat.services.error-message-resolver', ['sprintf', 	'groupeat.services.order'])
 
 /*global vsprintf:true*/
 .factory('ErrorMessageResolver', [

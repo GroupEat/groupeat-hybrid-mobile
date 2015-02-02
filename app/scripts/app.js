@@ -7,8 +7,8 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
-  'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMaterial', 'ngMessages',
-  'pascalprecht.translate', 'jcs-autoValidate', 'validation.match', 'LocalStorageModule', 'permission',
+  'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMessages',
+  'validation.match', 'LocalStorageModule', 'permission',
   'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
 ])
 

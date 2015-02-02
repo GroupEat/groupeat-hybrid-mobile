@@ -2,7 +2,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.directives'
+    module 'groupeat.controllers.authentication'
     module 'templates'
 
   AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
@@ -10,6 +11,14 @@ describe 'Ctrl: AuthenticationCtrl', ->
   # Initialize the controller and a mock scope
   beforeEach ->
     inject ($rootScope, $controller, $injector) ->
+
+      validator = $injector.get('validator')
+      ElementModifier = $injector.get('ElementModifier')
+      ErrorMessageResolver = $injector.get('ErrorMessageResolver')
+      validator.registerDomModifier(ElementModifier.key, ElementModifier)
+      validator.setDefaultElementModifier(ElementModifier.key)
+      validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
+
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
       $ionicPopup = $injector.get('$ionicPopup')
@@ -225,7 +234,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
   describe 'Registering (First Step)', ->
 
-    submitFormWithViewValues = (email, password, passwordConfirm) ->
+    submitFormWithViewValues = (email, password) ->
       form = scope.registerForm
       form.email.$setViewValue(email) if email?
       form.password.$setViewValue(password) if password?
@@ -240,59 +249,10 @@ describe 'Ctrl: AuthenticationCtrl', ->
         '<form name="registerForm" ng-submit="submitRegisterForm(registerForm)">'+
         '<input ng-model="userRegister.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail">'+
         '<input ng-model="userRegister.password" name="password" type="password" required ng-minlength="6">'+
-        '<input ng-model="userRegister.passwordConfirm" type="password" name="passwordConfirm" match="registerForm.password">'+
         '</form>'
       )
       $compile(formElement)(scope)
       scope.$digest()
-
-    it 'the form should be initially invalid and pristine', ->
-      form = scope.registerForm
-      form.$valid.should.be.false
-      form.$invalid.should.be.true
-      form.$pristine.should.be.true
-      form.$dirty.should.be.false
-
-    it 'the validateForm promise should initially reject a requiredErrorKey Error either if the email field is empty or the email field is valid and the password field empty', ->
-      form = submitFormWithViewValues()
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
-      $timeout.flush()
-
-      # The email field is present and valid
-      form = submitFormWithViewValues('campusemail@ensta.fr')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
-      $timeout.flush()
-
-      # No email, password valid, passwordConfirm dirty
-      form = submitFormWithViewValues('', 'validPassword', 'dirty')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
-      $timeout.flush()
-
-    it 'the validateForm promise should reject an emailErrorKey Error if the view value is not an email', ->
-      form = submitFormWithViewValues('not a valid email')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'emailErrorKey')
-      $timeout.flush()
-
-    it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
-      form = submitFormWithViewValues('notacampusemail@gmail.com')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'geCampusEmailErrorKey')
-      $timeout.flush()
-
-    it 'the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', ->
-      form = submitFormWithViewValues('campusemail@ensta.fr', 'short')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'minlengthErrorKey')
-      $timeout.flush()
-
-    it 'the validateForm promise should reject a matchErrorKey Error if the password fields do not match and the email is valid', ->
-      # Valid email, password valid, passwordConfirm dirty
-      form = submitFormWithViewValues('campusemail@ensta.fr', 'validpassword', 'dirty')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'matchErrorKey')
-      $timeout.flush()
-
-    it 'the validateForm promise should be resolved if all fields are valid', ->
-      form = submitFormWithViewValues('campusemail@ensta.fr', 'validpassword', 'validpassword')
-      scope.validateForm(form).should.be.fulfilled
-      scope.$apply()
 
     it "if there is a validation error, the shown dom elements should be the register form's", ->
       # We use a stub to make sure the validateForm promise is rejected

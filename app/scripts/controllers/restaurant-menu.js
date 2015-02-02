@@ -1,6 +1,12 @@
 'use strict';
 
-angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza', 'groupeat.services.cart', 'groupeat.services.lodash', 'groupeat.services.order'])
+angular.module('groupeat.controllers.restaurant-menu', [
+	'pascalprecht.translate',
+	'groupeat.services.cart',
+	'groupeat.services.lodash',
+	'groupeat.services.order',
+	'groupeat.services.pizza',
+])
 
 .controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup, Order, $ionicHistory) {
 
@@ -13,7 +19,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 	};
 
 	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
-	
+
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
 
@@ -28,7 +34,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 				if (product.id === productToShow.id) {
 					_.forEach(product.formats, function(productFormats) {
 						if(productFormats.id === formatIndex) {
-							
+
 							$scope.productToShowValue = productFormats.quantity ;
 						}
 						else {}
@@ -37,7 +43,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 				else {}
 			});
 		}
-		
+
 	};
 
 	$scope.toggleDetails = function(product) {
@@ -49,7 +55,7 @@ angular.module('groupeat.controllers.restaurant-menu', ['groupeat.services.pizza
 	    }
 		};
 
-	
+
 
 	$scope.isDetailsShown = function(product) {
 		return $scope.shownDetails === product;

@@ -1,6 +1,17 @@
 'use strict';
 
-angular.module('groupeat.controllers.authentication', ['groupeat.services.customer', 'groupeat.services.element-modifier'])
+angular.module('groupeat.controllers.authentication', [
+  'ionic',
+  'jcs-autoValidate',
+  'ngMaterial',
+  'pascalprecht.translate',
+  'groupeat.services.authentication',
+  'groupeat.services.customer',
+  'groupeat.services.element-modifier',
+  'groupeat.services.error-message-resolver',
+  'groupeat.services.lodash',
+  'groupeat.services.residency-utils'
+])
 
 .controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $mdDialog, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier, ResidencyUtils, Authentication, _) {
 
