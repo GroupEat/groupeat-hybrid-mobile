@@ -20,4 +20,7 @@ angular.module('groupeat.services', [
   'groupeat.services.residency-utils',
   'groupeat.services.restaurant',
   'groupeat.services.message-backdrop'
+  'groupeat.services.authentication',
+  'groupeat.services.http-provider-interceptor',
+  'groupeat.services.push-notifications'
 ]);

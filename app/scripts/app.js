@@ -77,4 +77,8 @@ angular.module('groupeat', [
     }
   });
 }
-);
+)
+
+.run(function(PushNotificationsService) {
+  PushNotificationsService.initialize();
+});
