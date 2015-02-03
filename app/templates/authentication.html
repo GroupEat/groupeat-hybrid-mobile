@@ -27,7 +27,7 @@
 				<label>
 					<i class="icon ion-ios7-email-outline"> {{ 'email' | translate }}</i>
 				</label>
-				<input ng-model="userLogin.email" name="email" type="email" required ge-campus-email ge-campus-email-err-type="campusEmail">
+				<input ng-model="userLogin.email" name="email" type="email" required ge-campus-email>
 				<div ng-show="(loginForm.email.$touched && loginForm.email.$dirty) || loginForm.$submitted" ng-messages="loginForm.email.$error">
 					<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
 					<div ng-message="email">{{ 'emailShortErrorKey' | translate }}</div>
@@ -41,7 +41,7 @@
 				<input ng-model="userLogin.password" ng-model-options="{ updateOn: 'default blur' }" name="password" type="password" required ng-minlength="6">
 				<div ng-show="(loginForm.password.$touched && loginForm.password.$dirty) || loginForm.$submitted" ng-messages="loginForm.password.$error">
 					<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-					<div ng-message="minlength">{{ 'minlengthShortErrorKey' | translate }}</div>
+					<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 				</div>
 			</md-input-container>
 		</div>
@@ -65,7 +65,7 @@
 				<label>
 					<i class="icon ion-ios7-email-outline"> {{ 'email' | translate }}</i>
 				</label>
-				<input ng-model="userRegister.email" name="email" type="email" required ge-campus-email ge-campus-email-err-type="campusEmail">
+				<input ng-model="userRegister.email" name="email" type="email" required ge-campus-email>
 				<div ng-show="(registerForm.email.$touched && registerForm.email.$dirty) || registerForm.$submitted" ng-messages="registerForm.email.$error">
 					<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
 					<div ng-message="email">{{ 'emailShortErrorKey' | translate }}</div>
@@ -79,7 +79,7 @@
 				<input ng-model="userRegister.password" ng-model-options="{ updateOn: 'default blur' }" name="password" type="password" required ng-minlength="6">
 				<div ng-show="(registerForm.password.$touched && registerForm.password.$dirty) || registerForm.$submitted" ng-messages="registerForm.password.$error">
 					<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-					<div ng-message="minlength">{{ 'minlengthShortErrorKey' | translate }}</div>
+					<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 				</div>
 			</md-input-container>
 		</div>
@@ -115,7 +115,7 @@
 				<label>
 					<i class="icon ion-ios7-telephone-outline"> {{ 'phoneNumber' | translate }}</i>
 				</label>
-				<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format ge-phone-format-err-type="phoneFormat">
+				<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format>
 				<div ng-show="(furtherRegisterForm.phoneNumber.$touched && furtherRegisterForm.phoneNumber.$dirty) || furtherRegisterForm.$submitted" ng-messages="furtherRegisterForm.phoneNumber.$error">
 					<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
 				</div>
