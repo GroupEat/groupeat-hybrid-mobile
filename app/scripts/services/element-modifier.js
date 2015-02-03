@@ -1,9 +1,14 @@
 'use strict';
 
-angular.module('groupeat.services.element-modifier', [])
+angular.module('groupeat.services.element-modifier', ['sprintf'])
 
+/*global vsprintf:true*/
 .factory('ElementModifier', [
-  function () {
+  '$filter',
+  function ($filter) {
+
+    var $translate = $filter('translate');
+
     var scopeErrorMsg = {};
     var /**
     * @ngdoc function
@@ -82,7 +87,11 @@ angular.module('groupeat.services.element-modifier', [])
 
     getErrorMsgFromBackend = function(response) {
       for (var field in response.data.errors) {
-        return response.data.errors[field][0];
+        for (var error in response.data.errors[field]) {
+          var fieldName = $translate(field+'FieldName');
+          var errorMessage = $translate(error+'ErrorKey', {fieldName: fieldName});
+          return response.data.errors[field][error] ? vsprintf(errorMessage, response.data.errors[field][error]) : errorMessage;
+        }
       }
       return undefined;
     };

@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('groupeat.services.authentication', ['LocalStorageModule'])
+angular.module('groupeat.services.authentication', ['LocalStorageModule', 'config'])
 
 .factory('Authentication',
-function (localStorageService) {
+function (localStorageService, $resource, ENV) {
   var /**
   * @ngdoc function
   * @name Authentication#setCredentials
@@ -53,12 +53,18 @@ function (localStorageService) {
       return undefined;
     }
     return {id: localStorageService.get('id'), token: localStorageService.get('token')};
-  };
+  },
+
+  resource =  $resource(ENV.apiEndpoint+'/auth/token', null,
+    {
+      'getToken': { method: 'PUT' }
+    });
 
   return {
     setCredentials: setCredentials,
     resetCredentials: resetCredentials,
-    getCredentials: getCredentials
+    getCredentials: getCredentials,
+    resource : resource
   };
 }
 );

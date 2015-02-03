@@ -80,14 +80,15 @@ angular.module('groupeat.controllers.authentication', [
         if (form.$invalid)
         {
           var errorMessage = ElementModifier.errorMsg(form.$name);
-          var alertWrongCombinaison = $ionicPopup.alert({
-            title: errorMessage,
-            okText: 'OK',
-            okType: 'button-energized',
-          });
+          $mdDialog.show(
+            $mdDialog.alert()
+            .title($translate('whoops'))
+            .content(errorMessage)
+            .ok($translate('ok'))
+          );
           $timeout(function() {
-            alertWrongCombinaison.close();
-          }, 4000);
+            $mdDialog.hide();
+          }, 3000);
           deferred.reject(new Error(errorMessage));
         }
         else
@@ -100,7 +101,26 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.submitLoginForm = function(form) {
     $scope.validateForm(form).then(function() {
-      $state.go('group-orders');
+      Authentication.resource.getToken(null, $scope.userLogin).$promise.then(function(response) {
+
+        var responseData = response.data;
+        Authentication.setCredentials(responseData.id, responseData.token);
+
+        $state.go('group-orders');
+
+        return response;
+      }, function(errorResponse) {
+        $mdDialog.show(
+          $mdDialog.alert()
+          .title($translate('whoops'))
+          .content(ElementModifier.errorMsgFromBackend(errorResponse))
+          .ok($translate('ok'))
+        );
+        $timeout(function() {
+          $mdDialog.hide();
+        }, 3000);
+        return errorResponse;
+      });
     });
   };
 

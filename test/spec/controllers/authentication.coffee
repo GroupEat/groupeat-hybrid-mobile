@@ -51,6 +51,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           id:7,
                           token: 'jklhkjhlkhl'
                       )
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
 
   afterEach ->
     sandbox.restore()
@@ -206,7 +212,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
-      scope.$apply()
+
+      $httpBackend.flush()
+
       # The state should change to group-orders
       $state.go.should.have.been.calledWith('group-orders')
 

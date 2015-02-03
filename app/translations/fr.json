@@ -92,14 +92,20 @@
   "requiredErrorKey": "Le champ {{fieldName}} est obligatoire",
   "requiredShortErrorKey": "Requis!",
   "minlengthErrorKey": "Le champ {{fieldName}} doit comporter au minimum %s caractères",
+  "minErrorKey": "Le champ {{fieldName}} doit comporter au minimum %s caractères",
   "minlengthShortErrorKey": "Trop court!",
   "maxlengthErrorKey": "Le champ {{fieldName}} doit comporter au maximum %s caractères",
+  "maxErrorKey": "Le champ {{fieldName}} doit comporter au maximum %s caractères",
   "maxlengthShortErrorKey": "Trop long!",
   "emailErrorKey": "Veuillez entrer une adresse e-mail valide",
   "emailShortErrorKey": "Email invalide",
   "geCampusEmailErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu",
+  "notFromCampusErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu",
   "geCampusEmailShortErrorKey": "Email de votre école uniquement!",
   "matchErrorKey": "Les mots de passe doivent correspondre",
   "gePhoneFormatErrorKey" : "Le format du numéro de téléphone n'est pas valide<br>ex: 0612345678",
-  "gePhoneFormatShortErrorKey" : "Téléphone invalide"
+  "gePhoneFormatShortErrorKey" : "Téléphone invalide",
+  "notFoundErrorKey" : "Email non reconnu",
+  "alreadyTakenErrorKey" : "Email déjà utilisé",
+  "invalidErrorKey": "Le {{fieldName}} est invalide"
 }
