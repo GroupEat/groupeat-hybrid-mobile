@@ -76,7 +76,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       ENV = $injector.get('ENV')
       mockData = [{key:"test"},{key:"test2"}]
       url = 'data/pizzas/pizzas_restaurant_.json'
-      $httpBackend.expectGET(ENV.apiEndpoint+'/restaurants/products').respond(401)
+      $httpBackend.expectGET(ENV.apiEndpoint+'/restaurants/products?include=formats').respond(401)
       $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       sandbox = sinon.sandbox.create()

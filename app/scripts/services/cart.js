@@ -62,7 +62,6 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 		};
 
 		var addProductToCart = function(productToAdd, format) {
-
 			// Test if productToAdd exists already in products
 			var IsInProducts = false ;
 			_.forEach(products.productsItems, function(product){
@@ -70,8 +69,9 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 					IsInProducts = true;
 				}
 			});
+
 			if ( IsInProducts ) {
-				// If productTo<Add already exists in products, just increment its quantity
+				// If productToAdd already exists in products, just increment its quantity
 				_.forEach(products.productsItems, function(product) {
 					if (product.id === productToAdd.id) {
 						_.forEach(product.formats, function(productFormats) {
@@ -88,11 +88,11 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 				
 				// First the formats array
 				var formatToAddInProduct = [];
-				for(var i=0 ; i < _.size(productToAdd.formats) ; i++) {
+				for(var i=0 ; i < _.size(productToAdd.formats.data) ; i++) {
 					formatToAddInProduct[i] = {
-						'id': productToAdd.formats[i].id,
-						'size': productToAdd.formats[i].size,
-						'price': productToAdd.formats[i].price*((100-products.cartDiscount)/100),
+						'id': productToAdd.formats.data[i].id,
+						'name': productToAdd.formats.data[i].name,
+						'price': productToAdd.formats.data[i].price*((100-products.cartDiscount)/100),
 						'quantity': 0
 					};
 					if (formatToAddInProduct[i].id === format.id) {
