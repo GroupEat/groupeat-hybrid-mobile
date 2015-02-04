@@ -2,6 +2,6 @@
 
 angular.module('groupeat.services.group-order', ['ngResource'])
 
-.factory('GroupOrder', function($resource) {
-  return $resource('data/group-orders.json');
+.factory('GroupOrder', function($resource, ENV) {
+  return $resource(ENV.apiEndpoint+'/groupOrders?opened=true&include=restaurant');
 });

@@ -6,16 +6,18 @@
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
     </button>
 
-    <div ng-repeat="groupOrder in groupOrders">
+    <div ng-repeat="groupOrder in groupOrders.data">
       <div class="card">
+
         <div class="item item-divider">
           <i class="ion-clock assertive"></i>
-          <b><timer countdown="groupOrder.timeLeft" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}} </timer></b>
+          <b><timer countdown="getTimeDiff(groupOrder.endingAt)" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}} </timer></b>
           <i class="ion-cash assertive"></i>
-          <b>{{ groupOrder.currentDiscount }}%</b>
+          <b>{{ groupOrder.reduction*100 }}%</b>
         </div>
+
         <div class="item item-text-wrap">
-          <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.name }}</h2>
+          <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.data.name }}</h2>
           <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
         </div>
         <a class="item item-icon-left assertive" on-tap="onJoinOrderTouch(groupOrder)">
