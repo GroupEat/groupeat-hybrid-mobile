@@ -94,10 +94,7 @@
     "org.apache.cordova.media",
     "https://github.com/phonegap-build/PushPlugin",
     "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
-<<<<<<< HEAD
     "org.apache.cordova.network-information"
-=======
-    "https://github.com/phonegap-build/PushPlugin.git"
->>>>>>> Removing obsolete push service
+    "org.apache.cordova.inappbrowser"
   ]
 }
