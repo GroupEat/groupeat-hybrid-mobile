@@ -7,13 +7,14 @@ angular.module('groupeat.controllers.authentication', [
   'pascalprecht.translate',
   'groupeat.services.authentication',
   'groupeat.services.customer',
+  'groupeat.services.address',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $mdDialog, $timeout, $q, $ionicModal, $filter, Customer, ElementModifier, ResidencyUtils, Authentication, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $mdDialog, $timeout, $q, $ionicModal, $filter, Customer, Address, ElementModifier, ResidencyUtils, Authentication, _) {
 
   var $translate = $filter('translate');
 
@@ -37,6 +38,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.userLogin = {};
   $scope.userReset = {};
   $scope.userRegister = {};
+  $scope.userId = undefined;
 
   $scope.validationError = undefined;
 
@@ -170,6 +172,7 @@ angular.module('groupeat.controllers.authentication', [
       customer.$save().then(function(response) {
 
         var responseData = response.data;
+        $scope.userId = responseData.id;
         Authentication.setCredentials(responseData.id, responseData.token);
 
         $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
@@ -237,7 +240,29 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.submitFurtherRegisterForm = function(form) {
     $scope.validateForm(form).then(function() {
-      $scope.onSkipFurtherRegisterButtonTouch();
+
+      var customerParams = _.pick($scope.userRegister, ['firstName', 'lastName', 'phoneNumber']);
+
+      Customer.update({id : $scope.userId}, customerParams).$promise
+      .then(function() {
+        var addressParams = _.merge(Address.getAddressFromResidencyInformation(), {details: $scope.userRegister.addressSuplement});
+        return Address.resource.update({id: $scope.userId}, addressParams).$promise;
+      })
+      .then(function() {
+        $scope.onSkipFurtherRegisterButtonTouch();
+      })
+      .catch(function(errorResponse) {
+        $mdDialog.show(
+          $mdDialog.alert()
+          .title($translate('whoops'))
+          .content(ElementModifier.errorMsgFromBackend(errorResponse))
+          .ok($translate('ok'))
+        );
+        $timeout(function() {
+          $mdDialog.hide();
+        }, 3000);
+        return errorResponse;
+      });
     });
   };
 
