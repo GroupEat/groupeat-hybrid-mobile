@@ -107,13 +107,13 @@ describe 'Service: Cart', ->
         formats: [
             {
               id: 1,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 0
             },
             {
               id: 2,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 0
             }
@@ -127,13 +127,13 @@ describe 'Service: Cart', ->
           formats: [
             {
               id: 6,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 2
             },
             {
               id: 7,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 2
             }
@@ -157,13 +157,13 @@ describe 'Service: Cart', ->
           formats: [
             {
               id: 1,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 2
             },
             {
               id: 2,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 1
             }
@@ -177,13 +177,13 @@ describe 'Service: Cart', ->
           formats: [
             {
               id: 6,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 2
             },
             {
               id: 7,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 2 # quantity to decrease
             }
@@ -205,12 +205,12 @@ describe 'Service: Cart', ->
         'totalPrice': 1222,
         'formats': [
             'id': 1,
-            'size': 'test size 1',
+            'name': 'test size 1',
             'price': 10,
             'quantity': 2
             ,
             'id': 2,
-            'size': 'test size 2',
+            'name': 'test size 2',
             'price': 15,
             'quantity': 1
           ]
@@ -221,12 +221,12 @@ describe 'Service: Cart', ->
         'totalPrice': 1222,
         'formats': [
             'id': 6,
-            'size': 'test size 1',
+            'name': 'test size 1',
             'price': 10,
             'quantity': 2
             ,
             'id': 7,
-            'size': 'test size 2',
+            'name': 'test size 2',
             'price': 15,
             'quantity': 2 # quantity to decrease
           ]
@@ -249,13 +249,13 @@ describe 'Service: Cart', ->
           formats: [
             {
               id: 1,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 2
             },
             {
               id: 2,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 1
             }
@@ -269,13 +269,13 @@ describe 'Service: Cart', ->
           formats: [
             {
               id: 6,
-              size: 'test size 1',
+              name: 'test size 1',
               price: 10,
               quantity: 2
             },
             {
               id: 7,
-              size: 'test size 2',
+              name: 'test size 2',
               price: 15,
               quantity: 2 # quantity to increase
             }
@@ -290,12 +290,12 @@ describe 'Service: Cart', ->
         formats:[
             {
               id: 10,
-              size:'Junior',
+              name:'Junior',
               price:8
             },
             {
               id: 7, # same format id as above
-              size:'Senior',
+              name:'Senior',
               price:10
             }
         ]
@@ -310,21 +310,22 @@ describe 'Service: Cart', ->
         name: 'test name',
         id: 5,
         description: 'test description',
-        formats:
-          [
+        formats: {
+          data: [
             {
               id: 10,
-              size:'Junior',
+              name:'Junior',
               price:8
             },
             {
               id: 7, # format to add for test
-              size:'Senior',
+              name:'Senior',
               price:10
             }
           ]
+        }
 
-      Cart.addProductToCart(productToAdd, productToAdd.formats[1])
+      Cart.addProductToCart(productToAdd, productToAdd.formats.data[1])
 
       # test if data from restaurant (above) has been added to CART (different structures)
       testCart.productsItems.should.have.length(1)
@@ -338,8 +339,8 @@ describe 'Service: Cart', ->
       expect(testCart.productsItems[0].formats[0].id).to.equal(10)
       expect(testCart.productsItems[0].formats[1].id).to.equal(7)
 
-      expect(testCart.productsItems[0].formats[0].size).to.equal('Junior')
-      expect(testCart.productsItems[0].formats[1].size).to.equal('Senior')
+      expect(testCart.productsItems[0].formats[0].name).to.equal('Junior')
+      expect(testCart.productsItems[0].formats[1].name).to.equal('Senior')
 
       expect(testCart.productsItems[0].formats[0].price).to.equal(8)
       expect(testCart.productsItems[0].formats[1].price).to.equal(10)

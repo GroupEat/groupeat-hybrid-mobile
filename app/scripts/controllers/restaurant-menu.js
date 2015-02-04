@@ -20,6 +20,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
 
+
+
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
 

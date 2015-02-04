@@ -29,12 +29,12 @@
 		  			<div class="row border-less">
 				  			<div class="col col-80 border-less">
 				  				<b>{{ product.name }}</b>
-				  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.size }}
+				  				<p ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.name }}
 				  				 </p>
 				  			</div>
 
 				  			<div class="col col-10">
-				  				{{ product.totalPrice }}€
+				  				{{ product.totalPrice | number : 2}}€
 				  			</div>
 				  			<div class="col col-10">
 				  			</div>
