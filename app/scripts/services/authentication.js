@@ -1,9 +1,24 @@
 'use strict';
 
-angular.module('groupeat.services.authentication', ['LocalStorageModule', 'config'])
+angular.module('groupeat.services.authentication', [
+  'config',
+  'LocalStorageModule',
+  'groupeat.services.element-modifier'
+])
 
 .factory('Authentication',
-function (localStorageService, $resource, ENV) {
+function (localStorageService, $resource, $q, ENV, ElementModifier) {
+
+  var
+  tokenResource =  $resource(ENV.apiEndpoint+'/auth/token', null,
+  {
+    'getToken': { method: 'PUT' }
+  }),
+  resetPasswordResource =  $resource(ENV.apiEndpoint+'/auth/resetPassword', null,
+  {
+    'resetPassword': { method: 'POST' }
+  });
+
   var /**
   * @ngdoc function
   * @name Authentication#setCredentials
@@ -54,17 +69,47 @@ function (localStorageService, $resource, ENV) {
     }
     return {id: localStorageService.get('id'), token: localStorageService.get('token')};
   },
+  /**
 
-  resource =  $resource(ENV.apiEndpoint+'/auth/token', null,
-    {
-      'getToken': { method: 'PUT' }
+  * @ngdoc function
+  * @name Authentication#getToken
+  * @methodOf Authentication
+  *
+  * @description
+  * Returns a promise for fetching the user token from the backend
+  *
+  * @param {} credentiels - A javascript object containing at least the email and password of the user
+  */
+  getToken = function(credentials) {
+    var defer = $q.defer();
+    tokenResource.getToken(null, credentials).$promise
+    .then(function(response) {
+      defer.resolve(response);
+    })
+    .catch(function(errorResponse) {
+      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
     });
+    return defer.promise;
+  },
+
+  resetPassword = function(credentials) {
+    var defer = $q.defer();
+    resetPasswordResource.resetPassword(null, credentials).$promise
+    .then(function(response) {
+      defer.resolve(response);
+    })
+    .catch(function(errorResponse) {
+      defer.reject(ElementModifier.errorKeyFromBackend(errorResponse));
+    });
+    return defer.promise;
+  };
 
   return {
     setCredentials: setCredentials,
     resetCredentials: resetCredentials,
     getCredentials: getCredentials,
-    resource : resource
+    getToken: getToken,
+    resetPassword: resetPassword
   };
 }
 );

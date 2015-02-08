@@ -85,6 +85,15 @@ angular.module('groupeat.services.element-modifier', ['sprintf'])
       return undefined;
     },
 
+    getErrorKeyFromBackend = function(response) {
+      for (var field in response.data.errors) {
+        for (var error in response.data.errors[field]) {
+          return error;
+        }
+      }
+      return undefined;
+    },
+
     getErrorMsgFromBackend = function(response) {
       for (var field in response.data.errors) {
         for (var error in response.data.errors[field]) {
@@ -101,6 +110,7 @@ angular.module('groupeat.services.element-modifier', ['sprintf'])
       makeInvalid: makeInvalid,
       makeDefault: makeDefault,
       errorMsg: getErrorMsg,
+      errorKeyFromBackend: getErrorKeyFromBackend,
       errorMsgFromBackend: getErrorMsgFromBackend,
       key: 'ElementModifier'
     };

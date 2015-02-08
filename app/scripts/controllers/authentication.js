@@ -11,10 +11,11 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
+  'groupeat.services.popup',
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $ionicPopup, $mdDialog, $timeout, $q, $ionicModal, $filter, Customer, Address, ElementModifier, ResidencyUtils, Authentication, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Customer, ElementModifier, Popup, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
 
@@ -82,16 +83,7 @@ angular.module('groupeat.controllers.authentication', [
         if (form.$invalid)
         {
           var errorMessage = ElementModifier.errorMsg(form.$name);
-          $mdDialog.show(
-            $mdDialog.alert()
-            .title($translate('whoops'))
-            .content(errorMessage)
-            .ok($translate('ok'))
-          );
-          $timeout(function() {
-            $mdDialog.hide();
-          }, 3000);
-          deferred.reject(new Error(errorMessage));
+          deferred.reject(errorMessage);
         }
         else
         {
@@ -102,56 +94,52 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.submitLoginForm = function(form) {
-    $scope.validateForm(form).then(function() {
-      Authentication.resource.getToken(null, $scope.userLogin).$promise.then(function(response) {
+    $scope.validateForm(form)
+    .then(function() {
+      return Authentication.getToken($scope.userLogin);
+    })
+    .then(function(response) {
+      var responseData = response.data;
+      Authentication.setCredentials(responseData.id, responseData.token);
 
-        var responseData = response.data;
-        Authentication.setCredentials(responseData.id, responseData.token);
+      $state.go('group-orders');
 
-        $state.go('group-orders');
+      return response;
+    })
+    .catch(function(errorResponse) {
+      return Popup.displayError(errorResponse, 3000);
+    });
+  };
 
-        return response;
-      }, function(errorResponse) {
-        $mdDialog.show(
-          $mdDialog.alert()
-          .title($translate('whoops'))
-          .content(ElementModifier.errorMsgFromBackend(errorResponse))
-          .ok($translate('ok'))
-        );
-        $timeout(function() {
-          $mdDialog.hide();
-        }, 3000);
-        return errorResponse;
+  $scope.showResetPasswordDialog = function(ev) {
+    // Resetting the relevant scope elements each time such a popup is created
+    $scope.userReset = {};
+    $mdDialog.show({
+      targetEvent: ev,
+      templateUrl: 'templates/popups/reset-password.html',
+      controller: 'AuthenticationCtrl',
+      disableParentScroll: false
+    });
+  };
+
+  $scope.closeResetPasswordDialog = function(form, cancel) {
+    return (cancel) ? $mdDialog.hide() : $scope.validateForm(form)
+    .then(function() {
+      Authentication.resetPassword($scope.userReset)
+      .then(function() {
+        $mdDialog.hide();
+      })
+      .catch(function(errorKey) {
+        form.email.$setValidity(errorKey, false);
       });
     });
   };
 
-  $scope.showResetPasswordPopup = function() {
-    // Resetting the relevant scope elements each time such a popup is created
-    $scope.userReset = {};
-    $scope.validationError = undefined;
-    return $ionicPopup.show({
-      title : $translate('resetPassword'),
-      template: null,
-      templateUrl: 'templates/popups/reset-password.html',
-      scope: $scope,
-      buttons: [
-        { text: $translate('cancel') },
-        {
-          text: '<b>'+$translate('ok')+'</b>',
-          type: 'button-outline button-energized',
-          onTap: function(e) {
-            if (ElementModifier.errorMsg('resetForm')) {
-              $scope.validationError = ElementModifier.errorMsg('resetForm');
-              e.preventDefault();
-            } else {
-              // TODO Run Back-End Request
-              return $scope.userReset.email;
-            }
-          }
-        }
-      ]
-    });
+  $scope.resetNotFoundValidity = function(form) {
+    if (form.email.$error.notFound)
+    {
+      form.email.$setValidity('notFound', true);
+    }
   };
 
   /*
@@ -163,42 +151,32 @@ angular.module('groupeat.controllers.authentication', [
   */
 
   $scope.submitRegisterForm = function(form) {
-    return $scope.validateForm(form).then(function() {
-
+    return $scope.validateForm(form)
+    .then(function() {
       // TODO : Fetch proper locale
-      var parameters = _.merge($scope.userRegister, {'locale': 'fr'});
+      var requestBody = _.merge($scope.userRegister, {'locale': 'fr'});
+      return Customer.save(requestBody);
+    })
+    .then(function(response) {
+      var responseData = response.data;
+      $scope.userId = responseData.id;
+      Authentication.setCredentials(responseData.id, responseData.token);
 
-      var customer = new Customer(parameters);
-      customer.$save().then(function(response) {
+      $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
 
-        var responseData = response.data;
-        $scope.userId = responseData.id;
-        Authentication.setCredentials(responseData.id, responseData.token);
+      $scope.showLoginAndRegisterButtons = false;
+      $scope.showLoginForm = false;
+      $scope.showRegisterForm = false;
+      $scope.showLoginEnergizedBackButton = false;
+      $scope.showLoginAssertiveBackButton = false;
+      $scope.showFurtherRegisterForm = true;
+      $scope.showSubmitFurtherRegisterButton = false;
+      $scope.showSkipFurtherRegisterButton = true;
 
-        $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
-
-        $scope.showLoginAndRegisterButtons = false;
-        $scope.showLoginForm = false;
-        $scope.showRegisterForm = false;
-        $scope.showLoginEnergizedBackButton = false;
-        $scope.showLoginAssertiveBackButton = false;
-        $scope.showFurtherRegisterForm = true;
-        $scope.showSubmitFurtherRegisterButton = false;
-        $scope.showSkipFurtherRegisterButton = true;
-
-        return response;
-      }, function(errorResponse) {
-        $mdDialog.show(
-          $mdDialog.alert()
-          .title($translate('whoops'))
-          .content(ElementModifier.errorMsgFromBackend(errorResponse))
-          .ok($translate('ok'))
-        );
-        $timeout(function() {
-          $mdDialog.hide();
-        }, 3000);
-        return errorResponse;
-      });
+      return response;
+    })
+    .catch(function(errorResponse) {
+      Popup.displayError(errorResponse);
     });
   };
 
@@ -213,18 +191,8 @@ angular.module('groupeat.controllers.authentication', [
   */
   $scope.onSkipFurtherRegisterButtonTouch = function () {
     $state.go('group-orders') ;
-
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
-    var dialog = $mdDialog.show(
-      $mdDialog.alert()
-      .title($translate('welcome', {firstName: firstName}))
-      .ok($translate('ok'))
-    );
-    $timeout(function() {
-      $mdDialog.hide();
-    }, 3000);
-
-    return dialog;
+    return Popup.displayTitleOnly($translate('welcome', {firstName: firstName}), 3000);
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
@@ -239,30 +207,20 @@ angular.module('groupeat.controllers.authentication', [
   }, true);
 
   $scope.submitFurtherRegisterForm = function(form) {
-    $scope.validateForm(form).then(function() {
-
+    $scope.validateForm(form)
+    .then(function() {
       var customerParams = _.pick($scope.userRegister, ['firstName', 'lastName', 'phoneNumber']);
-
-      Customer.update({id : $scope.userId}, customerParams).$promise
-      .then(function() {
-        var addressParams = _.merge(Address.getAddressFromResidencyInformation(), {details: $scope.userRegister.addressSuplement});
-        return Address.resource.update({id: $scope.userId}, addressParams).$promise;
-      })
-      .then(function() {
-        $scope.onSkipFurtherRegisterButtonTouch();
-      })
-      .catch(function(errorResponse) {
-        $mdDialog.show(
-          $mdDialog.alert()
-          .title($translate('whoops'))
-          .content(ElementModifier.errorMsgFromBackend(errorResponse))
-          .ok($translate('ok'))
-        );
-        $timeout(function() {
-          $mdDialog.hide();
-        }, 3000);
-        return errorResponse;
-      });
+      return Customer.update({id : $scope.userId}, customerParams);
+    })
+    .then(function() {
+      var addressParams = _.merge(Address.getAddressFromResidencyInformation(), {details: $scope.userRegister.addressSuplement});
+      return Address.update({id: $scope.userId}, addressParams);
+    })
+    .then(function() {
+      $scope.onSkipFurtherRegisterButtonTouch();
+    })
+    .catch(function(errorMessage) {
+      return Popup.displayError(errorMessage, 3000);
     });
   };
 

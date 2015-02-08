@@ -1,13 +1,30 @@
 'use strict';
 
-angular.module('groupeat.services.address', ['ngResource', 'config'])
+angular.module('groupeat.services.address', [
+  'config',
+  'ngResource',
+  'groupeat.services.element-modifier'
+])
 
-.factory('Address', function($resource, ENV) {
+.factory('Address', function($resource, $q, ENV, ElementModifier) {
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/address', null,
-{
+  {
     'update': { method: 'PUT' }
-  }),
+  });
+
+  var
+  update = function(parameters, requestBody) {
+    var defer = $q.defer();
+    resource.update(parameters, requestBody).$promise
+    .then(function() {
+      defer.resolve();
+    })
+    .catch(function(errorResponse) {
+      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
+    });
+    return defer.promise;
+  },
 
   getAddressFromResidencyInformation = function() {
     var street, latitude, longitude;
@@ -22,7 +39,7 @@ angular.module('groupeat.services.address', ['ngResource', 'config'])
   };
 
   return {
-    resource: resource,
+    update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation
   };
 });

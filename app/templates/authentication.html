@@ -21,7 +21,9 @@
 	<form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<div class="loginViewButtons">
-				<button on-tap="showResetPasswordPopup()" class="button button-small button-clear button-energized">{{ 'forgotPassword' | translate }}</button>
+				<md-button type="button" class="md-primary loginViewsButtons" ng-click="showResetPasswordDialog($event)">
+					{{ 'forgotPassword' | translate }}
+				</md-button>
 			</div>
 			<md-input-container flex>
 				<label>
@@ -132,7 +134,7 @@
 			</label>
 			<md-input-container class="no-validation-messages" flex>
 				<label>
-					<i class="icon ion-ios7-home-outline"> {{ 'addressSuplement' | translate }}</i>
+					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
 				</label>
 				<input ng-model="userRegister.addressSupplement" name="addressSupplement" type="text">
 			</md-input-container>

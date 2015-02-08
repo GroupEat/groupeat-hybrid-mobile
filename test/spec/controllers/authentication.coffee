@@ -156,35 +156,35 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form.$pristine.should.be.true
       form.$dirty.should.be.false
 
-    it 'the validateForm promise should initially reject a requiredErrorKey Error either if the email field is empty or the email field is valid and the password field empty', ->
+    it 'the validateForm promise should initially reject requiredErrorKey either if the email field is empty or the email field is valid and the password field empty', ->
       # Both fields are empty
       form = submitFormWithViewValues()
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
       # The email field is present and valid
       form = submitFormWithViewValues('campusemail@ensta.fr')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
       # The password field is present and valid
       form = submitFormWithViewValues('', 'validpassword')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'requiredErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject an emailErrorKey Error if the view value is not an email', ->
       form = submitFormWithViewValues('not a valid email')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'emailErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('emailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
       form = submitFormWithViewValues('notacampusemail@gmail.com')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'geCampusEmailErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('geCampusEmailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', ->
       form = submitFormWithViewValues('campusemail@ensta.fr', 'short')
-      scope.validateForm(form).should.be.rejectedWith(Error, 'minlengthErrorKey')
+      scope.validateForm(form).should.be.rejectedWith('minlengthErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
@@ -220,13 +220,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
   describe 'Forgot password', ->
 
-    # TODO : This test does not run the tests in the then block...
-    it 'should show the popup when the showResetPasswordPopup method is called', ->
-      expect(angular.element(document.body).hasClass('popup-open')).to.be.false
-      scope.showResetPasswordPopup().then( ->
-        expect(angular.element(document.body).hasClass('popup-open')).to.be.true
-      )
-      scope.$digest()
+    it 'should show the popup when the showResetPasswordDialog method is called', ->
+      # TODO : Missing test
 
     it 'should close the popup if the cancel button is selected', ->
       # TODO : Missing test
