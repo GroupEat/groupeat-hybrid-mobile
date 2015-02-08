@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurant-menu', [
+	'ngMaterial',
 	'pascalprecht.translate',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
@@ -8,7 +9,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.pizza',
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, Pizza, Cart, $ionicNavBarDelegate, _, $ionicPopup, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, Pizza, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
@@ -77,19 +78,16 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			$ionicHistory.goBack();
 		}
 		else {
-			var leaveOrder = $ionicPopup.confirm({
-				title: $translate('leaveOrder') ,
-				template: $translate('cartWillBeDestroyed'),
-				cancelType: 'button button-energized button-outline',
-				okType: 'button button-energized'
-			});
-			leaveOrder.then(function(confirmation) {
-				if(confirmation) {
-					Cart.resetCart();
-					Order.resetCurrentOrder();
-					$ionicHistory.goBack();
-				} else {
-				}
+			var leaveOrder = $mdDialog.confirm()
+			.title($translate('leaveOrder'))
+			.content($translate('cartWillBeDestroyed'))
+			.ok($translate('ok'))
+			.cancel($translate('cancel'));
+			$mdDialog.show(leaveOrder).then(function() {
+				Cart.resetCart();
+				Order.resetCurrentOrder();
+				$ionicHistory.goBack();
+			}, function() {
 			});
 		}
 	};
