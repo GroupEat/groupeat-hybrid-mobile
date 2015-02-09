@@ -47,6 +47,10 @@ angular.module('groupeat', [
   }
 ])
 
+.run(function(PushNotificationsService) {
+  PushNotificationsService.initialize();
+})
+
 .run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication) {
 
   Permission.defineRole('customer', function () {
@@ -76,9 +80,10 @@ angular.module('groupeat', [
       StatusBar.styleDefault();
     }
   });
-}
-)
+})
 
-.run(function(PushNotificationsService) {
-  PushNotificationsService.initialize();
+.run(function($cordovaSplashscreen) {
+  setTimeout(function() {
+    $cordovaSplashscreen.hide()
+  }, 5000)
 });

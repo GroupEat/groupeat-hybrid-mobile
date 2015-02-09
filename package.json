@@ -95,6 +95,8 @@
     "https://github.com/phonegap-build/PushPlugin",
     "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "https://github.com/phonegap-build/PushPlugin.git",
-    "org.apache.cordova.inappbrowser"
+    "org.apache.cordova.inappbrowser",
+    "com.ionic.keyboard",
+    "org.apache.cordova.splashscreen"
   ]
 }
