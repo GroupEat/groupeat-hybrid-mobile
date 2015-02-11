@@ -13,6 +13,10 @@
     <access origin="*" />
     <preference name="BackupWebStorage" value="none" />
 
+    <feature name="StatusBar">
+      <param name="ios-package" value="CDVStatusBar" onload="true" />
+    </feature>
+
     <platform name="ios">
 
       <!-- iOS 7.0+ -->
