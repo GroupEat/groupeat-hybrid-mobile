@@ -17,11 +17,8 @@ angular.module('groupeat.services.address', [
   update = function(parameters, requestBody) {
     var defer = $q.defer();
     resource.update(parameters, requestBody).$promise
-    .then(function() {
+    .then(function(response) {
       defer.resolve();
-    })
-    .catch(function(errorResponse) {
-      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   },

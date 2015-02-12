@@ -1,11 +1,12 @@
 'use strict';
 
-angular.module('groupeat.services.element-modifier', ['sprintf'])
+angular.module('groupeat.services.element-modifier', [
+  'pascalprecht.translate',
+  'sprintf'
+])
 
 /*global vsprintf:true*/
-.factory('ElementModifier', [
-  '$filter',
-  function ($filter) {
+.factory('ElementModifier', function ($filter) {
 
     var $translate = $filter('translate');
 
@@ -115,4 +116,4 @@ angular.module('groupeat.services.element-modifier', ['sprintf'])
       key: 'ElementModifier'
     };
   }
-]);
+);

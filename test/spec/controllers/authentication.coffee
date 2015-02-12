@@ -41,7 +41,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       elementUtils = $injector.get('jcs-elementUtils')
       sandbox.stub(elementUtils, 'isElementVisible').returns(true)
 
-      Cusomter = $injector.get('Customer')
+      Customer = $injector.get('Customer')
       ENV = $injector.get('ENV')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
