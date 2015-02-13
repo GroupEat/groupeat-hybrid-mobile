@@ -47,6 +47,10 @@ angular.module('groupeat.controllers.cart', [
 };*/
 
 	$scope.onConfirmOrderTouch = function() {
+
+		/* TODO request to back to confirm address*/
+
+
 		$scope.validateOrder()
 	    .then(function() {
 			var productFormats = {};
