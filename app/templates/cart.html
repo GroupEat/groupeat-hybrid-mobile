@@ -57,35 +57,43 @@
 	  	</h5>
 
 	  	<div ng-hide="currentOrder.groupOrderId" class="row border-less">
-		  		<div class="col col-25">
+		  		<div class="col col-20">
 		  			<a class="center">
-		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="5"></ion-checkbox>
+		  				<md-checkbox ng-model="FoodRushTime" class="no-border" ng-true-value="5"></md-checkbox>
+		  				<!-- <ion-checkbox class=" checkbox-assertive" ng-model="FoodRushTime" ng-true-value="5"></ion-checkbox> -->
 		  			</a>
 		  			<h5 class="border-less center">5 {{ 'min' | translate }}  &nbsp &nbsp  </h5>
 		  		</div>
-		  		<div class="col col-25">
+		  		<div class="col col-20">
 		  			<a class="center">
-		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="10"></ion-checkbox>
+		  				<md-checkbox ng-model="FoodRushTime" class="no-border" ng-true-value="10"></md-checkbox>
 		  			</a>
 		  			<h5 class="border-less center">10 {{ 'min' | translate }} &nbsp &nbsp  </h5>
 		  		</div>
-		  		<div class="col col-25">
+		  		<div class="col col-20">
 		  			<a class="center">
-		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="15"></ion-checkbox>
+		  				<md-checkbox ng-model="FoodRushTime" class="no-border" ng-true-value="15"></md-checkbox>
 		  			</a>
 		  			<h5 class="border-less center">15 {{ 'min' | translate }} &nbsp &nbsp  </h5>
 		  		</div>
-		  		<div class="col col-25">
+		  		<div class="col col-20">
 		  			<a class="center">
-		  				<ion-checkbox class="no-border checkbox-assertive" ng-model="FoodRushTime" ng-true-value="30"></ion-checkbox>
+		  				<md-checkbox ng-model="FoodRushTime" class="no-border" ng-true-value="30"></md-checkbox>
 		  			</a>
 		  			<h5 class="border-less center"> 30 {{ 'min' | translate }} &nbsp &nbsp  </h5>
 		  		</div>
+		  		<div class="col col-20">
+		  			<a class="center">
+		  				<md-checkbox ng-model="FoodRushTime" class="no-border" ng-true-value="45"></md-checkbox>
+		  			</a>
+		  			<h5 class="border-less center"> 45 {{ 'min' | translate }} &nbsp &nbsp  </h5>
+		  		</div>
 	  	</div>
-
-		<button id="confirmCommandButton" class="button button-assertive button-outline button-center center" on-tap="onConfirmOrderTouch()">
-			{{ 'confirmOrder' | translate }}
-		</button>
+	  	<div class="center">
+			<md-button class="md-raised md-primary" on-tap="onConfirmOrderTouch()">
+				{{ 'confirmOrder' | translate }}
+			</md-button>
+		</div>
 
 	</ion-content>
 <!-- - - - - - - - - - - -  END CART NOT EMPTY :  - - - - - - - - - - - - -->
