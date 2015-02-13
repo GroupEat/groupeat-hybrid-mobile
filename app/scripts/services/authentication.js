@@ -3,6 +3,7 @@
 angular.module('groupeat.services.authentication', [
   'config',
   'LocalStorageModule',
+  'ngResource',
   'groupeat.services.element-modifier'
 ])
 
@@ -95,8 +96,8 @@ function (localStorageService, $resource, $q, ENV, ElementModifier) {
   resetPassword = function(credentials) {
     var defer = $q.defer();
     resetPasswordResource.resetPassword(null, credentials).$promise
-    .then(function(response) {
-      defer.resolve(response);
+    .then(function() {
+      defer.resolve();
     })
     .catch(function(errorResponse) {
       defer.reject(ElementModifier.errorKeyFromBackend(errorResponse));
