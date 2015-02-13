@@ -68,12 +68,8 @@ angular.module('groupeat.controllers.cart', [
 				'longitude': 2.219278
 			};
 
-			console.log(requestBody);
 			return Order.save(requestBody);
 		})
-	    .then(function() {
-	      console.log('everything ok');
-	    })
 	    .catch(function(errorMessage) {
 	      return Popup.displayError(errorMessage, 3000);
 	    });

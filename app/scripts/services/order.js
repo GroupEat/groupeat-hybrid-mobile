@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('groupeat.services.order', ['ngResource'])
+angular.module('groupeat.services.order', ['ngResource', 'groupeat.services.element-modifier'])
 
-.service('Order', function(ENV, $q, $resource) {
+.service('Order', function(ENV, $q, $resource, ElementModifier) {
 
 	var resource = $resource(ENV.apiEndpoint+'/orders');
 	
@@ -50,7 +50,7 @@ angular.module('groupeat.services.order', ['ngResource'])
 			defer.resolve(response);
 		})
 		.catch(function(errorResponse) {
-			console.log(errorResponse);
+			defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
 		});
 		return defer.promise;
 	};
