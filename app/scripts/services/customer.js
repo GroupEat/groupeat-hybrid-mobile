@@ -13,11 +13,19 @@ angular.module('groupeat.services.customer', [
     'update': { method: 'PATCH' }
   });
 
-  var
-  get = function() {
-    return resource.get();
-  },
-  
+  var /**
+  * @ngdoc function
+  * @name Customer#save
+  * @methodOf Customer
+  *
+  * @description
+  * Registers a new customer and returns a promise
+  * if fulfilled, will have the id and the token of the customer
+  * if rejected, an error message in proper locale will be rejected
+  * https://groupeat.fr/docs
+  *
+  * @param {Object} requestBody - must contain an 'email' and 'password' field
+  */
   save = function(requestBody) {
     var defer = $q.defer();
     resource.save(null, requestBody).$promise
@@ -30,6 +38,19 @@ angular.module('groupeat.services.customer', [
     return defer.promise;
   },
 
+  /**
+  * @ngdoc function
+  * @name Customer#update
+  * @methodOf Customer
+  *
+  * @description
+  * Patches a customer and returns a promise
+  * if rejected, an error message in proper locale will be rejected
+  * https://groupeat.fr/docs
+  *
+  * @param {Object} parameters an object containing an 'id' field of the customer to update
+  * @param {Object} requestBody the fields to update for the customer
+  */
   update = function(parameters, requestBody) {
     var defer = $q.defer();
     resource.update(parameters, requestBody).$promise
@@ -43,7 +64,6 @@ angular.module('groupeat.services.customer', [
   };
 
   return {
-    get: get,
     save: save,
     update: update,
   };

@@ -2,11 +2,10 @@
 
 angular.module('groupeat.services.address', [
   'config',
-  'ngResource',
-  'groupeat.services.element-modifier'
+  'ngResource'
 ])
 
-.factory('Address', function($resource, $q, ENV, ElementModifier) {
+.factory('Address', function($resource, $q, ENV) {
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/address', null,
   {
@@ -17,7 +16,7 @@ angular.module('groupeat.services.address', [
   update = function(parameters, requestBody) {
     var defer = $q.defer();
     resource.update(parameters, requestBody).$promise
-    .then(function(response) {
+    .then(function() {
       defer.resolve();
     });
     return defer.promise;
