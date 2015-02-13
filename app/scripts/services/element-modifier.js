@@ -12,6 +12,43 @@ angular.module('groupeat.services.element-modifier', [
     var $translate = $filter('translate');
 
     var scopeErrorMsg = {};
+
+    /**
+    * @ngdoc function
+    * @name ElementModifier#getErrorObjectFromBackend
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns the first error key and its matching field from the backend for the first field which was invalid
+    * with an additional value matching this error key if relevant
+    *
+    * @param {Object} response - The response from the backend
+    */
+    var getErrorObjectFromBackend = function(response) {
+      if (!_.has(response, 'data') || !_.has(response.data, 'errors') || response.data.errors === null || typeof response.data.errors !== 'object')
+      {
+        return undefined;
+      }
+      for (var field in response.data.errors) {
+        if (response.data.errors[field] === null || typeof response.data.errors[field] !== 'object') {
+          continue;
+        }
+        for (var error in response.data.errors[field]) {
+          if (!(response.data.errors[field][error] instanceof Array))
+          {
+            continue;
+          }
+          var errorObjectFromBackend = {errorKey: error, field: field};
+          if (response.data.errors[field][error])
+          {
+            errorObjectFromBackend.additionalValue = response.data.errors[field][error];
+          }
+          return errorObjectFromBackend;
+        }
+      }
+      return undefined;
+    };
+
     var /**
     * @ngdoc function
     * @name ElementModifier#makeValid
@@ -98,23 +135,12 @@ angular.module('groupeat.services.element-modifier', [
     * @param {Object} response - The response from the backend
     */
     getErrorKeyFromBackend = function(response) {
-      if (!_.has(response, 'data') || !_.has(response.data, 'errors') || response.data.errors === null || typeof response.data.errors !== 'object')
+      var errorObject = getErrorObjectFromBackend(response);
+      if (errorObject === undefined)
       {
         return undefined;
       }
-      for (var field in response.data.errors) {
-        if (response.data.errors[field] === null || typeof response.data.errors[field] !== 'object') {
-          continue;
-        }
-        for (var error in response.data.errors[field]) {
-          if (response.data.errors[field][error].constructor !== 'Array')
-          {
-            continue;
-          }
-          return error;
-        }
-      }
-      return undefined;
+      return errorObject.errorKey;
     },
 
     /**
@@ -128,21 +154,14 @@ angular.module('groupeat.services.element-modifier', [
     * @param {Object} response - The response from the backend
     */
     getErrorMsgFromBackend = function(response) {
-      if (!_.has(response, 'data') || !_.has(response.data, 'errors') || response.data.errors === null || typeof response.data.errors !== 'object')
+      var errorObject = getErrorObjectFromBackend(response);
+      if (errorObject === undefined)
       {
         return undefined;
       }
-      for (var field in response.data.errors) {
-        for (var error in response.data.errors[field]) {
-          console.log(field)
-          var fieldName = $translate(field+'FieldName');
-          console.log(fieldName);
-          var errorMessage = $translate(error+'ErrorKey', {fieldName: fieldName});
-          console.log(errorMessage)
-          return response.data.errors[field][error] ? vsprintf(errorMessage, response.data.errors[field][error]) : errorMessage;
-        }
-      }
-      return undefined;
+      var fieldName = $translate(errorObject.field+'FieldName');
+      var errorMessage = $translate(errorObject.errorKey+'ErrorKey', {fieldName: fieldName});
+      return _.has(errorObject, 'additionalValue') ? vsprintf(errorMessage, errorObject.additionalValue) : errorMessage;
     };
 
     return {

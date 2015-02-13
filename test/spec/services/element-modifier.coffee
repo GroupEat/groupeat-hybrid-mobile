@@ -102,13 +102,23 @@ describe 'Service: ElementModifier', ->
           errors: null
       expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
 
-    it 'should return undefined if all keys of the response.data.errors are not objects', ->
+    it 'should return undefined if none of the keys of the response.data.errors are objects', ->
       response =
         data:
           errors:
             field: 'notAnObject'
             otherField: null
       expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+    it 'should return the first validation key whose value is an array of the first field whose value is a non null object of response.data.errors', ->
+      response =
+        data:
+          errors:
+            field: 'notAnObject'
+            otherField:
+              firstValidationKey: 'notAnArray'
+              validationKey: []
+      expect(ElementModifier.errorKeyFromBackend(response)).to.equal('validationKey')
 
   describe 'ElementModifier#errorMsgFromBackend', ->
 
@@ -125,3 +135,35 @@ describe 'Service: ElementModifier', ->
         data:
           notErrors: 'oops'
       expect(ElementModifier.errorMsgFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if none of the keys of the response.data.errors are objects', ->
+      response =
+        data:
+          errors:
+            field: 'notAnObject'
+            otherField: null
+      expect(ElementModifier.errorMsgFromBackend(response)).to.be.undefined
+
+    it 'should return the first validation key (concatenated with ErrorKey) whose value is an array of the first field whose value is a non null object of response.data.errors', ->
+      response =
+        data:
+          errors:
+            field: 'notAnObject'
+            otherField:
+              firstValidationKey: 'notAnArray'
+              validationKey: []
+      expect(ElementModifier.errorMsgFromBackend(response)).to.equal('validationKeyErrorKey')
+
+    it 'should properly insert an additional value in the validation key (concatenated with ErrorKey) when relevant', ->
+      response = {
+        'data': {
+          'errors': {
+            'password': {
+              'min%s': [
+                6
+              ]
+            }
+          }
+        }
+      }
+      expect(ElementModifier.errorMsgFromBackend(response)).to.equal('min6ErrorKey')
