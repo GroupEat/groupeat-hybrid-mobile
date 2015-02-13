@@ -76,6 +76,8 @@ angular.module('groupeat', [
       StatusBar.styleDefault();
     }
 
+    PushNotificationsService.initialize();
+
   });
 })
 

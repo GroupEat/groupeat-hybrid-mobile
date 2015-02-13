@@ -16,10 +16,10 @@ angular.module('groupeat.services.push-notifications', [])
   }
 
   function onDeviceReady() {
-    window.alert('NOTIFY  Device is ready.  Registering with APN server');
+    window.alert('NOTIFY  Device is ready.  Registering with GCM server');
     //register with google GCM server
     var pushNotification = window.plugins.pushNotification;
-    //var gcmAppID = 'hypnotic-spider-826';
+    var gcmAppID = 'hypnotic-spider-826';
     pushNotification.register(successHandler, errorHandler, {'senderID':gcmAppID,'ecb':'onNotificationGCM'});
     // pushNotification.register(successHandler, errorHandler, {
     //   'badge': 'true',
