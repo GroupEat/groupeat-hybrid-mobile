@@ -2,11 +2,12 @@
 
 angular.module('groupeat.services.element-modifier', [
   'pascalprecht.translate',
-  'sprintf'
+  'sprintf',
+  'groupeat.services.lodash'
 ])
 
 /*global vsprintf:true*/
-.factory('ElementModifier', function ($filter) {
+.factory('ElementModifier', function ($filter, _) {
 
     var $translate = $filter('translate');
 
@@ -86,20 +87,58 @@ angular.module('groupeat.services.element-modifier', [
       return undefined;
     },
 
+    /**
+    * @ngdoc function
+    * @name ElementModifier#getErrorKeyFromBackend
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns the first error key from the backend for the first field which was invalid
+    *
+    * @param {Object} response - The response from the backend
+    */
     getErrorKeyFromBackend = function(response) {
+      if (!_.has(response, 'data') || !_.has(response.data, 'errors') || response.data.errors === null || typeof response.data.errors !== 'object')
+      {
+        return undefined;
+      }
       for (var field in response.data.errors) {
+        if (response.data.errors[field] === null || typeof response.data.errors[field] !== 'object') {
+          continue;
+        }
         for (var error in response.data.errors[field]) {
+          if (response.data.errors[field][error].constructor !== 'Array')
+          {
+            continue;
+          }
           return error;
         }
       }
       return undefined;
     },
 
+    /**
+    * @ngdoc function
+    * @name ElementModifier#getErrorMsgFromBackend
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns the first error message with the proper locale from the backend for the first field which was invalid
+    *
+    * @param {Object} response - The response from the backend
+    */
     getErrorMsgFromBackend = function(response) {
+      if (!_.has(response, 'data') || !_.has(response.data, 'errors') || response.data.errors === null || typeof response.data.errors !== 'object')
+      {
+        return undefined;
+      }
       for (var field in response.data.errors) {
         for (var error in response.data.errors[field]) {
+          console.log(field)
           var fieldName = $translate(field+'FieldName');
+          console.log(fieldName);
           var errorMessage = $translate(error+'ErrorKey', {fieldName: fieldName});
+          console.log(errorMessage)
           return response.data.errors[field][error] ? vsprintf(errorMessage, response.data.errors[field][error]) : errorMessage;
         }
       }

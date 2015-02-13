@@ -2,8 +2,7 @@ describe 'Service: ElementModifier', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
-    module 'templates'
+    module 'groupeat.services.element-modifier'
 
   ElementModifier = scope = $httpBackend = {}
 
@@ -74,3 +73,55 @@ describe 'Service: ElementModifier', ->
       ElementModifier.makeInvalid(form.find('input'), 'This field is invalid')
       ElementModifier.makeDefault(form.find('input'))
       expect(ElementModifier.errorMsg('form')).to.be.undefined
+
+  describe 'ElementModifier#errorKeyFromBackend', ->
+
+    it 'should return undefined if the response from the server is undefined', ->
+      expect(ElementModifier.errorKeyFromBackend(undefined)).to.be.undefined
+
+    it 'should return undefined if the response from the server has no data property', ->
+      response =
+        notData: 'oops'
+      expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if the response from the server has a data property with no errors property', ->
+      response =
+        data:
+          notErrors: 'oops'
+      expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if the response.data.errors is not an object', ->
+      response =
+        data:
+          errors: 'error'
+      expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if the response.data.errors is null', ->
+      response =
+        data:
+          errors: null
+      expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if all keys of the response.data.errors are not objects', ->
+      response =
+        data:
+          errors:
+            field: 'notAnObject'
+            otherField: null
+      expect(ElementModifier.errorKeyFromBackend(response)).to.be.undefined
+
+  describe 'ElementModifier#errorMsgFromBackend', ->
+
+    it 'should return undefined if the response from the server is undefined', ->
+      expect(ElementModifier.errorMsgFromBackend(undefined)).to.be.undefined
+
+    it 'should return undefined if the response from the server has no data property', ->
+      response =
+        notData: 'oops'
+      expect(ElementModifier.errorMsgFromBackend(response)).to.be.undefined
+
+    it 'should return undefined if the response from the server has a data property with no errors property', ->
+      response =
+        data:
+          notErrors: 'oops'
+      expect(ElementModifier.errorMsgFromBackend(response)).to.be.undefined
