@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
+  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -21,7 +21,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
-      $ionicPopup = $injector.get('$ionicPopup')
+      $mdDialog = $injector.get('$mdDialog')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -32,7 +32,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $compile = $injector.get('$compile')
       $timeout = $injector.get('$timeout')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $ionicPopup: $injector.get('$ionicPopup'), $timeout: $injector.get('$timeout'), $ionicModal: $injector.get('$ionicModal'), $filter: $injector.get('$filter'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier')
+        $scope: scope, $state: $state, $mdDialog: $injector.get('$mdDialog'), $timeout: $injector.get('$timeout'), $q: $injector.get('$q'), $filter: $injector.get('$filter'), Address: $injector.get('Customer'), Authentication: $injector.get('Authentication'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier'), Popup: $injector.get('Popup'), ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -58,9 +58,13 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
 
+      Popup = $injector.get('Popup')
+      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'displayTitleOnly')
+
+
   afterEach ->
     sandbox.restore()
-    document.body.classList.remove('popup-open');
 
   describe "Constructor", ->
 
@@ -329,15 +333,4 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $state.go.should.have.been.calledWith('group-orders')
 
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
-      scope.$digest()
-
-      sandbox.useFakeTimers()
-
-      expect(angular.element(document.body).hasClass('popup-open')).to.be.false
-      # TODO : This test does not run the tests in the then block...
-      scope.onSkipFurtherRegisterButtonTouch().then( ->
-        expect(angular.element(document.body).hasClass('popup-open')).to.be.true
-        sandbox.clock.tick(5000)
-        expect(angular.element(document.body).hasClass('popup-open')).to.be.false
-      )
-      scope.$digest()
+      # TODO
