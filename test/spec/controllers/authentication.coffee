@@ -6,11 +6,13 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
+  Authentication = AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
     inject ($rootScope, $controller, $injector) ->
+
+      sandbox = sinon.sandbox.create()
 
       validator = $injector.get('validator')
       ElementModifier = $injector.get('ElementModifier')
@@ -19,7 +21,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setDefaultElementModifier(ElementModifier.key)
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
 
-      sandbox = sinon.sandbox.create()
+      Authentication = $injector.get('Authentication')
+      sandbox.stub(Authentication, 'setCredentials')
+
       $httpBackend = $injector.get('$httpBackend')
       $mdDialog = $injector.get('$mdDialog')
       scope = $rootScope.$new()
@@ -32,7 +36,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $compile = $injector.get('$compile')
       $timeout = $injector.get('$timeout')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $injector.get('$mdDialog'), $timeout: $injector.get('$timeout'), $q: $injector.get('$q'), $filter: $injector.get('$filter'), Address: $injector.get('Customer'), Authentication: $injector.get('Authentication'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier'), Popup: $injector.get('Popup'), ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
+        $scope: scope, $state: $state, $mdDialog: $injector.get('$mdDialog'), $timeout: $injector.get('$timeout'), $q: $injector.get('$q'), $filter: $injector.get('$filter'), Address: $injector.get('Customer'), Authentication: Authentication, Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier'), Popup: $injector.get('Popup'), ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -46,12 +50,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
-                      .respond(
-                        data:
-                          id:7,
-                          token: 'jklhkjhlkhl'
-                      )
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
                       .respond(
                         data:
                           id:7,
@@ -125,14 +123,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.showLoginForm.should.be.false
       scope.showRegisterForm.should.be.false
 
-  describe 'Validate form popup', ->
-
-    it 'should not show a popup when a valid form is being validated', ->
-      # TODO : Missing test
-
-    it 'should show a popup when a valid form is being validated', ->
-      # TODO : Missing test
-
   describe 'Logging in', ->
 
     submitFormWithViewValues = (email, password) ->
@@ -192,21 +182,57 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $timeout.flush()
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
+      # Needed because submitting will trigger the HTTP request
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       form = submitFormWithViewValues('campusemail@ensta.fr', 'longer')
       scope.validateForm(form).should.be.fulfilled
       $timeout.flush()
 
-    it 'if there is a validation error, the state should not change on form submit', ->
+    it 'if there is a validation error, an error dialog should be displayed', ->
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
       scope.$apply()
+      # Authentication.setCredentials should not be called
+      Authentication.setCredentials.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
+      # Popup.displayError should be called
+      Popup.displayError.should.have.been.called
 
-    it 'if there is no validation error, the state should change to group-orders on form submit', ->
+    it 'if there is no client side validation error but an error from the server, an error dialog should be displayed', ->
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
+      # We use a stub to make sure the validateForm promise is fulfilled
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      window.browserTrigger(formElement, 'submit')
+      scope.submitLoginForm(scope.loginForm)
+      scope.$apply()
+      $httpBackend.flush()
+      # Authentication.setCredentials should not be called
+      Authentication.setCredentials.should.have.not.been.called
+      # The state should not change
+      $state.go.should.have.not.been.called
+      #Popup.displayError should be called
+      Popup.displayError.should.have.been.called
+
+    it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -219,8 +245,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      # The state should change to group-orders
-      $state.go.should.have.been.calledWith('group-orders')
+      # Authentication.setCredentials should be called
+      Authentication.setCredentials.should.have.been.called
+      # The state should change
+      $state.go.should.have.been.called
+      #Popup.displayError should not be called
+      Popup.displayError.should.have.not.been.called
 
   describe 'Forgot password', ->
 
