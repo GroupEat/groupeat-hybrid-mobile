@@ -46,15 +46,10 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(elementUtils, 'isElementVisible').returns(true)
 
       Customer = $injector.get('Customer')
+      sandbox.spy(Customer, 'save')
       ENV = $injector.get('ENV')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
-                      .respond(
-                        data:
-                          id:7,
-                          token: 'jklhkjhlkhl'
-                      )
 
       Popup = $injector.get('Popup')
       sandbox.stub(Popup, 'displayError')
@@ -291,7 +286,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $compile(formElement)(scope)
       scope.$digest()
 
-    it "if there is a validation error, the shown dom elements should be the register form's", ->
+    it "if there is a validation error, an error dialog should be displayed and Customer.save should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
 
@@ -299,13 +294,33 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitRegisterForm(scope.registerForm)
       scope.$apply()
 
-      scope.showRegisterForm.should.be.true
-      scope.showLoginAssertiveBackButton.should.be.true
-      scope.showFurtherRegisterForm.should.be.false
-      scope.showSubmitFurtherRegisterButton.should.be.false
-      scope.showSkipFurtherRegisterButton.should.be.false
+      Popup.displayError.should.have.been.called
+      Customer.save.should.have.not.been.called
 
-    it 'if there is no validation error, the shown dom elements should change to display the further registration form', ->
+    it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(404, 'Error')
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      window.browserTrigger(formElement, 'submit')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
+
+      $httpBackend.flush()
+
+      Popup.displayError.should.have.been.called
+      Customer.save.should.been.called
+
+    it 'if there are no errors, the shown dom elements should change to display the further registration form', ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -325,6 +340,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.showSkipFurtherRegisterButton.should.be.true
 
     it 'if there is no validation error and the email given was not an ENSTA email, the residency should be given a default value', ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
