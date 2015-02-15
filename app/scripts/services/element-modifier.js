@@ -39,7 +39,7 @@ angular.module('groupeat.services.element-modifier', [
             continue;
           }
           var errorObjectFromBackend = {errorKey: error, field: field};
-          if (response.data.errors[field][error])
+          if (response.data.errors[field][error].length > 0)
           {
             errorObjectFromBackend.additionalValue = response.data.errors[field][error];
           }
