@@ -2,10 +2,13 @@
 
 angular.module('groupeat.services.address', [
   'config',
-  'ngResource'
+  'ngResource',
+  'pascalprecht.translate'
 ])
 
-.factory('Address', function($resource, $q, ENV) {
+.factory('Address', function($resource, $q, ENV, $filter) {
+
+  var $translate = $filter('translate');
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/address', null,
   {
@@ -18,6 +21,9 @@ angular.module('groupeat.services.address', [
     resource.update(parameters, requestBody).$promise
     .then(function() {
       defer.resolve();
+    })
+    .catch(function(errorResponse) {
+      defer.reject($translate('invalidAddressErrorKey'));
     });
     return defer.promise;
   },
