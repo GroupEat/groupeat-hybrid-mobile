@@ -11,7 +11,7 @@ angular.module('groupeat.controllers.group-orders', [
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation) {
 
   $scope.groupOrders = GroupOrder.get(function() {
-    console.log($scope.groupOrders);
+    // console.log($scope.groupOrders);
   });
 
   $geolocation.getCurrentPosition().then(function(currentPosition) {
