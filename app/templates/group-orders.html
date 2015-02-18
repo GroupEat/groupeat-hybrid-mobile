@@ -13,12 +13,12 @@
           <i class="ion-clock assertive"></i>
           <b><timer countdown="getTimeDiff(groupOrder.endingAt)" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}} </timer></b>
           <i class="ion-cash assertive"></i>
-          <b>{{ groupOrder.reduction*100 }}%</b>
+          <b>{{ groupOrder.discountRate }}%</b>
         </div>
 
         <div class="item item-text-wrap">
           <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.data.name }}</h2>
-          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
+          <div> {{ 'remainingCapacity' | translate }} {{ groupOrder.remainingCapacity }}</div>
         </div>
         <a class="item item-icon-left assertive" on-tap="onJoinOrderTouch(groupOrder)">
           <i class="icon ion-arrow-right-a"></i>

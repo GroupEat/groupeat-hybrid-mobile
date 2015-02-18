@@ -12,6 +12,17 @@ angular.module('groupeat.controllers.cart', [
 	$scope.cart = Cart.getCart();
 	$scope.isCartEmpty = _.isEmpty($scope.cart.productsItems);
 	$scope.currentOrder = Order.getCurrentOrder();
+	$scope.FoodRushTime = {
+		value : '0'
+	};
+
+	$scope.FoodRushTimeData = [
+      { label: '5 min', value: 5 },
+      { label: '10 min', value: 10 },
+      { label: '15 min', value: 15 },
+      { label: '30 min', value: 30 },
+      { label: '45 min', value: 45 }
+    ];
 
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
@@ -45,6 +56,9 @@ angular.module('groupeat.controllers.cart', [
 	      });
 	    });
 };*/
+	$scope.debug = function() {
+		//console.log($scope.FoodRushTime.value);
+	};
 
 	$scope.onConfirmOrderTouch = function() {
 
@@ -64,7 +78,7 @@ angular.module('groupeat.controllers.cart', [
 
 			var requestBody = {
 				'groupOrderId': Order.getCurrentOrder().groupOrderId,
-				'foodRushDurationInMinutes': 25,
+				'foodRushDurationInMinutes': $scope.FoodRushTime.value,
 				'productFormats': productFormats,
 				'street': 'Allée des techniques avancées',
 				'details': 'Bâtiment A, chambre 200',

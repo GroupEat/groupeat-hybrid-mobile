@@ -11,7 +11,7 @@ angular.module('groupeat.controllers.group-orders', [
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation) {
 
   $scope.groupOrders = GroupOrder.get(function() {
-    //console.log($scope.groupOrders);
+    console.log($scope.groupOrders);
   });
 
   $geolocation.getCurrentPosition().then(function(currentPosition) {
@@ -29,7 +29,7 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff, groupOrder.reduction*100);
+		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff, groupOrder.discountRate);
 		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
   };
 
