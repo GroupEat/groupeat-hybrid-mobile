@@ -196,6 +196,10 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
+    $scope.updateFurtherRegisterButton();
+  }, true);
+
+  $scope.updateFurtherRegisterButton = function() {
     if ( ($scope.showFurtherRegisterForm && $scope.userRegister.firstName && $scope.userRegister.lastName && $scope.userRegister.phoneNumber && $scope.userRegister.residency) ) {
       $scope.showSubmitFurtherRegisterButton = true;
       $scope.showSkipFurtherRegisterButton = false ;
@@ -204,7 +208,7 @@ angular.module('groupeat.controllers.authentication', [
       $scope.showSubmitFurtherRegisterButton = false;
       $scope.showSkipFurtherRegisterButton = true ;
     }
-  }, true);
+  };
 
   $scope.submitFurtherRegisterForm = function(form) {
     $scope.validateForm(form)

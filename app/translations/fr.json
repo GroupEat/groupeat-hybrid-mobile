@@ -106,5 +106,6 @@
   "gePhoneFormatShortErrorKey" : "Téléphone invalide",
   "notFoundErrorKey" : "Email non reconnu",
   "alreadyTakenErrorKey" : "Email déjà utilisé",
-  "invalidErrorKey": "Le {{fieldName}} est invalide"
+  "invalidErrorKey": "Le {{fieldName}} est invalide",
+  "invalidAddressErrorKey": "L'adresse entrée n'est pas correctement reconnue. Merci d'entrer le champ à nouveau"
 }

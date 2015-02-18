@@ -30,6 +30,12 @@ describe 'Service: Address', ->
       Address.update({id: 1}, null).should.be.fulfilled
       $httpBackend.flush()
 
+    it 'should reject a promise with an error message when the server responds with an error', ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      $httpBackend.whenPUT(regex).respond(404 , 'Error')
+      Address.update({id: 1}, null).should.be.rejectedWith('invalidAddressErrorKey')
+      $httpBackend.flush()
+
   describe 'Address#getAddressFromResidencyInformation', ->
 
     it 'should have a getAddressFromResidencyInformation method', ->

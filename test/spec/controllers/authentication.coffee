@@ -6,11 +6,13 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $ionicPopup = sandbox = elementUtils = formElement = Customer = ENV = {}
+  Authentication = Address = AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
     inject ($rootScope, $controller, $injector) ->
+
+      sandbox = sinon.sandbox.create()
 
       validator = $injector.get('validator')
       ElementModifier = $injector.get('ElementModifier')
@@ -19,9 +21,20 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setDefaultElementModifier(ElementModifier.key)
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
 
-      sandbox = sinon.sandbox.create()
+      Authentication = $injector.get('Authentication')
+      sandbox.stub(Authentication, 'setCredentials')
+      Customer = $injector.get('Customer')
+      sandbox.spy(Customer, 'save')
+      sandbox.spy(Customer, 'update')
+      Address = $injector.get('Address')
+      sandbox.spy(Address, 'update')
+      Popup = $injector.get('Popup')
+      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'displayTitleOnly')
+
       $httpBackend = $injector.get('$httpBackend')
-      $ionicPopup = $injector.get('$ionicPopup')
+      $timeout = $injector.get('$timeout')
+      $mdDialog = $injector.get('$mdDialog')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -30,9 +43,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $q = $injector.get('$q')
 
       $compile = $injector.get('$compile')
-      $timeout = $injector.get('$timeout')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $ionicPopup: $injector.get('$ionicPopup'), $timeout: $injector.get('$timeout'), $ionicModal: $injector.get('$ionicModal'), $filter: $injector.get('$filter'), Customer: $injector.get('Customer'), ElementModifier: $injector.get('ElementModifier')
+        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -41,26 +53,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
       elementUtils = $injector.get('jcs-elementUtils')
       sandbox.stub(elementUtils, 'isElementVisible').returns(true)
 
-      Customer = $injector.get('Customer')
       ENV = $injector.get('ENV')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
-                      .respond(
-                        data:
-                          id:7,
-                          token: 'jklhkjhlkhl'
-                      )
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
-                      .respond(
-                        data:
-                          id:7,
-                          token: 'jklhkjhlkhl'
-                      )
 
   afterEach ->
     sandbox.restore()
-    document.body.classList.remove('popup-open');
 
   describe "Constructor", ->
 
@@ -121,14 +119,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.showLoginForm.should.be.false
       scope.showRegisterForm.should.be.false
 
-  describe 'Validate form popup', ->
-
-    it 'should not show a popup when a valid form is being validated', ->
-      # TODO : Missing test
-
-    it 'should show a popup when a valid form is being validated', ->
-      # TODO : Missing test
-
   describe 'Logging in', ->
 
     submitFormWithViewValues = (email, password) ->
@@ -188,21 +178,57 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $timeout.flush()
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
+      # Needed because submitting will trigger the HTTP request
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       form = submitFormWithViewValues('campusemail@ensta.fr', 'longer')
       scope.validateForm(form).should.be.fulfilled
       $timeout.flush()
 
-    it 'if there is a validation error, the state should not change on form submit', ->
+    it 'if there is a validation error, an error dialog should be displayed', ->
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
       scope.$apply()
+      # Authentication.setCredentials should not be called
+      Authentication.setCredentials.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
+      # Popup.displayError should be called
+      Popup.displayError.should.have.been.called
 
-    it 'if there is no validation error, the state should change to group-orders on form submit', ->
+    it 'if there is no client side validation error but an error from the server, an error dialog should be displayed', ->
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
+      # We use a stub to make sure the validateForm promise is fulfilled
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      window.browserTrigger(formElement, 'submit')
+      scope.submitLoginForm(scope.loginForm)
+      scope.$apply()
+      $httpBackend.flush()
+      # Authentication.setCredentials should not be called
+      Authentication.setCredentials.should.have.not.been.called
+      # The state should not change
+      $state.go.should.have.not.been.called
+      #Popup.displayError should be called
+      Popup.displayError.should.have.been.called
+
+    it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
+      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -215,8 +241,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      # The state should change to group-orders
-      $state.go.should.have.been.calledWith('group-orders')
+      # Authentication.setCredentials should be called
+      Authentication.setCredentials.should.have.been.called
+      # The state should change
+      $state.go.should.have.been.called
+      #Popup.displayError should not be called
+      Popup.displayError.should.have.not.been.called
 
   describe 'Forgot password', ->
 
@@ -257,7 +287,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $compile(formElement)(scope)
       scope.$digest()
 
-    it "if there is a validation error, the shown dom elements should be the register form's", ->
+    it "if there is a validation error, an error dialog should be displayed and Customer.save should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
 
@@ -265,13 +295,33 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitRegisterForm(scope.registerForm)
       scope.$apply()
 
-      scope.showRegisterForm.should.be.true
-      scope.showLoginAssertiveBackButton.should.be.true
-      scope.showFurtherRegisterForm.should.be.false
-      scope.showSubmitFurtherRegisterButton.should.be.false
-      scope.showSkipFurtherRegisterButton.should.be.false
+      Popup.displayError.should.have.been.called
+      Customer.save.should.have.not.been.called
 
-    it 'if there is no validation error, the shown dom elements should change to display the further registration form', ->
+    it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(404, 'Error')
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      window.browserTrigger(formElement, 'submit')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
+
+      $httpBackend.flush()
+
+      Popup.displayError.should.have.been.called
+      Customer.save.should.been.called
+
+    it 'if there are no errors, the shown dom elements should change to display the further registration form', ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -291,6 +341,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.showSkipFurtherRegisterButton.should.be.true
 
     it 'if there is no validation error and the email given was not an ENSTA email, the residency should be given a default value', ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
         deferred = $q.defer()
@@ -315,10 +371,14 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.onRegisterButtonTouch()
       formElement = angular.element(
         '<form name="furtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)">'+
-        '<input ng-model="userRegister.firstName" type="text">'+
-        '<input ng-model="userRegister.lastName" type="text>'+
-        '<input ng-model="userRegister.phoneNumber" type="tel">'+
-        '<input ng-model="userRegister.address" type="text">'+
+        '<input ng-model="userRegister.firstName" name="firstName" type="text">'+
+        '<input ng-model="userRegister.lastName" name="lastName" type="text">'+
+        '<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format>'+
+        '<select ng-model="userRegister.residency" name="residency">'+
+        '<option value="1">ENSTA ParisTech</option>'+
+        '<option value="2">Polytechnique</option>'+
+        '<option value="3">Supoptique</option>'+
+        '</select>'+
         '</form>'
       )
       $compile(formElement)(scope)
@@ -329,15 +389,127 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $state.go.should.have.been.calledWith('group-orders')
 
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
+      scope.userRegister.firstName = 'firstName'
+      scope.onSkipFurtherRegisterButtonTouch()
+      Popup.displayTitleOnly.should.have.been.calledWith('welcome', 3000)
+
+    it 'should watch on all fields of the second step of userRegister', ->
+      sandbox.spy(scope, 'updateFurtherRegisterButton')
+      scope.updateFurtherRegisterButton.should.have.not.been.called
+      scope.userRegister.firstName = 'firstName'
+      scope.$digest()
+      scope.updateFurtherRegisterButton.should.have.callCount(1)
+      scope.userRegister.lastName = 'lastName'
+      scope.$digest()
+      scope.updateFurtherRegisterButton.should.have.callCount(2)
+      scope.userRegister.phoneNumber = 'phoneNumber'
+      scope.$digest()
+      scope.updateFurtherRegisterButton.should.have.callCount(3)
+      scope.userRegister.residency = 'residency'
+      scope.$digest()
+      scope.updateFurtherRegisterButton.should.have.callCount(4)
+
+    it 'should not change the displaying state of the skip/submit buttons if the further register form is not showing when calling updateFurtherRegisterButton', ->
+      scope.showFurtherRegisterForm = false
+      previousShowSubmitFurtherRegisterButton = scope.showSubmitFurtherRegisterButton
+      previousShowSkipFurtherSkipButton = scope.showSkipFurtherRegisterButton
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.equal.previousShowSubmitFurtherRegisterButton
+      scope.showSkipFurtherRegisterButton.should.equal.previousShowSubmitFurtherRegisterButton
+
+    it 'should show the skip button when showing the register form when an info is missing and calling updateFurtherRegisterButton', ->
+      scope.showFurtherRegisterForm = true
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.true
+      scope.userRegister.firstName = 'firstName'
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.true
+      scope.userRegister.lastName = 'lastName'
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.true
+      scope.userRegister.phoneNumber = 'phoneNumber'
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.be.false
+      scope.showSkipFurtherRegisterButton.should.be.true
+
+    it 'should show the submit button when showing the register form when all info are provided and calling updateFurtherRegisterButton', ->
+      scope.showFurtherRegisterForm = true
+      scope.userRegister.firstName = 'firstName'
+      scope.userRegister.lastName = 'lastName'
+      scope.userRegister.phoneNumber = 'phoneNumber'
+      scope.userRegister.residency = 'residency'
+      scope.updateFurtherRegisterButton()
+      scope.showSubmitFurtherRegisterButton.should.be.true
+      scope.showSkipFurtherRegisterButton.should.be.false
+
+    it "if there is a client side validation error, an error dialog should be displayed and Customer.update should not be called", ->
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
+
+      scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
 
-      sandbox.useFakeTimers()
+      Popup.displayError.should.have.been.called
+      Customer.update.should.have.not.been.called
 
-      expect(angular.element(document.body).hasClass('popup-open')).to.be.false
-      # TODO : This test does not run the tests in the then block...
-      scope.onSkipFurtherRegisterButtonTouch().then( ->
-        expect(angular.element(document.body).hasClass('popup-open')).to.be.true
-        sandbox.clock.tick(5000)
-        expect(angular.element(document.body).hasClass('popup-open')).to.be.false
+    it "if there are no client side validation errors but Customer.update returns an error, an error dialog should be displayed", ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('PATCH', regex).respond(404, 'Error')
+      scope.userId = 1
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
       )
+      scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
+      $httpBackend.flush()
+
+      Popup.displayError.should.have.been.called
+      Customer.update.should.have.been.called
+
+    it "if there are no errors for updating the customer but Address.update returns an error, an error dialog should be displayed", ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      $httpBackend.expectPUT(regex).respond(404, 'Error')
+      scope.userId = 1
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      scope.submitFurtherRegisterForm(scope.registerForm)
+      scope.$digest()
+      $httpBackend.flush()
+      Customer.update.should.have.been.called
+      Popup.displayError.should.have.been.called
+      Address.update.should.have.been.called
+
+    it 'if there are no errors, the onSkipFurtherRegisterButtonTouch should be called', ->
+      sandbox.spy(scope, 'onSkipFurtherRegisterButtonTouch')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      $httpBackend.expectPUT(regex).respond(200, 'Success')
+      scope.userId = 1
+      # We use a stub to make sure the validateForm promise is resolved
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      scope.submitFurtherRegisterForm(scope.registerForm)
+      scope.$digest()
+      $httpBackend.flush()
+
+      Customer.update.should.have.been.called
+      Address.update.should.have.been.called
+      Popup.displayError.should.have.not.been.called
+      scope.onSkipFurtherRegisterButtonTouch.should.have.been.called
