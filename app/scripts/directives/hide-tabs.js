@@ -10,6 +10,7 @@ angular.module('groupeat.directives.hide-tabs', [])
       $scope.$on('$destroy', function() {
         $rootScope.hideTabs = false;
       });
+      /* TODO : on cached --> hideTabs = false ; */
     }
   };
 });

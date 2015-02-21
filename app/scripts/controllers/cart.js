@@ -7,13 +7,14 @@ angular.module('groupeat.controllers.cart', [
 	'ngMaterial'
 ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup) {
+.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $filter) {
 
+	var $translate = $filter('translate');
 	$scope.cart = Cart.getCart();
 	$scope.isCartEmpty = _.isEmpty($scope.cart.productsItems);
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.FoodRushTime = {
-		value : '0'
+		value : null
 	};
 
 	$scope.FoodRushTimeData = [
@@ -26,7 +27,9 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
-		if (false /*invalid order*/) {}
+		if(Order.getCurrentOrder().groupOrderId === null && $scope.FoodRushTime.value === null) {
+			deferred.reject($translate('missingFoodRushTime'));
+		}
 	    else
 		{
 			deferred.resolve();
@@ -61,12 +64,8 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.onConfirmOrderTouch = function() {
-
-		/* TODO request to back to confirm address*/
-
-
 		$scope.validateOrder()
-	    .then(function() {
+		.then(function() {
 			var productFormats = {};
 			_.forEach($scope.cart.productsItems, function(product) {
 				_.forEach(product.formats, function(format) {
@@ -77,7 +76,7 @@ angular.module('groupeat.controllers.cart', [
 			});
 
 			var requestBody = {
-				'groupOrderId': Order.getCurrentOrder().groupOrderId,
+				'groupOrderId' : Order.getCurrentOrder().groupOrderId,
 				'foodRushDurationInMinutes': $scope.FoodRushTime.value,
 				'productFormats': productFormats,
 				'street': 'Allée des techniques avancées',
@@ -85,11 +84,21 @@ angular.module('groupeat.controllers.cart', [
 				'latitude': 48.711042,
 				'longitude': 2.219278
 			};
-
+			console.log(requestBody);
 			return Order.save(requestBody);
 		})
+		.then(function() {
+			/* TODO request to back to confirm address*/
+			// Popup.displayTitleOnly('Confirmez votre adresse', 10000);
+		})
+		.then(function() {
+			Cart.resetCart();
+			Order.resetCurrentOrder();
+			$state.go('group-orders');
+			Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
+		})
 	    .catch(function(errorMessage) {
-	      return Popup.displayError(errorMessage, 3000);
+	      return Popup.displayError(errorMessage, 4000);
 	    });
 	};
 

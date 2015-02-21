@@ -11,7 +11,7 @@ angular.module('groupeat.controllers.group-orders', [
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation) {
 
   $scope.groupOrders = GroupOrder.get(function() {
-    // console.log($scope.groupOrders);
+    //console.log($scope.groupOrders);
   });
 
   $geolocation.getCurrentPosition().then(function(currentPosition) {
@@ -24,7 +24,7 @@ angular.module('groupeat.controllers.group-orders', [
   
   $scope.getTimeDiff = function (endingAt) {
     $scope.currentTime = new Date() ;
-    var endingTime = new Date(endingAt.replace(/-/g, '/'));
+    var endingTime = new Date(endingAt.date.replace(/-/g, '/'));
     return Math.abs(endingTime - $scope.currentTime)/1000;
   };
 

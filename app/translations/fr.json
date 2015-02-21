@@ -80,6 +80,7 @@
   "Description" : "Description",
   "alertEditCart": "Pour éditer un produit, appuyer dessus",
   "ordered": "Votre commande a été passée.",
+  "missingFoodRushTime": "Vous avez oublié de sélectionner une durée pour le FoodRush",
 
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
