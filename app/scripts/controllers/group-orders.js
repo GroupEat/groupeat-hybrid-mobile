@@ -2,17 +2,25 @@
 
 angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.group-order',
+  'groupeat.services.lodash',
   'groupeat.services.order',
   'config',
   'ngGeolocation',
+  'ngMaterial',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation) {
+.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation, _) {
 
   $scope.groupOrders = GroupOrder.get(function() {
     //console.log($scope.groupOrders);
+    $scope.isGroupOrdersEmpty = false ;
+    if (_.isEmpty($scope.groupOrders)) {
+      $scope.isGroupOrdersEmpty = true ;
+    }
   });
+
+
 
   $geolocation.getCurrentPosition().then(function(currentPosition) {
 		$scope.UserCurrentPosition = currentPosition;

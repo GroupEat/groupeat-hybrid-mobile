@@ -27,6 +27,10 @@
       </div>
     </div>
 
+    <div ng-hide="isGroupOrderEmpty">
+      <span> {{ 'noGroupOrder' | translate }} </span>
+    </div>
+
   </ion-content>
 <!--
   Pour le futur bouton flottant swag
