@@ -13,14 +13,23 @@ angular.module('groupeat.controllers.group-orders', [
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation, _) {
 
   $scope.groupOrders = GroupOrder.get(function() {
-    //console.log($scope.groupOrders);
+    // console.log($scope.groupOrders);
     $scope.isGroupOrdersEmpty = false ;
-    if (_.isEmpty($scope.groupOrders)) {
+    if (_.isEmpty($scope.groupOrders.data)) {
       $scope.isGroupOrdersEmpty = true ;
     }
   });
 
-
+  $scope.refreshGroupOrders = function () {
+    GroupOrder.get(function(groupOrders) {
+      $scope.isGroupOrdersEmpty = false ;
+      if (_.isEmpty($scope.groupOrders.data)) {
+        $scope.isGroupOrdersEmpty = true ;
+      }
+      $scope.groupOrders = groupOrders ;
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
 
   $geolocation.getCurrentPosition().then(function(currentPosition) {
 		$scope.UserCurrentPosition = currentPosition;

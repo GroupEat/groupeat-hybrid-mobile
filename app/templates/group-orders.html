@@ -6,6 +6,9 @@
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
     </button>
 
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshGroupOrders()">
+    </ion-refresher>
+
     <div ng-repeat="groupOrder in groupOrders.data">
       <div class="card">
 
@@ -27,10 +30,10 @@
       </div>
     </div>
 
-    <div ng-hide="isGroupOrderEmpty">
+    <div ng-hide="!isGroupOrdersEmpty">
       <span> {{ 'noGroupOrder' | translate }} </span>
     </div>
-
+  
   </ion-content>
 <!--
   Pour le futur bouton flottant swag
