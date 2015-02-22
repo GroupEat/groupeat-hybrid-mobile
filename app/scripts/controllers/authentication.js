@@ -116,6 +116,7 @@ angular.module('groupeat.controllers.authentication', [
     $scope.userReset = {};
     $mdDialog.show({
       targetEvent: ev,
+      parent: angular.element(document.body),
       templateUrl: 'templates/popups/reset-password.html',
       controller: 'AuthenticationCtrl',
       disableParentScroll: false

@@ -22,7 +22,7 @@ angular.module('groupeat.services.address', [
     .then(function() {
       defer.resolve();
     })
-    .catch(function(errorResponse) {
+    .catch(function() {
       defer.reject($translate('invalidAddressErrorKey'));
     });
     return defer.promise;
