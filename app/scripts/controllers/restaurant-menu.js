@@ -19,7 +19,13 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		showDeleteList: false
 	};
 
-	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId});
+	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId}, function() {
+		_.forEach($scope.pizzas.data, function(pizza) {
+			_.forEach(pizza.formats.data, function(format) {
+				format.price = format.price / 100 ;
+			});
+		});
+	});
 
 
 

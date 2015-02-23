@@ -13,7 +13,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend = $injector.get('$httpBackend')
       ENV = $injector.get('ENV')
       mockData = {data:[{key:"test"},{key:"test2"}] }
-      url = ENV.apiEndpoint+'/groupOrders?opened=true&include=restaurant'
+      url = ENV.apiEndpoint+'/groupOrders?joinable=1&include=restaurant'
       $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 

@@ -39,13 +39,8 @@
           Templates are in the /templates folder (but you could also
           have templates inline in this html file if you'd like).
         -->
-    <ion-nav-view ng-class="{has-footer: !$root.hideTabs}" animation="fade-in">
+    <ion-nav-view animation="fade-in">
     </ion-nav-view>
-
-    <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
-      <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
-      </ion-tab>
-    </ion-tabs>
 
 <!-- ------------------------------------------- -->
 

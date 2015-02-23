@@ -1,6 +1,6 @@
-<ion-view ng-controller="GroupOrdersCtrl" title="{{ 'orders' | translate }}" hide-back-button="true" >
+<ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
 
-  <ion-content class="has-footer">
+  <ion-content class="has-footer has-header">
 
     <button id="new-order-button" ui-sref="restaurants" class="button button-full button-outline no-margin">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
@@ -13,12 +13,12 @@
           <i class="ion-clock assertive"></i>
           <b><timer countdown="getTimeDiff(groupOrder.endingAt)" max-time-unit="'minute'" interval="1000">{{mminutes}}:{{sseconds}} </timer></b>
           <i class="ion-cash assertive"></i>
-          <b>{{ groupOrder.reduction*100 }}%</b>
+          <b>{{ groupOrder.discountRate }}%</b>
         </div>
 
         <div class="item item-text-wrap">
           <h2>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.data.name }}</h2>
-          <div>{{ 'margharitaForTwo' | translate }} : <strike>{{ groupOrder.restaurant.mediumMargharitaPrice }}€</strike> {{ groupOrder.restaurant.mediumMargharitaPrice*(100-groupOrder.currentDiscount)/100 | number : 2}}€ </div>
+          <div> {{ 'remainingCapacity' | translate }} {{ groupOrder.remainingCapacity }}</div>
         </div>
         <a class="item item-icon-left assertive" on-tap="onJoinOrderTouch(groupOrder)">
           <i class="icon ion-arrow-right-a"></i>
@@ -39,5 +39,11 @@
     </span>
   </div> -->
 
+<ion-tabs id="bottom-tabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
+      <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
+      </ion-tab>
+</ion-tabs>
 
 </ion-view>
+
+
