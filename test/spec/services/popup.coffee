@@ -16,14 +16,19 @@ describe 'Service: Popup', ->
       sandbox.spy($mdDialog, 'hide')
       $timeout = $injector.get('$timeout')
 
-  beforeEach ->
+  cleanDialog = ->
     body = angular.element(document.body)
-
-  afterEach ->
-    sandbox.restore()
     dialogContainer = body[0].querySelector('.md-dialog-container')
     dialogElement = angular.element(dialogContainer)
     dialogElement.remove()
+    scope.$digest()
+
+  beforeEach ->
+    cleanDialog()
+
+  afterEach ->
+    sandbox.restore()
+    cleanDialog()
 
   describe 'Popup#displayError', ->
 

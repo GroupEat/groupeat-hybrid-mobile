@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Authentication = Address = AuthenticationCtrl = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
+  Authentication = Address = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -22,7 +22,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
 
       Authentication = $injector.get('Authentication')
-      sandbox.stub(Authentication, 'setCredentials')
+      sandbox.spy(Authentication, 'setCredentials')
+      sandbox.spy(Authentication, 'resetPassword')
       Customer = $injector.get('Customer')
       sandbox.spy(Customer, 'save')
       sandbox.spy(Customer, 'update')
@@ -35,6 +36,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $httpBackend = $injector.get('$httpBackend')
       $timeout = $injector.get('$timeout')
       $mdDialog = $injector.get('$mdDialog')
+      sandbox.spy($mdDialog, 'hide')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -250,20 +252,129 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
   describe 'Forgot password', ->
 
-    it 'should show the popup when the showResetPasswordDialog method is called', ->
-      # TODO : Missing test
+    beforeEach ->
+      $compile(angular.element(
+        '<form name="resetPasswordForm" ng-submit="submitRegisterForm(registerForm)">'+
+        '<input ng-model="userReset.email" name="email" type="email" required ge-campus-email>'+
+        '</form>'
+        ))(scope)
+      scope.$digest()
 
-    it 'should close the popup if the cancel button is selected', ->
-      # TODO : Missing test
+    it 'resetNotFoundValidity should not add the notFound error when it is initially not present', ->
+      form = scope.resetPasswordForm
+      scope.resetNotFoundValidity(form)
+      form.email.$error.should.not.have.property('notFound')
 
-    it 'the validateForm promise should reject a requiredErrorKe Error if the view value is empty', ->
-      # TODO : Missing test
+    it 'resetNotFoundValidity should remove the notFound error when it is initially present', ->
+      form = scope.resetPasswordForm
+      form.email.$setValidity('notFound', false)
+      form.email.$error.notFound.should.be.true
+      scope.resetNotFoundValidity(form)
+      form.email.$error.should.not.have.property('notFound')
 
-    it 'the validateForm promise should reject a emailErrorKey Error if the view value is not a valid email', ->
-      # TODO : Missing test
+    it 'showResetPasswordDialog should show a dialog when called', ->
+      ev = {}
+      scope.showResetPasswordDialog(ev)
+      scope.$digest()
+      body = angular.element(document.body)
+      dialogContainer = body[0].querySelector('.md-dialog-container')
+      expect(dialogContainer).to.be.not.null
+      dialogElement = angular.element(dialogContainer)
+      dialogElement.remove()
 
-    it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
-      # TODO : Missing test
+    it 'showResetPasswordDialog dialog should have a resetPassword title', ->
+      ev = {}
+      scope.showResetPasswordDialog(ev)
+      scope.$digest()
+      body = angular.element(document.body)
+      dialogContainer = body[0].querySelector('.md-dialog-container')
+      title = angular.element(dialogContainer).find('h2')
+      title.text().should.contain('resetPassword')
+
+    it 'showResetPasswordDialog dialog should have two buttons', ->
+      ev = {}
+      scope.showResetPasswordDialog(ev)
+      scope.$digest()
+      body = angular.element(document.body)
+      dialogContainer = body[0].querySelector('.md-dialog-container')
+      buttons = angular.element(dialogContainer).find('button')
+      buttons.length.should.equal(2)
+      buttons.eq(0).text().should.contain('cancel')
+      buttons.eq(1).text().should.contain('ok')
+
+    it 'showResetPasswordDialog dialog should have one email input element', ->
+      ev = {}
+      scope.showResetPasswordDialog(ev)
+      scope.$digest()
+      body = angular.element(document.body)
+      dialogContainer = body[0].querySelector('.md-dialog-container')
+      input = angular.element(dialogContainer).find('input')
+      input.length.should.equal(1)
+      input.attr('name').should.equal('email')
+
+    it 'closeResetPasswordDialog should close the mdDialog when its second argument is true', ->
+      $mdDialog.hide.should.not.have.been.called
+      scope.closeResetPasswordDialog(scope.resetPasswordForm, true)
+      $mdDialog.hide.should.have.been.called
+
+    it 'closeResetPasswordDialog should not close the mdDialog when its second argument is false and the form invalid', ->
+      form = scope.resetPasswordForm
+      $mdDialog.hide.should.not.have.been.called
+
+      scope.closeResetPasswordDialog(form, false)
+      $mdDialog.hide.should.not.have.been.called
+
+      form.email.$setViewValue('notanemail')
+      $timeout.flush()
+      scope.closeResetPasswordDialog(form, false)
+      $mdDialog.hide.should.not.have.been.called
+
+      form.email.$setViewValue('notacampusemail@gmail.com')
+      $timeout.flush()
+      scope.closeResetPasswordDialog(form, false)
+      $mdDialog.hide.should.not.have.been.called
+
+    it 'closeResetPasswordDialog should set an error field for the input when the server responds with an error', ->
+      form = scope.resetPasswordForm
+      $mdDialog.hide.should.not.have.been.called
+
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      errorKey = 'notFound'
+      sandbox.stub(ElementModifier, 'errorKeyFromBackend').returns(errorKey)
+
+      $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(404, 'Error')
+
+      scope.closeResetPasswordDialog(form, false)
+      form.email.$error.should.not.have.property.errorKey
+      scope.$digest()
+      $httpBackend.flush()
+
+      Authentication.resetPassword.should.have.been.called
+      $mdDialog.hide.should.not.have.been.called
+      form.email.$error[errorKey].should.be.true
+
+    it 'closeResetPasswordDialog should close the dialog when the server responds properly', ->
+      form = scope.resetPasswordForm
+      $mdDialog.hide.should.not.have.been.called
+
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(200, 'Success')
+
+      scope.closeResetPasswordDialog(form, false)
+      scope.$digest()
+      $httpBackend.flush()
+
+      Authentication.resetPassword.should.have.been.called
+      $mdDialog.hide.should.have.been.called
 
   describe 'Registering (First Step)', ->
 
@@ -373,7 +484,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         '<form name="furtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)">'+
         '<input ng-model="userRegister.firstName" name="firstName" type="text">'+
         '<input ng-model="userRegister.lastName" name="lastName" type="text">'+
-        '<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format>'+
+        '<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format ge-phone-format-err-type="phoneFormat">'+
         '<select ng-model="userRegister.residency" name="residency">'+
         '<option value="1">ENSTA ParisTech</option>'+
         '<option value="2">Polytechnique</option>'+
@@ -444,6 +555,46 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.updateFurtherRegisterButton()
       scope.showSubmitFurtherRegisterButton.should.be.true
       scope.showSkipFurtherRegisterButton.should.be.false
+
+    it 'the form should be initially valid and pristine', ->
+      form = scope.furtherRegisterForm
+      form.$valid.should.be.true
+      form.$invalid.should.be.false
+      form.$pristine.should.be.true
+      form.$dirty.should.be.false
+
+    it 'the validateForm promise should initially be fulfilled', ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      scope.userId = 1
+      form = scope.furtherRegisterForm
+      scope.$apply()
+      window.browserTrigger(formElement, 'submit')
+      scope.validateForm(form).should.be.fulfilled
+      $timeout.flush()
+
+    it 'the validateForm promise should be rejected if an invalid phone number is given', ->
+      # Both fields are empty
+      form = scope.furtherRegisterForm
+      #form.email.$setViewValue(email) if email?
+      form.phoneNumber.$setViewValue('notAPhoneNumber')
+      scope.$apply()
+      window.browserTrigger(formElement, 'submit')
+      scope.validateForm(form).should.be.rejectedWith('gePhoneFormatError')
+      $timeout.flush()
+
+    it 'the validateForm promise should be fulfilled if a proper phone number is given', ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      scope.userId = 1
+      # Both fields are empty
+      form = scope.furtherRegisterForm
+      #form.email.$setViewValue(email) if email?
+      form.phoneNumber.$setViewValue('0606060606')
+      scope.$apply()
+      window.browserTrigger(formElement, 'submit')
+      scope.validateForm(form).should.be.fulfilled
+      $timeout.flush()
 
     it "if there is a client side validation error, an error dialog should be displayed and Customer.update should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
