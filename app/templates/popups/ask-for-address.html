@@ -1,0 +1,55 @@
+<md-dialog>
+
+	<md-content>
+			<h3>{{ 'deliveryAddress' | translate }}</h3>
+	<md-list>
+	<md-radio-group ng-model="personalAddressSelected" ng-init="personalAddressSelected=true">
+
+		<md-item>
+			<md-item-content>
+				<md-radio-button ng-value="true">
+					Adresse personnelle
+        		</md-radio-button>
+			</md-item-content>
+		<md-divider></md-divider>
+		</md-item>
+
+		<md-item>
+			<md-item-content>
+				<md-radio-button ng-value="false">
+					Adresse commune
+        		</md-radio-button>
+			</md-item-content>
+
+			<div ng-hide="personalAddressSelected">
+				<a> Selectionnez un lieu :</a>
+				<md-select ng-model="deliveryAddress" placeholder="Lieu">
+    				<md-option ng-value="option.details" ng-repeat="option in predefinedAddresses.data">{{ option.details }}</md-option>
+  				</md-select>
+			</div>
+
+		<md-divider></md-divider>
+		</md-item>
+
+
+		<md-item>
+			<md-item-content>
+				<h4> Vous serez livré au : </h4>
+				{{ deliveryAddress }}
+
+			</md-item-content>
+		</md-item>
+
+	</md-list>			
+	</md-content>
+
+	<div class="md-actions">
+		<md-button ng-click="closeAskForAddressDialog(deliveryAddress, true, personalAddressSelected)">
+			{{ 'cancel' | translate }}
+		</md-button>
+		<md-button class="md-primary" ng-click="closeAskForAddressDialog(deliveryAddress, false, personalAddressSelected)">
+			{{ 'ok' | translate }}
+		</md-button>
+	</div>
+
+</md-dialog>
