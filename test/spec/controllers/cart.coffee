@@ -12,7 +12,10 @@ describe 'Ctrl: CartCtrl', ->
       $state = $injector.get('$state')
       ctrl = $controller('CartCtrl', ($scope: scope, $state: $state, _: $injector.get('_'), Cart: $injector.get('Cart')))
       $httpBackend = $injector.get('$httpBackend')
+      ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      url = ENV.apiEndpoint+'/predefinedAddresses'
+      $httpBackend.whenGET(url).respond('{}')
 
   describe 'Constructor', ->
 

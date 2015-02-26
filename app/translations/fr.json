@@ -29,6 +29,7 @@
   "welcome": "Bienvenue {{firstName}}!",
   "resetPassword": "Réinitialiser le mot de passe",
   "emailSentTo": "E-mail envoyé à",
+  "unableToAccessAddress": "Nous n'arrivons pas à accéder à votre addresse",
 
   "orders": "Commandes",
   "newOrder": "Nouvelle commande",
@@ -37,6 +38,7 @@
   "joinThisOrder": "Rejoindre cette commande",
   "toOrder": "Commander",
   "remainingCapacity": "Pizzas restantes : ",
+  "noGroupOrder": "Aucune commande en cours actuellement",
 
   "settings": "Réglages",
   "editProfile": "Editer mon profil",
@@ -81,7 +83,8 @@
   "alertEditCart": "Pour éditer un produit, appuyer dessus",
   "ordered": "Votre commande a été passée.",
   "missingFoodRushTime": "Vous avez oublié de sélectionner une durée pour le FoodRush",
-
+  "deliveryAddress": "Adresse de livraison",
+  
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
 

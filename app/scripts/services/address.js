@@ -12,7 +12,8 @@ angular.module('groupeat.services.address', [
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/address', null,
   {
-    'update': { method: 'PUT' }
+    'update': { method: 'PUT' },
+    'getAddress': { method: 'GET'}
   });
 
   var
@@ -22,8 +23,20 @@ angular.module('groupeat.services.address', [
     .then(function() {
       defer.resolve();
     })
-    .catch(function(errorResponse) {
+    .catch(function() {
       defer.reject($translate('invalidAddressErrorKey'));
+    });
+    return defer.promise;
+  },
+
+  getAddress = function(parameters) {
+    var defer = $q.defer();
+    resource.get(parameters).$promise
+    .then(function() {
+      defer.resolve();
+    })
+    .catch(function() {
+      defer.reject($translate('unableToAccessAddress'));
     });
     return defer.promise;
   },
@@ -42,6 +55,7 @@ angular.module('groupeat.services.address', [
 
   return {
     update: update,
-    getAddressFromResidencyInformation: getAddressFromResidencyInformation
+    getAddressFromResidencyInformation: getAddressFromResidencyInformation,
+    getAddress: getAddress
   };
 });

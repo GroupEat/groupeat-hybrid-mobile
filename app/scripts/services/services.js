@@ -14,6 +14,7 @@ angular.module('groupeat.services', [
   'groupeat.services.order',
   'groupeat.services.pizza',
   'groupeat.services.popup',
+  'groupeat.services.predefined-addresses',
   'groupeat.services.push',
   'groupeat.services.residency-utils',
   'groupeat.services.restaurant'

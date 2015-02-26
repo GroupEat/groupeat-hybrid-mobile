@@ -1,13 +1,16 @@
 'use strict';
 
 angular.module('groupeat.controllers.cart', [
+	'groupeat.services.address',
+	'groupeat.services.authentication',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
 	'groupeat.services.order',
+	'groupeat.services.predefined-addresses',
 	'ngMaterial'
 ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $filter) {
+.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Authentication, PredefinedAddresses) {
 
 	var $translate = $filter('translate');
 	$scope.cart = Cart.getCart();
@@ -16,7 +19,6 @@ angular.module('groupeat.controllers.cart', [
 	$scope.FoodRushTime = {
 		value : null
 	};
-
 	$scope.FoodRushTimeData = [
       { label: '5 min', value: 5 },
       { label: '10 min', value: 10 },
@@ -25,10 +27,29 @@ angular.module('groupeat.controllers.cart', [
       { label: '45 min', value: 45 }
     ];
 
+	/* I added here the get to predefined addresses, because it's a very long request, and returned "resolved: false" until i put it here*/
+	$scope.predefinedAddresses = PredefinedAddresses.get();
+	$scope.userCredit = Authentication.getCredentials(function(response) {
+		$scope.userAddress = Address.getAddress({id: response.id });
+	});
+
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
 		if(Order.getCurrentOrder().groupOrderId === null && $scope.FoodRushTime.value === null) {
 			deferred.reject($translate('missingFoodRushTime'));
+		}
+	    else
+		{
+			deferred.resolve();
+		}
+		return deferred.promise;
+	};
+
+	$scope.validateAddress = function() {
+		var deferred = $q.defer();
+		if(false)
+		{
+
 		}
 	    else
 		{
@@ -63,43 +84,82 @@ angular.module('groupeat.controllers.cart', [
 		//console.log($scope.FoodRushTime.value);
 	};
 
-	$scope.onConfirmOrderTouch = function() {
+	$scope.onConfirmOrderTouch = function(ev) {
 		$scope.validateOrder()
 		.then(function() {
-			var productFormats = {};
-			_.forEach($scope.cart.productsItems, function(product) {
-				_.forEach(product.formats, function(format) {
-					if(format.quantity > 0) {
-						productFormats[format.id] = format.quantity;
-					}
+				var productFormats = {};
+				_.forEach($scope.cart.productsItems, function(product) {
+					_.forEach(product.formats, function(format) {
+						if(format.quantity > 0) {
+							productFormats[format.id] = format.quantity;
+						}
+					});
 				});
-			});
 
-			var requestBody = {
-				'groupOrderId' : Order.getCurrentOrder().groupOrderId,
-				'foodRushDurationInMinutes': $scope.FoodRushTime.value,
-				'productFormats': productFormats,
-				'street': 'Allée des techniques avancées',
-				'details': 'Bâtiment A, chambre 200',
-				'latitude': 48.711042,
-				'longitude': 2.219278
-			};
-			console.log(requestBody);
-			return Order.save(requestBody);
-		})
-		.then(function() {
-			/* TODO request to back to confirm address*/
-			// Popup.displayTitleOnly('Confirmez votre adresse', 10000);
-		})
-		.then(function() {
-			Cart.resetCart();
-			Order.resetCurrentOrder();
-			$state.go('group-orders');
-			Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
-		})
-	    .catch(function(errorMessage) {
-	      return Popup.displayError(errorMessage, 4000);
-	    });
+				$scope.requestBody = {
+					'groupOrderId' : Order.getCurrentOrder().groupOrderId,
+					'foodRushDurationInMinutes': $scope.FoodRushTime.value,
+					'productFormats': productFormats,
+				};
+			})
+			.then(function(ev) {
+				$mdDialog.show({
+					targetEvent: ev,
+					templateUrl: 'templates/popups/ask-for-address.html',
+					controller: 'CartCtrl',
+					scope: $scope,
+					preserveScope: true,
+					disableParentScroll: false
+				});
+			})
+			.catch(function(errorMessage) {
+				return Popup.displayError(errorMessage, 4000);
+			});
+	};
+
+	$scope.closeAskForAddressDialog = function(deliveryAddress, cancel, personalAddressSelected) {
+		if(cancel)
+		{
+			$mdDialog.hide();
+		}
+		else
+		{
+			// TODO : process showing "circle running"
+			$scope.validateAddress(deliveryAddress, personalAddressSelected)
+			.then(function() {
+				if (personalAddressSelected)
+				{
+					// TODO
+				}
+				else if (!personalAddressSelected)
+				{
+					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
+						if (predefinedAddress.details === deliveryAddress)
+						{
+							_.assign($scope.requestBody, {
+								'street': predefinedAddress.street,
+								'details': predefinedAddress.details,
+								'latitude': predefinedAddress.latitude,
+								'longitude': predefinedAddress.longitude
+							});
+						}
+					});
+				}
+			})
+			.then(function() {
+				return Order.save($scope.requestBody);
+			})
+			.then(function() {
+				$mdDialog.hide();
+				Cart.resetCart();
+				Order.resetCurrentOrder();
+				$state.go('group-orders');
+				Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
+			})
+		    .catch(function(errorMessage) {
+		      return Popup.displayError(errorMessage, 4000);
+		    });
+		}
 	};
 
 });
