@@ -96,20 +96,17 @@ angular.module('groupeat.controllers.cart', [
 					});
 				});
 
-				$scope.requestBody = {
-					'groupOrderId' : Order.getCurrentOrder().groupOrderId,
-					'foodRushDurationInMinutes': $scope.FoodRushTime.value,
-					'productFormats': productFormats,
-				};
+				Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
+				Order.setFoodRushTime($scope.FoodRushTime.value);
+				Order.setProductFormats(productFormats);
+
 			})
 			.then(function(ev) {
 				$mdDialog.show({
 					targetEvent: ev,
 					templateUrl: 'templates/popups/ask-for-address.html',
+					clickOutsideToClose: false,
 					controller: 'CartCtrl',
-					scope: $scope,
-					preserveScope: true,
-					disableParentScroll: false
 				});
 			})
 			.catch(function(errorMessage) {
@@ -118,9 +115,10 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.closeAskForAddressDialog = function(deliveryAddress, cancel, personalAddressSelected) {
+
 		if(cancel)
 		{
-			$mdDialog.hide();
+			$mdDialog.cancel();
 		}
 		else
 		{
@@ -136,18 +134,16 @@ angular.module('groupeat.controllers.cart', [
 					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
 						if (predefinedAddress.details === deliveryAddress)
 						{
-							_.assign($scope.requestBody, {
-								'street': predefinedAddress.street,
-								'details': predefinedAddress.details,
-								'latitude': predefinedAddress.latitude,
-								'longitude': predefinedAddress.longitude
-							});
+							Order.setStreet(predefinedAddress.street);
+							Order.setDetails(predefinedAddress.details);
+							Order.setLatitude(predefinedAddress.latitude);
+							Order.setLongitude(predefinedAddress.longitude);
 						}
 					});
 				}
 			})
 			.then(function() {
-				return Order.save($scope.requestBody);
+				return Order.save();
 			})
 			.then(function() {
 				$mdDialog.hide();

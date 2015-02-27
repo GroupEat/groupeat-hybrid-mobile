@@ -1,6 +1,9 @@
 'use strict';
 
-angular.module('groupeat.services.order', ['ngResource', 'groupeat.services.element-modifier'])
+angular.module('groupeat.services.order', [
+	'ngResource',
+	'groupeat.services.element-modifier'
+])
 
 .service('Order', function(ENV, $q, $resource, ElementModifier) {
 
@@ -11,6 +14,42 @@ angular.module('groupeat.services.order', ['ngResource', 'groupeat.services.elem
 		'groupOrderId': null,
 		'timeLeft': null,
 		'currentDiscount': null
+	},
+
+	requestBody = {
+		'groupOrderId': null,
+		'foodRushDurationInMinutes': null,
+		'productFormats': {},
+		'street': null,
+		'details': null,
+		'latitude': null,
+		'longitude': null
+	},
+
+	getRequestBody = function() {
+		return requestBody;
+	},
+
+	setGroupOrderId = function(value) {
+		requestBody.groupOrderId = value;
+	},
+	setFoodRushTime = function(value) {
+		requestBody.foodRushDurationInMinutes = value;
+	},
+	setProductFormats = function(value) {
+		requestBody.productFormats = value;
+	},
+	setStreet = function(value) {
+		requestBody.street = value;
+	},
+	setDetails = function(value) {
+		requestBody.details = value;
+	},
+	setLatitude = function(value) {
+		requestBody.latitude = value;
+	},
+	setLongitude = function(value) {
+		requestBody.longitude = value;
 	},
 
 	getCurrentOrder = function() {
@@ -25,25 +64,13 @@ angular.module('groupeat.services.order', ['ngResource', 'groupeat.services.elem
 		};
 	},
 
-	setGroupOrderId = function(id) {
-		currentOrder.groupOrderId = id;
-	},
-
-	setTimeLeft = function(time) {
-		currentOrder.timeLeft = time;
-	},
-
-	setCurrentDiscount = function(discount) {
-		currentOrder.currentDiscount = discount;
-	},
-
 	setCurrentOrder = function(id, time, discount) {
 		currentOrder.groupOrderId = id;
 		currentOrder.timeLeft = time;
 		currentOrder.currentDiscount = discount;
 	},
 
-	save = function(requestBody) {
+	save = function() {
 		var defer = $q.defer();
 		resource.save(null, requestBody).$promise
 		.then(function(response) {
@@ -58,10 +85,15 @@ angular.module('groupeat.services.order', ['ngResource', 'groupeat.services.elem
 
 	return {
 		getCurrentOrder: getCurrentOrder,
-		resetCurrentOrder: resetCurrentOrder,
+		getRequestBody: getRequestBody,
 		setGroupOrderId: setGroupOrderId,
-		setTimeLeft: setTimeLeft,
-		setCurrentDiscount: setCurrentDiscount,
+		setFoodRushTime: setFoodRushTime,
+		setProductFormats: setProductFormats,
+		setStreet: setStreet,
+		setDetails: setDetails,
+		setLatitude: setLatitude,
+		setLongitude: setLongitude,
+		resetCurrentOrder: resetCurrentOrder,
 		setCurrentOrder: setCurrentOrder,
 		save: save
 	};
