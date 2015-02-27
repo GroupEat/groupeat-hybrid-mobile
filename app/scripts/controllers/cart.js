@@ -158,4 +158,8 @@ angular.module('groupeat.controllers.cart', [
 		}
 	};
 
+	$scope.resetDeliveryAddress = function() {
+		$scope.deliveryAddress = undefined;
+	};
+
 });

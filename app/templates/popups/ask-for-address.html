@@ -3,11 +3,11 @@
 	<md-content>
 			<h3>{{ 'deliveryAddress' | translate }}</h3>
 	<md-list>
-	<md-radio-group ng-model="personalAddressSelected" ng-init="personalAddressSelected=true">
+	<md-radio-group ng-model="personalAddressSelected" ng-change="resetDeliveryAddress()" ng-init="personalAddressSelected=true">
 
 		<md-item>
 			<md-item-content>
-				<md-radio-button ng-value="true">
+				<md-radio-button ng-value="true" >
 					Adresse personnelle
         		</md-radio-button>
 			</md-item-content>
@@ -16,29 +16,41 @@
 
 		<md-item>
 			<md-item-content>
-				<md-radio-button ng-value="false">
+				<md-radio-button ng-value="false" >
 					Adresse commune
         		</md-radio-button>
-			</md-item-content>
-
+        	</md-item-content>
+        	<md-item-content>
 			<div ng-hide="personalAddressSelected">
 				<a> Selectionnez un lieu :</a>
 				<md-select ng-model="deliveryAddress" placeholder="Lieu">
     				<md-option ng-value="option.details" ng-repeat="option in predefinedAddresses.data">{{ option.details }}</md-option>
   				</md-select>
 			</div>
+			</md-item-content>
 
 		<md-divider></md-divider>
 		</md-item>
 
 
-		<md-item>
+		<md-item ng-show="personalAddressSelected">
 			<md-item-content>
-				<h4> Vous serez livré au : </h4>
-				{{ deliveryAddress }}
+				<div> <b>Vous serez livré au : </b></div>
+			</md-item-content>
+			<md-item-content >
+				<div>{{ deliveryAddress || "Il semble que vous n'ayez pas encore définie d'addresse perso." }} </div>
+			</md-item-content>
 
+		</md-item>
+		<md-item ng-hide="personalAddressSelected">
+		<md-item-content>
+				<div> <b>Vous serez livré au : </b></div>
+			</md-item-content>
+			<md-item-content >
+				<div>{{ deliveryAddress || "Choisissez un lieu" }} </div>
 			</md-item-content>
 		</md-item>
+
 
 	</md-list>			
 	</md-content>
