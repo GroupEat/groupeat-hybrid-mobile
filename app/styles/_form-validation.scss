@@ -33,3 +33,12 @@ md-input-container.md-default-theme input {
 md-input-container.no-validation-messages {
   padding-bottom: 0px;
 }
+
+md-select.full-width {
+  width: 100%;
+}
+
+md-select md-select-label.md-select-label {
+  padding-left: 4px;
+  font-size: 14px;
+}

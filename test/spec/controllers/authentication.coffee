@@ -473,8 +473,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      # The residency value should match supoptique's, hence 3
-      scope.userRegister.residency.should.equal(3)
+      # The residency value should match supoptique
+      scope.userRegister.residency.should.equal('supoptique')
 
   describe 'Registering (Second Optional Step)', ->
 

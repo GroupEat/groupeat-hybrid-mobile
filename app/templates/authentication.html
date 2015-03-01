@@ -122,16 +122,12 @@
 					<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
 				</div>
 			</md-input-container>
-			<label class="item item-input item-select">
-				<div class="input-label">
-					<i class="icon ion-ios7-location-outline placeholder-icon"> {{ 'residency' | translate }}</i>
-				</div>
-				<select ng-model="userRegister.residency" name="residency">
-					<option value="1">{{ 'ENSTAParisTech' | translate }}</option>
-					<option value="2">{{ 'polytechnique' | translate }}</option>
-					<option value="3">{{ 'supoptique' | translate }}</option>
-				</select>
-			</label>
+			<md-select ng-model="userRegister.residency" class="full-width" name="residency" placeholder="{{ 'residency' | translate }}">
+				<md-select-label class="select-label">
+					<i class="icon ion-ios7-location-outline placeholder-icon"> </i>{{ userRegister.residency | translate }}
+				</md-select-label>
+				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
+			</md-select>
 			<md-input-container class="no-validation-messages" flex>
 				<label>
 					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>

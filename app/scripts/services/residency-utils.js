@@ -38,13 +38,13 @@ angular.module('groupeat.services.residency-utils', [])
     getDefaultResidencyValueFromEmail = function (email) {
       if (_endsWith(email, 'polytechnique.edu'))
       {
-        return 2;
+        return 'polytechnique';
       }
       else if (_endsWith(email, 'institutoptique.fr'))
       {
-        return 3;
+        return 'supoptique';
       }
-      return 1;
+      return 'ENSTAParisTech';
     };
 
     return {

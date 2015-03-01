@@ -17,22 +17,22 @@ describe 'Service: ResidencyUtils', ->
 
   describe "ElementModifier#getDefaultResidencyValueFromEmail", ->
 
-    it 'should return 2 for polytechnique emails', ->
-      ResidencyUtils.getDefaultResidencyValueFromEmail('email@polytechnique.edu').should.equal(2)
+    it 'should return polytechnique for polytechnique emails', ->
+      ResidencyUtils.getDefaultResidencyValueFromEmail('email@polytechnique.edu').should.equal('polytechnique')
 
-    it 'should return 3 for supoptique emails', ->
-      ResidencyUtils.getDefaultResidencyValueFromEmail('email@institutoptique.fr').should.equal(3)
+    it 'should return supoptique for supoptique emails', ->
+      ResidencyUtils.getDefaultResidencyValueFromEmail('email@institutoptique.fr').should.equal('supoptique')
 
-    it 'should return 1 otherwise', ->
-      ResidencyUtils.getDefaultResidencyValueFromEmail('email@ensta.fr').should.equal(1)
-      ResidencyUtils.getDefaultResidencyValueFromEmail('notevenanemail').should.equal(1)
-      ResidencyUtils.getDefaultResidencyValueFromEmail('').should.equal(1)
+    it 'should return ENSTAParisTech otherwise', ->
+      ResidencyUtils.getDefaultResidencyValueFromEmail('email@ensta.fr').should.equal('ENSTAParisTech')
+      ResidencyUtils.getDefaultResidencyValueFromEmail('notevenanemail').should.equal('ENSTAParisTech')
+      ResidencyUtils.getDefaultResidencyValueFromEmail('').should.equal('ENSTAParisTech')
 
-    it 'should return 1 if the given email is not a string', ->
-      ResidencyUtils.getDefaultResidencyValueFromEmail(42).should.equal(1)
-      ResidencyUtils.getDefaultResidencyValueFromEmail(42.2).should.equal(1)
-      ResidencyUtils.getDefaultResidencyValueFromEmail(['array', 'with', 'stuff']).should.equal(1)
-      ResidencyUtils.getDefaultResidencyValueFromEmail({'string in an object'}).should.equal(1)
+    it 'should return ENSTAParisTech if the given email is not a string', ->
+      ResidencyUtils.getDefaultResidencyValueFromEmail(42).should.equal('ENSTAParisTech')
+      ResidencyUtils.getDefaultResidencyValueFromEmail(42.2).should.equal('ENSTAParisTech')
+      ResidencyUtils.getDefaultResidencyValueFromEmail(['array', 'with', 'stuff']).should.equal('ENSTAParisTech')
+      ResidencyUtils.getDefaultResidencyValueFromEmail({'string in an object'}).should.equal('ENSTAParisTech')
 
-    it 'should return 1 if the given email is undefined', ->
-      ResidencyUtils.getDefaultResidencyValueFromEmail(undefined).should.equal(1)
+    it 'should return ENSTAParisTech if the given email is undefined', ->
+      ResidencyUtils.getDefaultResidencyValueFromEmail(undefined).should.equal('ENSTAParisTech')
