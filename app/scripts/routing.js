@@ -25,6 +25,15 @@ angular.module('routing', [])
       }
     }
   })
+  .state('empty', {
+    url: '/empty',
+    templateUrl: 'templates/empty.html',
+    data: {
+      permissions: {
+        except: []
+      }
+    }
+  })
   .state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',

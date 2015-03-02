@@ -33,9 +33,10 @@
     <div ng-hide="!isGroupOrdersEmpty">
       <span> {{ 'noGroupOrder' | translate }} </span>
     </div>
-  
+
   </ion-content>
-<!--
+  
+  <!--
   Pour le futur bouton flottant swag
 
   <div class="float-button">
@@ -46,11 +47,9 @@
     </span>
   </div> -->
 
-<ion-tabs id="bottom-tabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
-      <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
-      </ion-tab>
-</ion-tabs>
+  <ion-tabs id="bottom-tabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
+        <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
+        </ion-tab>
+  </ion-tabs>
 
 </ion-view>
-
-
