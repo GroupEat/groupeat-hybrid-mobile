@@ -30,15 +30,7 @@ angular.module('groupeat.services.address', [
   },
 
   getAddress = function(parameters) {
-    var defer = $q.defer();
-    resource.get(parameters).$promise
-    .then(function() {
-      defer.resolve();
-    })
-    .catch(function() {
-      defer.reject($translate('unableToAccessAddress'));
-    });
-    return defer.promise;
+    return resource.get(parameters);
   },
 
   getAddressFromResidencyInformation = function() {

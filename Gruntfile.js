@@ -416,6 +416,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-material/angular-material.js',
           '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.js',
           '<%= yeoman.app %>/lib/ngGeolocation/ngGeolocation.min.js',
+          '<%= yeoman.app %>/lib/ngAutocomplete/src/ngAutocomplete.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
           '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
           '<%= yeoman.app %>/lib/lodash/dist/lodash.min.js',
