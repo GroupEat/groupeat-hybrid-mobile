@@ -2,62 +2,132 @@
 
 	<md-content>
 			<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
-	<md-list>
-	<md-radio-group ng-model="personalAddressSelected" ng-change="resetDeliveryAddress()" ng-init="personalAddressSelected=true">
 
+	<md-radio-group flex="20" ng-model="AddressTypeSelected.value" ng-repeat="addressType in addressTypes" ng-init="AddressTypeSelected.value=addressTypes[0].value" ng-change="resetDeliveryAddress()">
+        <md-radio-button ng-value="addressType.value">
+        	{{ addressType.label }}
+        </md-radio-button>
+
+        <div ng-show="addressType.value=='enterAddress'">
+        	<md-select ng-model="DeliveryAddress.value" class="full-width select-content-item" name="residency" placeholder="{{ 'residency' | translate }}">
+				<md-select-label class="select-label">
+					<i class="icon ion-ios7-location-outline placeholder-icon"> </i>{{ DeliveryAddress.value | translate }}
+				</md-select-label>
+				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
+			</md-select>
+
+			<md-input-container class="no-validation-messages" flex>
+				<label>
+					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
+				</label>
+				<input ng-model="AddressSupplement.value" name="addressSupplement">
+			</md-input-container>
+			<md-checkbox ng-show="addressType.value=='enterAddress'" ng-model="SaveNewAddress.value"  class="small-text checkbox-margin">
+    			Enregistrer comme nouvelle addresse 
+  			</md-checkbox>
+        </div>
+
+        <div ng-show="addressType.value=='predefinedAddress'">
+        	<md-select class="full-width select-content-item" ng-model="PredefinedDeliveryAddress.value" placeholder="Lieux communs">
+    			<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses.data">{{ place.details }}</md-option>
+  			</md-select>
+        </div>
+        <md-divider></md-divider>
+    </md-radio-group>
+    
+
+
+<!-- 
 		<md-item>
-			<md-item-content >
-				<md-radio-button ng-value="true" class="first-radio-button">
-					Adresse personnelle
+			<md-item-content>
+				<md-radio-button ng-value="addressType[0].value" class="first-radio-button">
+					{{ addressType[0].label }}
         		</md-radio-button>
 			</md-item-content>
-			<md-item-content>
-			<div ng-show="personalAddressSelected" class="full-width">
-				<md-radio-group class="radio-margin-left" ng-model="predefinedPersonalAddressSelected" ng-change="resetDeliveryAddress()" ng-init="predefinedPersonalAddressSelected=true">
-					<md-radio-button ng-value="true" class="second-radio-button">
-						Adresse prédéfinie
-        			</md-radio-button>
-        			<md-radio-button ng-value="false" class="second-radio-button">
-						Nouvelle Adresse
-        			</md-radio-button>
-        		</md-radio-group>
-			</div>
+			<md-item-content >
+				<md-radio-button ng-value="addressType[1].value" class="first-radio-button">
+					{{ addressType[1].label }}
+        		</md-radio-button>
+			</md-item-content>
+
+			<md-select ng-model="deliveryAddress" class="full-width select-content-item" name="residency" placeholder="{{ 'residency' | translate }}">
+				<md-select-label class="select-label">
+					<i class="icon ion-ios7-location-outline placeholder-icon"> </i>{{ deliveryAddress | translate }}
+				</md-select-label>
+				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
+			</md-select>
+
+			<md-input-container class="no-validation-messages" flex>
+				<label>
+					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
+				</label>
+				<input ng-model="addressSupplement" name="addressSupplement" type="text">
+			</md-input-container>
+
 		<md-divider></md-divider>
 		</md-item>
 
 		<md-item>
 			<md-item-content >
-				<md-radio-button ng-value="false" class="first-radio-button">
-					Adresse commune
+				<md-radio-button ng-value="addressType[2].value" class="first-radio-button">
+					{{ addressType[2].label }}
         		</md-radio-button>
-        	</md-item-content>
-			<md-item-content class="select-content-text" ng-hide="personalAddressSelected">
-				<a> Selectionnez un lieu :</a>
-			</md-item-content>	
-			<md-item-content class="select-content-real-item" ng-hide="personalAddressSelected">
-				<md-select class="select-content-item" ng-model="deliveryAddress" placeholder="Lieux communs">
-    				<md-option ng-value="option.details" ng-repeat="option in predefinedAddresses.data">{{ option.details }}</md-option>
+        	</md-item-content>	
+			<md-item-content class="select-content-real-item">
+				<md-select class="full-width select-content-item" ng-model="deliveryAddress" placeholder="Lieux communs">
+    				<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses.data">{{ place.details }}</md-option>
   				</md-select>
 			</md-item-content>
-		</md-radio-group>
-		<md-divider  class="divider-margin"></md-divider>
+		
+			<md-divider class="divider-margin"></md-divider>
 		</md-item>
+		</md-radio-group>
 
 
-		<md-item ng-show="personalAddressSelected">
+<- - - - - - - - - - - - - - RESULTS -> WHERE CUSTOMER WILL BE DELIVERED - - - - - - - - -->
+
+		<md-item>
 			<md-item-content>
 				<div> <b>Vous serez livré au : </b></div>
 			</md-item-content>
-			<div ng-show="predefinedPersonalAddressSelected">
-				<md-item-content ng-show="hasPredefinedPersonalAddress">
-					<a class="parag-margin">
-						{{ userAddress.data.street || "loading..."}}, {{ userAddress.data.details }} <br />
-					{{ userAddress.data.postcode }}, {{ userAddress.data.city }} </a>
-				</md-item-content>
-				<md-item-content ng-hide="hasPredefinedPersonalAddress">
-					<div>{{ "Il semble que vous n'ayez pas d'adresse prédéfine..." }} </div>
-				</md-item-content>
+
+			<div ng-show="AddressTypeSelected.value=='myAddress'">
+				<div ng-show="hasPredefinedPersonalAddress">
+					{{ userAddress.data.street || "loading..."}} <br />
+					{{ userAddress.data.details || "" }}
+				</div>
+				<div ng-hide="hasPredefinedPersonalAddress">
+					{{ "Vous n'avez pas d'adresse perso enregistrée." }}
+				</div>
 			</div>
+
+			<div ng-show="AddressTypeSelected.value=='enterAddress'">
+				{{ DeliveryAddress.value || "select residence" }} <br/>
+				{{ AddressSupplement.value || "enter details"}}
+
+			</div>
+
+			<div ng-show="AddressTypeSelected.value=='predefinedAddress'">
+				{{ PredefinedDeliveryAddress.value || "Selectionnez un lieu commun"}}
+			</div>
+
+		</md-item>
+ 
+	</md-content>
+
+	<div class="md-actions">
+		<md-button ng-click="closeAskForAddressDialog(true)">
+			{{ 'cancel' | translate }}
+		</md-button>
+		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" > <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
+			{{ 'ok' | translate }}
+		</md-button>
+	</div>
+
+</md-dialog>
+
+
+<!-- KEEP IT !! FORWARD GEOCODING FOR CALZONE !!
 
 			<md-input-container class="container-margin" ng-hide="predefinedPersonalAddressSelected">
           		<input ng-autocomplete ng-model="newDeliveryAddress" details="newAddressFormatted">
@@ -66,31 +136,4 @@
         		<label>Details (Bâtiment, étage,...)</label>
           		<input ng-model="newAddressDetails">
         	</md-input-container>
-        	<md-checkbox ng-model="saveNewAddress" ng-hide="predefinedPersonalAddressSelected" class="checkbox-margin">
-    			Enregistrer cette adresse comme principale
-  			</md-checkbox>
-
-		</md-item>
-		<md-item ng-hide="personalAddressSelected">
-		<md-item-content>
-				<div> <b>Vous serez livré au : </b></div>
-			</md-item-content>
-			<md-item-content >
-				<div>{{ deliveryAddress || "Choisissez un lieu" }} </div>
-			</md-item-content>
-		</md-item>
-
-
-	</md-list>			
-	</md-content>
-
-	<div class="md-actions">
-		<md-button ng-click="closeAskForAddressDialog(deliveryAddress, true, personalAddressSelected, predefinedPersonalAddressSelected, newAddressDetails, saveNewAddress, newAddressFormatted)">
-			{{ 'cancel' | translate }}
-		</md-button>
-		<md-button class="md-primary" ng-click="closeAskForAddressDialog(deliveryAddress, false, personalAddressSelected, predefinedPersonalAddressSelected, newAddressDetails, saveNewAddress, newAddressFormatted)" ng-disabled="predefinedPersonalAddressSelected && !hasPredefinedPersonalAddress"> <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
-			{{ 'ok' | translate }}
-		</md-button>
-	</div>
-
-</md-dialog>
+ -->   

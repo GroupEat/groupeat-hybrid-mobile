@@ -18,15 +18,39 @@ angular.module('groupeat.controllers.cart', [
 	$scope.isCartEmpty = _.isEmpty($scope.cart.productsItems);
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.FoodRushTime = {
-		value : null
+		value: null
+	};
+	$scope.AddressTypeSelected = {
+		value: null
 	};
 	$scope.FoodRushTimeData = [
-      { label: '5 min', value: 5 },
-      { label: '10 min', value: 10 },
-      { label: '15 min', value: 15 },
-      { label: '30 min', value: 30 },
-      { label: '45 min', value: 45 }
-    ];
+		{ label: '5 min', value: 5 },
+		{ label: '10 min', value: 10 },
+		{ label: '15 min', value: 15 },
+		{ label: '30 min', value: 30 },
+		{ label: '45 min', value: 45 }
+	];
+
+	$scope.addressTypes = [
+		{ label: 'Mon adresse', value: 'myAddress' },
+		{ label: 'Rentrer une adresse', value: 'enterAddress'},
+		{ label: 'Utiliser une adresse prédéfinie', value: 'predefinedAddress'}
+	];
+
+	$scope.DeliveryAddress = {
+		value: null
+	};
+	$scope.AddressSupplement = {
+		value: null
+	};
+	$scope.PredefinedDeliveryAddress = {
+		value: null
+	};
+	$scope.SaveNewAddress = {
+		value: null
+	};
+
+	$scope.residencies = Address.getResidencies();
 
 	/* I added here the get to predefined addresses, because it's a very long request, and returned "resolved: false" until i put it here*/
 	$scope.predefinedAddresses = PredefinedAddresses.get();
@@ -60,7 +84,7 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.debug = function() {
-		//console.log($scope.FoodRushTime.value);
+		// console.log($scope.addressTypeSelected);
 	};
 
 	$scope.onConfirmOrderTouch = function(ev) {
@@ -80,8 +104,7 @@ angular.module('groupeat.controllers.cart', [
 				Order.setProductFormats(productFormats);
 
 			})
-			.then(function(ev) {
-				console.log($scope.userAddress.data);
+			.then(function() {
 				$mdDialog.show({
 					targetEvent: ev,
 					templateUrl: 'templates/popups/ask-for-address.html',
@@ -93,7 +116,7 @@ angular.module('groupeat.controllers.cart', [
 			});
 	};
 
-	$scope.closeAskForAddressDialog = function(deliveryAddress, cancel, personalAddressSelected, predefinedPersonalAddressSelected, newAddressDetails, saveNewAddress, newAddressFormatted) {
+	$scope.closeAskForAddressDialog = function(cancel) {
 
 		if(cancel)
 		{
@@ -101,49 +124,42 @@ angular.module('groupeat.controllers.cart', [
 		}
 		else
 		{
-			console.log(deliveryAddress);
-			console.log(personalAddressSelected);
-			console.log(predefinedPersonalAddressSelected);
-			console.log(newAddressDetails);
-			console.log(saveNewAddress);
-			console.log(newAddressFormatted);
+
 
 			// TODO : process showing "circle running"
-			$scope.validateAddress(deliveryAddress, personalAddressSelected)
+			$scope.validateAddress($scope.AddressTypeSelected.value)
 			.then(function() {
-				if (personalAddressSelected)
+				if ($scope.AddressTypeSelected.value === 'myAddress')
 				{
-					if (predefinedPersonalAddressSelected)
-					{
-						Order.setStreet($scope.userAddress.street);
-						Order.setDetails($scope.userAddress.details);
-						Order.setLatitude($scope.userAddress.latitude);
-						Order.setLongitude($scope.userAddress.longitude);
-					}
-					else if (!predefinedPersonalAddressSelected)
-					{
-						Order.setStreet(newAddressFormatted.name);
-						Order.setDetails(newAddressDetails);
-						Order.setLatitude(newAddressFormatted.geometry.location.k);
-						Order.setLongitude(newAddressFormatted.geometry.location.D);
+					Order.setStreet($scope.userAddress.data.street);
+					Order.setDetails($scope.userAddress.data.details);
+					Order.setLatitude($scope.userAddress.data.latitude);
+					Order.setLongitude($scope.userAddress.data.longitude);
+				}
+				else if ($scope.AddressTypeSelected.value === 'enterAddress')
+				{
+					/* TODO : get information from residency */
+					var residencyInformations = Address.getAddressFromResidencyInformation($scope.DeliveryAddress.value);
+					Order.setStreet(residencyInformations.street);
+					Order.setDetails($scope.AddressSupplement.value);
+					Order.setLatitude(residencyInformations.latitude);
+					Order.setLongitude(residencyInformations.longitude);
 
-						if (saveNewAddress)
+						if ($scope.SaveNewAddress.value)
 						{
 							var addressParams = {
-								'street': newAddressFormatted.name,
-								'details': newAddressDetails,
-								'latitude': newAddressFormatted.geometry.location.k,
-								'longitude': newAddressFormatted.geometry.location.D
+								'street': residencyInformations.street,
+								'details': $scope.AddressSupplement.value,
+								'latitude': residencyInformations.latitude,
+								'longitude': residencyInformations.longitude
 							};
 							Address.update({id: $scope.userCredit.id}, addressParams);
 						}
-
-					}
 				}
-				else if (!personalAddressSelected)
+				else if ($scope.AddressTypeSelected.value === 'predefinedAddress')
 				{
 					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
-						if (predefinedAddress.details === deliveryAddress)
+						if (predefinedAddress.details === $scope.PredefinedDeliveryAddress.value)
 						{
 							Order.setStreet(predefinedAddress.street);
 							Order.setDetails(predefinedAddress.details);
@@ -151,6 +167,9 @@ angular.module('groupeat.controllers.cart', [
 							Order.setLongitude(predefinedAddress.longitude);
 						}
 					});
+				}
+				else {
+
 				}
 			})
 			.then(function() {
@@ -170,9 +189,9 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.resetDeliveryAddress = function() {
-		$scope.deliveryAddress = undefined;
-		console.log('reset deliver address : ive been called');
-		console.log($scope.deliveryAddress);
+		$scope.DeliveryAddress.value = undefined;
+		$scope.AddressSupplement.value = undefined;
+		$scope.PredefinedDeliveryAddress.value = undefined;
 	};
 
 });
