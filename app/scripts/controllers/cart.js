@@ -192,6 +192,7 @@ angular.module('groupeat.controllers.cart', [
 		$scope.DeliveryAddress.value = undefined;
 		$scope.AddressSupplement.value = undefined;
 		$scope.PredefinedDeliveryAddress.value = undefined;
+		$scope.SaveNewAddress.value = false;
 	};
 
 });
