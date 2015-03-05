@@ -84,7 +84,7 @@
   "ordered": "Votre commande a été passée.",
   "missingFoodRushTime": "Vous avez oublié de sélectionner une durée pour le FoodRush",
   "deliveryAddress": "Adresse de livraison",
-  
+
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
 
@@ -111,5 +111,10 @@
   "notFoundErrorKey" : "Email non reconnu",
   "alreadyTakenErrorKey" : "Email déjà utilisé",
   "invalidErrorKey": "Le {{fieldName}} est invalide",
-  "invalidAddressErrorKey": "L'adresse entrée n'est pas correctement reconnue. Merci d'entrer le champ à nouveau"
+  "invalidAddressErrorKey": "L'adresse entrée n'est pas correctement reconnue. Merci d'entrer le champ à nouveau",
+
+  "noNetworkTitle": "Pas de réseau !",
+  "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
+  "genericFailureDetails": "Impossible de communiquer avec le serveur. Veuillez réessayer ultérieurement...",
+  "reload": "Recharger"
 }

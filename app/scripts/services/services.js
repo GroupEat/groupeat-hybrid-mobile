@@ -17,5 +17,6 @@ angular.module('groupeat.services', [
   'groupeat.services.predefined-addresses',
   'groupeat.services.push',
   'groupeat.services.residency-utils',
-  'groupeat.services.restaurant'
+  'groupeat.services.restaurant',
+  'groupeat.services.message-backdrop'
 ]);
