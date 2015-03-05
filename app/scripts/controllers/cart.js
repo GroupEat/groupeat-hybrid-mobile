@@ -33,8 +33,8 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.addressTypes = [
 		{ label: 'Mon adresse', value: 'myAddress' },
-		{ label: 'Rentrer une adresse', value: 'enterAddress'},
-		{ label: 'Utiliser une adresse prédéfinie', value: 'predefinedAddress'}
+		{ label: 'Nouvelle adresse', value: 'enterAddress'},
+		{ label: 'Lieu commun', value: 'predefinedAddress'}
 	];
 
 	$scope.DeliveryAddress = {

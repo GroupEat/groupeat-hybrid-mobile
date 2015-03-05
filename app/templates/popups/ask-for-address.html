@@ -4,15 +4,12 @@
 			<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
 
 	<md-radio-group flex="20" ng-model="AddressTypeSelected.value" ng-repeat="addressType in addressTypes" ng-init="AddressTypeSelected.value=addressTypes[0].value" ng-change="resetDeliveryAddress()">
-        <md-radio-button ng-value="addressType.value">
+        <md-radio-button ng-value="addressType.value" class="first-radio-button">
         	{{ addressType.label }}
         </md-radio-button>
 
         <div ng-show="addressType.value=='enterAddress'">
-        	<md-select ng-model="DeliveryAddress.value" class="full-width select-content-item" name="residency" placeholder="{{ 'residency' | translate }}">
-				<md-select-label class="select-label">
-					<i class="icon ion-ios7-location-outline placeholder-icon"> </i>{{ DeliveryAddress.value | translate }}
-				</md-select-label>
+        	<md-select ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-model="DeliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
 				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
 			</md-select>
 
@@ -20,19 +17,27 @@
 				<label>
 					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
 				</label>
-				<input ng-model="AddressSupplement.value" name="addressSupplement">
+				<input ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-model="AddressSupplement.value" name="addressSupplement">
 			</md-input-container>
-			<md-checkbox ng-show="addressType.value=='enterAddress'" ng-model="SaveNewAddress.value"  class="small-text checkbox-margin">
+			<md-checkbox ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-show="addressType.value=='enterAddress'" ng-model="SaveNewAddress.value"  class="small-text checkbox-margin">
     			Enregistrer comme nouvelle addresse 
   			</md-checkbox>
         </div>
 
         <div ng-show="addressType.value=='predefinedAddress'">
-        	<md-select class="full-width select-content-item" ng-model="PredefinedDeliveryAddress.value" placeholder="Lieux communs">
+        	<md-select ng-disabled="AddressTypeSelected.value!='predefinedAddress'" class="full-width select-content-item" ng-model="PredefinedDeliveryAddress.value" placeholder="Lieux communs">
     			<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses.data">{{ place.details }}</md-option>
   			</md-select>
         </div>
-        <md-divider></md-divider>
+        <div ng-hide="addressType.value=='predefinedAddress'" class="line-divider">
+  			<span class="text-divider">
+    			 &nbsp OU &nbsp 
+  			</span>
+		</div>
+		<div ng-show="addressType.value=='predefinedAddress'" class="end-line-divider">
+  			
+		</div>
+        <!-- <md-divider></md-divider> -->
     </md-radio-group>
     
 
