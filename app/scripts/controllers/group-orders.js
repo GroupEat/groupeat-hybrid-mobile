@@ -35,6 +35,7 @@ angular.module('groupeat.controllers.group-orders', [
           show: true,
           title: 'noGroupOrdersTitle',
           details: 'noGroupOrdersDetails',
+          iconClasses: 'ion-ios-cart-outline',
           button: {
             text: 'newOrder',
             action: 'onNewGroupOrder()'
@@ -47,6 +48,7 @@ angular.module('groupeat.controllers.group-orders', [
     })
     .catch(function() {
       $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
+      console.log($scope.messageBackdrop);
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');

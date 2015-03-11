@@ -18,7 +18,7 @@ angular.module('groupeat.services.message-backdrop', [])
         show: true,
         title: 'noNetworkTitle',
         details: 'noNetworkDetails',
-        iconClasses: '',
+        iconClasses: 'ion-wifi',
         button: {
           text: 'reload',
           action: 'onReload()'
@@ -32,7 +32,7 @@ angular.module('groupeat.services.message-backdrop', [])
         show: true,
         title: 'whoops',
         details: 'genericFailureDetails',
-        iconClasses: '',
+        iconClasses: 'ion-alert-circled',
         button: {
           text: 'reload',
           action: buttonAction
