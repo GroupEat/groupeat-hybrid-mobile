@@ -2,11 +2,11 @@
 
   <ion-content class="has-footer has-header" ng-show="!messageBackdrop.show">
 
-    <button id="new-order-button" ui-sref="restaurants" class="button button-full button-outline no-margin">
+    <button id="new-order-button" on-tap="onNewGroupOrder()" class="button button-full button-outline no-margin">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
     </button>
 
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="refreshGroupOrders()">
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshGroupOrders()">
     </ion-refresher>
 
     <div ng-repeat="groupOrder in groupOrders.data">
