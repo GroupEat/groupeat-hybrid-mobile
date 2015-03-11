@@ -10,6 +10,7 @@ angular.module('groupeat.services', [
   'groupeat.services.group-order',
   'groupeat.services.http-provider-interceptor',
   'groupeat.services.lodash',
+  'groupeat.services.network',
   'groupeat.services.notifications-settings',
   'groupeat.services.order',
   'groupeat.services.pizza',

@@ -3,6 +3,7 @@
 angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.group-order',
   'groupeat.services.lodash',
+  'groupeat.services.network',
   'groupeat.services.order',
   'groupeat.services.popup',
   'groupeat.services.message-backdrop',
@@ -12,7 +13,7 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Order, Popup, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
 
   $scope.groupOrders = {};
 
@@ -21,6 +22,11 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onRefreshGroupOrders = function() {
+    if (!Network.hasConnectivity())
+    {
+      $scope.messageBackdrop = MessageBackdrop.noNetwork();
+      return;
+    }
     GroupOrder.get()
     .then(function(response) {
       $scope.groupOrders = response.data;
