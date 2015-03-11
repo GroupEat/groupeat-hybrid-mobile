@@ -1,6 +1,6 @@
 <ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
 
-  <ion-content class="has-footer has-header">
+  <ion-content class="has-footer has-header" ng-show="!messageBackdrop.show">
 
     <button id="new-order-button" ui-sref="restaurants" class="button button-full button-outline no-margin">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
@@ -35,7 +35,12 @@
     </div>
 
   </ion-content>
-  
+
+  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
+    <ge-message-backdrop>
+    </ge-message-backdrop>
+  </ion-content>
+
   <!--
   Pour le futur bouton flottant swag
 

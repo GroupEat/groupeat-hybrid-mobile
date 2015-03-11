@@ -4,13 +4,16 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.group-order',
   'groupeat.services.lodash',
   'groupeat.services.order',
+  'groupeat.services.message-backdrop',
   'config',
   'ngGeolocation',
   'ngMaterial',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, Order, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Order, $geolocation, _) {
+
+  $scope.messageBackdrop = MessageBackdrop.noBackdrop();
 
   $scope.groupOrders = GroupOrder.get(function() {
     // console.log($scope.groupOrders);
@@ -38,7 +41,7 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.$watch('UserCurrentPosition', function(){
   });
 
-  
+
   $scope.getTimeDiff = function (endingAt) {
     $scope.currentTime = new Date() ;
     var endingTime = new Date(endingAt.date.replace(/-/g, '/'));
