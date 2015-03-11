@@ -47,7 +47,12 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication) {
+// .run(function(PushNotificationsService) {
+//   PushNotificationsService.initialize();
+// })
+
+.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication, PushNotificationsService) {
+
 
   Permission.defineRole('customer', function () {
     // If the returned value is *truthy* then the user has the role, otherwise they don't
@@ -76,17 +81,15 @@ angular.module('groupeat', [
       StatusBar.styleDefault();
     }
 
-    PushNotificationsService.initialize();
-
   });
-})
 
-.run(function(PushNotificationsService) {
   PushNotificationsService.initialize();
-})
 
-.run(function($cordovaSplashscreen) {
-  setTimeout(function() {
-    $cordovaSplashscreen.hide();
-  }, 5000);
+  
 });
+
+// .run(function($cordovaSplashscreen) {
+//   setTimeout(function() {
+//     $cordovaSplashscreen.hide();
+//   }, 5000);
+// });
