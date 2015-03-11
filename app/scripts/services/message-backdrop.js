@@ -17,7 +17,10 @@ angular.module('groupeat.services.message-backdrop', [])
         show: true,
         title: 'noNetworkTitle',
         details: 'noNetworkDetails',
-        button: 'reload'
+        button: {
+          text: 'reload',
+          action: 'onReload()'
+        }
       };
     },
 
@@ -26,7 +29,10 @@ angular.module('groupeat.services.message-backdrop', [])
         show: true,
         title: 'whoops',
         details: 'genericFailureDetails',
-        button: 'reload'
+        button: {
+          text: 'reload',
+          action: 'onReload()'
+        }
       };
     };
 
