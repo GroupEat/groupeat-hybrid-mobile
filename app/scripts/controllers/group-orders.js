@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.group-order',
   'groupeat.services.lodash',
   'groupeat.services.order',
+  'groupeat.services.popup',
   'groupeat.services.message-backdrop',
   'config',
   'ngGeolocation',
@@ -11,25 +12,37 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Order, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Order, Popup, $geolocation, _) {
 
-  $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+  $scope.groupOrders = {};
 
-  $scope.groupOrders = GroupOrder.get(function() {
-    // console.log($scope.groupOrders);
-    $scope.isGroupOrdersEmpty = false ;
-    if (_.isEmpty($scope.groupOrders.data)) {
-      $scope.isGroupOrdersEmpty = true ;
-    }
-  });
+  $scope.onNewGroupOrder = function() {
+    $state.go('restaurants');
+  };
 
-  $scope.refreshGroupOrders = function () {
-    GroupOrder.get(function(groupOrders) {
-      $scope.isGroupOrdersEmpty = false ;
-      if (_.isEmpty($scope.groupOrders.data)) {
-        $scope.isGroupOrdersEmpty = true ;
+  $scope.onRefreshGroupOrders = function() {
+    GroupOrder.get()
+    .then(function(response) {
+      $scope.groupOrders = response.data;
+      if (_.isEmpty($scope.groupOrders)) {
+        $scope.messageBackdrop = {
+          show: true,
+          title: 'noGroupOrdersTitle',
+          details: 'noGroupOrdersDetails',
+          button: {
+            text: 'newOrder',
+            action: 'onNewGroupOrder()'
+          }
+        };
       }
-      $scope.groupOrders = groupOrders ;
+      else {
+        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+      }
+    })
+    .catch(function() {
+      $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
+    })
+    .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
   };
@@ -52,5 +65,7 @@ angular.module('groupeat.controllers.group-orders', [
 		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff, groupOrder.discountRate);
 		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
   };
+
+  $scope.onRefreshGroupOrders();
 
 });

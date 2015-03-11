@@ -12,26 +12,30 @@ angular.module('groupeat.services.message-backdrop', [])
       };
     },
 
-    noNetwork = function() {
+    noNetwork = function(buttonAction) {
+      buttonAction = buttonAction || 'onReload()';
       return {
         show: true,
         title: 'noNetworkTitle',
         details: 'noNetworkDetails',
+        iconClasses: '',
         button: {
           text: 'reload',
           action: 'onReload()'
-        }
+        },
       };
     },
 
-    genericFailure = function() {
+    genericFailure = function(buttonAction) {
+      buttonAction = buttonAction || 'onReload()';
       return {
         show: true,
         title: 'whoops',
         details: 'genericFailureDetails',
+        iconClasses: '',
         button: {
           text: 'reload',
-          action: 'onReload()'
+          action: buttonAction
         }
       };
     };

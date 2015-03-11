@@ -116,5 +116,8 @@
   "noNetworkTitle": "Pas de réseau !",
   "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
   "genericFailureDetails": "Impossible de communiquer avec le serveur. Veuillez réessayer ultérieurement...",
-  "reload": "Recharger"
+  "noGroupOrdersTitle": "Aucune commande",
+  "noGroupOrdersDetails": "Aucune commande groupée n'est en cours !",
+  "reload": "Recharger",
+  "newOrder": "Nouvelle Commande"
 }
