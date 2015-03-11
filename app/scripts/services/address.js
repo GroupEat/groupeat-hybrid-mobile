@@ -33,21 +33,45 @@ angular.module('groupeat.services.address', [
     return resource.get(parameters);
   },
 
-  getAddressFromResidencyInformation = function() {
+  getAddressFromResidencyInformation = function(residency) {
     var street, latitude, longitude;
-    street = 'Boulevard des Maréchaux';
-    latitude = 48.7107339;
-    longitude = 2.218232700000044;
+    if(residency === 'ENSTAParisTech')
+    {
+      street = 'Boulevard des Maréchaux';
+      latitude = 48.7107339;
+      longitude = 2.218232700000044;
+    }
+    else if (residency === 'polytechnique')
+    {
+      street = 'Boulevard des Maréchaux';
+      latitude = 48.709862;
+      longitude = 2.210241;
+    }
+    else if (residency === 'supoptique')
+    {
+      street = '2 Avenue Augustin Fresnel';
+      latitude = 48.714258;
+      longitude = 2.203553;
+    }
+    else
+    {
+      return false;
+    }
     return {
-      street: street,
-      latitude: latitude,
-      longitude: longitude
-    };
+        street: street,
+        latitude: latitude,
+        longitude: longitude
+      };
+  },
+
+  getResidencies = function() {
+    return ['ENSTAParisTech', 'polytechnique', 'supoptique'] ;
   };
 
   return {
     update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation,
-    getAddress: getAddress
+    getAddress: getAddress,
+    getResidencies: getResidencies
   };
 });

@@ -42,18 +42,18 @@ describe 'Service: Address', ->
       Address.should.have.property('getAddressFromResidencyInformation')
 
     it 'the address should have street, latitude and longitude properties', ->
-      address = Address.getAddressFromResidencyInformation()
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
       address.should.have.property('street')
       address.should.have.property('latitude')
       address.should.have.property('longitude')
 
     it 'the address street should be a non empty string', ->
-      address = Address.getAddressFromResidencyInformation()
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
       address.street.should.be.a('string')
       address.street.should.not.be.empty
 
     it 'the latitude and longitude should be valid latitude and longitude', ->
-      address = Address.getAddressFromResidencyInformation()
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
       address.latitude.should.be.within(-90, 90)
       address.longitude.should.be.within(-180, 180)
 
@@ -61,7 +61,7 @@ describe 'Service: Address', ->
       street = 'Boulevard des Maréchaux'
       latitude = 48.7107339
       longitude = 2.218232700000044
-      address = Address.getAddressFromResidencyInformation()
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
       address.street.should.equal(street)
       address.latitude.should.equal(latitude)
       address.longitude.should.equal(longitude)

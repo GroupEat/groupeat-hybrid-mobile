@@ -42,7 +42,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.userId = undefined;
 
   /* Residencies options */
-  $scope.residencies = ['ENSTAParisTech', 'polytechnique', 'supoptique'];
+  $scope.residencies = Address.getResidencies();
 
   $scope.validationError = undefined;
 
@@ -221,7 +221,7 @@ angular.module('groupeat.controllers.authentication', [
       return Customer.update({id : $scope.userId}, customerParams);
     })
     .then(function() {
-      var addressParams = _.merge(Address.getAddressFromResidencyInformation(), {details: $scope.userRegister.addressSuplement});
+      var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.userRegister.residency), {details: $scope.userRegister.addressSuplement});
       return Address.update({id: $scope.userId}, addressParams);
     })
     .then(function() {

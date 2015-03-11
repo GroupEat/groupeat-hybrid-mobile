@@ -3,24 +3,22 @@
 }
 
 .title-margin {
-	margin-bottom: 2%;
+	margin-bottom: 2vh;
 }
 
-.divider-margin {
-	margin-top : 2%;
-	margin-bottom: 2%;
-}
-
-.parag-margin {
-	margin-bottom:0px;
-}
 
 .container-margin {
 	padding-bottom: 0px !important;
 }
 
+.small-text {
+	font-size: 9px;
+}
+
 .checkbox-margin {
-	margin-top: 4px;
+	margin-left: 8vw;
+	margin-top: 1vh;
+	margin-bottom:0px;
 }
 
 .full-width {
@@ -28,23 +26,46 @@
 }
 
 .first-radio-button {
-	margin-top: 3px;
-	margin-bottom: 0px;
-}
-
-.radio-margin-left {
-	margin-left: 10% !important;
-}
-
-.second-radio-button {
-	margin-bottom: 0px;
 	margin-top: 0px;
-}
-
-.select-content-text {
-	margin-top : 1%;
+	margin-bottom: 0px;
 }
 
 .select-content-item {
-	margin-top :0.5%;
+	margin-top :0.5vh;
+}
+
+.line-divider {
+	margin-top: 1.5vh;
+	margin-bottom: 1.5vh;
+	height: 1px;
+	background-color: $energized;
+	opacity: 0.7;
+	text-align: center
+}
+
+.text-divider {
+	background-color: white;
+	position: relative;
+	top: -0.9em;
+	font-size: 11px;
+	font-style: italic;
+}
+
+.end-line-divider {
+	margin-top: 1.5vh;
+	margin-bottom: 2vh;
+	height: 1px;
+	background-color: $assertive;
+	opacity: 0.7;
+}
+md-radio-button.md-default-theme.md-checked .md-off {
+	border-color: $energized !important;
+}
+
+md-radio-button.md-default-theme .md-on {
+	background-color: $energized !important;
+}
+
+md-checkbox.md-default-theme.md-checked .md-icon {
+	background-color: $assertive !important;
 }
