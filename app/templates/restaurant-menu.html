@@ -2,12 +2,12 @@
 
 
 <ion-nav-buttons side="right">
-<button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
+<button class="button button-clear ion-ios-cart-outline right-header-bar-icon" ui-sref="cart">
 </button>
 </ion-nav-buttons>
 
 <ion-nav-buttons side="left">
-<button class="button button-clear ion-ios7-arrow-back" on-tap="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
+<button class="button button-clear ion-ios-arrow-back" on-tap="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
 </button>
 </ion-nav-buttons>
 
@@ -25,21 +25,21 @@
 
   <ion-item ng-repeat="format in product.formats.data" ng-show="isDetailsShown(product)">
     <div class="row border-less">
-      <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
+      <div ng-hide="isInGroupOrder" class="col col-60 border-less">
         {{ format.name }} ({{ format.price }} €)
       </div>
-      <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
+      <div ng-show="isInGroupOrder" class="col col-60 border-less">
         {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
       </div>
 
       <div class="col col-10 ">
-        <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" on-tap="onProductDelete(product, format.id)"></a>
+        <a class="icon ion-ios-minus-empty assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" on-tap="onProductDelete(product, format.id)"></a>
       </div>
       <div class="col col-10">
         <a class="center"> {{ productToShowValue }} </a>
       </div>
       <div class="col col-10 ">
-        <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
+        <a class="icon ion-ios-plus-empty assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
       </div>
       <div class="col col-10 ">
       </div>

@@ -32,6 +32,17 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
 
+
+	$scope.isInGroupOrder = function() {
+		if ($scope.currentOrder.groupOrderId !== null) {
+			$scope.isInGroupOrder = true ;
+		}
+		else {
+			$scope.isInGroupOrder = false ;
+		}
+	};
+	$scope.isInGroupOrder();
+	
 	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
 		$scope.productToShowValue = 0;
 
