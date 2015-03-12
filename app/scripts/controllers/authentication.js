@@ -163,8 +163,8 @@ angular.module('groupeat.controllers.authentication', [
     })
     .then(function(response) {
       var responseData = response.data;
-      $scope.userId = parseInt(responseData.id);
-      Authentication.setCredentials(parseInt(responseData.id), responseData.token);
+      $scope.userId = responseData.id;
+      Authentication.setCredentials(responseData.id, responseData.token);
 
       $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
 

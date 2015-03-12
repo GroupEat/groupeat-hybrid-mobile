@@ -28,14 +28,10 @@ function (localStorageService, $resource, $q, ENV, ElementModifier) {
   * @description
   * Stores the customer credentials in local storage, and set the authorization HTTP headers
   *
-  * @param {Integer} id - The customer id
+  * @param {String} id - The customer id
   * @param {String} token - The customer user token
   */
   setCredentials = function (id, token) {
-    if (id !== parseInt(id, 10))
-    {
-      throw new Error('The customer id is not an integer');
-    }
     localStorageService.set('id', id);
     localStorageService.set('token', token);
   },
