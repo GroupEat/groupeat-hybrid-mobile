@@ -121,5 +121,7 @@
   "noRestaurantsTitle": "Aucun restaurant",
   "noRestaurantsDetails": "Aucune restaurant n'est actuellement ouvert à votre proximité...",
   "reload": "Recharger",
-  "newOrder": "Nouvelle Commande"
+  "newOrder": "Nouvelle Commande",
+  "noGeolocationTitle": "Echec de localisation",
+  "noGeolocationDetails": "Autorisez Groupeat à accéder à vos données de geolocalisation dans vos réglages téléphone pour profiter de nos offres !"
 }

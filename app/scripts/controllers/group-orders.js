@@ -17,7 +17,11 @@ angular.module('groupeat.controllers.group-orders', [
 
   $scope.groupOrders = {};
 
+  /*$scope.$watch('UserCurrentPosition', function(){
+  });*/
+
   $scope.onNewGroupOrder = function() {
+    console.log($scope.UserCurrentPosition.coords);
     $state.go('restaurants');
   };
 
@@ -27,41 +31,46 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       return;
     }
-    GroupOrder.get()
-    .then(function(response) {
-      $scope.groupOrders = response.data;
-      if (_.isEmpty($scope.groupOrders)) {
-        $scope.messageBackdrop = {
-          show: true,
-          title: 'noGroupOrdersTitle',
-          details: 'noGroupOrdersDetails',
-          iconClasses: 'ion-ios-cart-outline',
-          button: {
-            text: 'newOrder',
-            action: 'onNewGroupOrder()'
-          }
-        };
-      }
-      else {
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-        console.log($scope.groupOrders);
-      }
+
+    $geolocation.getCurrentPosition()
+    .then(function(currentPosition) {
+      $scope.UserCurrentPosition = currentPosition;
+    })
+    .then(function() {
+      GroupOrder.get($scope.UserCurrentPosition.coords.latitude, $scope.UserCurrentPosition.coords.longitude)
+      .then(function(response) {
+        $scope.groupOrders = response.data;
+        if (_.isEmpty($scope.groupOrders)) {
+          $scope.messageBackdrop = {
+            show: true,
+            title: 'noGroupOrdersTitle',
+            details: 'noGroupOrdersDetails',
+            iconClasses: 'ion-ios-cart-outline',
+            button: {
+              text: 'newOrder',
+              action: 'onNewGroupOrder()'
+            }
+          };
+        }
+        else {
+          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+          console.log($scope.groupOrders);
+        }
+      })
+      .catch(function() {
+        $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
+      })
+      .finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
+      });
     })
     .catch(function() {
-      $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
-    })
-    .finally(function() {
-      $scope.$broadcast('scroll.refreshComplete');
+      $scope.messageBackdrop = MessageBackdrop.noGeolocation();
+      return;
     });
+
+    
   };
-
-  $geolocation.getCurrentPosition().then(function(currentPosition) {
-		$scope.UserCurrentPosition = currentPosition;
-  });
-
-  $scope.$watch('UserCurrentPosition', function(){
-  });
-
 
   $scope.getTimeDiff = function (endingAt) {
     $scope.currentTime = new Date() ;

@@ -7,7 +7,7 @@ angular.module('groupeat.services.restaurant', [
 ])
 
 .factory('Restaurant', function($resource, $q, ENV, ElementModifier) {
-  var resource = $resource(ENV.apiEndpoint+'/restaurants?opened=true');
+  var resource = $resource(ENV.apiEndpoint+'/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
 
   var /**
   * @ngdoc function
@@ -20,9 +20,9 @@ angular.module('groupeat.services.restaurant', [
   * https://groupeat.fr/docs
   *
   */
-  get = function() {
+  get = function(latitude, longitude) {
     var defer = $q.defer();
-    resource.get().$promise
+    resource.get({latitude: latitude, longitude: longitude}).$promise
     .then(function(response) {
       defer.resolve(response);
     })
