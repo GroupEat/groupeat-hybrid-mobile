@@ -12,7 +12,7 @@ angular.module('groupeat.services.group-order', [
 
   var /**
   * @ngdoc function
-  * @name GroupOrder#query
+  * @name GroupOrder#get
   * @methodOf GroupOrder
   *
   * @description

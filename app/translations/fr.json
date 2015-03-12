@@ -117,7 +117,9 @@
   "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
   "genericFailureDetails": "Impossible de communiquer avec le serveur. Veuillez réessayer ultérieurement...",
   "noGroupOrdersTitle": "Aucune commande",
-  "noGroupOrdersDetails": "Aucune commande groupée n'est en cours !",
+  "noGroupOrdersDetails": "Aucune commande groupée n'est actuellement en cours...",
+  "noRestaurantsTitle": "Aucun restaurant",
+  "noRestaurantsDetails": "Aucune restaurant n'est actuellement ouvert à votre proximité...",
   "reload": "Recharger",
   "newOrder": "Nouvelle Commande"
 }
