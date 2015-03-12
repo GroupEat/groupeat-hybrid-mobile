@@ -59,9 +59,6 @@ describe 'Service: Authentication', ->
       localStorageService.set('id', 1)
       expect(Authentication.getCredentials()).to.be.undefined
 
-    it 'should throw an error when the given user id is not an integer', ->
-      expect( -> Authentication.setCredentials('notAnInteger', 'token')).to.throw(Error, 'The customer id is not an integer')
-
   describe 'Authentication#getToken', ->
 
     it 'should have a getToken property', ->
