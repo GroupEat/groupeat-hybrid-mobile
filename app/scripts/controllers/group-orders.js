@@ -44,6 +44,7 @@ angular.module('groupeat.controllers.group-orders', [
       }
       else {
         $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+        console.log($scope.groupOrders);
       }
     })
     .catch(function() {
@@ -64,7 +65,7 @@ angular.module('groupeat.controllers.group-orders', [
 
   $scope.getTimeDiff = function (endingAt) {
     $scope.currentTime = new Date() ;
-    var endingTime = new Date(endingAt.date.replace(/-/g, '/'));
+    var endingTime = new Date(endingAt.replace(/-/g, '/'));
     return Math.abs(endingTime - $scope.currentTime)/1000;
   };
 
