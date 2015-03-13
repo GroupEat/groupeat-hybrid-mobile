@@ -16,12 +16,11 @@ angular.module('groupeat.controllers.group-orders', [
 .controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
 
   $scope.groupOrders = {};
-
-  /*$scope.$watch('UserCurrentPosition', function(){
-  });*/
-
+  $scope.isLoadingView = {
+    value: true
+  };
+  
   $scope.onNewGroupOrder = function() {
-    console.log($scope.UserCurrentPosition.coords);
     $state.go('restaurants');
   };
 
@@ -39,6 +38,7 @@ angular.module('groupeat.controllers.group-orders', [
     .then(function() {
       GroupOrder.get($scope.UserCurrentPosition.coords.latitude, $scope.UserCurrentPosition.coords.longitude)
       .then(function(response) {
+        $scope.isLoadingView.value = false;
         $scope.groupOrders = response.data;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
@@ -54,7 +54,6 @@ angular.module('groupeat.controllers.group-orders', [
         }
         else {
           $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-          console.log($scope.groupOrders);
         }
       })
       .catch(function() {

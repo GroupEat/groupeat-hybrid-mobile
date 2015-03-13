@@ -57,3 +57,18 @@ md-toolbar.md-default-theme {
 	border-top: 2px solid;
 	border-top-color: rgb(245,245,245) !important;
 }
+
+.go-loading {
+	margin: auto;
+	margin-top: 10vh;
+}
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle {
+	border-left-color: $assertive;
+	border-bottom-color: $assertive;
+}
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle, md-progress-circular.md-default-theme.md-warn .md-inner .md-right .md-half-circle {
+	border-top-color: $assertive ;
+	border-right-color: $assertive ;
+}

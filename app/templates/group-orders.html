@@ -9,6 +9,9 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshGroupOrders()">
     </ion-refresher>
 
+    <md-progress-circular ng-show="isLoadingView.value" class="md-warn go-loading" md-mode="indeterminate"></md-progress-circular>
+
+
     <md-list>
       <md-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
         <md-item-content>
