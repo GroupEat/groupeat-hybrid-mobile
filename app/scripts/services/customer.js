@@ -30,9 +30,11 @@ angular.module('groupeat.services.customer', [
     var defer = $q.defer();
     resource.save(null, requestBody).$promise
     .then(function(response) {
+      window.alert(JSON.stringify(response));
       defer.resolve(response);
     })
     .catch(function(errorResponse) {
+      window.alert(JSON.stringify(errorResponse));
       defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
