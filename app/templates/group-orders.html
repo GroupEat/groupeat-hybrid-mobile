@@ -10,7 +10,7 @@
     </ion-refresher>
 
     <md-list>
-      <md-item ng-repeat="groupOrder in groupOrders">
+      <md-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
         <md-item-content>
           <md-toolbar class="go-list-header">
             <span class="list-title"> <i class="italic">{{ 'pizzeria' | translate }} </i>: {{ groupOrder.restaurant.data.name }} </span>
