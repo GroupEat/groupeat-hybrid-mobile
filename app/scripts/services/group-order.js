@@ -8,7 +8,7 @@ angular.module('groupeat.services.group-order', [
 
 .factory('GroupOrder', function($resource, $q, ENV, BackendUtils) {
 
-  var resource = $resource(ENV.apiEndpoint+'/groupOrders?joinable=1&include=restaurant');
+  var resource = $resource(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
 
   var /**
   * @ngdoc function
@@ -21,9 +21,9 @@ angular.module('groupeat.services.group-order', [
   * https://groupeat.fr/docs
   *
   */
-  get = function() {
+  get = function(latitude, longitude) {
     var defer = $q.defer();
-    resource.get().$promise
+    resource.get({latitude: latitude, longitude: longitude}).$promise
     .then(function(response) {
       defer.resolve(response.data);
     })

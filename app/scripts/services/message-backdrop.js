@@ -26,6 +26,20 @@ angular.module('groupeat.services.message-backdrop', [])
       };
     },
 
+    noGeolocation = function(buttonAction) {
+      buttonAction = buttonAction || 'onReload()';
+      return {
+        show: true,
+        title: 'noGeolocationTitle',
+        details: 'noGeolocationDetails',
+        iconClasses: 'ion-location',
+        button: {
+          text: 'reload',
+          action: 'onReload()'
+        },
+      };
+    },
+
     genericFailure = function(buttonAction) {
       buttonAction = buttonAction || 'onReload()';
       return {
@@ -43,6 +57,7 @@ angular.module('groupeat.services.message-backdrop', [])
     return {
       noBackdrop: noBackdrop,
       noNetwork: noNetwork,
+      noGeolocation: noGeolocation,
       genericFailure: genericFailure,
     };
 

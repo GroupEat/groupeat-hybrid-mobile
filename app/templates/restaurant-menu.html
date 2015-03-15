@@ -1,12 +1,12 @@
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" hide-back-button="true">
 
   <ion-nav-buttons side="right">
-    <button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
+    <button class="button button-clear ion-ios-cart-outline right-header-bar-icon" ui-sref="cart">
     </button>
   </ion-nav-buttons>
 
   <ion-nav-buttons side="left">
-    <button class="button button-clear ion-ios7-arrow-back" on-tap="onLeaveRestaurant()"> {{ 'back' | translate }}
+    <button class="button button-clear ion-ios-arrow-back" on-tap="onLeaveRestaurant()"> {{ 'back' | translate }}
     </button>
   </ion-nav-buttons>
 
@@ -32,13 +32,13 @@
             </div>
 
             <div class="col col-10 ">
-              <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" on-tap="onProductDelete(product, format.id)"></a>
+              <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onProductDelete(product, format.id)"></a>
             </div>
             <div class="col col-10">
               <a class="center">0</a>
             </div>
             <div class="col col-10 ">
-              <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
+              <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
             </div>
             <div class="col col-10 ">
             </div>

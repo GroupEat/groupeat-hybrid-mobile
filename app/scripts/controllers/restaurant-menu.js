@@ -58,6 +58,16 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		});
 	};
 
+
+	$scope.isInGroupOrder = function() {
+		if ($scope.currentOrder.groupOrderId !== null) {
+			$scope.isInGroupOrder = true ;
+		}
+		else {
+			$scope.isInGroupOrder = false ;
+		}
+	};
+
 	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
 		$scope.productToShowValue = 0;
 
@@ -120,5 +130,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.initCart();
 	$scope.onRefreshRestaurantMenu();
+	$scope.isInGroupOrder();
 
 });

@@ -4,10 +4,11 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.message-backdrop',
   'groupeat.services.lodash',
   'groupeat.services.network',
-  'groupeat.services.restaurant'
+  'groupeat.services.restaurant',
+  'ngGeolocation'
 ])
 
-.controller('RestaurantsCtrl', function($scope, $state, Restaurant, MessageBackdrop, Network, _) {
+.controller('RestaurantsCtrl', function($scope, $state, Restaurant, MessageBackdrop, Network, _, $geolocation) {
 
   $scope.restaurants = {};
 
@@ -17,27 +18,36 @@ angular.module('groupeat.controllers.restaurants', [
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       return;
     }
-    Restaurant.get()
-    .then(function(restaurants) {
-      $scope.restaurants = restaurants;
-      if (_.isEmpty($scope.restaurants)) {
-        $scope.messageBackdrop = {
-          show: true,
-          title: 'noRestaurantsTitle',
-          details: 'noRestaurantsDetails',
-          iconClasses: 'ion-android-restaurant',
-          button: {
-            text: 'reload',
-            action: 'onRefreshRestaurants()'
-          }
-        };
-      }
-      else {
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-      }
+    $geolocation.getCurrentPosition()
+    .then(function(currentPosition) {
+      $scope.userCurrentPosition = currentPosition;
+      Restaurant.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      .then(function(restaurants) {
+        $scope.restaurants = restaurants;
+        if (_.isEmpty($scope.restaurants))
+        {
+          $scope.messageBackdrop = {
+            show: true,
+            title: 'noRestaurantsTitle',
+            details: 'noRestaurantsDetails',
+            iconClasses: 'ion-android-restaurant',
+            button: {
+              text: 'reload',
+              action: 'onRefreshRestaurants()'
+            }
+          };
+        }
+        else
+        {
+          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+        }
+      })
+      .catch(function() {
+        $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
+      });
     })
     .catch(function() {
-      $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
+      $scope.messageBackdrop = MessageBackdrop.noGeolocation();
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');

@@ -1,0 +1,74 @@
+.go-title {
+	margin-left: 3vw;
+	margin-bottom: 1vh;
+}
+
+.go-details {
+	margin-left: 5vw;
+	margin-bottom: 5vh;
+	margin-top: 5vh;
+	font-size: 15px;
+}
+
+.go-icon {
+	font-size: 22px; 
+	margin-right: 3px;
+	margin-bottom: 5vh;
+	margin-top: 5vh;
+}
+
+.go-discount {
+	font-size: 24px;
+	margin-bottom: 5vh;
+	margin-top: 5vh;
+}
+
+.go-chrono {
+	font-size: 24px;
+	margin-bottom: 5vh;
+	margin-top: 5vh;
+}
+
+.go-list-header {
+	min-height: 2px;
+
+}
+
+.list-title {
+	margin-left: 5vw;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+
+}
+
+md-toolbar.md-default-theme {
+	background-color: rgb(245,245,245);
+	color: rgba(0,0,0,0.87);
+	border-radius: 10px 10px 0 0;
+	box-shadow: 0 0 0 0;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.go-divider {
+	margin-bottom: 2vh;
+	border-top: 2px solid;
+	border-top-color: rgb(245,245,245) !important;
+}
+
+.go-loading {
+	margin: auto;
+	margin-top: 10vh;
+}
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle {
+	border-left-color: $assertive;
+	border-bottom-color: $assertive;
+}
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle, md-progress-circular.md-default-theme.md-warn .md-inner .md-right .md-half-circle {
+	border-top-color: $assertive ;
+	border-right-color: $assertive ;
+}
