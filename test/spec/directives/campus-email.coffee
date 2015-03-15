@@ -1,7 +1,7 @@
 describe 'Directive: geCampusEmail', ->
 
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.directives.campus-email'
     module 'templates'
 
   scope = form = $httpBackend = {}

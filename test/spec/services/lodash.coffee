@@ -2,7 +2,7 @@ describe 'Service: _', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.services.lodash'
     module 'templates'
 
   _ = scope = $httpBackend = {}

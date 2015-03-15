@@ -1,84 +1,104 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurant-menu', [
+	'ionic',
 	'ngMaterial',
 	'pascalprecht.translate',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
+	'groupeat.services.message-backdrop',
+	'groupeat.services.network',
 	'groupeat.services.order',
-	'groupeat.services.pizza',
+	'groupeat.services.product',
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, Pizza, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, MessageBackdrop, Network, Product, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
-	$scope.cart = Cart.getCart();
-	$scope.cartTotalPrice = $scope.cart.cartTotalPrice ;
-	$scope.data = {
-		showDeleteList: false
+	$scope.initCart = function() {
+		$scope.currentOrder = Order.getCurrentOrder();
+		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
+		$scope.cart = Cart;
 	};
 
-	$scope.pizzas = Pizza.get({restaurantId: $stateParams.restaurantId}, function() {
-		_.forEach($scope.pizzas.data, function(pizza) {
-			_.forEach(pizza.formats.data, function(format) {
-				format.price = format.price / 100 ;
-			});
+	$scope.onRefreshRestaurantMenu = function() {
+		if (!Network.hasConnectivity())
+    {
+      $scope.messageBackdrop = MessageBackdrop.noNetwork();
+      return;
+    }
+		// Loading the menu of the restaurant
+		Product.get($stateParams.restaurantId)
+		.then(function(products) {
+			$scope.products = products;
+			if (_.isEmpty($scope.restaurants))
+			{
+        $scope.messageBackdrop = {
+          show: true,
+          title: 'emptyMenuTitle',
+          details: 'emptyMenuDetails',
+          iconClasses: 'ion-android-pizza',
+          button: {
+            text: 'reload',
+            action: 'onRefreshRestaurantMenu()'
+          }
+        };
+			}
+			else
+			{
+				$scope.messageBackdrop = MessageBackdrop.noBackdrop();
+			}
+		})
+		.catch(function() {
+			$scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurantMenu()');
+		})
+		.finally(function() {
+			$scope.$broadcast('scroll.refreshComplete');
 		});
-	});
-
-
-
-	$scope.currentOrder = Order.getCurrentOrder();
-	$scope.cart.cartDiscount = $scope.currentOrder.currentDiscount;
+	};
 
 	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
 		$scope.productToShowValue = 0;
 
-		if (_.isEmpty($scope.cart.productsItems)) {
-			// nothing to do...
-		}
-		else {
+		if (!_.isEmpty($scope.cart.productsItems))
+		{
 			_.forEach($scope.cart.productsItems, function(product) {
-				if (product.id === productToShow.id) {
+				if (product.id === productToShow.id)
+				{
 					_.forEach(product.formats, function(productFormats) {
-						if(productFormats.id === formatIndex) {
-
+						if(productFormats.id === formatIndex)
+						{
 							$scope.productToShowValue = productFormats.quantity ;
 						}
-						else {}
 					});
 				}
-				else {}
 			});
 		}
-
 	};
 
 	$scope.toggleDetails = function(product) {
-	    if ($scope.isDetailsShown(product)) {
-	      $scope.shownDetails = null;
+	    if ($scope.areDetailsShown(product)) {
+	      $scope.detailedProduct = null;
 	    }
 	    else {
-	      $scope.shownDetails = product;
+	      $scope.detailedProduct = product;
 	    }
 		};
 
-
-
-	$scope.isDetailsShown = function(product) {
-		return $scope.shownDetails === product;
+	$scope.areDetailsShown = function(product) {
+		return $scope.detailedProduct === product;
 	};
 
-	$scope.onProductDelete = function(product, formatIndex) {
-		Cart.removeProductFromCart(product, formatIndex);
+	$scope.onDeleteProduct = function(product, formatIndex) {
+		Cart.removeProduct(product, formatIndex);
 	};
 
-	$scope.onProductAdd = function(product, format) {
-		Cart.addProductToCart(product, format);
+	$scope.onAddProduct = function(product, format) {
+		Cart.addProduct(product, format);
 	};
 
-	$scope.onLeaveRestaurantTouch = function() {
+	$scope.onLeaveRestaurant = function() {
 		if (_.isEmpty($scope.cart.productsItems)) {
 			Order.resetCurrentOrder();
 			$ionicHistory.goBack();
@@ -89,12 +109,16 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			.content($translate('cartWillBeDestroyed'))
 			.ok($translate('ok'))
 			.cancel($translate('cancel'));
-			$mdDialog.show(leaveOrder).then(function() {
-				Cart.resetCart();
+			$mdDialog.show(leaveOrder)
+			.then(function() {
+				Cart.reset();
 				Order.resetCurrentOrder();
 				$ionicHistory.goBack();
-			}, function() {
 			});
 		}
 	};
+
+	$scope.initCart();
+	$scope.onRefreshRestaurantMenu();
+
 });

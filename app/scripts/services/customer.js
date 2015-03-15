@@ -3,10 +3,10 @@
 angular.module('groupeat.services.customer', [
   'config',
   'ngResource',
-  'groupeat.services.element-modifier'
+  'groupeat.services.backend-utils'
 ])
 
-.factory('Customer', function($resource, $q, ENV, ElementModifier) {
+.factory('Customer', function($resource, $q, ENV, BackendUtils) {
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id', null,
   {
@@ -33,7 +33,7 @@ angular.module('groupeat.services.customer', [
       defer.resolve(response);
     })
     .catch(function(errorResponse) {
-      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
+      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   },
@@ -58,7 +58,7 @@ angular.module('groupeat.services.customer', [
       defer.resolve();
     })
     .catch(function(errorResponse) {
-      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
+      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   };

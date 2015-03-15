@@ -1,7 +1,7 @@
 describe 'Ctrl: RestaurantsCtrl', ->
 
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.controllers.restaurants'
     module 'templates'
 
   ctrl = scope = $state = $httpBackend = {}

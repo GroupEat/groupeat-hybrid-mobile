@@ -28,9 +28,11 @@ angular.module('groupeat.controllers.group-orders', [
       return;
     }
     GroupOrder.get()
-    .then(function(response) {
-      $scope.groupOrders = response.data;
+    .then(function(groupOrders) {
+      console.log(groupOrders);
+      $scope.groupOrders = groupOrders;
       if (_.isEmpty($scope.groupOrders)) {
+        console.log('empty');
         $scope.messageBackdrop = {
           show: true,
           title: 'noGroupOrdersTitle',

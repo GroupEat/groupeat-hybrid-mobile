@@ -3,7 +3,9 @@
 angular.module('groupeat.services', [
   'groupeat.services.address',
   'groupeat.services.authentication',
+  'groupeat.services.backend-utils',
   'groupeat.services.cart',
+  'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
@@ -13,7 +15,7 @@ angular.module('groupeat.services', [
   'groupeat.services.network',
   'groupeat.services.notifications-settings',
   'groupeat.services.order',
-  'groupeat.services.pizza',
+  'groupeat.services.product',
   'groupeat.services.popup',
   'groupeat.services.predefined-addresses',
   'groupeat.services.push',

@@ -6,7 +6,7 @@
 		</ion-refresher>
 
 		<md-list>
-		  <md-item ng-repeat="restaurant in restaurants.data" on-tap="onRestaurantTouch(restaurant.id)">
+		  <md-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant.id)">
 		    <md-item-content>
 		      <div class="md-tile-left">
 		        <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">

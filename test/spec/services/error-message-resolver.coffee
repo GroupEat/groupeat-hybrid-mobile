@@ -2,7 +2,7 @@ describe 'Service: ErrorMessageResolver', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.services.error-message-resolver'
     module 'templates'
 
   ErrorMessageResolver = scope = $httpBackend = $q = $timeout = {}

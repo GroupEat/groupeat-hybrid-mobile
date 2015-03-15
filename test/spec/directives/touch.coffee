@@ -1,7 +1,7 @@
 describe 'Directive: geTouch', ->
 
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.directives.touch'
     module 'templates'
 
   scope = httpBackend = element = sandbox = {}

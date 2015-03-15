@@ -6,8 +6,9 @@ angular.module('groupeat.controllers.authentication', [
   'ngMaterial',
   'pascalprecht.translate',
   'groupeat.services.authentication',
-  'groupeat.services.customer',
   'groupeat.services.address',
+  'groupeat.services.credentials',
+  'groupeat.services.customer',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
@@ -15,7 +16,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Customer, ElementModifier, Popup, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Credentials, Customer, ElementModifier, Popup, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
 
@@ -103,7 +104,7 @@ angular.module('groupeat.controllers.authentication', [
     })
     .then(function(response) {
       var responseData = response.data;
-      Authentication.setCredentials(responseData.id, responseData.token);
+      Credentials.set(responseData.id, responseData.token);
 
       $state.go('group-orders');
 
@@ -164,7 +165,7 @@ angular.module('groupeat.controllers.authentication', [
     .then(function(response) {
       var responseData = response.data;
       $scope.userId = responseData.id;
-      Authentication.setCredentials(responseData.id, responseData.token);
+      Credentials.set(responseData.id, responseData.token);
 
       $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
 

@@ -18,8 +18,8 @@ angular.module('groupeat.controllers.restaurants', [
       return;
     }
     Restaurant.get()
-    .then(function(response) {
-      $scope.restaurants = response.data;
+    .then(function(restaurants) {
+      $scope.restaurants = restaurants;
       if (_.isEmpty($scope.restaurants)) {
         $scope.messageBackdrop = {
           show: true,

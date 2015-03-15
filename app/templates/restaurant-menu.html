@@ -1,68 +1,66 @@
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" hide-back-button="true">
 
+  <ion-nav-buttons side="right">
+    <button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
+    </button>
+  </ion-nav-buttons>
 
-<ion-nav-buttons side="right">
-<button class="button button-clear ion-ios7-cart-outline right-header-bar-icon" ui-sref="cart">
-</button>
-</ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <button class="button button-clear ion-ios7-arrow-back" on-tap="onLeaveRestaurant()"> {{ 'back' | translate }}
+    </button>
+  </ion-nav-buttons>
 
-<ion-nav-buttons side="left">
-<button class="button button-clear ion-ios7-arrow-back" on-tap="onLeaveRestaurantTouch()"> {{ 'back' | translate }}
-</button>
-</ion-nav-buttons>
+  <ion-content has-header="true">
 
-<ion-content has-header="true">
+    <ion-list>
+      <div ng-repeat="product in products">
 
-<ion-list>
-<div ng-repeat="product in pizzas.data">
+        <ion-item on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
+          <div class="border-less">
+              <b> {{ product.name }} </b>
+              <p> {{ product.description }} </p>
+          </div>
+        </ion-item>
 
-  <ion-item on-tap="toggleDetails(product)" ng-class="{active: isDetailsShown(product)}" >
-    <div class="border-less" ng-class="isDetailsShown(product)">
-        <b> {{ product.name }} </b>
-        <p> {{ product.description }} </p>
-    </div>
-  </ion-item>
+        <ion-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
+          <div class="row border-less">
+            <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
+              {{ format.name }} ({{ format.price }} €)
+            </div>
+            <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
+              {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
+            </div>
 
-  <ion-item ng-repeat="format in product.formats.data" ng-show="isDetailsShown(product)">
-    <div class="row border-less">
-      <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
-        {{ format.name }} ({{ format.price }} €)
+            <div class="col col-10 ">
+              <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" on-tap="onProductDelete(product, format.id)"></a>
+            </div>
+            <div class="col col-10">
+              <a class="center">0</a>
+            </div>
+            <div class="col col-10 ">
+              <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
+            </div>
+            <div class="col col-10 ">
+            </div>
+          </div>
+        </ion-item>
       </div>
-      <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
-        {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
-      </div>
+    </ion-list>
 
-      <div class="col col-10 ">
-        <a class="ion-ios7-minus-outline assertive icon-cart-add-delete align-right" ng-class="changeProductToShowValue(product, format.id)" on-tap="onProductDelete(product, format.id)"></a>
-      </div>
-      <div class="col col-10">
-        <a class="center"> {{ productToShowValue }} </a>
-      </div>
-      <div class="col col-10 ">
-        <a class="icon ion-ios7-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
-      </div>
-      <div class="col col-10 ">
-      </div>
-    </div>
-  </ion-item>
-</div>
-</ion-list>
+  </ion-content>
 
-
-</ion-content>
-
-<ion-footer-bar class="bar-energized ">
-    <div class="row border-less">
-        <div class="col col-25">
-        <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.cartTotalPrice | number : 2}}€
-        </div>
-        <div class="col col-25">
-          <ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>
-        </div>
-        <div ng-show="currentOrder.groupOrderId" class="col col-25">
-          {{ currentOrder.currentDiscount }} %
-        </div>
-    </div>
- </ion-footer-bar>
+  <ion-footer-bar class="bar-energized ">
+      <div class="row border-less">
+          <div class="col col-25">
+            <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.getTotalPrice() | number : 2}}€
+          </div>
+          <div class="col col-25">
+            <ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.cartTotalQuantity }} Pizzas'}" ></ng-pluralize>
+          </div>
+          <div ng-show="currentOrder.groupOrderId" class="col col-25">
+            {{ currentOrder.currentDiscount }} %
+          </div>
+      </div>
+   </ion-footer-bar>
 
 </ion-view>

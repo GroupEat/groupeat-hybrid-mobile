@@ -2,24 +2,54 @@
 
 angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 
-.service('Cart',
-	function(_) {
-	
-		var products = {
-				'cartTotalPrice': 0,
-				'cartTotalQuantity': 0,
-				'cartDiscount': 0,
-				'productsItems': []
-			};
+.service('Cart', function(_) {
 
-		var refreshCart = function() {
-			// create index variable to store index of product to be potentially removed from cart
+		var totalPrice = 0;
+		var totalQuantity = 0;
+		var discountRate = 0;
+		var products = [];
+
+		var
+		getProducts = function() {
+			return products;
+		},
+
+		getTotalPrice = function() {
+			return totalPrice;
+		},
+
+		getTotalQuantity = function() {
+			return totalQuantity;
+		},
+
+		getDiscountRate = function() {
+			return discountRate;
+		},
+
+		setProducts = function(value) {
+			products = value;
+		},
+
+		setTotalPrice = function(value) {
+			totalPrice = value;
+		},
+
+		setTotalQuantity = function(value) {
+			totalQuantity = value;
+		},
+
+		setDiscountRate = function(value) {
+			discountRate = value;
+		},
+
+		refresh = function() {
+			// Create index variable to store index of product to be potentially removed from cart
 			var indexOfProductToBeDeleted = [false, 0];
-			// update cart
-			products.cartTotalPrice = 0 ;
-			products.cartTotalQuantity = 0 ;
+			// Update cart
+			totalPrice = 0 ;
+			totalQuantity = 0 ;
 
-			_.forEach(products.productsItems, function(product) {
+			_.forEach(products, function(product) {
 				product.totalQuantity = 0 ;
 				product.totalPrice = 0 ;
 
@@ -27,26 +57,22 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 					product.totalPrice += productFormats.price*productFormats.quantity ;
 					product.totalQuantity += productFormats.quantity ;
 				});
-				products.cartTotalPrice += product.totalPrice ;
-				products.cartTotalQuantity += product.totalQuantity ;
+				totalPrice += product.totalPrice ;
+				totalQuantity += product.totalQuantity ;
 				if (product.totalQuantity === 0) {
 					indexOfProductToBeDeleted = [true, _.indexOf(product)];
 				}
 			});
 
-			// remove potentially a product if total quantity has been seen as 0
+			// Remove potentially a product if total quantity has been seen as 0
 			if (indexOfProductToBeDeleted[0]) {
-				products.productsItems.splice(indexOfProductToBeDeleted[1] - 1, 1);
+				products.splice(indexOfProductToBeDeleted[1] - 1, 1);
 			}
-		};
+		},
 
-		var getCart = function(){
-	      return products;
-			};
-
-		var removeProductFromCart = function(productToDelete, formatIndex) {
+		removeProduct = function(productToDelete, formatIndex) {
 			// Find product in products and decrement its quantity
-			_.forEach(products.productsItems, function(product) {
+			_.forEach(products, function(product) {
 				if (product.id === productToDelete.id) {
 
 					_.forEach(product.formats, function(productFormats) {
@@ -58,21 +84,21 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 				}
 				else {}
 			});
-			refreshCart();
-		};
+			refresh();
+		},
 
-		var addProductToCart = function(productToAdd, format) {
+		addProduct = function(productToAdd, format) {
 			// Test if productToAdd exists already in products
-			var IsInProducts = false ;
-			_.forEach(products.productsItems, function(product){
+			var isInProducts = false ;
+			_.forEach(products, function(product){
 				if (product.id === productToAdd.id) {
-					IsInProducts = true;
+					isInProducts = true;
 				}
 			});
 
-			if ( IsInProducts ) {
+			if ( isInProducts ) {
 				// If productToAdd already exists in products, just increment its quantity
-				_.forEach(products.productsItems, function(product) {
+				_.forEach(products, function(product) {
 					if (product.id === productToAdd.id) {
 						_.forEach(product.formats, function(productFormats) {
 							if(productFormats.id === format.id) {
@@ -84,15 +110,15 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 				});
 			}
 			else {
-				// Else, create new product to add in products.productsItems
-				
+				// Else, create new product to add in products
+
 				// First the formats array
 				var formatToAddInProduct = [];
 				for(var i=0 ; i < _.size(productToAdd.formats.data) ; i++) {
 					formatToAddInProduct[i] = {
 						'id': productToAdd.formats.data[i].id,
 						'name': productToAdd.formats.data[i].name,
-						'price': productToAdd.formats.data[i].price*((100-products.cartDiscount)/100),
+						'price': productToAdd.formats.data[i].price*((100-discountRate)/100),
 						'quantity': 0
 					};
 					if (formatToAddInProduct[i].id === format.id) {
@@ -100,7 +126,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 						formatToAddInProduct[i].quantity = 1 ;
 					}
 				}
-				
+
 				// Then the product to add
 				var productToAddInProducts = {
 						'id': productToAdd.id,
@@ -110,25 +136,32 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 						'formats': formatToAddInProduct
 					};
 
-				products.productsItems.splice(1, 0, productToAddInProducts);
+				products.splice(1, 0, productToAddInProducts);
 			}
 
-			refreshCart();
-		};
+			refresh();
+		},
 
-		var resetCart = function() {
-			products.cartTotalQuantity = 0 ;
-			products.cartTotalPrice = 0 ;
-			products.cartDiscount = 0;
-			products.productsItems = [];
+		reset = function() {
+			totalQuantity = 0 ;
+			totalPrice = 0 ;
+			discountRate = 0;
+			products = [];
 		};
 
 		return {
-			addProductToCart: addProductToCart,
-			getCart: getCart,
-			removeProductFromCart: removeProductFromCart,
-			refreshCart: refreshCart,
-			resetCart: resetCart
+			getProducts: getProducts,
+			getDiscountRate: getDiscountRate,
+			getTotalQuantity: getTotalQuantity,
+			getTotalPrice: getTotalPrice,
+			setProducts: setProducts,
+			setDiscountRate: setDiscountRate,
+			setTotalQuantity: setTotalQuantity,
+			setTotalPrice: setTotalPrice,
+			addProduct: addProduct,
+			removeProduct: removeProduct,
+			refresh: refresh,
+			reset: reset
 		};
 	}
 );

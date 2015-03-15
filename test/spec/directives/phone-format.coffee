@@ -1,7 +1,7 @@
 describe 'Directive: gePhoneFormat', ->
 
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.directives.phone-format'
     module 'templates'
 
   scope = form = $httpBackend = {}
