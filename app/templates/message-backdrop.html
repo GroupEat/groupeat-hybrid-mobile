@@ -7,7 +7,7 @@
       <div class="item item-text-wrap">
         <p>{{ messageBackdrop.details | translate }}</p>
         <br>
-        <button class="button button-outline button-block button-energized" on-tap="call(messageBackdrop.button.action)">
+        <button class="button button-outline button-block button-energized" ng-show="messageBackdrop.button" on-tap="call(messageBackdrop.button.action)">
         {{ messageBackdrop.button.text | translate }}
         </button>
       </div>
