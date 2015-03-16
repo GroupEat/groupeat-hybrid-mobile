@@ -23,8 +23,6 @@ angular.module('groupeat.services.push-notifications', [
   *
   * @description
   * Bind the notification handler to the '$cordovaPush:notificationReceived' event
-  * PushNotifications services currently supported :
-  * Google Cloud Messaging (GCM) : Android
   *
   */
   bindNotificationHandler = function() {
@@ -65,19 +63,21 @@ angular.module('groupeat.services.push-notifications', [
   *
   * @description
   * Callback method to the cordova 'deviceready' event
+  * Sets the appropriate Notification handler acoording to the device's platform
   *
   */
   var onDeviceReady = function(){
+    window.alert( 'Device : ' + JSON.stringify(window.device) );
     notificationHandler = AndroidNotificationHandler;
     registerDevice()
     .then(function() {
       return bindNotificationHandler();
     })
     .then(function() {
-      return deferredSubscribtion.resolve();
+      return deferredSubscription.resolve();
     })
     .catch(function(err) {
-      deferredSubscribtion.reject(err);
+      deferredSubscription.reject(err);
     });
   },
 
@@ -93,9 +93,9 @@ angular.module('groupeat.services.push-notifications', [
   *
   */
   subscribe = function() {
-    deferredSubscribtion = $q.defer();
+    deferredSubscription = $q.defer();
     document.addEventListener('deviceready', onDeviceReady, false);
-    return deferredSubscribtion.promise;
+    return deferredSubscription.promise;
   };
 
 

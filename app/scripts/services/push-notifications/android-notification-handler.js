@@ -9,7 +9,7 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
 
   var
 
-  resource = $resource(ENV.apiEndpoint+'/notifications/:id'),
+  resource = $resource(ENV.apiEndpoint + '/notifications/:id'),
 
   config = {
     'senderID': '993639413774'
@@ -20,14 +20,15 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
 
   var
 
-  initialize = function() {
-    deferredRegistration = $q.defer();
-  },
-
-  promise = function() {
-    return deferredRegistration.promise;
-  }
-
+  /**
+  * @ngdoc function
+  * @name AndroidNotificationHandler#handleGCMRegisteredEvent
+  * @methodOf AndroidNotificationHandler
+  *
+  * @description
+  * Handles GCM 'registered' event
+  * Private method
+  */
   handleGCMRegisteredEvent = function(id) {
     if (id.length > 0 ) {
       var requestBody = {
@@ -41,8 +42,19 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
         deferredRegistration.reject(ElementModifier.errorMsgFromBackend(errorResponse));
       });
     }
-  },
+  };
 
+
+  var
+  /**
+  * @ngdoc function
+  * @name AndroidNotificationHandler#onNotification
+  * @methodOf AndroidNotificationHandler
+  *
+  * @description
+  * On notification received callback method
+  *
+  */
   onNotification = function(event, notification) {
 
     switch(notification.event) {
@@ -68,6 +80,32 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
     }
 
   },
+
+  /**
+  * @ngdoc function
+  * @name AndroidNotificationHandler#initialize
+  * @methodOf AndroidNotificationHandler
+  *
+  * @description
+  * Initialize the NotificationHandler object with a Deferred object
+  *
+  */
+  initialize = function() {
+    deferredRegistration = $q.defer();
+  },
+
+  /**
+  * @ngdoc function
+  * @name AndroidNotificationHandler#promise
+  * @methodOf AndroidNotificationHandler
+  *
+  * @description
+  * Return a promise for the registration event
+  *
+  */
+  promise = function() {
+    return deferredRegistration.promise;
+  };
 
 
   return {
