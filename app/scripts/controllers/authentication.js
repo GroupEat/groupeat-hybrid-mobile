@@ -160,15 +160,13 @@ angular.module('groupeat.controllers.authentication', [
     .then(function() {
       // TODO : Fetch proper locale
       var requestBody = _.merge($scope.userRegister, {'locale': 'fr'});
-      window.alert(JSON.stringify(requestBody));
       return Customer.save(requestBody);
     })
     .then(function(response) {
       var responseData = response.data;
       $scope.userId = responseData.id;
       Authentication.setCredentials(responseData.id, responseData.token);
-      window.alert('Registering for push-notifications for user with token : ' + responseData.token);
-      return PushNotifications.initialize();
+      return PushNotifications.subscribe();
     })
     .then(function(response) {
       $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
@@ -185,7 +183,6 @@ angular.module('groupeat.controllers.authentication', [
       return response;
     })
     .catch(function(errorResponse) {
-      window.alert('Reg failed : ' + errorResponse);
       Popup.displayError(errorResponse);
     });
   };
