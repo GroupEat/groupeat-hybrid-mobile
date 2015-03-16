@@ -5,7 +5,8 @@ angular.module('groupeat.services.push-notifications', [
   'ngCordova',
   'groupeat.services.push-notifications.android-notification-handler'
 ])
-//factory for processing push notifications.
+
+
 .factory('PushNotifications', function($rootScope, $cordovaPush, $q, AndroidNotificationHandler) {
 
   var
@@ -49,12 +50,10 @@ angular.module('groupeat.services.push-notifications', [
 
     $cordovaPush.register(config)
     .then(function(result) {
-      window.alert(result);
-      deferred.resolve(JSON.stringify(result));
+      deferred.resolve(result);
     })
     .catch(function(err) {
-      window.alert(err);
-      deferred.reject(JSON.stringify(err));
+      deferred.reject(err);
     });
     return deferred.promise;
   };
@@ -67,7 +66,6 @@ angular.module('groupeat.services.push-notifications', [
   * @description
   * Callback method to the cordova 'deviceready' event
   * Sets the appropriate Notification handler acoording to the device's platform
-  *
   */
   var onDeviceReady = function(){
     var device = window.device;
@@ -77,7 +75,7 @@ angular.module('groupeat.services.push-notifications', [
     }
     else
     {
-      deferredSubscription.reject(new Error('Device platform not handled'));
+      deferredSubscription.reject();
     }
 
     registerDevice()
