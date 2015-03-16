@@ -47,7 +47,6 @@ angular.module('groupeat', [
   }
 ])
 
-
 .run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication) {
 
   Permission.defineRole('customer', function () {
@@ -78,8 +77,6 @@ angular.module('groupeat', [
     }
 
   });
-
-  //PushNotifications.initialize();
 
 });
 
