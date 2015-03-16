@@ -32,7 +32,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		Product.get($stateParams.restaurantId)
 		.then(function(products) {
 			$scope.products = products;
-			if (_.isEmpty($scope.restaurants))
+			if (_.isEmpty(products))
 			{
         $scope.messageBackdrop = {
           show: true,
