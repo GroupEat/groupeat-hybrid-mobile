@@ -5,26 +5,27 @@ angular.module('groupeat.controllers.cart', [
 	'ngAutocomplete',
 	'pascalprecht.translate',
 	'groupeat.services.address',
-	'groupeat.services.authentication',
 	'groupeat.services.cart',
+	'groupeat.services.credentials',
 	'groupeat.services.lodash',
+	'groupeat.services.message-backdrop',
 	'groupeat.services.order',
 	'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Authentication, PredefinedAddresses) {
+.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
 	var $translate = $filter('translate');
-	$scope.cart = Cart.getCart();
-	$scope.isCartEmpty = _.isEmpty($scope.cart.productsItems);
+
 	$scope.currentOrder = Order.getCurrentOrder();
-	$scope.FoodRushTime = {
+	$scope.foodRushTime = {
 		value: null
 	};
-	$scope.AddressTypeSelected = {
+	$scope.addressTypeSelected = {
 		value: null
 	};
-	$scope.FoodRushTimeData = [
+
+	$scope.foodRushTimeData = [
 		{ label: '5 min', value: 5 },
 		{ label: '10 min', value: 10 },
 		{ label: '15 min', value: 15 },
@@ -38,33 +39,59 @@ angular.module('groupeat.controllers.cart', [
 		{ label: 'Lieu commun', value: 'predefinedAddress'}
 	];
 
-	$scope.DeliveryAddress = {
+	$scope.deliveryAddress = {
 		value: null
 	};
-	$scope.AddressSupplement = {
+	$scope.addressSupplement = {
 		value: null
 	};
-	$scope.PredefinedDeliveryAddress = {
+	$scope.predefinedDeliveryAddress = {
 		value: null
 	};
-	$scope.SaveNewAddress = {
+	$scope.saveNewAddress = {
 		value: null
 	};
 
-	$scope.residencies = Address.getResidencies();
+	$scope.loadCart = function() {
+		$scope.cart = Cart;
+		if (_.isEmpty(Cart.getProducts()))
+		{
+			$scope.messageBackdrop = {
+				show: true,
+				title: 'emptyCartTitle',
+				details: 'emptyCartDetails',
+				iconClasses: 'ion-ios-cart',
+			};
+		}
+		else
+		{
+			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
+		}
+	};
 
-	/* I added here the get to predefined addresses, because it's a very long request, and returned "resolved: false" until i put it here*/
-	$scope.predefinedAddresses = PredefinedAddresses.get();
-	$scope.userCredit = Authentication.getCredentials();
-	$scope.userAddress = Address.getAddress({id: $scope.userCredit.id });
-	$scope.hasPredefinedPersonalAddress = _.isEmpty($scope.userAddress.data) ;
+	$scope.loadAddressInformation = function() {
+		$scope.residencies = Address.getResidencies();
+		PredefinedAddresses.get()
+		.then(function(predefinedAddresses) {
+			$scope.predefinedAddresses = predefinedAddresses;
+			return Address.get(Credentials.get().id);
+		})
+		.then(function(userAddress) {
+			$scope.userAddress = userAddress;
+			$scope.hasPredefinedPersonalAddress = _.isEmpty($scope.userAddress.data);
+		})
+		.catch(function() {
+			$scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
+		});
+	};
 
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
-		if(Order.getCurrentOrder().groupOrderId === null && $scope.FoodRushTime.value === null) {
+		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === null)
+		{
 			deferred.reject($translate('missingFoodRushTime'));
 		}
-	    else
+	  else
 		{
 			deferred.resolve();
 		}
@@ -73,14 +100,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.validateAddress = function() {
 		var deferred = $q.defer();
-		if(false)
-		{
-
-		}
-	    else
-		{
-			deferred.resolve();
-		}
+		deferred.resolve();
 		return deferred.promise;
 	};
 
@@ -91,42 +111,36 @@ angular.module('groupeat.controllers.cart', [
 	$scope.onConfirmOrderTouch = function(ev) {
 		$scope.validateOrder()
 		.then(function() {
-				var productFormats = {};
-				_.forEach($scope.cart.productsItems, function(product) {
-					_.forEach(product.formats, function(format) {
-						if(format.quantity > 0) {
-							productFormats[format.id] = format.quantity;
-						}
-					});
+			var productFormats = {};
+			_.forEach($scope.cart.productsItems, function(product) {
+				_.forEach(product.formats, function(format) {
+					if(format.quantity > 0) {
+						productFormats[format.id] = format.quantity;
+					}
 				});
-
-				Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
-				Order.setFoodRushTime($scope.FoodRushTime.value);
-				Order.setProductFormats(productFormats);
-
-			})
-			.then(function() {
-				$mdDialog.show({
-					targetEvent: ev,
-					templateUrl: 'templates/popups/ask-for-address.html',
-					controller: 'CartCtrl',
-				});
-			})
-			.catch(function(errorMessage) {
-				return Popup.displayError(errorMessage, 4000);
 			});
+
+			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
+			Order.setFoodRushTime($scope.FoodRushTime.value);
+			Order.setProductFormats(productFormats);
+			$mdDialog.show({
+				targetEvent: ev,
+				templateUrl: 'templates/popups/ask-for-address.html',
+				controller: 'CartCtrl',
+			});
+		})
+		.catch(function(errorMessage) {
+			return Popup.displayError(errorMessage, 4000);
+		});
 	};
 
 	$scope.closeAskForAddressDialog = function(cancel) {
-
 		if(cancel)
 		{
 			$mdDialog.cancel();
 		}
 		else
 		{
-
-
 			// TODO : process showing "circle running"
 			$scope.validateAddress($scope.AddressTypeSelected.value)
 			.then(function() {
@@ -169,11 +183,6 @@ angular.module('groupeat.controllers.cart', [
 						}
 					});
 				}
-				else {
-
-				}
-			})
-			.then(function() {
 				return Order.save();
 			})
 			.then(function() {
@@ -183,17 +192,20 @@ angular.module('groupeat.controllers.cart', [
 				$state.go('group-orders');
 				Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
 			})
-		    .catch(function(errorMessage) {
-		      return Popup.displayError(errorMessage, 4000);
-		    });
+	    .catch(function(errorMessage) {
+	      return Popup.displayError(errorMessage, 4000);
+	    });
 		}
 	};
 
 	$scope.resetDeliveryAddress = function() {
-		$scope.DeliveryAddress.value = undefined;
-		$scope.AddressSupplement.value = undefined;
-		$scope.PredefinedDeliveryAddress.value = undefined;
-		$scope.SaveNewAddress.value = false;
+		$scope.deliveryAddress.value = undefined;
+		$scope.addressSupplement.value = undefined;
+		$scope.predefinedDeliveryAddress.value = undefined;
+		$scope.saveNewAddress.value = false;
 	};
+
+	$scope.loadCart();
+	$scope.loadAddressInformation();
 
 });
