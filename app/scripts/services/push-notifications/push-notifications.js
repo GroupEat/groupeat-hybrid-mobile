@@ -67,8 +67,12 @@ angular.module('groupeat.services.push-notifications', [
   *
   */
   var onDeviceReady = function(){
-    window.alert( 'Device : ' + JSON.stringify(window.device) );
-    notificationHandler = AndroidNotificationHandler;
+    var device = window.device;
+    if ( device.platform == 'Android' || device.platform == 'android' || device.platform == "amazon-fireos" )
+      notificationHandler = AndroidNotificationHandler;
+    else
+      deferredSubscription.reject('Device platform not handled');
+      
     registerDevice()
     .then(function() {
       return bindNotificationHandler();
