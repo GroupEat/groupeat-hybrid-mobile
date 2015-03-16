@@ -10,7 +10,7 @@ angular.module('groupeat.services.customer', [
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id', null,
   {
-    'update': { method: 'PATCH' }
+    'update': { method: 'PUT' }
   });
 
   var /**

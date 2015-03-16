@@ -604,7 +604,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it 'the validateForm promise should initially be fulfilled', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      $httpBackend.expect('PUT', regex).respond(200, 'Success')
       scope.userId = 1
       form = scope.furtherRegisterForm
       scope.$apply()
@@ -624,7 +624,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it 'the validateForm promise should be fulfilled if a proper phone number is given', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      $httpBackend.expect('PUT', regex).respond(200, 'Success')
       scope.userId = 1
       # Both fields are empty
       form = scope.furtherRegisterForm
@@ -647,7 +647,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it "if there are no client side validation errors but Customer.update returns an error, an error dialog should be displayed", ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(404, 'Error')
+      $httpBackend.expect('PUT', regex).respond(404, 'Error')
       scope.userId = 1
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(scope, 'validateForm', (form) ->
@@ -664,7 +664,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it "if there are no errors for updating the customer but Address.update returns an error, an error dialog should be displayed", ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      $httpBackend.expect('PUT', regex).respond(200, 'Success')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.expectPUT(regex).respond(404, 'Error')
       scope.userId = 1
@@ -684,7 +684,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it 'if there are no errors, the onSkipFurtherRegisterButtonTouch should be called', ->
       sandbox.spy(scope, 'onSkipFurtherRegisterButtonTouch')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      $httpBackend.expect('PUT', regex).respond(200, 'Success')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.expectPUT(regex).respond(200, 'Success')
       scope.userId = 1

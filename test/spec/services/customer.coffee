@@ -52,7 +52,7 @@ describe 'Service: Customer', ->
       parameters = {id: 1}
       requestBody = {}
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(200, 'Success')
+      $httpBackend.expect('PUT', regex).respond(200, 'Success')
       Customer.update(parameters, requestBody)
       $httpBackend.flush()
 
@@ -62,6 +62,6 @@ describe 'Service: Customer', ->
       parameters = {id: 1}
       requestBody = {}
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PATCH', regex).respond(400, 'Failure')
+      $httpBackend.expect('PUT', regex).respond(400, 'Failure')
       Customer.update(parameters, requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
