@@ -75,7 +75,7 @@ angular.module('groupeat.services.push-notifications', [
     }
     else
     {
-      deferredSubscription.reject('Device platform not handled');
+      deferredSubscription.reject(new Error('Device platform not handled'));
     }
 
     registerDevice()
