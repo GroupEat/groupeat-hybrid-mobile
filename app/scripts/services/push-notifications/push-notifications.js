@@ -2,6 +2,7 @@
 
 
 angular.module('groupeat.services.push-notifications', [
+  'ngCordova',
   'groupeat.services.push-notifications.android-notification-handler'
 ])
 //factory for processing push notifications.
