@@ -57,7 +57,7 @@ angular.module('groupeat.controllers.group-orders', [
         $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
       });
     })
-    .catch(function(error) {
+    .catch(function() {
       $scope.messageBackdrop = MessageBackdrop.noGeolocation();
       return;
     })

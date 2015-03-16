@@ -1,6 +1,6 @@
 <ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
 
-  <ion-content class="has-footer has-header" ng-show="!messageBackdrop.show">
+  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show">
 
     <md-button id="new-order-button" class="md-raised center" on-tap="onNewGroupOrder()">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
@@ -47,8 +47,8 @@
   </ion-content>
 
   <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
-    <ge-message-backdrop>
-    </ge-message-backdrop>
+      <ge-message-backdrop>
+      </ge-message-backdrop>
   </ion-content>
 
   <!--

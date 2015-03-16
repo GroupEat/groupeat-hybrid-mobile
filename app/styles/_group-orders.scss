@@ -72,3 +72,7 @@ md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle
 	border-top-color: $assertive ;
 	border-right-color: $assertive ;
 }
+
+div.white-backdrop {
+	height: calc(100% - 49px);
+}
