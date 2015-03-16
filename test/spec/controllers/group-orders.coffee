@@ -1,18 +1,289 @@
 describe 'Ctrl: GroupOrdersCtrl', ->
 
   beforeEach ->
+    module 'groupeat.controllers.authentication'
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  ctrl = scope = $state = $httpBackend = {}
+  scope = $q = $httpBackend = $state = GroupOrder = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
+
+  positionMock = {
+    'coords': {
+      'latitude': 48,
+      'longitude': 2
+    }
+  }
+
+  groupOrderMock = {
+    'id': '11',
+    'discountRate': 24
+    'restaurant': {
+      'data': {
+        'id': 5
+      }
+    }
+  }
+
+  groupOrderEmptyListMock = {
+    'data': {}
+  }
+
+  groupOrderNotEmptyListMock = {
+    'data': {'someData'}
+  }
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
-      scope = $rootScope.$new()
-      ctrl = $controller('GroupOrdersCtrl', ($scope: scope, $state: $state, GroupOrder: $injector.get('GroupOrder'), MessageBackdrop: $injector.get('MessageBackdrop'), Order: $injector.get('Order'), Popup: $injector.get('Popup'), $geolocation: $injector.get('$geolocation'), _: $injector.get('_')))
+
+      sandbox = sinon.sandbox.create()
+
+      MessageBackdrop = $injector.get('MessageBackdrop')
+      Order = $injector.get('Order')
+      Popup = $injector.get('Popup')
+      $geolocation = $injector.get('$geolocation')
+      GroupOrder = $injector.get('GroupOrder')
+      Network = $injector.get('Network')
+
       $httpBackend = $injector.get('$httpBackend')
+
+      scope = $rootScope.$new()
+      $state = $injector.get('$state')
+      sandbox.stub($state, 'go')
+      $q = $injector.get('$q')
+      $compile = $injector.get('$compile')
+
+      GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
+        $scope: scope, $state: $state, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
+      })
+
       ENV = $injector.get('ENV')
-      mockData = {data:[{key:"test"},{key:"test2"}] }
-      url = ENV.apiEndpoint+'/groupOrders?joinable=1&include=restaurant'
-      $httpBackend.whenGET(url).respond(mockData)
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+
+  afterEach ->
+    sandbox.restore()
+    
+  beforeEach ->
+    scope.$apply()
+
+  describe "Constructor", ->
+
+    it 'should initialize groupOrders and isLoadingView variables (isLoadingView is a boolean which turns true when receive date from backend)', ->
+      scope.groupOrders.should.be.empty
+      scope.isLoadingView.value.should.be.true
+
+    it 'should refresh view', ->
+
+
+  describe "Refreshing the view", ->
+
+    it 'should check connectivity', ->
+      callback = sandbox.stub(Network, 'hasConnectivity')
+      scope.onRefreshGroupOrders()
+      assert(callback.calledOnce)
+
+    it 'should show backdrop message if no Network', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return false
+      )
+      callback = sandbox.stub(MessageBackdrop, 'noNetwork')
+      scope.onRefreshGroupOrders()
+      assert(callback.calledOnce)
+
+    it 'should NOT show backdrop message if Network', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      callback = sandbox.stub(MessageBackdrop, 'noNetwork')
+      scope.onRefreshGroupOrders()
+      assert(callback.notCalled)
+
+    it 'should check user current position', ->
+      sandbox.spy($geolocation, 'getCurrentPosition')
+      # We make network working to test geolocation access
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      scope.onRefreshGroupOrders()
+      $geolocation.getCurrentPosition.should.have.been.called
+
+
+    it 'should show backdrop message if unable to access to user geolocation', ->
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.reject('cest le bordel...')
+        return deferred.promise
+      )
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      sandbox.stub(MessageBackdrop, 'noGeolocation')
+      scope.onRefreshGroupOrders()
+      scope.$apply()
+      MessageBackdrop.noGeolocation.should.have.been.calledOnce
+
+    it 'should show NO geolocation backdrop message and set UserCurrentPosition if able to access to user geolocation', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      # as we made user geolocation accessible, a request will follow (GroupOrders.get)
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond('{}')
+      sandbox.spy(MessageBackdrop, 'noGeolocation')
+      scope.onRefreshGroupOrders()
+      scope.$apply()
+
+      MessageBackdrop.noGeolocation.should.not.have.been.called
+      expect(scope.UserCurrentPosition).to.be.equal(positionMock)
+      
+    it 'should load groupOrders when network and UserCurrentPosition are available', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrderEmptyListMock)
+        return deferred.promise
+      )
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
+      scope.onRefreshGroupOrders()
+      scope.$digest()
+      
+      expect(scope.groupOrders).to.be.equal(groupOrderEmptyListMock.data)
+
+    it 'should show a generic failure backdrop message if encountered pb loading groupOrders', ->
+      sandbox.spy(MessageBackdrop, 'genericFailure')
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.reject()
+        return deferred.promise
+      )
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
+      scope.onRefreshGroupOrders()
+      scope.$digest()
+
+      MessageBackdrop.genericFailure.should.have.been.calledWithExactly('onRefreshGroupOrders()')
+
+
+    it 'should turn isLoadingView to false when receive data from backend', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrderEmptyListMock)
+        return deferred.promise
+      )
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
+      scope.onRefreshGroupOrders()
+      scope.$digest()
+      
+      expect(scope.isLoadingView.value).to.be.false
+
+    it 'should show backdrop message if data is empty (no GroupOrder)', ->
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrderEmptyListMock)
+        return deferred.promise
+      )
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
+      scope.onRefreshGroupOrders()
+      scope.$digest()
+
+      expect(scope.messageBackdrop.show).to.be.equal(true)
+      expect(scope.messageBackdrop.title).to.be.equal('noGroupOrdersTitle')
+      expect(scope.messageBackdrop.details).to.be.equal('noGroupOrdersDetails')
+      expect(scope.messageBackdrop.iconClasses).to.be.equal('ion-ios-cart-outline')
+      expect(scope.messageBackdrop.button.text).to.be.equal('newOrder')
+      expect(scope.messageBackdrop.button.action).to.be.equal('onNewGroupOrder()')
+
+    it 'should NOT show backdrop message if any groupOrder', ->
+      sandbox.spy(MessageBackdrop, 'noBackdrop')
+      sandbox.stub(Network, 'hasConnectivity', () ->
+        return true
+      )
+      # We make user location accessible
+      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+        deferred = $q.defer()
+        deferred.resolve(positionMock)
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrderNotEmptyListMock)
+        return deferred.promise
+      )
+      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderNotEmptyListMock)
+      scope.onRefreshGroupOrders()
+      scope.$digest()
+
+      expect(scope.messageBackdrop.show).to.be.equal(false)
+      MessageBackdrop.noBackdrop.should.have.been.called
+
+      
+
+  describe "Other ctrl methods", ->
+
+    it 'should return time between a mock date and actual date', ->
+      endingAt = '2015-01-30 16:39:26'
+      timeReturned = scope.getTimeDiff(endingAt)
+      expect(timeReturned>=0).to.be.true
+      expect(timeReturned>3895158).to.be.true
+
+    it 'should return time in sec between two dates', ->
+
+    it 'should set the current Order (service) when joining a groupOrder', ->
+      sandbox.stub(scope, 'getTimeDiff').returns(1000)
+      sandbox.spy(Order, 'setCurrentOrder')
+      scope.onJoinOrderTouch(groupOrderMock)
+
+      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, 1000, groupOrderMock.discountRate)
+
+    it 'should go to restaurant menu view corresponding to the selected groupOrder', ->
+      sandbox.stub(scope, 'getTimeDiff').returns(1000)
+      scope.onJoinOrderTouch(groupOrderMock)
+
+      $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: groupOrderMock.restaurant.data.id})
+
+    it 'should go to the list of restaurants view on new order tap', ->
+      scope.onNewGroupOrder()
+      expect($state.current.name).to.not.equal('restaurants')
+      $state.go.should.have.been.called
+
+
+3895239.191
+3895158.948
