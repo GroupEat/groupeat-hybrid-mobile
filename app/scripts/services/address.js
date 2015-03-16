@@ -12,8 +12,7 @@ angular.module('groupeat.services.address', [
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/address', null,
   {
-    'update': { method: 'PUT' },
-    'getAddress': { method: 'GET'}
+    'update': { method: 'PUT' }
   });
 
   var
@@ -29,8 +28,16 @@ angular.module('groupeat.services.address', [
     return defer.promise;
   },
 
-  getAddress = function(parameters) {
-    return resource.get(parameters);
+  get = function(userId) {
+    var defer = $q.defer();
+    resource.get({id: userId}).$promise
+    .then(function(response) {
+      defer.resolve(response.data);
+    })
+    .catch(function() {
+      defer.reject();
+    });
+    return defer.promise;
   },
 
   getAddressFromResidencyInformation = function(residency) {
@@ -69,9 +76,9 @@ angular.module('groupeat.services.address', [
   };
 
   return {
+    get: get,
     update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation,
-    getAddress: getAddress,
     getResidencies: getResidencies
   };
 });
