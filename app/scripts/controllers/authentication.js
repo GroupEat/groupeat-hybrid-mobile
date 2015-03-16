@@ -17,7 +17,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Customer, ElementModifier, Popup, PushNotifications, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Credentials, Customer, ElementModifier, Popup, PushNotifications, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
 
