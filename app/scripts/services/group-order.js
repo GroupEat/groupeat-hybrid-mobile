@@ -25,8 +25,6 @@ angular.module('groupeat.services.group-order', [
     var defer = $q.defer();
     resource.get({latitude: latitude, longitude: longitude}).$promise
     .then(function(response) {
-      console.log('service sata');
-      console.log(response);
       defer.resolve(response.data);
     })
     .catch(function(errorResponse) {
