@@ -16,6 +16,7 @@ angular.module('groupeat.controllers.restaurants', [
     if (!Network.hasConnectivity())
     {
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
+      $scope.$broadcast('scroll.refreshComplete');
       return;
     }
     $geolocation.getCurrentPosition()
