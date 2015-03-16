@@ -13,10 +13,11 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
   'groupeat.services.popup',
+  'groupeat.services.push-notifications',
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Credentials, Customer, ElementModifier, Popup, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Credentials, Customer, ElementModifier, Popup, PushNotifications, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
 
@@ -166,7 +167,9 @@ angular.module('groupeat.controllers.authentication', [
       var responseData = response.data;
       $scope.userId = responseData.id;
       Credentials.set(responseData.id, responseData.token);
-
+      return PushNotifications.subscribe();
+    })
+    .then(function(response) {
       $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
 
       $scope.showLoginAndRegisterButtons = false;
