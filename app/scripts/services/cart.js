@@ -14,6 +14,16 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			return products;
 		},
 
+		getFormatQuantity = function(formatId) {
+			var format;
+			_.find(products, function(product) {
+				format = _.find(product.formats, function(format) {
+					return format.id === formatId;
+				});
+			});
+			return format ? format.quantity : 0;
+		},
+
 		getTotalPrice = function() {
 			return totalPrice;
 		},
@@ -151,6 +161,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 
 		return {
 			getProducts: getProducts,
+			getFormatQuantity: getFormatQuantity,
 			getDiscountRate: getDiscountRate,
 			getTotalQuantity: getTotalQuantity,
 			getTotalPrice: getTotalPrice,

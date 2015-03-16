@@ -32,13 +32,13 @@
             </div>
 
             <div class="col col-10 ">
-              <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onProductDelete(product, format.id)"></a>
+              <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onDeleteProduct(product, format.id)"></a>
             </div>
             <div class="col col-10">
-              <a class="center">0</a>
+              <a class="center">{{ cart.getFormatQuantity(format.id) }}</a>
             </div>
             <div class="col col-10 ">
-              <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onProductAdd(product, format)"></a>
+              <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onAddProduct(product, format)"></a>
             </div>
             <div class="col col-10 ">
             </div>

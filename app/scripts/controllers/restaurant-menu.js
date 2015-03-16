@@ -68,25 +68,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		}
 	};
 
-	$scope.changeProductToShowValue = function(productToShow, formatIndex) {
-		$scope.productToShowValue = 0;
-
-		if (!_.isEmpty($scope.cart.productsItems))
-		{
-			_.forEach($scope.cart.productsItems, function(product) {
-				if (product.id === productToShow.id)
-				{
-					_.forEach(product.formats, function(productFormats) {
-						if(productFormats.id === formatIndex)
-						{
-							$scope.productToShowValue = productFormats.quantity ;
-						}
-					});
-				}
-			});
-		}
-	};
-
 	$scope.toggleDetails = function(product) {
 	    if ($scope.areDetailsShown(product)) {
 	      $scope.detailedProduct = null;
