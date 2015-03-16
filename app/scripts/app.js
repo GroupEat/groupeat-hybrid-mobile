@@ -90,6 +90,13 @@ angular.module('groupeat', [
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
   });
-}
-);
+
+});
+
+// .run(function($cordovaSplashscreen) {
+//   setTimeout(function() {
+//     $cordovaSplashscreen.hide();
+//   }, 5000);
+// });

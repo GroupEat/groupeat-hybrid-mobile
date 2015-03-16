@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.example.GroupEat" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.groupeat.HybridMobile" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>GroupEat</name>
     <description>
         Ionic+Angular.js application (Yeoman generated) for GroupEat.
@@ -7,7 +7,54 @@
     <author email="contact@groupeat.fr" href="http://groupeat.fr">
         GroupEat Team
     </author>
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="3000" />
     <content src="index.html" />
     <access origin="*" />
     <preference name="BackupWebStorage" value="none" />
+
+    <plugin name="Notification" value="org.apache.cordova.Notification"/>
+
+    <feature name="StatusBar">
+      <param name="ios-package" value="CDVStatusBar" onload="true" />
+    </feature>
+
+    <feature name="Device">
+      <param name="ios-package" value="CDVDevice" />
+      <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+
+    <platform name="ios">
+
+      <!-- iOS 7.0+ -->
+      <!-- iPhone / iPod Touch -->
+      <icon src="resources/icons/ios/icon-60.png" width="60" height="60" />
+      <icon src="resources/icons/ios/icon-60@2x.png" width="120" height="120" />
+
+      <!-- iPad -->
+      <icon src="resources/icons/ios/icon-76.png" width="76" height="76" />
+      <icon src="resources/icons/ios/icon-76@2x.png" width="152" height="152" />
+
+      <!-- iOS 6.1 -->
+      <!-- Spotlight Icon -->
+      <icon src="resources/icons/ios/icon-40.png" width="40" height="40" />
+      <icon src="resources/icons/ios/icon-40@2x.png" width="80" height="80" />
+
+      <!-- iPhone / iPod Touch -->
+      <icon src="resources/icons/ios/icon.png" width="57" height="57" />
+      <icon src="resources/icons/ios/icon@2x.png" width="114" height="114" />
+
+      <!-- iPad -->
+      <icon src="resources/icons/ios/icon-72.png" width="72" height="72" />
+      <icon src="resources/icons/ios/icon-72@2x.png" width="144" height="144" />
+
+      <!-- iPhone Spotlight and Settings Icon -->
+      <icon src="resources/icons/ios/icon-small.png" width="29" height="29" />
+      <icon src="resources/icons/ios/icon-small@2x.png" width="58" height="58" />
+
+      <!-- iPad Spotlight and Settings Icon -->
+      <icon src="resources/icons/ios/icon-50.png" width="50" height="50" />
+      <icon src="resources/icons/ios/icon-50@2x.png" width="100" height="100" />
+    </platform>
+
 </widget>
