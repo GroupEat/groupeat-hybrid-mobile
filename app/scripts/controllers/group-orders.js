@@ -19,7 +19,7 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.isLoadingView = {
     value: true
   };
-  
+
   $scope.onNewGroupOrder = function() {
     $state.go('restaurants');
   };
@@ -30,15 +30,13 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       return;
     }
-
     $geolocation.getCurrentPosition()
     .then(function(currentPosition) {
-      $scope.UserCurrentPosition = currentPosition;
-
-      GroupOrder.get($scope.UserCurrentPosition.coords.latitude, $scope.UserCurrentPosition.coords.longitude)
-      .then(function(response) {
+      $scope.userCurrentPosition = currentPosition;
+      GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      .then(function(groupOrders) {
         $scope.isLoadingView.value = false;
-        $scope.groupOrders = response.data;
+        $scope.groupOrders = groupOrders.data;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
             show: true,
@@ -57,17 +55,15 @@ angular.module('groupeat.controllers.group-orders', [
       })
       .catch(function() {
         $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
-      })
-      .finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
       });
     })
     .catch(function(error) {
       $scope.messageBackdrop = MessageBackdrop.noGeolocation();
       return;
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
     });
-
-    
   };
 
   $scope.getTimeDiff = function (endingAt) {

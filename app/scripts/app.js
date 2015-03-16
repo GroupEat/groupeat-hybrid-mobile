@@ -7,9 +7,24 @@
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
-  'ionic', 'config', 'ngCordova', 'ngCookies', 'ngMessages',
-  'validation.match', 'LocalStorageModule', 'permission',
-  'routing', 'groupeat.controllers', 'groupeat.services', 'groupeat.directives'
+  'config',
+  'ionic',
+  'jcs-autoValidate',
+  'LocalStorageModule',
+  'ngCordova',
+  'ngCookies',
+  'ngMaterial',
+  'ngMessages',
+  'pascalprecht.translate',
+  'permission',
+  'routing',
+  'validation.match',
+  'groupeat.controllers',
+  'groupeat.directives',
+  'groupeat.services.credentials',
+  'groupeat.services.element-modifier',
+  'groupeat.services.error-message-resolver',
+  'groupeat.services.http-provider-interceptor'
 ])
 
 .config(function($httpProvider, $translateProvider) {
@@ -47,11 +62,11 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Authentication) {
+.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Credentials) {
 
   Permission.defineRole('customer', function () {
     // If the returned value is *truthy* then the user has the role, otherwise they don't
-    return Authentication.getCredentials();
+    return Credentials.get();
   });
 
   if(typeof navigator.globalization !== 'undefined') {
@@ -75,6 +90,13 @@ angular.module('groupeat', [
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
   });
-}
-);
+
+});
+
+// .run(function($cordovaSplashscreen) {
+//   setTimeout(function() {
+//     $cordovaSplashscreen.hide();
+//   }, 5000);
+// });

@@ -3,10 +3,10 @@
 angular.module('groupeat.services.group-order', [
   'config',
   'ngResource',
-  'groupeat.services.element-modifier'
+  'groupeat.services.backend-utils'
 ])
 
-.factory('GroupOrder', function($resource, $q, ENV, ElementModifier) {
+.factory('GroupOrder', function($resource, $q, ENV, BackendUtils) {
 
   var resource = $resource(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
 
@@ -25,10 +25,12 @@ angular.module('groupeat.services.group-order', [
     var defer = $q.defer();
     resource.get({latitude: latitude, longitude: longitude}).$promise
     .then(function(response) {
-      defer.resolve(response);
+      console.log('service sata');
+      console.log(response);
+      defer.resolve(response.data);
     })
     .catch(function(errorResponse) {
-      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
+      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   };

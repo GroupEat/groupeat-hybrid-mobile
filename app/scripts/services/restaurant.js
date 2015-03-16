@@ -3,10 +3,11 @@
 angular.module('groupeat.services.restaurant', [
   'config',
   'ngResource',
-  'groupeat.services.element-modifier'
+  'groupeat.services.backend-utils'
 ])
 
-.factory('Restaurant', function($resource, $q, ENV, ElementModifier) {
+.factory('Restaurant', function($resource, $q, ENV, BackendUtils) {
+
   var resource = $resource(ENV.apiEndpoint+'/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
 
   var /**
@@ -24,10 +25,10 @@ angular.module('groupeat.services.restaurant', [
     var defer = $q.defer();
     resource.get({latitude: latitude, longitude: longitude}).$promise
     .then(function(response) {
-      defer.resolve(response);
+      defer.resolve(response.data);
     })
     .catch(function(errorResponse) {
-      defer.reject(ElementModifier.errorMsgFromBackend(errorResponse));
+      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   };

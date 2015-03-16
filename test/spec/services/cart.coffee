@@ -2,7 +2,7 @@ describe 'Service: Cart', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.services.cart'
     module 'templates'
 
   Cart = scope = $httpBackend = {}
@@ -18,7 +18,7 @@ describe 'Service: Cart', ->
 
   describe "Cart Service contents :", ->
     it "should create an objet of products", ->
-      expect(Cart.products).not.to.equal(null)
+      expect(Cart).not.to.equal(null)
 
   describe "Cart Service methods :", ->
 
@@ -26,22 +26,21 @@ describe 'Service: Cart', ->
       scope.$apply()
 
     it "should return cart", ->
-      testCart = Cart.refreshCart()
-      expect(testCart).to.equal(Cart.products)
+      previousCart = Cart
+      Cart.refresh()
+      expect(Cart).to.equal(previousCart)
 
     it "should refresh empty cart", ->
-      testCart = Cart.getCart()
-      testCart.cartTotalPrice += 10
-      testCart.cartTotalQuantity += 1
-      testCart.productsItems = [{}]
+      Cart.setTotalPrice(Cart.getTotalPrice()+10)
+      Cart.setTotalQuantity(Cart.getTotalQuantity()+1)
+      Cart.setProducts([{}])
 
-      Cart.refreshCart()
-      expect(testCart.cartTotalPrice).to.equal(0)
-      expect(testCart.cartTotalQuantity).to.equal(0)
+      Cart.refresh()
+      expect(Cart.getTotalPrice()).to.equal(0)
+      expect(Cart.getTotalQuantity()).to.equal(0)
 
-    it "refreshCart should update prices and quantities of cart and childrens", ->
-      testCart = Cart.getCart()
-      testCart.productsItems = [
+    it "refresh should update prices and quantities of cart and childrens", ->
+      Cart.setProducts([
         {
           id: 12,
           name: 'test name',
@@ -83,22 +82,20 @@ describe 'Service: Cart', ->
             }
           ]
         }
-      ]
+      ])
 
-      Cart.refreshCart()
+      Cart.refresh()
 
-      expect(testCart.productsItems[0].totalQuantity).to.equal(3)
-      expect(testCart.productsItems[1].totalQuantity).to.equal(4)
-      expect(testCart.productsItems[0].totalPrice).to.equal(35)
-      expect(testCart.productsItems[1].totalPrice).to.equal(50)
+      expect(Cart.getProducts()[0].totalQuantity).to.equal(3)
+      expect(Cart.getProducts()[1].totalQuantity).to.equal(4)
+      expect(Cart.getProducts()[0].totalPrice).to.equal(35)
+      expect(Cart.getProducts()[1].totalPrice).to.equal(50)
 
-      expect(testCart.cartTotalQuantity).to.equal(7)
-      expect(testCart.cartTotalPrice).to.equal(85)
+      expect(Cart.getTotalQuantity()).to.equal(7)
+      expect(Cart.getTotalPrice()).to.equal(85)
 
     it "should delete productsItems when a product total quantity equals 0", ->
-      testCart = Cart.getCart()
-
-      testCart.productsItems = [
+      Cart.setProducts([
         {
         id: 12,
         name: 'test name',
@@ -139,16 +136,15 @@ describe 'Service: Cart', ->
             }
           ]
         }
-      ]
+      ])
 
-      Cart.refreshCart()
+      Cart.refresh()
 
-      testCart.productsItems.should.have.length(1)
+      Cart.getProducts().should.have.length(1)
 
     it "should remove product by decreasing quantity", ->
-      testCart = Cart.getCart()
 
-      testCart.productsItems = [
+      Cart.setProducts([
         {
           id: 12,
           name: 'test name',
@@ -189,16 +185,15 @@ describe 'Service: Cart', ->
             }
           ]
         }
-      ]
+      ])
 
-      Cart.removeProductFromCart(testCart.productsItems[1], testCart.productsItems[1].formats[1].id)
-      expect(testCart.productsItems[1].formats[1].quantity).to.equal(1)
+      Cart.removeProduct(Cart.getProducts()[1], Cart.getProducts()[1].formats[1].id)
+      expect(Cart.getProducts()[1].formats[1].quantity).to.equal(1)
 
     it "should reset cart", ->
-      testCart = Cart.getCart()
-      testCart.cartTotalPrice = 111
-      testCart.cartTotalQuantity = 555
-      testCart.productsItems = [
+      Cart.setTotalPrice(111)
+      Cart.setTotalQuantity(555)
+      Cart.setProducts([
         'id': 12,
         'name': 'test name',
         'totalQuantity': 22,
@@ -230,17 +225,16 @@ describe 'Service: Cart', ->
             'price': 15,
             'quantity': 2 # quantity to decrease
           ]
-      ]
+      ])
 
-      Cart.resetCart()
+      Cart.reset()
 
-      expect(testCart.cartTotalQuantity).to.equal(0)
-      expect(testCart.cartTotalPrice).to.equal(0)
-      testCart.productsItems.should.have.length(0)
+      expect(Cart.getTotalQuantity()).to.equal(0)
+      expect(Cart.getTotalPrice()).to.equal(0)
+      Cart.getProducts().should.have.length(0)
 
     it "should add an existing product", ->
-      testCart = Cart.getCart()
-      testCart.productsItems = [
+      Cart.setProducts([
         {
           id: 12,
           name: 'test name',
@@ -281,7 +275,7 @@ describe 'Service: Cart', ->
             }
           ]
         }
-      ]
+      ])
 
       productToAdd = # data coming from restaurant menu alias pizzas*.json
         name: 'test name',
@@ -300,11 +294,10 @@ describe 'Service: Cart', ->
             }
         ]
 
-      Cart.addProductToCart(productToAdd, productToAdd.formats[1])
-      expect(testCart.productsItems[1].formats[1].quantity).to.equal(3)
+      Cart.addProduct(productToAdd, productToAdd.formats[1])
+      expect(Cart.getProducts()[1].formats[1].quantity).to.equal(3)
 
     it "should add a new product in cart", ->
-      testCart = Cart.getCart()
 
       productToAdd = # data coming from restaurant menu alias pizzas*.json
         name: 'test name',
@@ -325,25 +318,27 @@ describe 'Service: Cart', ->
           ]
         }
 
-      Cart.addProductToCart(productToAdd, productToAdd.formats.data[1])
+      Cart.addProduct(productToAdd, productToAdd.formats.data[1])
 
       # test if data from restaurant (above) has been added to CART (different structures)
-      testCart.productsItems.should.have.length(1)
+      Cart.getProducts().should.have.length(1)
 
-      expect(testCart.productsItems[0].id).to.equal(5)
-      expect(testCart.productsItems[0].name).to.equal('test name')
-      testCart.productsItems[0].should.have.property('totalPrice') # dont care of value because will be update by refreshCart, which has been tested
-      testCart.productsItems[0].should.have.property('totalQuantity')
-      testCart.productsItems[0].formats.should.have.length(2)
+      firstProduct = Cart.getProducts()[0]
 
-      expect(testCart.productsItems[0].formats[0].id).to.equal(10)
-      expect(testCart.productsItems[0].formats[1].id).to.equal(7)
+      expect(firstProduct.id).to.equal(5)
+      expect(firstProduct.name).to.equal('test name')
+      firstProduct.should.have.property('totalPrice') # dont care of value because will be update by refresh, which has been tested
+      firstProduct.should.have.property('totalQuantity')
+      firstProduct.formats.should.have.length(2)
 
-      expect(testCart.productsItems[0].formats[0].name).to.equal('Junior')
-      expect(testCart.productsItems[0].formats[1].name).to.equal('Senior')
+      expect(firstProduct.formats[0].id).to.equal(10)
+      expect(firstProduct.formats[1].id).to.equal(7)
 
-      expect(testCart.productsItems[0].formats[0].price).to.equal(8)
-      expect(testCart.productsItems[0].formats[1].price).to.equal(10)
+      expect(firstProduct.formats[0].name).to.equal('Junior')
+      expect(firstProduct.formats[1].name).to.equal('Senior')
 
-      testCart.productsItems[0].formats[0].should.have.property('quantity')
-      testCart.productsItems[0].formats[1].should.have.property('quantity')
+      expect(firstProduct.formats[0].price).to.equal(8)
+      expect(firstProduct.formats[1].price).to.equal(10)
+
+      firstProduct.formats[0].should.have.property('quantity')
+      firstProduct.formats[1].should.have.property('quantity')

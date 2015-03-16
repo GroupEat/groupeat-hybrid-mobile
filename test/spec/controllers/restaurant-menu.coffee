@@ -1,10 +1,10 @@
 describe 'Ctrl: RestaurantMenuCtrl', ->
 
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.controllers.restaurant-menu'
     module 'templates'
 
-  ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = $ionicPopup = {}
+  ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = {}
 
   cartTest =
     cartTotalPrice: 88
@@ -68,10 +68,10 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope = $rootScope.$new()
       $state = $injector.get('$state')
       Cart = $injector.get('Cart')
-      $ionicPopup = $injector.get('$ionicPopup')
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
-      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, Pizza: $injector.get('Pizza'), Cart: Cart, $ionicPopup: $ionicPopup))
+      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), $mdDialog: $injector.get('$mdDialog'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
+      Order: $injector.get('Order'), $ionicHistory: $injector.get('$ionicHistory'), _: $injector.get('_')))
 
       ENV = $injector.get('ENV')
       mockData = [{key:"test"},{key:"test2"}]
@@ -84,7 +84,6 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   afterEach ->
     sandbox.restore()
 
-
   describe 'Constructor', ->
 
     beforeEach ->
@@ -92,10 +91,10 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
     it 'should create an empty cart', ->
       expect(scope.cart).not.to.equal(null)
-      scope.cart.should.have.property('cartTotalPrice')
-      scope.cart.should.have.property('cartTotalQuantity')
-      scope.cart.should.have.property('productsItems')
-      expect(_.isEmpty(scope.cart.productsItems)).to.be.true
+      scope.cart.should.have.property('getTotalPrice')
+      scope.cart.should.have.property('getTotalQuantity')
+      scope.cart.should.have.property('getProducts')
+      expect(_.isEmpty(scope.cart.getProducts())).to.be.true
 
 
   describe 'State change', ->
@@ -104,45 +103,36 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       $httpBackend.flush()
 
     it 'should call Cart service function add product', ->
-      callback = sandbox.stub(Cart, 'addProductToCart')
-      scope.onProductAdd(productTest, productTest.formats[0])
+      callback = sandbox.stub(Cart, 'addProduct')
+      scope.onAddProduct(productTest, productTest.formats[0])
       assert(callback.calledOnce)
       assert(callback.calledWithExactly(productTest, productTest.formats[0]))
 
     it 'should call Cart service function remove product', ->
-      callback = sandbox.stub(Cart, 'removeProductFromCart')
-      scope.onProductDelete(productTest, 10)
+      callback = sandbox.stub(Cart, 'removeProduct')
+      scope.onDeleteProduct(productTest, 10)
       assert(callback.calledOnce)
       assert(callback.calledWithExactly(productTest, 10))
 
     it 'should toggle product if asking', ->
       scope.toggleDetails(productTest)
       scope.$apply()
-      expect(scope.shownDetails).to.equal(productTest)
+      expect(scope.detailedProduct).to.equal(productTest)
 
     it 'should not toggle product if not asking', ->
-      scope.shownDetails = productTest
+      scope.detailedProduct = productTest
       scope.toggleDetails(productTest)
       scope.$apply()
-      expect(scope.shownDetails).to.equal(null)
+      expect(scope.detailedProduct).to.equal(null)
 
     it 'should right product be shown', ->
-      scope.shownDetails = productTest
-      expect(scope.isDetailsShown(productTest)).to.be.true
-      scope.shownDetails = null
-      expect(scope.isDetailsShown(productTest)).to.be.false
-
-    it 'should right product\'s quantity be shown when cart is empty', ->
-      scope.changeProductToShowValue(productTest,11)
-      expect(scope.productToShowValue).to.equal(0)
-
-    it 'should right product\'s quantity be shown when cart is not empty', ->
-      scope.cart = cartTest
-      scope.changeProductToShowValue(productTest,11)
-      expect(scope.productToShowValue).to.equal(3)
+      scope.detailedProduct = productTest
+      expect(scope.areDetailsShown(productTest)).to.be.true
+      scope.detailedProduct = null
+      expect(scope.areDetailsShown(productTest)).to.be.false
 
     it 'should leave restaurant menu cell without poping if cart is empty', ->
-      scope.onLeaveRestaurantTouch()
+      scope.onLeaveRestaurant()
       expect($state.current.name).to.not.equal('restaurant-menu')
 
     it 'should alert user when leaving restaurant menu cell if cart is not empty', ->

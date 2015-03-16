@@ -2,10 +2,17 @@
 
 angular.module('groupeat.directives.message-backdrop', [])
 
-.directive('geMessageBackdrop', function() {
+.directive('geMessageBackdrop', function($timeout) {
   return {
     restrict: 'E',
-    replace: true,
-    templateUrl: 'templates/message-backdrop.html'
+    scope: true,
+    templateUrl: 'templates/message-backdrop.html',
+    link: function(scope) {
+      scope.call = function(methodName) {
+        $timeout(function() {
+          scope.$apply(methodName);
+        });
+      };
+    }
   };
 });

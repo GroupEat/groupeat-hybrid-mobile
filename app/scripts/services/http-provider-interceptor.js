@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('groupeat.services.http-provider-interceptor', ['groupeat.services.authentication'])
+angular.module('groupeat.services.http-provider-interceptor', [
+  'groupeat.services.credentials'
+])
 
-.factory('HttpProviderInterceptor', function($injector) {
+.factory('HttpProviderInterceptor', function($injector, Credentials) {
   var request = function(config) {
     config.headers.Accept = 'application/vnd.groupeat.v1+json';
 
-    var Authentication = $injector.get('Authentication');
-    var credentials = Authentication.getCredentials();
+    var credentials = Credentials.get();
     if (credentials && credentials.token)
     {
       config.headers.Authorization = 'bearer ' + credentials.token;

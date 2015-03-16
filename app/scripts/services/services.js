@@ -3,7 +3,9 @@
 angular.module('groupeat.services', [
   'groupeat.services.address',
   'groupeat.services.authentication',
+  'groupeat.services.backend-utils',
   'groupeat.services.cart',
+  'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
@@ -11,13 +13,16 @@ angular.module('groupeat.services', [
   'groupeat.services.http-provider-interceptor',
   'groupeat.services.lodash',
   'groupeat.services.network',
+  'groupeat.services.cart',
   'groupeat.services.notifications-settings',
   'groupeat.services.order',
-  'groupeat.services.pizza',
+  'groupeat.services.product',
   'groupeat.services.popup',
   'groupeat.services.predefined-addresses',
-  'groupeat.services.push',
   'groupeat.services.residency-utils',
   'groupeat.services.restaurant',
-  'groupeat.services.message-backdrop'
+  'groupeat.services.message-backdrop',
+  'groupeat.services.authentication',
+  'groupeat.services.http-provider-interceptor',
+  'groupeat.services.push-notifications'
 ]);

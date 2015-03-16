@@ -21,7 +21,7 @@ angular.module('groupeat.controllers.settings', ['groupeat.services.notification
 			adress:      'Palaiseau',
 		}
 	};
-	
+
 	$scope.user.settings = NotificationsSettings.settings;
 
 	$scope.settings = NotificationsSettings.pivotTableSettings;

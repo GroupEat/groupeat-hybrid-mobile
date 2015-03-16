@@ -2,7 +2,7 @@ describe 'Service: ResidencyUtils', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
+    module 'groupeat.services.residency-utils'
     module 'templates'
 
   ResidencyUtils = scope = $httpBackend = {}

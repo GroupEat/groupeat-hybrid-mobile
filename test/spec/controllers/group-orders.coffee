@@ -47,6 +47,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend = $injector.get('$httpBackend')
 
       scope = $rootScope.$new()
+      
       $state = $injector.get('$state')
       sandbox.stub($state, 'go')
       $q = $injector.get('$q')
@@ -55,7 +56,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
         $scope: scope, $state: $state, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
       })
-
+      sandbox.spy(scope, 'onRefreshGroupOrders')
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
@@ -72,7 +73,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.isLoadingView.value.should.be.true
 
     it 'should refresh view', ->
-
+      # It would be nice to test if the method onRefreshGroupOrders is calling when GroupOrderCtrl
 
   describe "Refreshing the view", ->
 
@@ -131,6 +132,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred.resolve(positionMock)
         return deferred.promise
       )
+
       # as we made user geolocation accessible, a request will follow (GroupOrders.get)
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond('{}')
       sandbox.spy(MessageBackdrop, 'noGeolocation')
@@ -138,7 +140,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$apply()
 
       MessageBackdrop.noGeolocation.should.not.have.been.called
-      expect(scope.UserCurrentPosition).to.be.equal(positionMock)
+      expect(scope.userCurrentPosition).to.be.equal(positionMock)
       
     it 'should load groupOrders when network and UserCurrentPosition are available', ->
       sandbox.stub(Network, 'hasConnectivity', () ->

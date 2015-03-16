@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('groupeat.controllers.cart', [
+	'ngMaterial',
+	'ngAutocomplete',
+	'pascalprecht.translate',
 	'groupeat.services.address',
 	'groupeat.services.authentication',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
 	'groupeat.services.order',
-	'groupeat.services.predefined-addresses',
-	'ngMaterial',
-	'ngAutocomplete'
+	'groupeat.services.predefined-addresses'
 ])
 
 .controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Authentication, PredefinedAddresses) {
@@ -145,16 +146,16 @@ angular.module('groupeat.controllers.cart', [
 					Order.setLatitude(residencyInformations.latitude);
 					Order.setLongitude(residencyInformations.longitude);
 
-						if ($scope.SaveNewAddress.value)
-						{
-							var addressParams = {
-								'street': residencyInformations.street,
-								'details': $scope.AddressSupplement.value,
-								'latitude': residencyInformations.latitude,
-								'longitude': residencyInformations.longitude
-							};
-							Address.update({id: $scope.userCredit.id}, addressParams);
-						}
+					if ($scope.SaveNewAddress.value)
+					{
+						var addressParams = {
+							'street': residencyInformations.street,
+							'details': $scope.AddressSupplement.value,
+							'latitude': residencyInformations.latitude,
+							'longitude': residencyInformations.longitude
+						};
+						Address.update({id: $scope.userCredit.id}, addressParams);
+					}
 				}
 				else if ($scope.AddressTypeSelected.value === 'predefinedAddress')
 				{

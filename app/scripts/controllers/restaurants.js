@@ -20,13 +20,12 @@ angular.module('groupeat.controllers.restaurants', [
     }
     $geolocation.getCurrentPosition()
     .then(function(currentPosition) {
-      $scope.UserCurrentPosition = currentPosition;
-    })
-    .then(function() {
-      Restaurant.get($scope.UserCurrentPosition.coords.latitude, $scope.UserCurrentPosition.coords.longitude)
-      .then(function(response) {
-        $scope.restaurants = response.data;
-        if (_.isEmpty($scope.restaurants)) {
+      $scope.userCurrentPosition = currentPosition;
+      Restaurant.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      .then(function(restaurants) {
+        $scope.restaurants = restaurants;
+        if (_.isEmpty($scope.restaurants))
+        {
           $scope.messageBackdrop = {
             show: true,
             title: 'noRestaurantsTitle',
@@ -38,20 +37,20 @@ angular.module('groupeat.controllers.restaurants', [
             }
           };
         }
-        else {
+        else
+        {
           $scope.messageBackdrop = MessageBackdrop.noBackdrop();
         }
       })
       .catch(function() {
         $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
-      })
-      .finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
       });
     })
     .catch(function() {
       $scope.messageBackdrop = MessageBackdrop.noGeolocation();
-      return;
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
     });
   };
 

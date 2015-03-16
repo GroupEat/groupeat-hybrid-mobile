@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Authentication = Address = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = ENV = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = PushNotifications = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -15,6 +15,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox = sinon.sandbox.create()
 
       validator = $injector.get('validator')
+      BackendUtils = $injector.get('BackendUtils')
       ElementModifier = $injector.get('ElementModifier')
       ErrorMessageResolver = $injector.get('ErrorMessageResolver')
       validator.registerDomModifier(ElementModifier.key, ElementModifier)
@@ -22,8 +23,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
 
       Authentication = $injector.get('Authentication')
-      sandbox.spy(Authentication, 'setCredentials')
-      sandbox.spy(Authentication, 'resetPassword')
+      Credentials = $injector.get('Credentials')
+      sandbox.spy(Credentials, 'set')
+      sandbox.spy(Credentials, 'reset')
       Customer = $injector.get('Customer')
       sandbox.spy(Customer, 'save')
       sandbox.spy(Customer, 'update')
@@ -32,6 +34,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup = $injector.get('Popup')
       sandbox.stub(Popup, 'displayError')
       sandbox.stub(Popup, 'displayTitleOnly')
+      PushNotifications = $injector.get('PushNotifications')
 
       $httpBackend = $injector.get('$httpBackend')
       $timeout = $injector.get('$timeout')
@@ -46,7 +49,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $compile = $injector.get('$compile')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
+        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, PushNotifications: PushNotifications, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -198,8 +201,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
       scope.$apply()
-      # Authentication.setCredentials should not be called
-      Authentication.setCredentials.should.have.not.been.called
+      # Credentials.set should not be called
+      Credentials.set.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
       # Popup.displayError should be called
@@ -217,8 +220,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitLoginForm(scope.loginForm)
       scope.$apply()
       $httpBackend.flush()
-      # Authentication.setCredentials should not be called
-      Authentication.setCredentials.should.have.not.been.called
+      # Credentials.set should not be called
+      Credentials.set.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
       #Popup.displayError should be called
@@ -243,8 +246,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      # Authentication.setCredentials should be called
-      Authentication.setCredentials.should.have.been.called
+      # Credentials.set should be called
+      Credentials.set.should.have.been.called
       # The state should change
       $state.go.should.have.been.called
       #Popup.displayError should not be called
@@ -344,7 +347,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
         return deferred.promise
       )
       errorKey = 'notFound'
-      sandbox.stub(ElementModifier, 'errorKeyFromBackend').returns(errorKey)
+      sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKey)
+      sandbox.spy(Authentication, 'resetPassword')
 
       $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(404, 'Error')
 
@@ -366,6 +370,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
+      sandbox.spy(Authentication, 'resetPassword')
 
       $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(200, 'Success')
 
@@ -426,6 +431,30 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup.displayError.should.have.been.called
       Customer.save.should.been.called
 
+    it "if there is no client side validation error, no server side error, PushNotifications.subscribe should be called and an error dialog should be displayed", ->
+      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
+                      .respond(
+                        data:
+                          id:7,
+                          token: 'jklhkjhlkhl'
+                      )
+      # We use a stub to make sure the validateForm promise is rejected
+      sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(PushNotifications, 'subscribe').returns($q.reject(new Error('errorMessage')))
+      window.browserTrigger(formElement, 'submit')
+      scope.submitRegisterForm(scope.registerForm)
+      scope.$apply()
+
+      $httpBackend.flush()
+
+      Popup.displayError.should.have.been.called
+      Credentials.set.should.have.been.called
+      PushNotifications.subscribe.should.have.been.called
+
     it 'if there are no errors, the shown dom elements should change to display the further registration form', ->
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
                       .respond(
@@ -435,6 +464,11 @@ describe 'Ctrl: AuthenticationCtrl', ->
                       )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(PushNotifications, 'subscribe', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -460,6 +494,11 @@ describe 'Ctrl: AuthenticationCtrl', ->
                       )
       # We use a stub to make sure the validateForm promise is resolved
       sandbox.stub(scope, 'validateForm', (form) ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(PushNotifications, 'subscribe', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
