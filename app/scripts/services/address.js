@@ -42,13 +42,7 @@ angular.module('groupeat.services.address', [
 
   getAddressFromResidencyInformation = function(residency) {
     var street, latitude, longitude;
-    if(residency === 'ENSTAParisTech')
-    {
-      street = 'Boulevard des Maréchaux';
-      latitude = 48.7107339;
-      longitude = 2.218232700000044;
-    }
-    else if (residency === 'polytechnique')
+    if (residency === 'polytechnique')
     {
       street = 'Boulevard des Maréchaux';
       latitude = 48.709862;
@@ -62,7 +56,9 @@ angular.module('groupeat.services.address', [
     }
     else
     {
-      return false;
+      street = 'Boulevard des Maréchaux';
+      latitude = 48.7107339;
+      longitude = 2.218232700000044;
     }
     return {
         street: street,

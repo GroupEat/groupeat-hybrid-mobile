@@ -28,6 +28,7 @@ angular.module('groupeat.controllers.group-orders', [
     if (!Network.hasConnectivity())
     {
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
+      $scope.$broadcast('scroll.refreshComplete');
       return;
     }
     $geolocation.getCurrentPosition()
@@ -36,7 +37,7 @@ angular.module('groupeat.controllers.group-orders', [
       GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
       .then(function(groupOrders) {
         $scope.isLoadingView.value = false;
-        $scope.groupOrders = groupOrders.data;
+        $scope.groupOrders = groupOrders;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
             show: true,
@@ -59,7 +60,6 @@ angular.module('groupeat.controllers.group-orders', [
     })
     .catch(function() {
       $scope.messageBackdrop = MessageBackdrop.noGeolocation();
-      return;
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');

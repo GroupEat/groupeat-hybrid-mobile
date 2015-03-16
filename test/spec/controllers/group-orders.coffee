@@ -1,7 +1,6 @@
 describe 'Ctrl: GroupOrdersCtrl', ->
 
   beforeEach ->
-    module 'groupeat.controllers.authentication'
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
@@ -47,7 +46,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend = $injector.get('$httpBackend')
 
       scope = $rootScope.$new()
-      
+
       $state = $injector.get('$state')
       sandbox.stub($state, 'go')
       $q = $injector.get('$q')
@@ -62,7 +61,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   afterEach ->
     sandbox.restore()
-    
+
   beforeEach ->
     scope.$apply()
 
@@ -132,16 +131,20 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred.resolve(positionMock)
         return deferred.promise
       )
+      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrderEmptyListMock)
+        return deferred.promise
+      )
 
       # as we made user geolocation accessible, a request will follow (GroupOrders.get)
-      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond('{}')
       sandbox.spy(MessageBackdrop, 'noGeolocation')
       scope.onRefreshGroupOrders()
       scope.$apply()
 
       MessageBackdrop.noGeolocation.should.not.have.been.called
       expect(scope.userCurrentPosition).to.be.equal(positionMock)
-      
+
     it 'should load groupOrders when network and UserCurrentPosition are available', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
@@ -160,8 +163,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
       scope.onRefreshGroupOrders()
       scope.$digest()
-      
-      expect(scope.groupOrders).to.be.equal(groupOrderEmptyListMock.data)
+
+      expect(scope.groupOrders).to.be.equal(groupOrderEmptyListMock)
 
     it 'should show a generic failure backdrop message if encountered pb loading groupOrders', ->
       sandbox.spy(MessageBackdrop, 'genericFailure')
@@ -204,7 +207,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
       scope.onRefreshGroupOrders()
       scope.$digest()
-      
+
       expect(scope.isLoadingView.value).to.be.false
 
     it 'should show backdrop message if data is empty (no GroupOrder)', ->
@@ -219,10 +222,10 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       )
       sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
         deferred = $q.defer()
-        deferred.resolve(groupOrderEmptyListMock)
+        deferred.resolve(groupOrderEmptyListMock.data)
         return deferred.promise
       )
-      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
+
       scope.onRefreshGroupOrders()
       scope.$digest()
 
@@ -246,17 +249,14 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       )
       sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
         deferred = $q.defer()
-        deferred.resolve(groupOrderNotEmptyListMock)
+        deferred.resolve(groupOrderNotEmptyListMock.data)
         return deferred.promise
       )
-      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderNotEmptyListMock)
       scope.onRefreshGroupOrders()
       scope.$digest()
 
       expect(scope.messageBackdrop.show).to.be.equal(false)
       MessageBackdrop.noBackdrop.should.have.been.called
-
-      
 
   describe "Other ctrl methods", ->
 
