@@ -36,7 +36,7 @@ angular.module('groupeat.controllers.group-orders', [
       GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
       .then(function(groupOrders) {
         $scope.isLoadingView.value = false;
-        $scope.groupOrders = groupOrders;
+        $scope.groupOrders = groupOrders.data;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
             show: true,
@@ -57,7 +57,7 @@ angular.module('groupeat.controllers.group-orders', [
         $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
       });
     })
-    .catch(function() {
+    .catch(function(error) {
       $scope.messageBackdrop = MessageBackdrop.noGeolocation();
       return;
     })
@@ -73,7 +73,7 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff, groupOrder.discountRate);
+		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff(), groupOrder.discountRate);
 		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
   };
 
