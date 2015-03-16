@@ -34,6 +34,7 @@ describe 'Service: HttpProviderInterceptor', ->
     $httpBackend.flush()
 
   it 'should have no authorization headers when the customer is not authorized', ->
+    sandbox.stub(Credentials, 'get').returns(undefined)
     $httpBackend.expectGET(ENV.apiEndpoint, (headers) ->
       expect(headers.Authorization).to.be.undefined
     ).respond(200, '')

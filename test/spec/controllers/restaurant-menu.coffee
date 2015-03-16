@@ -131,15 +131,6 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope.detailedProduct = null
       expect(scope.areDetailsShown(productTest)).to.be.false
 
-    it 'should right product\'s quantity be shown when cart is empty', ->
-      scope.changeProductToShowValue(productTest,11)
-      expect(scope.productToShowValue).to.equal(0)
-
-    it 'should right product\'s quantity be shown when cart is not empty', ->
-      scope.cart = cartTest
-      scope.changeProductToShowValue(productTest,11)
-      expect(scope.productToShowValue).to.equal(3)
-
     it 'should leave restaurant menu cell without poping if cart is empty', ->
       scope.onLeaveRestaurant()
       expect($state.current.name).to.not.equal('restaurant-menu')
