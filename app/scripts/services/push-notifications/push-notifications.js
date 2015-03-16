@@ -5,7 +5,7 @@ angular.module('groupeat.services.push-notifications', [
   'groupeat.services.push-notifications.android-notification-handler'
 ])
 //factory for processing push notifications.
-.factory('PushNotifications', function($rootScope, $cordovaPush, ENV, $resource, $q, ElementModifier, AndroidNotificationHandler) {
+.factory('PushNotifications', function($rootScope, $cordovaPush, $q, AndroidNotificationHandler) {
 
   var
 
@@ -68,11 +68,15 @@ angular.module('groupeat.services.push-notifications', [
   */
   var onDeviceReady = function(){
     var device = window.device;
-    if ( device.platform == 'Android' || device.platform == 'android' || device.platform == "amazon-fireos" )
+    if ( device.platform === 'Android' || device.platform === 'android' || device.platform === 'amazon-fireos' )
+    {
       notificationHandler = AndroidNotificationHandler;
+    }
     else
+    {
       deferredSubscription.reject('Device platform not handled');
-      
+    }
+
     registerDevice()
     .then(function() {
       return bindNotificationHandler();
