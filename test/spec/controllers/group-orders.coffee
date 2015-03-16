@@ -285,7 +285,3 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.onNewGroupOrder()
       expect($state.current.name).to.not.equal('restaurants')
       $state.go.should.have.been.called
-
-
-3895239.191
-3895158.948
