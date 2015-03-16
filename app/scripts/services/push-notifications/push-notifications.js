@@ -49,10 +49,12 @@ angular.module('groupeat.services.push-notifications', [
 
     $cordovaPush.register(config)
     .then(function(result) {
-      deferred.resolve(result);
+      window.alert(result);
+      deferred.resolve(JSON.stringify(result));
     })
     .catch(function(err) {
-      deferred.reject(err);
+      window.alert(err);
+      deferred.reject(JSON.stringify(err));
     });
     return deferred.promise;
   };
