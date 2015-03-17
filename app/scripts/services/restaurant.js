@@ -1,8 +1,11 @@
 'use strict';
 
-angular.module('groupeat.services.restaurant', ['groupeat.services.backend-utils'])
+angular.module('groupeat.services.restaurant', [
+  'config',
+  'ngResource'
+])
 
-.factory('Restaurant', function($resource, $q, ENV, BackendUtils) {
+.factory('Restaurant', function($resource, $q, ENV) {
 
   var resource = $resource(ENV.apiEndpoint+'/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
 
@@ -12,8 +15,8 @@ angular.module('groupeat.services.restaurant', ['groupeat.services.backend-utils
   * @methodOf Restaurant
   *
   * @description
-  * Returns the list of currently opened restaurants
-  * if rejected, an error message in proper locale will be rejected
+  * Returns a promise resolved with the list of currently opened restaurants if the server responds properly
+  * Else the promise is rejected
   * https://groupeat.fr/docs
   *
   */
@@ -23,8 +26,8 @@ angular.module('groupeat.services.restaurant', ['groupeat.services.backend-utils
     .then(function(response) {
       defer.resolve(response.data);
     })
-    .catch(function(errorResponse) {
-      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+    .catch(function() {
+      defer.reject();
     });
     return defer.promise;
   };
