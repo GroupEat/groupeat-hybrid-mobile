@@ -124,9 +124,12 @@
   "newOrder": "Nouvelle Commande",
   "noGeolocationTitle": "Echec de localisation",
   "noGeolocationDetails": "Autorisez Groupeat à accéder à vos données de geolocalisation dans vos réglages téléphone pour profiter de nos offres !",
+
   "emptyMenuTitle": "Aucun Produit",
   "emptyMenuDetails": "Ce restaurant ne propose aucun produit de cette catégorie",
   "emptyCartTitle": "Panier Vide",
   "emptyCartDetails": "Ajoutez dès maintenant des produits à votre panier !"
+
+  "foodrush": "FoodRush !"
 
 }

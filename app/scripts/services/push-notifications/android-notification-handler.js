@@ -2,10 +2,11 @@
 
 
 angular.module('groupeat.services.push-notifications.android-notification-handler', [
-  'ngResource'
+  'ngResource',
 ])
-//factory for processing push notifications.
-.factory('AndroidNotificationHandler', function(ENV, $resource, $q, ElementModifier) {
+
+
+.factory('AndroidNotificationHandler', function(ENV, $resource, $q, ElementModifier, $ionicModal) {
 
   var
 
@@ -42,6 +43,14 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
         deferredRegistration.reject(ElementModifier.errorMsgFromBackend(errorResponse));
       });
     }
+  },
+
+  handleGCMMessageEvent = function(notification) {
+    $ionicModal.fromTemplateUrl('templates/modals/notification.html', {
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      modal.show();
+    });
   };
 
 
@@ -64,8 +73,7 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
       break;
 
     case 'message':
-      // this is the actual push notification. its format depends on the data model from the push server
-      window.alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+      handleGCMMessageEvent(notification);
       break;
 
     case 'error':
