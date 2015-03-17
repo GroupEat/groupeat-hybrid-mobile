@@ -1,10 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.authentication', [
-  'config',
-  'ngResource',
-  'groupeat.services.backend-utils'
-])
+angular.module('groupeat.services.authentication', ['groupeat.services.backend-utils'])
 
 .factory('Authentication',
 function ($resource, $q, ENV, BackendUtils) {

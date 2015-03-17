@@ -1,10 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.order', [
-	'config',
-	'ngResource',
-	'groupeat.services.element-modifier'
-])
+angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 
 .service('Order', function(ENV, $q, $resource, BackendUtils) {
 
