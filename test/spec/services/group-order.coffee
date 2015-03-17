@@ -4,7 +4,7 @@ describe 'Service: GroupOrder', ->
   beforeEach ->
     module 'groupeat.services.group-order'
 
-  GroupOrder = scope = $httpBackend = ENV = sandbox = BackendUtils = Customer = {}
+  GroupOrder = scope = $httpBackend = ENV = sandbox = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -14,11 +14,7 @@ describe 'Service: GroupOrder', ->
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       GroupOrder = $injector.get('GroupOrder')
       ENV = $injector.get('ENV')
-      BackendUtils = $injector.get('BackendUtils')
       sandbox = sinon.sandbox.create()
-
-  afterEach ->
-    mockLocalStorage = {}
 
   describe 'GroupOrder#get', ->
 
@@ -36,9 +32,7 @@ describe 'Service: GroupOrder', ->
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      errorMsgFromBackend = 'errorMsgFromBackend'
-      sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=\\d+&include=restaurant$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
-      GroupOrder.get(1, 1).should.be.rejectedWith(errorMsgFromBackend)
+      GroupOrder.get(1, 1).should.be.rejected
       $httpBackend.flush()
