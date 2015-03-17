@@ -42,13 +42,13 @@ angular.module('groupeat.controllers.cart', [
 	$scope.deliveryAddress = {
 		value: null
 	};
+	$scope.isNewOrder = {
+		value: null
+	};
 	$scope.addressSupplement = {
 		value: null
 	};
 	$scope.predefinedDeliveryAddress = {
-		value: null
-	};
-	$scope.saveNewAddress = {
 		value: null
 	};
 
@@ -66,10 +66,18 @@ angular.module('groupeat.controllers.cart', [
 		else
 		{
 			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
+			if(Order.getCurrentOrder().groupOrderId === null) {
+				$scope.isNewOrder.value = true ;
+			}
+			else {
+				$scope.isNewOrder.value = false ;
+			}
 		}
 	};
 
 	$scope.loadAddressInformation = function() {
+		// hasPredefinedPersonalAddress is setting to true to display the loading process 
+		$scope.hasPredefinedPersonalAddress = true;
 		$scope.residencies = Address.getResidencies();
 		PredefinedAddresses.get()
 		.then(function(predefinedAddresses) {
@@ -121,7 +129,7 @@ angular.module('groupeat.controllers.cart', [
 			});
 
 			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
-			Order.setFoodRushTime($scope.FoodRushTime.value);
+			Order.setFoodRushTime($scope.foodRushTime.value);
 			Order.setProductFormats(productFormats);
 			$mdDialog.show({
 				targetEvent: ev,
@@ -142,36 +150,39 @@ angular.module('groupeat.controllers.cart', [
 		else
 		{
 			// TODO : process showing "circle running"
-			$scope.validateAddress($scope.AddressTypeSelected.value)
+			$scope.validateAddress($scope.addressTypeSelected.value)
 			.then(function() {
-				if ($scope.AddressTypeSelected.value === 'myAddress')
+				if ($scope.addressTypeSelected.value === 'myAddress')
 				{
-					Order.setStreet($scope.userAddress.data.street);
-					Order.setDetails($scope.userAddress.data.details);
-					Order.setLatitude($scope.userAddress.data.latitude);
-					Order.setLongitude($scope.userAddress.data.longitude);
+					console.log($scope.userAddress);
+					Order.setStreet($scope.userAddress.street);
+					Order.setDetails($scope.userAddress.details);
+					Order.setLatitude($scope.userAddress.latitude);
+					Order.setLongitude($scope.userAddress.longitude);
 				}
-				else if ($scope.AddressTypeSelected.value === 'enterAddress')
+				else if ($scope.addressTypeSelected.value === 'enterAddress')
 				{
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.DeliveryAddress.value);
+					console.log(residencyInformations);
 					Order.setStreet(residencyInformations.street);
 					Order.setDetails($scope.AddressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);
 					Order.setLongitude(residencyInformations.longitude);
 
+					/* Update User address code, keeping for calzone or later...
 					if ($scope.SaveNewAddress.value)
 					{
 						var addressParams = {
 							'street': residencyInformations.street,
 							'details': $scope.AddressSupplement.value,
 							'latitude': residencyInformations.latitude,
-							'longitude': residencyInformations.longitude
-						};
+											};
+		'longitude': residencyInformations.longitude
 						Address.update({id: $scope.userCredit.id}, addressParams);
-					}
+					}*/
 				}
-				else if ($scope.AddressTypeSelected.value === 'predefinedAddress')
+				else if ($scope.addressTypeSelected.value === 'predefinedAddress')
 				{
 					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
 						if (predefinedAddress.details === $scope.PredefinedDeliveryAddress.value)
@@ -202,7 +213,6 @@ angular.module('groupeat.controllers.cart', [
 		$scope.deliveryAddress.value = undefined;
 		$scope.addressSupplement.value = undefined;
 		$scope.predefinedDeliveryAddress.value = undefined;
-		$scope.saveNewAddress.value = false;
 	};
 
 	$scope.loadCart();

@@ -49,12 +49,12 @@
 			</ion-item>
 		</ion-list>
 
-		<h5 ng-hide="currentOrder.groupOrderId" class="login-text-first-page add-horizontal-margin no-bottom-margin">
+		<h5 ng-show="isNewOrder.value" class="login-text-first-page add-horizontal-margin no-bottom-margin">
 			{{ 'howLongFoodRush' | translate }} <a class="energized">Food</a><a class="assertive">Rush</a> ?
 		</h5>
 
-		<div ng-hide="currentOrder.groupOrderId" layout="row" layout-wrap>
-			<md-radio-group flex="20" ng-model="FoodRushTime.value" ng-repeat="d in FoodRushTimeData">
+		<div ng-show="isNewOrder.value" layout="row" layout-wrap>
+			<md-radio-group flex="20" ng-model="foodRushTime.value" ng-repeat="d in foodRushTimeData">
 				<md-radio-button ng-value="d.value" class="center">
 				</md-radio-button>
 				<a class="center"> {{ d.label }} &nbsp &nbsp </a>
