@@ -45,7 +45,7 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
     }
   },
 
-  handleGCMMessageEvent = function(notification) {
+  handleGCMMessageEvent = function() {
     $ionicModal.fromTemplateUrl('templates/modals/notification.html', {
       animation: 'slide-in-up'
     }).then(function(modal) {
@@ -73,7 +73,7 @@ angular.module('groupeat.services.push-notifications.android-notification-handle
       break;
 
     case 'message':
-      handleGCMMessageEvent(notification);
+      handleGCMMessageEvent();
       break;
 
     case 'error':
