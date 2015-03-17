@@ -22,7 +22,7 @@ describe 'Service: GroupOrder', ->
       GroupOrder.should.have.property('get')
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=\\d+&latitude=\\d+&longitude=1&include=restaurant$')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=1&include=restaurant$')
       orders = []
       response =
         data:

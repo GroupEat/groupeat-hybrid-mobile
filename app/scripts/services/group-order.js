@@ -15,8 +15,8 @@ angular.module('groupeat.services.group-order', [
   * @methodOf GroupOrder
   *
   * @description
-  * Returns the list of current group orders
-  * if rejected, an error message in proper locale will be rejected
+  * Returns a promise resolved with the list of current group orders if the server responds properly
+  * Else the promise is rejected
   * https://groupeat.fr/docs
   *
   */
