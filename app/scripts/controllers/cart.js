@@ -82,6 +82,50 @@ angular.module('groupeat.controllers.cart', [
 		else {
 			$scope.predefinedDeliveryAddress.hasValue = true;
 		}
+
+		$scope.shouldAddressDialogConfirmButtonBeDisable();
+	};
+
+	$scope.shouldAddressDialogConfirmButtonBeDisable = function() {
+		/*
+		Depends on which radio button is on (= which addressType has been
+		selected), we check if a delivery address has been selected/entered
+		*/
+		var shouldBeDisable ;
+
+		if ($scope.addressTypeSelected.value === 'myAddress') {
+			if ($scope.hasPredefinedPersonalAddress.hasValue) {
+				if ($scope.hasPredefinedPersonalAddress.value) {
+					shouldBeDisable = false;
+				}
+				else {
+					shouldBeDisable = true;
+				}
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else if ($scope.addressTypeSelected.value === 'enterAddress') {
+			if($scope.deliveryAddress.hasValue && $scope.addressSupplement.hasValue) {
+				shouldBeDisable = false;
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else if ($scope.addressTypeSelected.value === 'predefinedAddress') {
+			if($scope.predefinedDeliveryAddress.hasValue) {
+				shouldBeDisable = false;
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else {
+			shouldBeDisable = true;
+		}
+		return shouldBeDisable;
 	};
 
 	$scope.loadCart = function() {

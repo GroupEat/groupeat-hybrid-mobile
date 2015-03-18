@@ -141,7 +141,7 @@
 		<md-button ng-click="closeAskForAddressDialog(true)">
 			{{ 'cancel' | translate }}
 		</md-button>
-		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" > <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
+		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" ng-disabled="shouldAddressDialogConfirmButtonBeDisable()"> <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
 			{{ 'ok' | translate }}
 		</md-button>
 	</div>
