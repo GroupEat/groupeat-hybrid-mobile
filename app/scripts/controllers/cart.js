@@ -40,16 +40,48 @@ angular.module('groupeat.controllers.cart', [
 	];
 
 	$scope.deliveryAddress = {
+		hasValue: false,
 		value: null
 	};
+
 	$scope.isNewOrder = {
 		value: null
 	};
 	$scope.addressSupplement = {
+		hasValue: false,
 		value: null
 	};
 	$scope.predefinedDeliveryAddress = {
+		hasValue: false,
 		value: null
+	};
+
+	$scope.hasPredefinedPersonalAddress = {
+		hasValue: false,
+		value: null
+	};
+
+	$scope.detectPlaceholder = function() {
+		if($scope.deliveryAddress.value === null) {
+			$scope.deliveryAddress.hasValue = false;
+		}
+		else {
+			$scope.deliveryAddress.hasValue = true;
+		}
+
+		if($scope.addressSupplement.value === null || $scope.addressSupplement.value === '') {
+			$scope.addressSupplement.hasValue = false;
+		}
+		else {
+			$scope.addressSupplement.hasValue = true;
+		}
+
+		if($scope.predefinedDeliveryAddress.value === null) {
+			$scope.predefinedDeliveryAddress.hasValue = false;
+		}
+		else {
+			$scope.predefinedDeliveryAddress.hasValue = true;
+		}
 	};
 
 	$scope.loadCart = function() {
@@ -76,8 +108,6 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.loadAddressInformation = function() {
-		// hasPredefinedPersonalAddress is setting to true to display the loading process 
-		$scope.hasPredefinedPersonalAddress = true;
 		$scope.residencies = Address.getResidencies();
 		PredefinedAddresses.get()
 		.then(function(predefinedAddresses) {
@@ -86,7 +116,8 @@ angular.module('groupeat.controllers.cart', [
 		})
 		.then(function(userAddress) {
 			$scope.userAddress = userAddress;
-			$scope.hasPredefinedPersonalAddress = _.isEmpty($scope.userAddress.data);
+			$scope.hasPredefinedPersonalAddress.value = _.isEmpty($scope.userAddress.data);
+			$scope.hasPredefinedPersonalAddress.hasValue = true;
 		})
 		.catch(function() {
 			$scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
@@ -211,9 +242,10 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.resetDeliveryAddress = function() {
-		$scope.deliveryAddress.value = undefined;
-		$scope.addressSupplement.value = undefined;
-		$scope.predefinedDeliveryAddress.value = undefined;
+		$scope.deliveryAddress.value = null;
+		$scope.addressSupplement.value = null;
+		$scope.predefinedDeliveryAddress.value = null;
+		$scope.detectPlaceholder();
 	};
 
 	$scope.loadCart();

@@ -9,7 +9,7 @@
         </md-radio-button>
 
         <div ng-show="addressType.value=='enterAddress'">
-        	<md-select ng-disabled="addressTypeSelected.value!='enterAddress'" ng-model="deliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
+        	<md-select ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='enterAddress'" ng-model="deliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
 				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
 			</md-select>
 
@@ -17,12 +17,12 @@
 				<label>
 					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
 				</label>
-				<input ng-disabled="addressTypeSelected.value!='enterAddress'" ng-model="addressSupplement.value" name="addressSupplement">
+				<input ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='enterAddress'" ng-model="addressSupplement.value" name="addressSupplement">
 			</md-input-container>
         </div>
 
         <div ng-show="addressType.value=='predefinedAddress'">
-        	<md-select ng-disabled="addressTypeSelected.value!='predefinedAddress'" class="full-width select-content-item" ng-model="predefinedDeliveryAddress.value" placeholder="Lieux communs">
+        	<md-select ng-model="predefinedDeliveryAddress.value" ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='predefinedAddress'" class="full-width select-content-item" placeholder="Lieux communs">
     			<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses">{{ place.details }}</md-option>
   			</md-select>
         </div>
@@ -90,27 +90,47 @@
 
 		<md-item>
 			<md-item-content>
-				<div> <b>Vous serez livré au : </b></div>
+				<div> <b>{{ 'beDeliveredAt' | translate }}</b></div>
 			</md-item-content>
 
 			<div ng-show="addressTypeSelected.value=='myAddress'">
-				<div ng-show="hasPredefinedPersonalAddress">
-					{{ userAddress.street || "loading..."}} <br />
-					{{ userAddress.details || "" }}
+				<div ng-show="hasPredefinedPersonalAddress.hasValue">
+					<div ng-show="hasPredefinedPersonalAddress.value">
+						{{ userAddress.street }} <br />
+						{{ userAddress.details }}
+					</div>
+					<div ng-hide="hasPredefinedPersonalAddress.value">
+						{{ 'noPersonalAddress' | translate }}
+					</div>
 				</div>
-				<div ng-hide="hasPredefinedPersonalAddress">
-					{{ "Vous n'avez pas d'adresse perso enregistrée." }}
+				<div ng-hide="hasPredefinedPersonalAddress.hasValue">
+					{{ 'loading' | translate }}
 				</div>
 			</div>
 
 			<div ng-show="addressTypeSelected.value=='enterAddress'">
-				{{ deliveryAddress.value || "select residence" }} <br/>
-				{{ addressSupplement.value || "enter details"}}
-
+				<div ng-show="deliveryAddress.hasValue">
+					{{ deliveryAddress.value | translate }} <br/>
+				</div>
+				<div ng-show="addressSupplement.hasValue">
+					{{ addressSupplement.value }}
+				</div>
+				
+				<div ng-hide="deliveryAddress.hasValue" class="placeholder">
+					{{ 'selectResidency' | translate }} <br/>
+				</div>
+				<div ng-hide="addressSupplement.hasValue" class="placeholder">
+					{{ 'addressSupplement' | translate }}
+				</div>
 			</div>
 
 			<div ng-show="addressTypeSelected.value=='predefinedAddress'">
-				{{ predefinedDeliveryAddress.value || "Selectionnez un lieu commun"}}
+				<div ng-show="predefinedDeliveryAddress.hasValue">
+					{{ predefinedDeliveryAddress.value }}
+				</div>
+				<div ng-hide="predefinedDeliveryAddress.hasValue" class="placeholder">
+					{{ 'selectCommonPlace' | translate }}
+				</div>
 			</div>
 
 		</md-item>

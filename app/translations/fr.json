@@ -85,6 +85,12 @@
   "missingFoodRushTime": "Vous avez oublié de sélectionner une durée pour le FoodRush",
   "deliveryAddress": "Adresse de livraison",
 
+  "beDeliveredAt": "Vous serez livré au :",
+  "loading": "Chargement...",
+  "noPersonalAddress": "Vous n'avez pas d'adresse perso enregistrée.",
+  "selectResidency": "Séléctionnez une résidence" ,
+  "selectCommonPlace": "Séléctionnez un lieu commun",
+
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
 
