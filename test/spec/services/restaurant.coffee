@@ -1,10 +1,10 @@
-describe 'Service: GroupOrder', ->
+describe 'Service: Restaurant', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat.services.group-order'
+    module 'groupeat.services.restaurant'
 
-  GroupOrder = scope = $httpBackend = ENV = sandbox = {}
+  Restaurant = scope = $httpBackend = ENV = sandbox = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -12,27 +12,26 @@ describe 'Service: GroupOrder', ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      GroupOrder = $injector.get('GroupOrder')
+      Restaurant = $injector.get('Restaurant')
       ENV = $injector.get('ENV')
       sandbox = sinon.sandbox.create()
 
-  describe 'GroupOrder#get', ->
+  describe 'Restaurant#get', ->
 
     it 'should have an get method', ->
-      GroupOrder.should.have.property('get')
-
+      Restaurant.should.have.property('get')
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=1&include=restaurant$')
-      orders = []
+      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
+      restaurants = []
       response =
         data:
-          orders
+          restaurants
       $httpBackend.expect('GET', regex).respond(response)
-      GroupOrder.get(1, 1).should.become(orders)
+      Restaurant.get(1, 1).should.become(restaurants)
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=\\d+&include=restaurant$')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
-      GroupOrder.get(1, 1).should.be.rejected
+      Restaurant.get(1, 1).should.be.rejected
       $httpBackend.flush()

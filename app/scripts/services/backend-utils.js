@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('groupeat.services.backend-utils', [
+  'config',
   'ionic',
+  'ngResource',
   'pascalprecht.translate',
   'sprintf',
   'groupeat.services.credentials',

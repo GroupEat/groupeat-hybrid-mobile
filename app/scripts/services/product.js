@@ -1,8 +1,6 @@
 'use strict';
 
 angular.module('groupeat.services.product', [
-  'config',
-  'ngResource',
   'groupeat.services.backend-utils',
   'groupeat.services.lodash'
 ])

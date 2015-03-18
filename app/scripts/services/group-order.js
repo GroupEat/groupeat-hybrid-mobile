@@ -2,11 +2,10 @@
 
 angular.module('groupeat.services.group-order', [
   'config',
-  'ngResource',
-  'groupeat.services.backend-utils'
+  'ngResource'
 ])
 
-.factory('GroupOrder', function($resource, $q, ENV, BackendUtils) {
+.factory('GroupOrder', function($resource, $q, ENV) {
 
   var resource = $resource(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
 
@@ -16,8 +15,8 @@ angular.module('groupeat.services.group-order', [
   * @methodOf GroupOrder
   *
   * @description
-  * Returns the list of current group orders
-  * if rejected, an error message in proper locale will be rejected
+  * Returns a promise resolved with the list of current group orders if the server responds properly
+  * Else the promise is rejected
   * https://groupeat.fr/docs
   *
   */
@@ -27,8 +26,8 @@ angular.module('groupeat.services.group-order', [
     .then(function(response) {
       defer.resolve(response.data);
     })
-    .catch(function(errorResponse) {
-      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+    .catch(function() {
+      defer.reject();
     });
     return defer.promise;
   };

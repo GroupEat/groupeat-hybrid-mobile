@@ -1,10 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.customer', [
-  'config',
-  'ngResource',
-  'groupeat.services.backend-utils'
-])
+angular.module('groupeat.services.customer', ['groupeat.services.backend-utils'])
 
 .factory('Customer', function($resource, $q, ENV, BackendUtils) {
 
