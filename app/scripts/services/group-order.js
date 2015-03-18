@@ -1,9 +1,6 @@
 'use strict';
 
-angular.module('groupeat.services.group-order', [
-  'config',
-  'ngResource'
-])
+angular.module('groupeat.services.group-order', ['groupeat.services.backend-utils'])
 
 .factory('GroupOrder', function($resource, $q, ENV) {
 
