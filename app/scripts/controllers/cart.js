@@ -15,6 +15,12 @@ angular.module('groupeat.controllers.cart', [
 
 .controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
+	/* -------------------------------------------------------------------------
+	All variables are defined here.
+	It is usual here to define an object to use its 'value' propoerty, and its 'hasValue' one
+	It is an angular way, especially if those variables are used in ngModels
+	   ------------------------------------------------------------------------
+	*/
 	var $translate = $filter('translate');
 
 	$scope.currentOrder = Order.getCurrentOrder();
@@ -61,72 +67,14 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
-	$scope.detectPlaceholder = function() {
-		if($scope.deliveryAddress.value === null) {
-			$scope.deliveryAddress.hasValue = false;
-		}
-		else {
-			$scope.deliveryAddress.hasValue = true;
-		}
+/* --------------------------------------------------------------------------------------------------------------------------- */
 
-		if($scope.addressSupplement.value === null || $scope.addressSupplement.value === '') {
-			$scope.addressSupplement.hasValue = false;
-		}
-		else {
-			$scope.addressSupplement.hasValue = true;
-		}
-
-		if($scope.predefinedDeliveryAddress.value === null) {
-			$scope.predefinedDeliveryAddress.hasValue = false;
-		}
-		else {
-			$scope.predefinedDeliveryAddress.hasValue = true;
-		}
-
-		$scope.shouldAddressDialogConfirmButtonBeDisable();
-	};
-
-	$scope.shouldAddressDialogConfirmButtonBeDisable = function() {
-		/*
-		Depends on which radio button is on (= which addressType has been
-		selected), we check if a delivery address has been selected/entered
-		*/
-		var shouldBeDisable ;
-
-		if ($scope.addressTypeSelected.value === 'myAddress') {
-			if ($scope.hasPredefinedPersonalAddress.hasValue) {
-				if ($scope.hasPredefinedPersonalAddress.value) {
-					shouldBeDisable = false;
-				}
-				else {
-					shouldBeDisable = true;
-				}
-			}
-			else {
-				shouldBeDisable = true;
-			}
-		}
-		else if ($scope.addressTypeSelected.value === 'newAddress') {
-			if($scope.deliveryAddress.hasValue && $scope.addressSupplement.hasValue) {
-				shouldBeDisable = false;
-			}
-			else {
-				shouldBeDisable = true;
-			}
-		}
-		else if ($scope.addressTypeSelected.value === 'predefinedAddress') {
-			if($scope.predefinedDeliveryAddress.hasValue) {
-				shouldBeDisable = false;
-			}
-			else {
-				shouldBeDisable = true;
-			}
-		}
-		else {
-			shouldBeDisable = true;
-		}
-		return shouldBeDisable;
-	};
+	/* -------------------------------------------------------------------------
+	Here comes the loading methods. It's kind of constructor of ctrl, they are called
+	when ctrl is created, and could be recalled if they have to.
+	They load information, such as user address, predefined addresses, cart,...
+	   ------------------------------------------------------------------------
+	*/
 
 	$scope.loadCart = function() {
 		$scope.cart = Cart;
@@ -168,28 +116,16 @@ angular.module('groupeat.controllers.cart', [
 		});
 	};
 
-	$scope.validateOrder = function() {
-		var deferred = $q.defer();
-		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === null)
-		{
-			deferred.reject($translate('missingFoodRushTime'));
-		}
-	  else
-		{
-			deferred.resolve();
-		}
-		return deferred.promise;
-	};
+/* --------------------------------------------------------------------------------------------------------------------------- */
 
-	$scope.validateAddress = function() {
-		var deferred = $q.defer();
-		deferred.resolve();
-		return deferred.promise;
-	};
-
-	$scope.debug = function() {
-		// console.log($scope.addressTypeSelected);
-	};
+	/* -------------------------------------------------------------------------
+	Here comes the confirm order part. After user has fulled information, such as the 
+	wanted time for FoodRush, a Popup shows to ask for the delivery address.
+	There is here two functions : the first sets the Order and calls the popup ;
+	the second is calling when user leaves popup. This is the second function in which 
+	all validation is made, and in which we process to the backend request PlaceOrder
+	   ------------------------------------------------------------------------
+	*/
 
 	$scope.onConfirmOrderTouch = function(ev) {
 		$scope.validateOrder()
@@ -285,14 +221,140 @@ angular.module('groupeat.controllers.cart', [
 		}
 	};
 
+/* --------------------------------------------------------------------------------------------------------------------------- */
+
+	/* -------------------------------------------------------------------------
+	Here comes the validation functions.
+	The first is calling when user first confirms its order (after choosing foodrush time)
+	The second is calling when user confirm its delivery Address.
+	   ------------------------------------------------------------------------
+	*/
+
+	$scope.validateOrder = function() {
+		var deferred = $q.defer();
+		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === null)
+		{
+			deferred.reject($translate('missingFoodRushTime'));
+		}
+	  else
+		{
+			deferred.resolve();
+		}
+		return deferred.promise;
+	};
+
+	$scope.validateAddress = function() {
+		/* TODO : validate address format ? */
+		var deferred = $q.defer();
+		deferred.resolve();
+		return deferred.promise;
+	};
+
+/* --------------------------------------------------------------------------------------------------------------------------- */
+
+	/* -------------------------------------------------------------------------
+	Here comes the beautiful binding between html and ctrl.
+	We handle here to update variables in html according to user interaction.
+	   ------------------------------------------------------------------------
+	*/
+
+	$scope.detectPlaceholder = function() {
+		/*
+		this function is called by ngChange when user interact with all inputs (mdSelect, mdInput)
+		*/
+		if($scope.deliveryAddress.value === null) {
+			$scope.deliveryAddress.hasValue = false;
+		}
+		else {
+			$scope.deliveryAddress.hasValue = true;
+		}
+
+		if($scope.addressSupplement.value === null || $scope.addressSupplement.value === '') {
+			$scope.addressSupplement.hasValue = false;
+		}
+		else {
+			$scope.addressSupplement.hasValue = true;
+		}
+
+		if($scope.predefinedDeliveryAddress.value === null) {
+			$scope.predefinedDeliveryAddress.hasValue = false;
+		}
+		else {
+			$scope.predefinedDeliveryAddress.hasValue = true;
+		}
+
+		$scope.shouldAddressDialogConfirmButtonBeDisable();
+	};
+
+	$scope.shouldAddressDialogConfirmButtonBeDisable = function() {
+		/*
+		This function return true if the OK button of popup should be disabled,
+		else false.
+		Depends on which radio button is on (= which addressType has been
+		selected), we check if a delivery address has been selected/entered
+		*/
+		var shouldBeDisable ;
+
+		if ($scope.addressTypeSelected.value === 'myAddress') {
+			if ($scope.hasPredefinedPersonalAddress.hasValue) {
+				if ($scope.hasPredefinedPersonalAddress.value) {
+					shouldBeDisable = false;
+				}
+				else {
+					shouldBeDisable = true;
+				}
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else if ($scope.addressTypeSelected.value === 'newAddress') {
+			if($scope.deliveryAddress.hasValue && $scope.addressSupplement.hasValue) {
+				shouldBeDisable = false;
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else if ($scope.addressTypeSelected.value === 'predefinedAddress') {
+			if($scope.predefinedDeliveryAddress.hasValue) {
+				shouldBeDisable = false;
+			}
+			else {
+				shouldBeDisable = true;
+			}
+		}
+		else {
+			shouldBeDisable = true;
+		}
+		return shouldBeDisable;
+	};
+
 	$scope.resetDeliveryAddress = function() {
+		/*
+		this function is called when user interact with radio button,
+		which means when user changes the type of delivery address 
+		(personal, predefined, or new)
+		*/
 		$scope.deliveryAddress.value = null;
 		$scope.addressSupplement.value = null;
 		$scope.predefinedDeliveryAddress.value = null;
 		$scope.detectPlaceholder();
 	};
 
+/* --------------------------------------------------------------------------------------------------------------------------- */
+
+	/* -------------------------------------------------------------------------
+	Here comes the "construction" part of the ctrl. 
+	   ------------------------------------------------------------------------
+	*/
+
 	$scope.loadCart();
 	$scope.loadAddressInformation();
 
 });
+
+	/* -------------------------------------------------------------------------
+	Here comes the sun... 
+	   ------------------------------------------------------------------------
+	*/
