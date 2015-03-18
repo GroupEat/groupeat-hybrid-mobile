@@ -26,17 +26,17 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.foodRushTimeData = [
-		{ label: '5 min', value: 5 },
-		{ label: '10 min', value: 10 },
-		{ label: '15 min', value: 15 },
-		{ label: '30 min', value: 30 },
-		{ label: '45 min', value: 45 }
+		{ label: $translate('fiveMin'), value: 5 },
+		{ label: $translate('tenMin'), value: 10 },
+		{ label: $translate('fifteenMin'), value: 15 },
+		{ label: $translate('thirtyMin'), value: 30 },
+		{ label: $translate('fortyFiveMin'), value: 45 }
 	];
 
 	$scope.addressTypes = [
-		{ label: 'Mon adresse', value: 'myAddress' },
-		{ label: 'Nouvelle adresse', value: 'enterAddress'},
-		{ label: 'Lieu commun', value: 'predefinedAddress'}
+		{ label: $translate('myAddress'), value: 'myAddress' },
+		{ label: $translate('newAddress'), value: 'newAddress'},
+		{ label: $translate('predefinedAddress'), value: 'predefinedAddress'}
 	];
 
 	$scope.deliveryAddress = {
@@ -106,7 +106,7 @@ angular.module('groupeat.controllers.cart', [
 				shouldBeDisable = true;
 			}
 		}
-		else if ($scope.addressTypeSelected.value === 'enterAddress') {
+		else if ($scope.addressTypeSelected.value === 'newAddress') {
 			if($scope.deliveryAddress.hasValue && $scope.addressSupplement.hasValue) {
 				shouldBeDisable = false;
 			}
@@ -236,7 +236,7 @@ angular.module('groupeat.controllers.cart', [
 					Order.setLatitude($scope.userAddress.latitude);
 					Order.setLongitude($scope.userAddress.longitude);
 				}
-				else if ($scope.addressTypeSelected.value === 'enterAddress')
+				else if ($scope.addressTypeSelected.value === 'newAddress')
 				{
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
@@ -277,7 +277,7 @@ angular.module('groupeat.controllers.cart', [
 				Cart.reset();
 				Order.resetCurrentOrder();
 				$state.go('group-orders');
-				Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
+				Popup.displayTitleOnly($translate('ordered'), 3000);
 			})
 	    .catch(function(errorMessage) {
 	      return Popup.displayError(errorMessage, 4000);
