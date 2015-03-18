@@ -73,6 +73,14 @@
   "yourCart": "Votre panier",
   "confirmOrder": "Valider ma Commande",
   "total": "Total",
+  "fiveMin": "5 min",
+  "tenMin": "10 min",
+  "fifteenMin": "15 min",
+  "thirtyMin": "30 min",
+  "fortyFiveMin": "45 min",
+  "myAddress": "Mon adresse",
+  "newAddress": "Nouvelle adresse",
+  "predefinedAddress": "Lieu commun",
   "emptyCart": "Votre panier est vide.",
   "howLongFoodRush" : "Quelle durée souhaitez-vous pour le",
   "min": "min",
@@ -84,6 +92,11 @@
   "ordered": "Votre commande a été passée.",
   "missingFoodRushTime": "Vous avez oublié de sélectionner une durée pour le FoodRush",
   "deliveryAddress": "Adresse de livraison",
+  "beDeliveredAt": "Vous serez livré au :",
+  "loading": "Chargement...",
+  "noPersonalAddress": "Vous n'avez pas d'adresse perso enregistrée.",
+  "selectResidency": "Séléctionnez une résidence" ,
+  "selectCommonPlace": "Séléctionnez un lieu commun",
 
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",
@@ -124,9 +137,12 @@
   "newOrder": "Nouvelle Commande",
   "noGeolocationTitle": "Echec de localisation",
   "noGeolocationDetails": "Autorisez Groupeat à accéder à vos données de geolocalisation dans vos réglages téléphone pour profiter de nos offres !",
+
   "emptyMenuTitle": "Aucun Produit",
   "emptyMenuDetails": "Ce restaurant ne propose aucun produit de cette catégorie",
   "emptyCartTitle": "Panier Vide",
-  "emptyCartDetails": "Ajoutez dès maintenant des produits à votre panier !"
+  "emptyCartDetails": "Ajoutez dès maintenant des produits à votre panier !",
+
+  "foodrush": "FoodRush !"
 
 }

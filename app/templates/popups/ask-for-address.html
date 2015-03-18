@@ -3,13 +3,13 @@
 	<md-content>
 			<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
 
-	<md-radio-group flex="20" ng-model="AddressTypeSelected.value" ng-repeat="addressType in addressTypes" ng-init="AddressTypeSelected.value=addressTypes[0].value" ng-change="resetDeliveryAddress()">
+	<md-radio-group flex="20" ng-model="addressTypeSelected.value" ng-repeat="addressType in addressTypes" ng-init="addressTypeSelected.value=addressTypes[0].value" ng-change="resetDeliveryAddress()">
         <md-radio-button ng-value="addressType.value" class="first-radio-button">
         	{{ addressType.label }}
         </md-radio-button>
 
-        <div ng-show="addressType.value=='enterAddress'">
-        	<md-select ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-model="DeliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
+        <div ng-show="addressType.value=='newAddress'">
+        	<md-select ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='newAddress'" ng-model="deliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
 				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
 			</md-select>
 
@@ -17,16 +17,13 @@
 				<label>
 					<i class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</i>
 				</label>
-				<input ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-model="AddressSupplement.value" name="addressSupplement">
+				<input ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='newAddress'" ng-model="addressSupplement.value" name="addressSupplement">
 			</md-input-container>
-			<md-checkbox ng-disabled="AddressTypeSelected.value!='enterAddress'" ng-show="addressType.value=='enterAddress'" ng-model="SaveNewAddress.value"  class="small-text checkbox-margin">
-    			Enregistrer comme nouvelle addresse 
-  			</md-checkbox>
         </div>
 
         <div ng-show="addressType.value=='predefinedAddress'">
-        	<md-select ng-disabled="AddressTypeSelected.value!='predefinedAddress'" class="full-width select-content-item" ng-model="PredefinedDeliveryAddress.value" placeholder="Lieux communs">
-    			<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses.data">{{ place.details }}</md-option>
+        	<md-select ng-model="predefinedDeliveryAddress.value" ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='predefinedAddress'" class="full-width select-content-item" placeholder="Lieux communs">
+    			<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses">{{ place.details }}</md-option>
   			</md-select>
         </div>
         <div ng-hide="addressType.value=='predefinedAddress'" class="line-divider">
@@ -93,27 +90,47 @@
 
 		<md-item>
 			<md-item-content>
-				<div> <b>Vous serez livré au : </b></div>
+				<div> <b>{{ 'beDeliveredAt' | translate }}</b></div>
 			</md-item-content>
 
-			<div ng-show="AddressTypeSelected.value=='myAddress'">
-				<div ng-show="hasPredefinedPersonalAddress">
-					{{ userAddress.data.street || "loading..."}} <br />
-					{{ userAddress.data.details || "" }}
+			<div ng-show="addressTypeSelected.value=='myAddress'">
+				<div ng-show="hasPredefinedPersonalAddress.hasValue">
+					<div ng-show="hasPredefinedPersonalAddress.value">
+						{{ userAddress.street }} <br />
+						{{ userAddress.details }}
+					</div>
+					<div ng-hide="hasPredefinedPersonalAddress.value">
+						{{ 'noPersonalAddress' | translate }}
+					</div>
 				</div>
-				<div ng-hide="hasPredefinedPersonalAddress">
-					{{ "Vous n'avez pas d'adresse perso enregistrée." }}
+				<div ng-hide="hasPredefinedPersonalAddress.hasValue">
+					{{ 'loading' | translate }}
 				</div>
 			</div>
 
-			<div ng-show="AddressTypeSelected.value=='enterAddress'">
-				{{ DeliveryAddress.value || "select residence" }} <br/>
-				{{ AddressSupplement.value || "enter details"}}
-
+			<div ng-show="addressTypeSelected.value=='newAddress'">
+				<div ng-show="deliveryAddress.hasValue">
+					{{ deliveryAddress.value | translate }} <br/>
+				</div>
+				<div ng-show="addressSupplement.hasValue">
+					{{ addressSupplement.value }}
+				</div>
+				
+				<div ng-hide="deliveryAddress.hasValue" class="placeholder">
+					{{ 'selectResidency' | translate }} <br/>
+				</div>
+				<div ng-hide="addressSupplement.hasValue" class="placeholder">
+					{{ 'addressSupplement' | translate }}
+				</div>
 			</div>
 
-			<div ng-show="AddressTypeSelected.value=='predefinedAddress'">
-				{{ PredefinedDeliveryAddress.value || "Selectionnez un lieu commun"}}
+			<div ng-show="addressTypeSelected.value=='predefinedAddress'">
+				<div ng-show="predefinedDeliveryAddress.hasValue">
+					{{ predefinedDeliveryAddress.value }}
+				</div>
+				<div ng-hide="predefinedDeliveryAddress.hasValue" class="placeholder">
+					{{ 'selectCommonPlace' | translate }}
+				</div>
 			</div>
 
 		</md-item>
@@ -124,7 +141,7 @@
 		<md-button ng-click="closeAskForAddressDialog(true)">
 			{{ 'cancel' | translate }}
 		</md-button>
-		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" > <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
+		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" ng-disabled="shouldAddressDialogConfirmButtonBeDisable()"> <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
 			{{ 'ok' | translate }}
 		</md-button>
 	</div>
