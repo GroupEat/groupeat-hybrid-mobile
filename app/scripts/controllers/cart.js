@@ -120,17 +120,18 @@ angular.module('groupeat.controllers.cart', [
 		$scope.validateOrder()
 		.then(function() {
 			var productFormats = {};
-			_.forEach($scope.cart.productsItems, function(product) {
+			_.forEach(Cart.getProducts(), function(product) {
 				_.forEach(product.formats, function(format) {
 					if(format.quantity > 0) {
 						productFormats[format.id] = format.quantity;
 					}
 				});
 			});
-
+			console.log(productFormats);
 			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
 			Order.setFoodRushTime($scope.foodRushTime.value);
 			Order.setProductFormats(productFormats);
+
 			$mdDialog.show({
 				targetEvent: ev,
 				templateUrl: 'templates/popups/ask-for-address.html',
@@ -163,10 +164,10 @@ angular.module('groupeat.controllers.cart', [
 				else if ($scope.addressTypeSelected.value === 'enterAddress')
 				{
 					/* TODO : get information from residency */
-					var residencyInformations = Address.getAddressFromResidencyInformation($scope.DeliveryAddress.value);
+					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
 					console.log(residencyInformations);
 					Order.setStreet(residencyInformations.street);
-					Order.setDetails($scope.AddressSupplement.value);
+					Order.setDetails($scope.addressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);
 					Order.setLongitude(residencyInformations.longitude);
 
@@ -177,8 +178,8 @@ angular.module('groupeat.controllers.cart', [
 							'street': residencyInformations.street,
 							'details': $scope.AddressSupplement.value,
 							'latitude': residencyInformations.latitude,
-											};
-		'longitude': residencyInformations.longitude
+							'longitude': residencyInformations.longitude
+						};
 						Address.update({id: $scope.userCredit.id}, addressParams);
 					}*/
 				}
@@ -198,7 +199,7 @@ angular.module('groupeat.controllers.cart', [
 			})
 			.then(function() {
 				$mdDialog.hide();
-				Cart.resetCart();
+				Cart.reset();
 				Order.resetCurrentOrder();
 				$state.go('group-orders');
 				Popup.displayTitleOnly('Votre commande a bien été passée', 3000);
