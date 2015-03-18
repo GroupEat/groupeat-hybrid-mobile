@@ -5,7 +5,7 @@ angular.module('groupeat.services.product', [
   'groupeat.services.lodash'
 ])
 
-.factory('Product', function($resource, ENV, $q, BackendUtils, _) {
+.factory('Product', function($resource, ENV, $q, _) {
 
   var resource = $resource(ENV.apiEndpoint+'/restaurants/:restaurantId/products?include=formats');
 
@@ -32,8 +32,8 @@ angular.module('groupeat.services.product', [
       });
       defer.resolve(products);
     })
-    .catch(function(errorResponse) {
-      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+    .catch(function() {
+      defer.reject();
     });
     return defer.promise;
   };
