@@ -76,7 +76,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 
 			// Remove potentially a product if total quantity has been seen as 0
 			if (indexOfProductToBeDeleted[0]) {
-				products.splice(indexOfProductToBeDeleted[1] - 1, 1);
+				products.splice(indexOfProductToBeDeleted[1], 1);
 			}
 		},
 
@@ -84,10 +84,9 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			// Find product in products and decrement its quantity
 			_.forEach(products, function(product) {
 				if (product.id === productToDelete.id) {
-
-					_.forEach(product.formats, function(productFormats) {
-						if(productFormats.id === formatIndex && productFormats.quantity > 0) {
-							productFormats.quantity -= 1 ;
+					_.forEach(product.formats, function(productFormat) {
+						if(productFormat.id === formatIndex && productFormat.quantity > 0) {
+							productFormat.quantity -= 1 ;
 						}
 						else {}
 					});
