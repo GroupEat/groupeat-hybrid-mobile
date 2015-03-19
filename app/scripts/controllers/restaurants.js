@@ -21,11 +21,10 @@ angular.module('groupeat.controllers.restaurants', [
     }
     $geolocation.getCurrentPosition()
     .then(function(currentPosition) {
-      $scope.userCurrentPosition = currentPosition;
-      Restaurant.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
       .then(function(restaurants) {
         $scope.restaurants = restaurants;
-        if (_.isEmpty($scope.restaurants))
+        if (_.isEmpty(restaurants))
         {
           $scope.messageBackdrop = {
             show: true,
