@@ -17,12 +17,42 @@
 
 <!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
 
+  <md-content class="has-header" ng-hide="messageBackdrop.show">
+    <md-item>
+      <md-item-content layout="row" layout-wrap>
+        <div flex="25" ng-hide="isNewOrder.value" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <i class="ion-arrow-graph-down-right energized"></i>
+            {{ currentOrder.currentDiscount }} %
+          </h3>
+        </div>
+        <div flex="25" ng-hide="isNewOrder.value" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <i class="ion-android-stopwatch energized"></i>
+            <timer countdown="getTimeDiff(currentOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer>
+          </h3>
+        </div>
+        <div flex="50" ng-show="isNewOrder.value">
+        </div>
+        <div flex="25" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
+          </h3>
+        </div>
+        <div flex="25" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            {{ cart.getTotalPrice() | number : 2}}€
+          </h3>
+        </div>
+      </md-item-content>
+    </md-item>
+    <h6 class="rm-sub-header-divider"></h6>
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 
 <!-- - - - - - - - - - - - - - - - - - - LIST OF PRODUCTS - - - - - - - - - - - - - - - - - -->
 
-  <md-content class="has-header" ng-hide="messageBackdrop.show">
+    <ion-scroll direction="y">
     <md-list>
       <md-item ng-repeat="product in products">
         <md-item-content layout="row" layout-wrap on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
@@ -64,6 +94,7 @@
         </md-list>
       </md-item>
     </md-list>
+    </ion-scroll>
   </md-content>
 
 <!-- - - - - - - - - - - - - - - - - - - BACKDROP MESSAGE - - - - - - - - - - - - - - - - - -->
@@ -74,24 +105,5 @@
   </ion-content>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
-
-<!-- - - - - - - - - - - - - - - - - - - FOOTER BAR - - - - - - - - - - - - - - - - - -->
-
-  <ion-footer-bar class="bar-energized ">
-      <div class="row border-less">
-          <div class="col col-25">
-            <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.getTotalPrice() | number : 2}}€
-          </div>
-          <div class="col col-25">
-            <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
-          </div>
-          <div ng-hide="isNewOrder.value" class="col col-25">
-            {{ currentOrder.currentDiscount }} %
-          </div>
-      </div>
-   </ion-footer-bar>
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-
 
 </ion-view>

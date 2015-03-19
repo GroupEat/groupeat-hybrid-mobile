@@ -102,6 +102,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		}
 	};
 
+	$scope.getTimeDiff = function (endingAt) {
+		return Order.getTimeDiff(endingAt);
+	};
+
 	$scope.initCart();
 	$scope.onRefreshRestaurantMenu();
 

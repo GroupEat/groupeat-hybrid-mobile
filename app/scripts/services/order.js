@@ -9,7 +9,7 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 	var
 	currentOrder = {
 		'groupOrderId': null,
-		'timeLeft': null,
+		'endingAt': null,
 		'currentDiscount': null
 	},
 
@@ -67,14 +67,14 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 	resetCurrentOrder = function() {
 		currentOrder = {
 			'groupOrderId': null,
-			'timeLeft': null,
+			'endingAt': null,
 			'currentDiscount': null
 		};
 	},
 
-	setCurrentOrder = function(id, time, discount) {
+	setCurrentOrder = function(id, date, discount) {
 		currentOrder.groupOrderId = id;
-		currentOrder.timeLeft = time;
+		currentOrder.endingAt = date;
 		currentOrder.currentDiscount = discount;
 	},
 
@@ -88,6 +88,16 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 			defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
 		});
 		return defer.promise;
+	},
+
+	getTimeDiff = function(date) {
+		var response = null;
+		if(date !== null) {
+			var currentTime = new Date() ;
+			var endingTime = new Date(date.replace(/-/g, '/'));
+			response = Math.abs(endingTime - currentTime)/1000;
+		}
+		return response;
 	};
 
 
@@ -104,7 +114,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		resetCurrentOrder: resetCurrentOrder,
 		setCurrentOrder: setCurrentOrder,
 		save: save,
-		isNewOrder: isNewOrder
+		isNewOrder: isNewOrder,
+		getTimeDiff: getTimeDiff
 	};
 }
 );

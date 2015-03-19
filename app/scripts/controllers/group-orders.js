@@ -67,13 +67,11 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.getTimeDiff = function (endingAt) {
-    var currentTime = new Date() ;
-    var endingTime = new Date(endingAt.replace(/-/g, '/'));
-    return Math.abs(endingTime - currentTime)/1000;
+    return Order.getTimeDiff(endingAt);
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-		Order.setCurrentOrder(groupOrder.id, $scope.getTimeDiff(groupOrder.endingAt), groupOrder.discountRate);
+		Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate);
 		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
   };
 
