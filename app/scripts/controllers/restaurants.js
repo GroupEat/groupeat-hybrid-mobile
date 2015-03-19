@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurants', [
-  'groupeat.services.message-backdrop',
+  'groupeat.services.customer',
   'groupeat.services.lodash',
+  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.restaurant',
-  'ngGeolocation'
+  'ngGeolocation',
+  'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($scope, $state, Restaurant, MessageBackdrop, Network, _, $geolocation) {
+.controller('RestaurantsCtrl', function($mdDialog, $scope, $state, Customer, Restaurant, MessageBackdrop, Network, _, $geolocation) {
 
   $scope.restaurants = {};
 
@@ -55,7 +57,24 @@ angular.module('groupeat.controllers.restaurants', [
   };
 
   $scope.onRestaurantTouch = function(restaurantId) {
-		$state.go('restaurant-menu', {restaurantId: restaurantId});
+    // Checking if the customer has provided the needed further information before going further
+    Customer.checkMissingInformation()
+    .then(function() {
+      $state.go('restaurant-menu', {restaurantId: restaurantId});
+    })
+    .catch(function(missingPropertiesString) {
+      var confirm = $mdDialog.confirm({
+        parent: angular.element(document.body)
+      })
+      .title($translate('missingPropertiesTitle'))
+      .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
+      .ok($translate('settings'))
+      .cancel($translate('cancel'));
+      $mdDialog.show(confirm)
+      .then(function() {
+        $state.go('settings');
+      });
+    });
   };
 
   $scope.onRefreshRestaurants();

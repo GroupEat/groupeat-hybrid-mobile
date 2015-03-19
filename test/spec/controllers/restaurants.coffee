@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $state = $httpBackend = sandbox = MessageBackdrop = Network = Restaurant = $geolocation = $q = {}
+  scope = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Restaurant = $geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -15,6 +15,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $state = $injector.get('$state')
       sandbox.stub($state, 'go')
 
+      Customer = $injector.get('Customer')
       Restaurant = $injector.get('Restaurant')
       MessageBackdrop = $injector.get('MessageBackdrop')
       Network = $injector.get('Network')
@@ -22,7 +23,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $geolocation = $injector.get('$geolocation')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $scope: scope, $state: $state, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, _: _, $geolocation: $geolocation
+        $mdDialog: $injector.get('$mdDialog'), $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, _: _, $geolocation: $geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -45,7 +46,13 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should change the state with the given restaurant id', ->
       id = 1
+      sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
       scope.onRestaurantTouch(id)
+      scope.$digest()
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: id})
 
   describe 'RestaurantsCtrl#onRefreshRestaurants', ->
