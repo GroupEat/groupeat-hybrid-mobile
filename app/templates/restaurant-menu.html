@@ -1,5 +1,7 @@
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" hide-back-button="true">
 
+<!-- - - - - - - - - - - - - - - - - - - NAV BAR - - - - - - - - - - - - - - - - - -->
+
   <ion-nav-buttons side="right">
     <button class="button button-clear ion-ios-cart-outline right-header-bar-icon" ui-sref="cart">
     </button>
@@ -10,60 +12,98 @@
     </button>
   </ion-nav-buttons>
 
-  <ion-content has-header="true" ng-hide="messageBackdrop.show">
-    <ion-list>
-      <div ng-repeat="product in products">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-        <ion-item on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
-          <div class="border-less">
-              <b> {{ product.name }} </b>
-              <p> {{ product.description }} </p>
+
+<!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
+
+  <md-content class="has-header" ng-hide="messageBackdrop.show">
+    <md-item>
+      <md-item-content layout="row" layout-wrap>
+        <div flex="25" ng-hide="isNewOrder.value" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <i class="ion-arrow-graph-down-right energized"></i>
+            {{ currentOrder.currentDiscount }} %
+          </h3>
+        </div>
+        <div flex="25" ng-hide="isNewOrder.value" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <i class="ion-android-stopwatch energized"></i>
+            <timer countdown="getTimeDiff(currentOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer>
+          </h3>
+        </div>
+        <div flex="50" ng-show="isNewOrder.value">
+        </div>
+        <div flex="25" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
+          </h3>
+        </div>
+        <div flex="25" class="rm-sub-header-content">
+          <h3 class="rm-sub-header-text">
+            {{ cart.getTotalPrice() | number : 2}}€
+          </h3>
+        </div>
+      </md-item-content>
+    </md-item>
+    <h6 class="rm-sub-header-divider"></h6>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+<!-- - - - - - - - - - - - - - - - - - - LIST OF PRODUCTS - - - - - - - - - - - - - - - - - -->
+
+    <ion-scroll direction="y">
+    <md-list>
+      <md-item ng-repeat="product in products">
+        <md-item-content layout="row" layout-wrap on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
+          <div flex="90" class="md-tile-content">
+              <h3> {{ product.name }} </h3>
+              <h4> {{ product.description }} </h4>
           </div>
-        </ion-item>
-
-        <ion-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
-          <div class="row border-less">
-            <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
-              {{ format.name }} ({{ format.price }} €)
-            </div>
-            <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
-              {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
-            </div>
-
-            <div class="col col-10 ">
-              <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onDeleteProduct(product, format.id)"></a>
-            </div>
-            <div class="col col-10">
-              <a class="center">{{ cart.getFormatQuantity(format.id) }}</a>
-            </div>
-            <div class="col col-10 ">
-              <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onAddProduct(product, format)"></a>
-            </div>
-            <div class="col col-10 ">
-            </div>
+          <div flex="10" ng-show="cart.hasAtLeastOneProduct(product)" class="icon-height">
+              <i class="icon ion-ios-checkmark-empty assertive"></i>
           </div>
-        </ion-item>
-      </div>
-    </ion-list>
-  </ion-content>
+        </md-item-content>
+
+        <md-divider></md-divider>
+
+        <md-list>
+          <md-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
+            <md-item-content layout="row" layout-wrap>
+                <div flex="60" ng-show="isNewOrder.value" class="md-tile-content">
+                  {{ format.name }} ({{ format.price }} €)
+                </div>
+                <div flex="60" ng-hide="isNewOrder.value" class="md-tile-content">
+                  {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
+                </div>
+
+                <div flex="10">
+                  <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onDeleteProduct(product, format.id)"></a>
+                </div>
+                <div flex="10">
+                  <a class="center">{{ cart.getFormatQuantity(format.id) }}</a>
+                </div>
+                <div flex="10">
+                  <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onAddProduct(product, format)"></a>
+                </div>
+                <div flex="10">
+                </div>
+            </md-item-content>
+            <md-divider></md-divider>
+          </md-item>
+        </md-list>
+      </md-item>
+    </md-list>
+    </ion-scroll>
+  </md-content>
+
+<!-- - - - - - - - - - - - - - - - - - - BACKDROP MESSAGE - - - - - - - - - - - - - - - - - -->
 
   <ion-content has-header="true" scroll="false" ng-show="messageBackdrop.show">
     <ge-message-backdrop>
     </ge-message-backdrop>
   </ion-content>
 
-  <ion-footer-bar class="bar-energized ">
-      <div class="row border-less">
-          <div class="col col-25">
-            <i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.getTotalPrice() | number : 2}}€
-          </div>
-          <div class="col col-25">
-            <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
-          </div>
-          <div ng-show="currentOrder.groupOrderId" class="col col-25">
-            {{ currentOrder.currentDiscount }} %
-          </div>
-      </div>
-   </ion-footer-bar>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
 </ion-view>

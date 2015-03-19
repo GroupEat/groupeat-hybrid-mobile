@@ -57,7 +57,7 @@ describe 'Service: Authentication', ->
 
     it 'should return a fulfilled promise when the server responds properly', ->
       credentials = 'credentials'
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(200, 'Success')
+      $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
       Authentication.resetPassword(credentials).should.be.fulfilled
       $httpBackend.flush()
 
@@ -65,6 +65,6 @@ describe 'Service: Authentication', ->
       errorKeyFromBackend = 'errorKeyFromBackend'
       sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKeyFromBackend)
       credentials = 'credentials'
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(404, 'Failure')
+      $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(404, 'Failure')
       Authentication.resetPassword(credentials).should.be.rejectedWith(errorKeyFromBackend)
       $httpBackend.flush()

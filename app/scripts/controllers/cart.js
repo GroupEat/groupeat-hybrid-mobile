@@ -90,12 +90,7 @@ angular.module('groupeat.controllers.cart', [
 		else
 		{
 			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
-			if(Order.getCurrentOrder().groupOrderId === null) {
-				$scope.isNewOrder.value = true ;
-			}
-			else {
-				$scope.isNewOrder.value = false ;
-			}
+			$scope.isNewOrder.value = Order.isNewOrder();
 		}
 	};
 
