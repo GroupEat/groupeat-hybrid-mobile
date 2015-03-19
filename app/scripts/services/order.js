@@ -27,6 +27,17 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		return requestBody;
 	},
 
+	isNewOrder = function() {
+		var response ;
+		if (currentOrder.groupOrderId === null) {
+			response = true;
+		}
+		else {
+			response = false;
+		}
+		return response;
+	},
+
 	setGroupOrderId = function(value) {
 		requestBody.groupOrderId = value;
 	},
@@ -92,7 +103,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		setLongitude: setLongitude,
 		resetCurrentOrder: resetCurrentOrder,
 		setCurrentOrder: setCurrentOrder,
-		save: save
+		save: save,
+		isNewOrder: isNewOrder
 	};
 }
 );

@@ -23,10 +23,10 @@
 
         <ion-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
           <div class="row border-less">
-            <div ng-hide="currentOrder.groupOrderId" class="col col-60 border-less">
+            <div ng-show="isNewOrder.value" class="col col-60 border-less">
               {{ format.name }} ({{ format.price }} €)
             </div>
-            <div ng-show="currentOrder.groupOrderId" class="col col-60 border-less">
+            <div ng-hide="isNewOrder.value" class="col col-60 border-less">
               {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
             </div>
 
@@ -60,7 +60,7 @@
           <div class="col col-25">
             <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
           </div>
-          <div ng-show="currentOrder.groupOrderId" class="col col-25">
+          <div ng-hide="isNewOrder.value" class="col col-25">
             {{ currentOrder.currentDiscount }} %
           </div>
       </div>

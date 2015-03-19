@@ -16,10 +16,15 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	var $translate = $filter('translate');
 
+	$scope.isNewOrder = {
+		value: null
+	};
+
 	$scope.initCart = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
+		$scope.isNewOrder.value = Order.isNewOrder();
 	};
 
 	$scope.onRefreshRestaurantMenu = function() {
