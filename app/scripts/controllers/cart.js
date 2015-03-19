@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.cart', [
 	'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
+.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
 	/* -------------------------------------------------------------------------
 	All variables are defined here.
@@ -209,6 +209,7 @@ angular.module('groupeat.controllers.cart', [
 				$mdDialog.hide();
 				Cart.reset();
 				Order.resetCurrentOrder();
+				$ionicHistory.clearCache();
 				$state.go('group-orders');
 				Popup.displayTitleOnly($translate('ordered'), 3000);
 			})

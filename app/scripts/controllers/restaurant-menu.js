@@ -83,7 +83,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.onLeaveRestaurant = function() {
-		if (_.isEmpty($scope.cart.productsItems)) {
+		if (_.isEmpty($scope.cart.getProducts())) {
 			Order.resetCurrentOrder();
 			$ionicHistory.goBack();
 		}
