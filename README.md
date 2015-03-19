@@ -40,8 +40,16 @@ Then run the following command to install the needed dependencies
     npm install
     bower install
     grunt serve
-    
+
+## Resources
+
+Fonts
 You might also need to install the fonts used by our app. To do that, browse into app/fonts and double click on each .otf and .ttf files to install them on your machine.
+
+Icons & Splash
+To include the app icons and splashscreens for all devices run the following command before building the app for a platform :
+    
+    ionic resources
 
 ## Before Making a Commit
 
