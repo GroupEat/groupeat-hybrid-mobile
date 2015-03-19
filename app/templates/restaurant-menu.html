@@ -1,5 +1,7 @@
 <ion-view ng-controller='RestaurantMenuCtrl'  title="{{ 'restaurantMenu' | translate }}" hide-back-button="true">
 
+<!-- - - - - - - - - - - - - - - - - - - NAV BAR - - - - - - - - - - - - - - - - - -->
+
   <ion-nav-buttons side="right">
     <button class="button button-clear ion-ios-cart-outline right-header-bar-icon" ui-sref="cart">
     </button>
@@ -10,47 +12,68 @@
     </button>
   </ion-nav-buttons>
 
-  <ion-content has-header="true" ng-hide="messageBackdrop.show">
-    <ion-list>
-      <div ng-repeat="product in products">
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
-        <ion-item on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
-          <div class="border-less">
-              <b> {{ product.name }} </b>
-              <p> {{ product.description }} </p>
+
+<!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+<!-- - - - - - - - - - - - - - - - - - - LIST OF PRODUCTS - - - - - - - - - - - - - - - - - -->
+
+  <md-content class="has-header" ng-hide="messageBackdrop.show">
+    <md-list>
+      <md-item ng-repeat="product in products">
+        <md-item-content on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
+          <div class="md-tile-content">
+              <h3> {{ product.name }} </h3>
+              <h4> {{ product.description }} </h4>
           </div>
-        </ion-item>
+        </md-item-content>
 
-        <ion-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
-          <div class="row border-less">
-            <div ng-show="isNewOrder.value" class="col col-60 border-less">
-              {{ format.name }} ({{ format.price }} €)
-            </div>
-            <div ng-hide="isNewOrder.value" class="col col-60 border-less">
-              {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
-            </div>
+        <md-divider></md-divider>
 
-            <div class="col col-10 ">
-              <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onDeleteProduct(product, format.id)"></a>
-            </div>
-            <div class="col col-10">
-              <a class="center">{{ cart.getFormatQuantity(format.id) }}</a>
-            </div>
-            <div class="col col-10 ">
-              <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onAddProduct(product, format)"></a>
-            </div>
-            <div class="col col-10 ">
-            </div>
-          </div>
-        </ion-item>
-      </div>
-    </ion-list>
-  </ion-content>
+        <md-list>
+          <md-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
+            <md-item-content layout="row" layout-wrap>
+                <div flex="60" ng-show="isNewOrder.value" class="md-tile-content">
+                  {{ format.name }} ({{ format.price }} €)
+                </div>
+                <div flex="60" ng-hide="isNewOrder.value" class="md-tile-content">
+                  {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
+                </div>
+
+                <div flex="10">
+                  <a class="ion-ios-minus-outline assertive icon-cart-add-delete align-right" on-tap="onDeleteProduct(product, format.id)"></a>
+                </div>
+                <div flex="10">
+                  <a class="center">{{ cart.getFormatQuantity(format.id) }}</a>
+                </div>
+                <div flex="10">
+                  <a class="icon ion-ios-plus-outline assertive icon-cart-add-delete" on-tap="onAddProduct(product, format)"></a>
+                </div>
+                <div flex="10">
+                </div>
+            </md-item-content>
+            <md-divider></md-divider>
+          </md-item>
+        </md-list>
+      </md-item>
+    </md-list>
+  </md-content>
+
+<!-- - - - - - - - - - - - - - - - - - - BACKDROP MESSAGE - - - - - - - - - - - - - - - - - -->
 
   <ion-content has-header="true" scroll="false" ng-show="messageBackdrop.show">
     <ge-message-backdrop>
     </ge-message-backdrop>
   </ion-content>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
+
+<!-- - - - - - - - - - - - - - - - - - - FOOTER BAR - - - - - - - - - - - - - - - - - -->
 
   <ion-footer-bar class="bar-energized ">
       <div class="row border-less">
@@ -65,5 +88,7 @@
           </div>
       </div>
    </ion-footer-bar>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
 
 </ion-view>

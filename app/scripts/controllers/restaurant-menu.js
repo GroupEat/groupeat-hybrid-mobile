@@ -37,21 +37,19 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		Product.get($stateParams.restaurantId)
 		.then(function(products) {
 			$scope.products = products;
-			if (_.isEmpty(products))
-			{
-        $scope.messageBackdrop = {
-          show: true,
-          title: 'emptyMenuTitle',
-          details: 'emptyMenuDetails',
-          iconClasses: 'ion-android-pizza',
-          button: {
-            text: 'reload',
-            action: 'onRefreshRestaurantMenu()'
-          }
-        };
+			if (_.isEmpty(products)) {
+				$scope.messageBackdrop = {
+					show: true,
+					title: 'emptyMenuTitle',
+					details: 'emptyMenuDetails',
+					iconClasses: 'ion-android-pizza',
+					button: {
+						text: 'reload',
+						action: 'onRefreshRestaurantMenu()'
+					}
+				};
 			}
-			else
-			{
+			else {
 				$scope.messageBackdrop = MessageBackdrop.noBackdrop();
 			}
 		})
@@ -61,16 +59,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		.finally(function() {
 			$scope.$broadcast('scroll.refreshComplete');
 		});
-	};
-
-
-	$scope.isInGroupOrder = function() {
-		if ($scope.currentOrder.groupOrderId !== null) {
-			$scope.isInGroupOrder = true ;
-		}
-		else {
-			$scope.isInGroupOrder = false ;
-		}
 	};
 
 	$scope.toggleDetails = function(product) {
@@ -116,6 +104,5 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.initCart();
 	$scope.onRefreshRestaurantMenu();
-	$scope.isInGroupOrder();
 
 });
