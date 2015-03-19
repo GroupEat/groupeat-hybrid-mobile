@@ -1,6 +1,5 @@
 <ion-view ng-controller="CartCtrl" title="{{ 'yourCart' | translate }}">
 
-	<!-- - - - - - - - - - - -  CART NOT EMPTY :  - - - - - - - - - - - - -->
 	<ion-nav-buttons side="right">
 		<button ng-hide="isCartEmpty" class="button button-clear ion-ios7-checkmark-empty right-header-bar-icon">
 		</button>
@@ -61,11 +60,20 @@
 			</md-radio-group>
 		</div>
 
+		<div ng-hide="isNewOrder.value" class="cart-chrono">
+			<h3 class="cart-chrono-text">
+            <i class="ion-android-stopwatch energized"></i>
+            <timer countdown="getTimeDiff(currentOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer>
+          </h3>
+		</div>
+
 		<div class="center">
 			<md-button id="cart-confirm-button" class="md-raised md-primary" on-tap="onConfirmOrderTouch($event)">
 				<a class="cart-button-text"> {{ 'confirmOrder' | translate }}</a>
 			</md-button>
 		</div>
+
+
 	</ion-content>
 
 	<ion-content has-header="true" scroll="false" ng-show="messageBackdrop.show">
@@ -73,7 +81,8 @@
 		</ge-message-backdrop>
 	</ion-content>
 
-	<ion-footer-bar class="bar-energized ">
+
+	<!-- <ion-footer-bar class="bar-energized ">
 		<div class="row border-less">
 			<div class="col col-25">
 				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.getTotalPrice() | number : 2 }}€
@@ -88,6 +97,6 @@
 				{{ cart.cartTotalPrice/((100-currentOrder.currentDiscount)/100) - cart.cartTotalPrice | number : 2}}€ économisés grâce à GroupEat
 			</div>
 		</div>
-	</ion-footer-bar>
+	</ion-footer-bar> -->
 
 </ion-view>

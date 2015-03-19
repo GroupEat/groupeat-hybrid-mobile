@@ -337,6 +337,9 @@ angular.module('groupeat.controllers.cart', [
 		$scope.detectPlaceholder();
 	};
 
+	$scope.getTimeDiff = function (endingAt) {
+		return Order.getTimeDiff(endingAt);
+	};
 /* --------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------
