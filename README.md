@@ -50,6 +50,8 @@ Icons & Splash
 To include the app icons and splashscreens for all devices run the following command before building the app for a platform :
     
     ionic resources
+    
+Should this command fail, make sure that your ionic CLI is higher than 1.2.14
 
 ## Before Making a Commit
 
