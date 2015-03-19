@@ -85,7 +85,6 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 
 	save = function() {
 		var defer = $q.defer();
-		console.log(requestBody);
 		resource.save(null, requestBody).$promise
 		.then(function(response) {
 			defer.resolve(response);

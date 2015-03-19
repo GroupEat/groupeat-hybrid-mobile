@@ -137,7 +137,6 @@ angular.module('groupeat.controllers.cart', [
 					}
 				});
 			});
-			console.log(productFormats);
 			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
 			Order.setFoodRushTime($scope.foodRushTime.value);
 			Order.setProductFormats(productFormats);
@@ -166,7 +165,6 @@ angular.module('groupeat.controllers.cart', [
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')
 				{
-					console.log($scope.userAddress);
 					Order.setStreet($scope.userAddress.street);
 					Order.setDetails($scope.userAddress.details);
 					Order.setLatitude($scope.userAddress.latitude);
@@ -176,7 +174,6 @@ angular.module('groupeat.controllers.cart', [
 				{
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
-					console.log(residencyInformations);
 					Order.setStreet(residencyInformations.street);
 					Order.setDetails($scope.addressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);

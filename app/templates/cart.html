@@ -87,22 +87,4 @@
 		</ge-message-backdrop>
 	</ion-content>
 
-
-	<!-- <ion-footer-bar class="bar-energized ">
-		<div class="row border-less">
-			<div class="col col-25">
-				<i class="icon ion-ios7-cart-outline right-footer-bar-icon"></i>  {{ cart.getTotalPrice() | number : 2 }}€
-			</div>
-			<div class="col col-25">
-				<ng-pluralize count="cart.cartTotalQuantity" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>
-			</div>
-			<div ng-show="currentOrder.groupOrderId" class="col col-10">
-				{{ currentOrder.currentDiscount }} %
-			</div>
-			<div ng-show="currentOrder.groupOrderId" class="col">
-				{{ cart.cartTotalPrice/((100-currentOrder.currentDiscount)/100) - cart.cartTotalPrice | number : 2}}€ économisés grâce à GroupEat
-			</div>
-		</div>
-	</ion-footer-bar> -->
-
 </ion-view>
