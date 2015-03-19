@@ -15,13 +15,15 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 		},
 
 		getFormatQuantity = function(formatId) {
-			var format;
-			_.find(products, function(product) {
-				format = _.find(product.formats, function(format) {
-					return format.id === formatId;
+			var quantityToReturn = 0;
+			_.forEach(products, function(product) {
+				_.forEach(product.formats, function(format) {
+					if(format.id === formatId) {
+						quantityToReturn = format.quantity;
+					}
 				});
 			});
-			return format ? format.quantity : 0;
+			return quantityToReturn ;
 		},
 
 		getTotalPrice = function() {
@@ -70,7 +72,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 				totalPrice += product.totalPrice ;
 				totalQuantity += product.totalQuantity ;
 				if (product.totalQuantity === 0) {
-					indexOfProductToBeDeleted = [true, _.indexOf(product)];
+					indexOfProductToBeDeleted = [true, _.indexOf(products, product)];
 				}
 			});
 
