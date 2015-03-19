@@ -350,7 +350,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKey)
       sandbox.spy(Authentication, 'resetPassword')
 
-      $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(404, 'Error')
+      $httpBackend.expectDELETE(ENV.apiEndpoint+'/auth/password').respond(404, 'Error')
 
       scope.closeResetPasswordDialog(form, false)
       form.email.$error.should.not.have.property.errorKey
@@ -372,7 +372,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       )
       sandbox.spy(Authentication, 'resetPassword')
 
-      $httpBackend.expectPOST(ENV.apiEndpoint+'/auth/resetPassword').respond(200, 'Success')
+      $httpBackend.expectDELETE(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
 
       scope.closeResetPasswordDialog(form, false)
       scope.$digest()
