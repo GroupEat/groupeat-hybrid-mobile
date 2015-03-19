@@ -144,6 +144,10 @@
   "emptyCartTitle": "Panier Vide",
   "emptyCartDetails": "Ajoutez dès maintenant des produits à votre panier !",
 
-  "foodrush": "FoodRush !"
+  "foodrush": "FoodRush !",
+
+  "missingPropertiesTitle": "Informations Manquantes !",
+  "missingCustomerInformationMessage": "Il vous faut fournir votre {{missingProperties}} avant de pouvoir rejoindre une commande"
+
 
 }
