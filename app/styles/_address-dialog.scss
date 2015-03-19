@@ -69,3 +69,8 @@ md-radio-button.md-default-theme .md-on {
 md-checkbox.md-default-theme.md-checked .md-icon {
 	background-color: $assertive !important;
 }
+
+.placeholder {
+	font-style: italic;
+	color: rgba(0,0,0,0.6);
+}

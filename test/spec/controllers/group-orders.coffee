@@ -15,7 +15,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   groupOrderMock = {
     'id': '11',
-    'discountRate': 24
+    'endingAt': '2015-01-30 16:39:26',
+    'discountRate': 24,
     'restaurant': {
       'data': {
         'id': 5
@@ -269,11 +270,10 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     it 'should return time in sec between two dates', ->
 
     it 'should set the current Order (service) when joining a groupOrder', ->
-      sandbox.stub(scope, 'getTimeDiff').returns(1000)
       sandbox.spy(Order, 'setCurrentOrder')
       scope.onJoinOrderTouch(groupOrderMock)
 
-      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, 1000, groupOrderMock.discountRate)
+      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate)
 
     it 'should go to restaurant menu view corresponding to the selected groupOrder', ->
       sandbox.stub(scope, 'getTimeDiff').returns(1000)
