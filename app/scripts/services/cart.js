@@ -97,16 +97,27 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			refresh();
 		},
 
-		addProduct = function(productToAdd, format) {
-			// Test if productToAdd exists already in products
+		hasAtLeastOneProduct = function(productToTest) {
+			/*
+			if product.id is in products, that means there is at least 
+			one product (senior, junior,.... whatever) added by user
+			 */
 			var isInProducts = false ;
 			_.forEach(products, function(product){
-				if (product.id === productToAdd.id) {
+				if (product.id === productToTest.id) {
 					isInProducts = true;
 				}
 			});
+			return isInProducts;
+		},
 
-			if ( isInProducts ) {
+		addProduct = function(productToAdd, format) {
+			/*
+			Test if productToAdd exists already in products
+			We do that directly thanks to the method 'hasAtLeastOneProduct'
+			*/
+
+			if ( hasAtLeastOneProduct(productToAdd) ) {
 				// If productToAdd already exists in products, just increment its quantity
 				_.forEach(products, function(product) {
 					if (product.id === productToAdd.id) {
@@ -165,6 +176,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			getDiscountRate: getDiscountRate,
 			getTotalQuantity: getTotalQuantity,
 			getTotalPrice: getTotalPrice,
+			hasAtLeastOneProduct: hasAtLeastOneProduct,
 			setProducts: setProducts,
 			setDiscountRate: setDiscountRate,
 			setTotalQuantity: setTotalQuantity,

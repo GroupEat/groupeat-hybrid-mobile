@@ -25,10 +25,13 @@
   <md-content class="has-header" ng-hide="messageBackdrop.show">
     <md-list>
       <md-item ng-repeat="product in products">
-        <md-item-content on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
-          <div class="md-tile-content">
+        <md-item-content layout="row" layout-wrap on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
+          <div flex="90" class="md-tile-content">
               <h3> {{ product.name }} </h3>
               <h4> {{ product.description }} </h4>
+          </div>
+          <div flex="10" ng-show="cart.hasAtLeastOneProduct(product)" class="icon-height">
+              <i class="icon ion-ios-checkmark-empty assertive"></i>
           </div>
         </md-item-content>
 
