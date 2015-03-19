@@ -60,6 +60,12 @@
 			</md-radio-group>
 		</div>
 
+		<div class="list list-inset">
+			<label class="item item-input">
+				<textarea ng-model="comment.value" type="text" placeholder="{{ 'comment' | translate}}"></textarea>
+			</label>
+		</div>
+
 		<div ng-hide="isNewOrder.value" class="cart-chrono">
 			<h3 class="cart-chrono-text">
             <i class="ion-android-stopwatch energized"></i>

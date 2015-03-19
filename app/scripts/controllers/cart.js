@@ -67,6 +67,10 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
+	$scope.comment = {
+		value: null
+	};
+
 /* --------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------
@@ -137,6 +141,7 @@ angular.module('groupeat.controllers.cart', [
 			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
 			Order.setFoodRushTime($scope.foodRushTime.value);
 			Order.setProductFormats(productFormats);
+			Order.setComment($scope.comment.value);
 
 			$mdDialog.show({
 				targetEvent: ev,
