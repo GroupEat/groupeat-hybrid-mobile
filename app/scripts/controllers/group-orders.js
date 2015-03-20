@@ -117,12 +117,15 @@ angular.module('groupeat.controllers.group-orders', [
 
   $scope.onJoinOrderTouch = function(groupOrder) {
     // Checking if the customer has provided the needed further information before going further
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop('with-bar-and-tabs');
     Customer.checkMissingInformation()
     .then(function() {
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate);
 		  $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
     })
     .catch(function(missingPropertiesString) {
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       if (!missingPropertiesString)
       {
         Popup.displayError($translate('genericFailureDetails'), 3000);
