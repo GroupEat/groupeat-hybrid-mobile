@@ -162,9 +162,7 @@ angular.module('groupeat.controllers.cart', [
 		}
 		else
 		{
-			// TODO : process showing "circle running"
-			$scope.loadingBackdrop = LoadingBackdrop.dialogBackdrop();
-			console.log($scope.loadingBackdrop);
+			$scope.loadingBackdrop = LoadingBackdrop.backdrop('with-dialog', 'dialog-circular');
 			$scope.validateAddress($scope.addressTypeSelected.value)
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')

@@ -29,7 +29,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.onRefreshRestaurantMenu = function() {
-		$scope.loadingBackdrop = LoadingBackdrop.subBarBackdrop();
+		$scope.loadingBackdrop = LoadingBackdrop.backdrop('with-sub-bar');
 		if (!Network.hasConnectivity())
 		{
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();

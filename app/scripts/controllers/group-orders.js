@@ -23,8 +23,8 @@ angular.module('groupeat.controllers.group-orders', [
     $state.go('restaurants');
   };
 
-  $scope.onRefreshGroupOrders = function() {
-    $scope.loadingBackdrop = LoadingBackdrop.barAndTabsBackdrop();
+  $scope.initCtrl = function() {
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop('with-bar-and-tabs');
     if (!Network.hasConnectivity())
     {
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
@@ -66,6 +66,47 @@ angular.module('groupeat.controllers.group-orders', [
     });
   };
 
+  $scope.onRefreshGroupOrders = function() {
+    if (!Network.hasConnectivity())
+    {
+      $scope.messageBackdrop = MessageBackdrop.noNetwork();
+      $scope.$broadcast('scroll.refreshComplete');
+      return;
+    }
+    $geolocation.getCurrentPosition()
+    .then(function(currentPosition) {
+      $scope.userCurrentPosition = currentPosition;
+      GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      .then(function(groupOrders) {
+        $scope.groupOrders = groupOrders;
+        if (_.isEmpty($scope.groupOrders)) {
+          $scope.messageBackdrop = {
+            show: true,
+            title: 'noGroupOrdersTitle',
+            details: 'noGroupOrdersDetails',
+            iconClasses: 'ion-ios-cart-outline',
+            button: {
+              text: 'newOrder',
+              action: 'onNewGroupOrder()'
+            }
+          };
+        }
+        else {
+          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+        }
+      })
+      .catch(function() {
+        $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
+      });
+    })
+    .catch(function() {
+      $scope.messageBackdrop = MessageBackdrop.noGeolocation();
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+
   $scope.getTimeDiff = function (endingAt) {
     return Order.getTimeDiff(endingAt);
   };
@@ -75,6 +116,6 @@ angular.module('groupeat.controllers.group-orders', [
 		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
   };
 
-  $scope.onRefreshGroupOrders();
+  $scope.initCtrl();
 
 });
