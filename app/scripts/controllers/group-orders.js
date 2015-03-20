@@ -1,20 +1,24 @@
 'use strict';
 
 angular.module('groupeat.controllers.group-orders', [
+  'config',
+  'groupeat.services.customer',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
+  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
   'groupeat.services.popup',
   'groupeat.services.loading-backdrop',
-  'groupeat.services.message-backdrop',
   'config',
   'ngGeolocation',
   'ngMaterial',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+
+  var $translate = $filter('translate');
 
   $scope.groupOrders = {};
 
@@ -112,8 +116,32 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-		Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate);
-		$state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+    // Checking if the customer has provided the needed further information before going further
+    Customer.checkMissingInformation()
+    .then(function() {
+      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate);
+		  $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+    })
+    .catch(function(missingPropertiesString) {
+      if (!missingPropertiesString)
+      {
+        Popup.displayError($translate('genericFailureDetails'), 3000);
+      }
+      else
+      {
+        var confirm = $mdDialog.confirm({
+          parent: angular.element(document.body)
+        })
+        .title($translate('missingPropertiesTitle'))
+        .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
+        .ok($translate('settings'))
+        .cancel($translate('cancel'));
+        $mdDialog.show(confirm)
+        .then(function() {
+          $state.go('settings');
+        });
+      }
+    });
   };
 
   $scope.initCtrl();

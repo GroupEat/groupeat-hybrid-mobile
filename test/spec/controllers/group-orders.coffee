@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $state = GroupOrder = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $state = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -37,6 +37,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       sandbox = sinon.sandbox.create()
 
+      Customer = $injector.get('Customer')
       MessageBackdrop = $injector.get('MessageBackdrop')
       Order = $injector.get('Order')
       Popup = $injector.get('Popup')
@@ -54,7 +55,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $compile = $injector.get('$compile')
 
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $scope: scope, $state: $state, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
+        $scope: scope, $state: $state, $mdDialog: $injector.get('$mdDialog'), Customer: Customer, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
       })
       sandbox.spy(scope, 'onRefreshGroupOrders')
       ENV = $injector.get('ENV')
@@ -268,13 +269,24 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should set the current Order (service) when joining a groupOrder', ->
       sandbox.spy(Order, 'setCurrentOrder')
+      sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
       scope.onJoinOrderTouch(groupOrderMock)
-
+      scope.$digest()
       Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate)
 
     it 'should go to restaurant menu view corresponding to the selected groupOrder', ->
       sandbox.stub(scope, 'getTimeDiff').returns(1000)
+      sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
       scope.onJoinOrderTouch(groupOrderMock)
+      scope.$digest()
 
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: groupOrderMock.restaurant.data.id})
 
