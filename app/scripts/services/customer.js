@@ -35,6 +35,7 @@ angular.module('groupeat.services.customer', [
       defer.resolve(response.data);
     })
     .catch(function() {
+      defer.reject();
     });
     return defer.promise;
   },
@@ -99,6 +100,9 @@ angular.module('groupeat.services.customer', [
   * if rejected with a string, it will be a formatted string of missing properties (in the current locale)
   * it will also be rejected (with nothing) if an error was encountered along the way
   *
+  * @todo : The string formatted relies heavily on the grammar and thus on the locale.
+  * It will however probably work fine for most locales (French, English, Spanish...)
+  *
   */
   checkMissingInformation = function() {
     var deferred = $q.defer();
@@ -108,7 +112,7 @@ angular.module('groupeat.services.customer', [
     get(customerId)
     .then(function(customer) {
       _.forEach(mandatoryCustomerProperties, function(mandatoryProperty) {
-        if (!_.has(customer, mandatoryProperty) || !customer.mandatoryProperty)
+        if (!_.has(customer, mandatoryProperty) || !customer[mandatoryProperty])
         {
           missingProperties.push(mandatoryProperty);
         }
@@ -131,7 +135,7 @@ angular.module('groupeat.services.customer', [
           }
           else if (missingProperties.length === 2)
           {
-            missingPropertiesString = $translate(missingProperties[0]) + ' et ';
+            missingPropertiesString = $translate(missingProperties[0]) + ' ' + $translate('and') + ' ';
             missingPropertiesString += $translate(missingProperties[1]);
           }
           else
@@ -141,7 +145,7 @@ angular.module('groupeat.services.customer', [
             {
               missingPropertiesString += $translate(missingProperties[i]) + ', ';
             }
-            missingPropertiesString += $translate(missingProperties[missingProperties.length-2]) + ' et ';
+            missingPropertiesString += $translate(missingProperties[missingProperties.length-2]) + ' ' + $translate('and') + ' ';
             missingPropertiesString += $translate(missingProperties[missingProperties.length-1]);
           }
           deferred.reject(missingPropertiesString);
