@@ -21,7 +21,7 @@ angular.module('groupeat.services.message-backdrop', [])
         iconClasses: 'ion-wifi',
         button: {
           text: 'reload',
-          action: 'onReload()'
+          action: buttonAction
         },
       };
     },
@@ -35,7 +35,7 @@ angular.module('groupeat.services.message-backdrop', [])
         iconClasses: 'ion-location',
         button: {
           text: 'reload',
-          action: 'onReload()'
+          action: buttonAction
         },
       };
     },

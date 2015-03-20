@@ -6,13 +6,13 @@ angular.module('groupeat.services.authentication', ['groupeat.services.backend-u
 function ($resource, $q, ENV, BackendUtils) {
 
   var
-  tokenResource =  $resource(ENV.apiEndpoint+'/auth/token', null,
+  tokenResource = $resource(ENV.apiEndpoint+'/auth/token', null,
   {
     'getToken': { method: 'PUT' }
   }),
-  resetPasswordResource =  $resource(ENV.apiEndpoint+'/auth/resetPassword', null,
+  resetPasswordResource = $resource(ENV.apiEndpoint+'/auth/password', null,
   {
-    'resetPassword': { method: 'POST' }
+    'resetPassword': { method: 'DELETE' }
   });
 
   var

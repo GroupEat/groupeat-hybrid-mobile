@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.cart', [
 	'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function($scope, $state, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
+.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
 	/* -------------------------------------------------------------------------
 	All variables are defined here.
@@ -64,6 +64,10 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.hasPredefinedPersonalAddress = {
 		hasValue: false,
+		value: null
+	};
+
+	$scope.comment = {
 		value: null
 	};
 
@@ -133,10 +137,10 @@ angular.module('groupeat.controllers.cart', [
 					}
 				});
 			});
-			console.log(productFormats);
 			Order.setGroupOrderId(Order.getCurrentOrder().groupOrderId);
 			Order.setFoodRushTime($scope.foodRushTime.value);
 			Order.setProductFormats(productFormats);
+			Order.setComment($scope.comment.value);
 
 			$mdDialog.show({
 				targetEvent: ev,
@@ -161,7 +165,6 @@ angular.module('groupeat.controllers.cart', [
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')
 				{
-					console.log($scope.userAddress);
 					Order.setStreet($scope.userAddress.street);
 					Order.setDetails($scope.userAddress.details);
 					Order.setLatitude($scope.userAddress.latitude);
@@ -171,7 +174,6 @@ angular.module('groupeat.controllers.cart', [
 				{
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
-					console.log(residencyInformations);
 					Order.setStreet(residencyInformations.street);
 					Order.setDetails($scope.addressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);
@@ -207,6 +209,7 @@ angular.module('groupeat.controllers.cart', [
 				$mdDialog.hide();
 				Cart.reset();
 				Order.resetCurrentOrder();
+				$ionicHistory.clearCache();
 				$state.go('group-orders');
 				Popup.displayTitleOnly($translate('ordered'), 3000);
 			})
@@ -337,6 +340,9 @@ angular.module('groupeat.controllers.cart', [
 		$scope.detectPlaceholder();
 	};
 
+	$scope.getTimeDiff = function (endingAt) {
+		return Order.getTimeDiff(endingAt);
+	};
 /* --------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------

@@ -19,7 +19,29 @@ describe 'Service: Customer', ->
       sandbox = sinon.sandbox.create()
 
   afterEach ->
-    mockLocalStorage = {}
+    sandbox.restore()
+
+  describe 'Customer#get', ->
+
+    it 'should have an get method', ->
+      Customer.should.have.property('get')
+
+    it 'should return a fulfilled promise with the data from response when the request returns a 200 status', ->
+      id = 1
+      customer = 'customer'
+      response =
+        data: customer
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(response)
+      Customer.get(id).should.become(customer)
+      $httpBackend.flush()
+
+    it 'should reject a promise when the server responds with an error', ->
+      id = 1
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(400, 'Failure')
+      Customer.get(id).should.be.rejected
+      $httpBackend.flush()
 
   describe 'Customer#save', ->
 

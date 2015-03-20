@@ -20,7 +20,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		'street': null,
 		'details': null,
 		'latitude': null,
-		'longitude': null
+		'longitude': null,
+		'comment': null
 	},
 
 	getRequestBody = function() {
@@ -58,6 +59,10 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 	},
 	setLongitude = function(value) {
 		requestBody.longitude = value;
+	},
+
+	setComment = function(value) {
+		requestBody.comment = value;
 	},
 
 	getCurrentOrder = function() {
@@ -111,6 +116,7 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		setDetails: setDetails,
 		setLatitude: setLatitude,
 		setLongitude: setLongitude,
+		setComment: setComment,
 		resetCurrentOrder: resetCurrentOrder,
 		setCurrentOrder: setCurrentOrder,
 		save: save,
