@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $state = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -42,6 +42,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       Order = $injector.get('Order')
       Popup = $injector.get('Popup')
       $geolocation = $injector.get('$geolocation')
+      $mdDialog = $injector.get('$mdDialog')
       GroupOrder = $injector.get('GroupOrder')
       Network = $injector.get('Network')
 
@@ -55,17 +56,26 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $compile = $injector.get('$compile')
 
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $injector.get('$mdDialog'), Customer: Customer, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
       })
       sandbox.spy(scope, 'onRefreshGroupOrders')
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
+  cleanDialog = ->
+    body = angular.element(document.body)
+    dialogContainer = body[0].querySelector('.md-dialog-container')
+    dialogElement = angular.element(dialogContainer)
+    dialogElement.remove()
+    scope.$digest()
+
   afterEach ->
     sandbox.restore()
+    #cleanDialog()
 
   beforeEach ->
-    scope.$apply()
+    scope.$digest()
+    #cleanDialog()
 
   describe "Constructor", ->
 
@@ -257,7 +267,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       expect(scope.messageBackdrop.show).to.be.equal(false)
       MessageBackdrop.noBackdrop.should.have.been.called
 
-  describe "Other ctrl methods", ->
+  describe 'GroupOrdersCtrl#getTimeDiff', ->
 
     it 'should return time between a mock date and actual date', ->
       endingAt = '2015-01-30 16:39:26'
@@ -267,7 +277,47 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should return time in sec between two dates', ->
 
-    it 'should set the current Order (service) when joining a groupOrder', ->
+  describe 'GroupOrdersCtrl#onNewOrderTouch', ->
+
+    it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
+      sandbox.stub(Popup, 'displayError')
+      scope.onJoinOrderTouch(groupOrderMock)
+      scope.$digest()
+      Popup.displayError.should.have.been.calledWithExactly('genericFailureDetails', 3000)
+
+    it 'should open a confirm dialog dialog if customer information are missing', ->
+      # TODO : Test could be better (spying on the chained methods)
+      sandbox.spy($mdDialog, 'confirm')
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onJoinOrderTouch(groupOrderMock)
+      scope.$digest()
+      $mdDialog.confirm.should.be.called
+
+    it 'should change the state to settings if the user confirms the dialog', ->
+      sandbox.stub($mdDialog, 'show', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onJoinOrderTouch(groupOrderMock)
+      scope.$digest()
+      $mdDialog.show.should.be.called
+      $state.go.should.have.been.calledWithExactly('settings')
+
+    it 'should not change the state to settings if the user confirms the dialog', ->
+      sandbox.stub($mdDialog, 'show').returns($q.reject())
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onJoinOrderTouch(groupOrderMock)
+      scope.$digest()
+      $mdDialog.show.should.be.called
+      $state.go.should.have.not.been.called
+
+    it 'should set the current Order (service) when joining a groupOrder if no customer information are missing', ->
       sandbox.spy(Order, 'setCurrentOrder')
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
@@ -278,7 +328,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
       Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate)
 
-    it 'should go to restaurant menu view corresponding to the selected groupOrder', ->
+    it 'should go to restaurant menu view corresponding to the selected groupOrder if no customer information are missing', ->
       sandbox.stub(scope, 'getTimeDiff').returns(1000)
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
@@ -287,8 +337,9 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       )
       scope.onJoinOrderTouch(groupOrderMock)
       scope.$digest()
-
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: groupOrderMock.restaurant.data.id})
+
+  describe 'GroupOrdersCtrl#onNewGroupOrder', ->
 
     it 'should go to the list of restaurants view on new order tap', ->
       scope.onNewGroupOrder()

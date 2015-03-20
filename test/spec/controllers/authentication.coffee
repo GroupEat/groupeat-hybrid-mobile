@@ -62,7 +62,15 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
+  cleanDialog = ->
+    body = angular.element(document.body)
+    dialogContainer = body[0].querySelector('.md-dialog-container')
+    dialogElement = angular.element(dialogContainer)
+    dialogElement.remove()
+    scope.$digest()
+
   afterEach ->
+    cleanDialog()
     sandbox.restore()
 
   describe "Constructor", ->
