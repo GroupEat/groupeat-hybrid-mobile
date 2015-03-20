@@ -1,6 +1,9 @@
 <ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
+  
+  <ge-loading-backdrop ng-show="loadingBackdrop.show">
+  </ge-loading-backdrop>
 
-  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show">
+  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show || loadingBackdrop.show">
 
     <md-button id="new-order-button" class="md-raised center" on-tap="onNewGroupOrder()">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
@@ -9,7 +12,8 @@
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshGroupOrders()">
     </ion-refresher>
 
-    <md-progress-circular ng-show="isLoadingView.value" class="md-warn go-loading" md-mode="indeterminate"></md-progress-circular>
+      
+
 
 
     <md-list>

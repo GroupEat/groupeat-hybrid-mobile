@@ -3,18 +3,21 @@
 angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.message-backdrop',
   'groupeat.services.lodash',
+  'groupeat.services.loading-backdrop',
   'groupeat.services.network',
   'groupeat.services.restaurant',
   'ngGeolocation'
 ])
 
-.controller('RestaurantsCtrl', function($scope, $state, Restaurant, MessageBackdrop, Network, _, $geolocation) {
+.controller('RestaurantsCtrl', function($scope, $state, Restaurant, LoadingBackdrop, MessageBackdrop, Network, _, $geolocation) {
 
   $scope.restaurants = {};
 
   $scope.onRefreshRestaurants = function() {
+    $scope.loadingBackdrop = LoadingBackdrop.barAndTabsBackdrop();
     if (!Network.hasConnectivity())
     {
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       $scope.$broadcast('scroll.refreshComplete');
       return;
@@ -24,6 +27,7 @@ angular.module('groupeat.controllers.restaurants', [
       Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
       .then(function(restaurants) {
         $scope.restaurants = restaurants;
+        $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
         if (_.isEmpty(restaurants))
         {
           $scope.messageBackdrop = {

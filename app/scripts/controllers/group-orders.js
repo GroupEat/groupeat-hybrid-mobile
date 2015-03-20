@@ -6,6 +6,7 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.network',
   'groupeat.services.order',
   'groupeat.services.popup',
+  'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'config',
   'ngGeolocation',
@@ -13,18 +14,17 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($scope, $state, GroupOrder, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
 
   $scope.groupOrders = {};
-  $scope.isLoadingView = {
-    value: true
-  };
+
 
   $scope.onNewGroupOrder = function() {
     $state.go('restaurants');
   };
 
   $scope.onRefreshGroupOrders = function() {
+    $scope.loadingBackdrop = LoadingBackdrop.barAndTabsBackdrop();
     if (!Network.hasConnectivity())
     {
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
@@ -36,7 +36,7 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.userCurrentPosition = currentPosition;
       GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
       .then(function(groupOrders) {
-        $scope.isLoadingView.value = false;
+        LoadingBackdrop.noBackdrop();
         $scope.groupOrders = groupOrders;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
