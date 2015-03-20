@@ -6,6 +6,7 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
+  'groupeat.services.popup',
   'groupeat.services.restaurant',
   'ngGeolocation',
   'ngMaterial'
