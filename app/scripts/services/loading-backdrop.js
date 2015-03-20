@@ -16,6 +16,7 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       return {
         show: true,
         class: 'total-backdrop',
+        circular: 'classical',
       };
     },
 
@@ -23,6 +24,7 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       return {
         show: true,
         class: 'bar-and-tabs-backdrop',
+        circular: 'classical',
       };
     },
 
@@ -30,6 +32,15 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       return {
         show: true,
         class: 'bar-backdrop',
+        circular: 'classical',
+      };
+    },
+
+    dialogBackdrop = function() {
+      return {
+        show: true,
+        class: 'dialog-backdrop',
+        circular: 'dialog-circular',
       };
     },
 
@@ -37,6 +48,7 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       return {
         show: true,
         class: 'sub-bar-backdrop',
+        circular: 'classical',
       };
     };
 
@@ -45,7 +57,8 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       totalBackdrop: totalBackdrop,
       barAndTabsBackdrop: barAndTabsBackdrop,
       barBackdrop: barBackdrop,
-      subBarBackdrop: subBarBackdrop
+      subBarBackdrop: subBarBackdrop,
+      dialogBackdrop: dialogBackdrop
     };
 
   }

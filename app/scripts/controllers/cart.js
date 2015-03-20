@@ -8,12 +8,13 @@ angular.module('groupeat.controllers.cart', [
 	'groupeat.services.cart',
 	'groupeat.services.credentials',
 	'groupeat.services.lodash',
+	'groupeat.services.loading-backdrop',
 	'groupeat.services.message-backdrop',
 	'groupeat.services.order',
 	'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
+.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, LoadingBackdrop, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
 	/* -------------------------------------------------------------------------
 	All variables are defined here.
@@ -145,6 +146,7 @@ angular.module('groupeat.controllers.cart', [
 			$mdDialog.show({
 				targetEvent: ev,
 				templateUrl: 'templates/popups/ask-for-address.html',
+				clickOutsideToClose: false,
 				controller: 'CartCtrl',
 			});
 		})
@@ -161,6 +163,8 @@ angular.module('groupeat.controllers.cart', [
 		else
 		{
 			// TODO : process showing "circle running"
+			$scope.loadingBackdrop = LoadingBackdrop.dialogBackdrop();
+			console.log($scope.loadingBackdrop);
 			$scope.validateAddress($scope.addressTypeSelected.value)
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')
@@ -206,6 +210,7 @@ angular.module('groupeat.controllers.cart', [
 				return Order.save();
 			})
 			.then(function() {
+				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 				$mdDialog.hide();
 				Cart.reset();
 				Order.resetCurrentOrder();
@@ -213,8 +218,9 @@ angular.module('groupeat.controllers.cart', [
 				$state.go('group-orders');
 				Popup.displayTitleOnly($translate('ordered'), 3000);
 			})
-	    .catch(function(errorMessage) {
-	      return Popup.displayError(errorMessage, 4000);
+			.catch(function(errorMessage) {
+				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+				return Popup.displayError(errorMessage, 4000);
 	    });
 		}
 	};
