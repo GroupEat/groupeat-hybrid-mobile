@@ -5,12 +5,13 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.lodash',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
+  'groupeat.services.popup',
   'groupeat.services.restaurant',
   'ngGeolocation',
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($mdDialog, $scope, $state, Customer, Restaurant, MessageBackdrop, Network, _, $geolocation) {
+.controller('RestaurantsCtrl', function($mdDialog, $scope, $state, Customer, Restaurant, MessageBackdrop, Network, Popup, _, $geolocation) {
 
   $scope.restaurants = {};
 
