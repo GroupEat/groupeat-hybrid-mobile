@@ -11,7 +11,9 @@ angular.module('groupeat.controllers.restaurants', [
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($mdDialog, $scope, $state, Customer, Restaurant, MessageBackdrop, Network, Popup, _, $geolocation) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $scope, $state, Customer, Restaurant, MessageBackdrop, Network, Popup, _, $geolocation) {
+
+  var $translate = $filter('translate');
 
   $scope.restaurants = {};
 

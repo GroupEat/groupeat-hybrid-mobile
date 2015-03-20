@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Restaurant = $geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Popup = Restaurant = $geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -21,9 +21,11 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Network = $injector.get('Network')
       _ = $injector.get('_')
       $geolocation = $injector.get('$geolocation')
+      $mdDialog = $injector.get('$mdDialog')
+      Popup = $injector.get('Popup')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $injector.get('$mdDialog'), $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, _: _, $geolocation: $geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, _: _, $geolocation: $geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -44,7 +46,45 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
   describe 'RestaurantsCtrl#onRestaurantTouch', ->
 
-    it 'should change the state with the given restaurant id', ->
+    it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
+      sandbox.stub(Popup, 'displayError')
+      scope.onRestaurantTouch(1)
+      scope.$digest()
+      Popup.displayError.should.have.been.calledWithExactly('genericFailureDetails', 3000)
+
+    it 'should open a confirm dialog dialog if customer information are missing', ->
+      # TODO : Test could be better (spying on the chained methods)
+      sandbox.spy($mdDialog, 'confirm')
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onRestaurantTouch(1)
+      scope.$digest()
+      $mdDialog.confirm.should.be.called
+
+    it 'should change the state to settings if the user confirms the dialog', ->
+      sandbox.stub($mdDialog, 'show', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onRestaurantTouch(1)
+      scope.$digest()
+      $mdDialog.show.should.be.called
+      $state.go.should.have.been.calledWithExactly('settings')
+
+    it 'should not change the state to settings if the user confirms the dialog', ->
+      sandbox.stub($mdDialog, 'show').returns($q.reject())
+      missingPropertiesString =  'missingPropertiesString'
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
+      scope.onRestaurantTouch(1)
+      scope.$digest()
+      $mdDialog.show.should.be.called
+      $state.go.should.have.not.been.called
+
+    it 'should change the state with the given restaurant id if there are no missing customer information', ->
       id = 1
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
