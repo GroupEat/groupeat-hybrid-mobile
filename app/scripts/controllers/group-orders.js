@@ -36,7 +36,7 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.userCurrentPosition = currentPosition;
       GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
       .then(function(groupOrders) {
-        LoadingBackdrop.noBackdrop();
+        $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
         $scope.groupOrders = groupOrders;
         if (_.isEmpty($scope.groupOrders)) {
           $scope.messageBackdrop = {
