@@ -1,7 +1,9 @@
-<md-dialog class="dialog-size">
-
+<md-dialog class="dialog-size dialog-address-box">
+	<ge-loading-backdrop ng-show="loadingBackdrop.show">
+	</ge-loading-backdrop>
+	
 	<md-content>
-			<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
+		<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
 
 	<md-radio-group flex="20" ng-model="addressTypeSelected.value" ng-repeat="addressType in addressTypes" ng-init="addressTypeSelected.value=addressTypes[0].value" ng-change="resetDeliveryAddress()">
         <md-radio-button ng-value="addressType.value" class="first-radio-button">

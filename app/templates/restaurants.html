@@ -1,5 +1,8 @@
 <ion-view ng-controller="RestaurantsCtrl" title="{{ 'chooseARestaurant' | translate }}" >
 
+	<ge-loading-backdrop ng-show="loadingBackdrop.show">
+	</ge-loading-backdrop>
+	
 	<ion-content has-header="true" ng-show="!messageBackdrop.show">
 
 		<ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshRestaurants()">

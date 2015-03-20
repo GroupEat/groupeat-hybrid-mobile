@@ -71,7 +71,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should initialize groupOrders and isLoadingView variables (isLoadingView is a boolean which turns true when receive date from backend)', ->
       scope.groupOrders.should.be.empty
-      scope.isLoadingView.value.should.be.true
 
     it 'should refresh view', ->
       # It would be nice to test if the method onRefreshGroupOrders is calling when GroupOrderCtrl
@@ -191,8 +190,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       MessageBackdrop.genericFailure.should.have.been.calledWithExactly('onRefreshGroupOrders()')
 
 
-    it 'should turn isLoadingView to false when receive data from backend', ->
-      sandbox.stub(Network, 'hasConnectivity', () ->
+    it 'should call LoadingBackdrop.noBackdrop when receive data from backend', ->
+      ### sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
       # We make user location accessible
@@ -208,9 +207,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       )
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
       scope.onRefreshGroupOrders()
-      scope.$digest()
-
-      expect(scope.isLoadingView.value).to.be.false
+      scope.$digest()###
 
     it 'should show backdrop message if data is empty (no GroupOrder)', ->
       sandbox.stub(Network, 'hasConnectivity', () ->

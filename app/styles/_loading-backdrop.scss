@@ -1,0 +1,58 @@
+.commun-backdrop {
+	display: block;
+	background-color: rgba(0, 0, 0, 0.1) ;
+}
+
+.total-backdrop {
+	height: 100vh;
+	width: 100vw;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.with-bar-and-tabs {
+	height: calc(100vh - 93px);
+	width: 100vw;
+	position: absolute;
+	top: 44px;
+}
+
+.with-sub-bar {
+	height: calc(100vh - 95px);
+	width: 100vw;
+	position: absolute;
+	top: 95px;
+}
+
+.with-dialog {
+	height: 100vh;
+	width: 80vw;
+	position: absolute;
+	top: 0;
+	z-index: 85;
+}
+
+#dialog-circular {
+	position: absolute;
+	top: 30vh;
+	left: calc(40vw - 25px);
+}
+
+#classical {
+	position: absolute;
+	top: 30vh;
+	left: calc(50vw - 25px);
+}
+
+
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle {
+	border-left-color: $assertive;
+	border-bottom-color: $assertive;
+}
+
+md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle, md-progress-circular.md-default-theme.md-warn .md-inner .md-right .md-half-circle {
+	border-top-color: $assertive ;
+	border-right-color: $assertive ;
+}

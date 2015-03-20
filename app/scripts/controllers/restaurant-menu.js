@@ -6,13 +6,14 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'pascalprecht.translate',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
+	'groupeat.services.loading-backdrop',
 	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
 	'groupeat.services.order',
 	'groupeat.services.product',
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, MessageBackdrop, Network, Product, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, LoadingBackdrop,  MessageBackdrop, Network, Product, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
@@ -28,15 +29,18 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.onRefreshRestaurantMenu = function() {
+		$scope.loadingBackdrop = LoadingBackdrop.backdrop('with-sub-bar');
 		if (!Network.hasConnectivity())
-    {
-      $scope.messageBackdrop = MessageBackdrop.noNetwork();
-      return;
-    }
+		{
+			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+			$scope.messageBackdrop = MessageBackdrop.noNetwork();
+			return;
+		}
 		// Loading the menu of the restaurant
 		Product.get($stateParams.restaurantId)
 		.then(function(products) {
 			$scope.products = products;
+			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 			if (_.isEmpty(products)) {
 				$scope.messageBackdrop = {
 					show: true,
