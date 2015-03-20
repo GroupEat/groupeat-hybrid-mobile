@@ -115,7 +115,7 @@ angular.module('groupeat.controllers.restaurants', [
       $state.go('restaurant-menu', {restaurantId: restaurantId});
     })
     .catch(function(missingPropertiesString) {
-      $scope.loadingBackdrop.noBackdrop();
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       if (!missingPropertiesString)
       {
         Popup.displayError($translate('genericFailureDetails'), 3000);
