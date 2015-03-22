@@ -67,7 +67,7 @@ angular.module('groupeat.services.push-notifications', [
   * Callback method to the cordova 'deviceready' event
   * Sets the appropriate Notification handler acoording to the device's platform
   */
-  var onDeviceReady = function(){
+  var onDeviceReady = function() {
     var device = window.device;
     if ( device.platform === 'Android' || device.platform === 'android' || device.platform === 'amazon-fireos' )
     {

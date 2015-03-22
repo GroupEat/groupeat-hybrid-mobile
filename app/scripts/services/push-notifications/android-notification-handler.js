@@ -2,7 +2,10 @@
 
 
 angular.module('groupeat.services.push-notifications.android-notification-handler', [
+  'ionic',
   'ngResource',
+  'config',
+  'groupeat.services.element-modifier'
 ])
 
 
