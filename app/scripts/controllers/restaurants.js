@@ -12,7 +12,9 @@ angular.module('groupeat.controllers.restaurants', [
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($mdDialog, $scope, $state, $translate, Customer, LoadingBackdrop, Restaurant, MessageBackdrop, Network, _, $geolocation, Popup) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Popup, Restaurant, _, $geolocation) {
+
+  var $translate = $filter('translate');
 
   $scope.restaurants = {};
 
@@ -106,11 +108,14 @@ angular.module('groupeat.controllers.restaurants', [
 
   $scope.onRestaurantTouch = function(restaurantId) {
     // Checking if the customer has provided the needed further information before going further
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop('with-bar-and-tabs');
     Customer.checkMissingInformation()
     .then(function() {
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       $state.go('restaurant-menu', {restaurantId: restaurantId});
     })
     .catch(function(missingPropertiesString) {
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       if (!missingPropertiesString)
       {
         Popup.displayError($translate('genericFailureDetails'), 3000);

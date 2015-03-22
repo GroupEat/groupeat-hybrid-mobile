@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Customer = scope = $httpBackend = ENV = sandbox = BackendUtils = {}
+  Address = Credentials = Customer = scope = $httpBackend = $q = ENV = sandbox = BackendUtils = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -13,8 +13,11 @@ describe 'Service: Customer', ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+      Address = $injector.get('Address')
+      Credentials = $injector.get('Credentials')
       Customer = $injector.get('Customer')
       ENV = $injector.get('ENV')
+      $q = $injector.get('$q')
       BackendUtils = $injector.get('BackendUtils')
       sandbox = sinon.sandbox.create()
 
@@ -86,4 +89,76 @@ describe 'Service: Customer', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(400, 'Failure')
       Customer.update(parameters, requestBody).should.be.rejectedWith(errorMsgFromBackend)
+      $httpBackend.flush()
+
+  describe 'Customer#checkMissingInformation', ->
+
+    it 'should reject a promise when the Customer GET request fails', ->
+      sandbox.stub(Credentials, 'get').returns(id: 1)
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(400, 'Failure')
+      Customer.checkMissingInformation().should.be.rejected
+      $httpBackend.flush()
+
+    it 'should resolve a promise when the Customer GET and Address GET requests succeed and no required information is missing', ->
+      customerGetResponse =
+        data:
+          firstName: 'firstName'
+          lastName: 'lastName'
+          phoneNumber: '0606060606'
+      sandbox.stub(Credentials, 'get').returns(id: 1)
+      sandbox.stub(Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(customerGetResponse)
+      Customer.checkMissingInformation().should.be.resolved
+      $httpBackend.flush()
+
+    it 'should reject a promise with the string "address" when just the customer address is missing', ->
+      customerGetResponse =
+        data:
+          firstName: 'firstName'
+          lastName: 'lastName'
+          phoneNumber: '0606060606'
+      sandbox.stub(Credentials, 'get').returns(id: 1)
+      sandbox.stub(Address, 'get').returns($q.reject())
+
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(customerGetResponse)
+      Customer.checkMissingInformation().should.be.rejectedWith('address')
+      $httpBackend.flush()
+
+    it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (> 2 missing)', ->
+      customerGetResponse =
+        data: {}
+      sandbox.stub(Credentials, 'get').returns(id: 1)
+      sandbox.stub(Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(customerGetResponse)
+      Customer.checkMissingInformation().should.be.rejectedWith('firstName, lastName and phoneNumber')
+      $httpBackend.flush()
+
+    it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (2 missing)', ->
+      customerGetResponse =
+        data:
+          firstName: 'firstName'
+      sandbox.stub(Credentials, 'get').returns(id: 1)
+      sandbox.stub(Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(customerGetResponse)
+      Customer.checkMissingInformation().should.be.rejectedWith('lastName and phoneNumber')
       $httpBackend.flush()
