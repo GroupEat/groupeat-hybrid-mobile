@@ -98,7 +98,7 @@
 			<div ng-show="addressTypeSelected.value=='myAddress'">
 				<div ng-show="hasPredefinedPersonalAddress.hasValue">
 					<div ng-show="hasPredefinedPersonalAddress.value">
-						{{ userAddress.street }} <br />
+						{{ (userAddress.residency | translate)  || userAddress.street }} <br />
 						{{ userAddress.details }}
 					</div>
 					<div ng-hide="hasPredefinedPersonalAddress.value">
