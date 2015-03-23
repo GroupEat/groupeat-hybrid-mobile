@@ -49,6 +49,9 @@
 		</md-list>
 
 		<div ng-show="isNewOrder.value" layout="row" layout-wrap>
+		<style scoped>
+		    canvas { height: 0px; }
+		  </style>
 			<md-slider flex md-discrete  min="5" max="60" ng-model="foodRushTime.value" aria-label="foodRushSlider" ng-change="onSliderChanged(foodRushTime.value)" class="foodrush-slider">
      		 </md-slider>
 			
