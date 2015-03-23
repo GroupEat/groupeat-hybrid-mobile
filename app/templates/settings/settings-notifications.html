@@ -1,39 +1,27 @@
-<ion-view ng-controller="SettingsCtrl" title="{{'pushSettings'| translate }}">
-	<ion-content has-header="true">
+<ion-toggle ng-model="select.pushActivation" ng-checked="select.pushActivation">
+	{{ 'pushActivation' | translate }}
+</ion-toggle>
 
-		<ion-toggle ng-model="select.pushActivation" ng-checked="select.pushActivation">
-          {{ 'pushActivation' | translate }}
-        </ion-toggle>
+<div class="item item-divider">
+	{{ 'atNight' | translate }} :
+</div>
 
-        <div class="item item-divider">
-          {{ 'atNight' | translate }} :
-        </div>
+<label class="item item-input item-select">
+	<div class="input-label">
+		{{ 'dontPushAfter' | translate }} :</p>
+	</div>
+	<select ng-model="select.dontPushAfter" ng-options="item.name for item in settings">
+	</select>
+</label>
 
-        <label class="item item-input item-select">
-		    <div class="input-label">
-		      {{ 'dontPushAfter' | translate }} :</p>
-		    </div>
-		    <select ng-model="select.dontPushAfter" ng-options="item.name for item in settings.dontPushAfter">
-      		</select>
-		</label>
+<div class="item item-divider">
+	{{ 'afterAnOrder' | translate }} :
+</div>
 
-		<div class="item item-divider">
-          {{ 'afterAnOrder' | translate }} :
-        </div>
-
-        <label class="item item-input item-select">
-		    <div class="input-label">
-		    {{ 'dontPushFor' | translate }} :
-		    </div>
-		    <select ng-model="select.dontPushFor" ng-options="item.name for item in settings.dontPushFor">
-      		</select>
-		</label>
-
-
-
-
-		<button on-tap="saveSettings()" class="button button-full button-outline no-margin">
-	   		   <text>{{ 'save' | translate }}<text/>
-	   	</button>
-	</ion-content>
-</ion-view>
+<label class="item item-input item-select">
+	<div class="input-label">
+		{{ 'dontPushFor' | translate }} :
+	</div>
+	<select ng-model="select.dontPushFor" ng-options="item.name for item in settings">
+	</select>
+</label>

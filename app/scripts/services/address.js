@@ -2,11 +2,12 @@
 
 angular.module('groupeat.services.address', [
   'config',
+  'groupeat.services.lodash',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function($resource, $q, ENV, $filter) {
+.factory('Address', function($resource, $q, ENV, $filter, _) {
 
   var $translate = $filter('translate');
 
@@ -40,21 +41,6 @@ angular.module('groupeat.services.address', [
     return defer.promise;
   },
 
-  getResidencyFromGeolocation = function(latitude, longitude) {
-    console.log(latitude + ', ' + longitude);
-    var response = null;
-    if(latitude === 48.709862 && longitude === 2.210241) {
-      response = 'polytechnique';
-    }
-    else if (latitude === 48.714258 && longitude === 2.203553) {
-      response = 'supoptique';
-    }
-    else if (latitude === 48.7107339 && longitude === 2.2182327) {
-      response = 'ENSTAParisTech';
-    }
-    return response;
-  },
-
   getAddressFromResidencyInformation = function(residency) {
     var street, latitude, longitude = null;
     if (residency === 'polytechnique')
@@ -82,6 +68,23 @@ angular.module('groupeat.services.address', [
       };
   },
 
+  getResidencyInformationFromAddress = function(address) {
+    var residencyInformation = _.pick(address, 'details') || {};
+    if (address.latitude === 48.709862 && address.longitude === 2.210241)
+    {
+      residencyInformation.residency = 'polytechnique';
+    }
+    else if (address.latitude === 48.714258 && address.longitude === 2.203553)
+    {
+      residencyInformation.residency = 'supoptique';
+    }
+    else
+    {
+      residencyInformation.residency = 'ENSTAParisTech';
+    }
+    return residencyInformation;
+  },
+
   getResidencies = function() {
     return ['ENSTAParisTech', 'polytechnique', 'supoptique'] ;
   };
@@ -90,7 +93,7 @@ angular.module('groupeat.services.address', [
     get: get,
     update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation,
-    getResidencyFromGeolocation: getResidencyFromGeolocation,
+    getResidencyInformationFromAddress: getResidencyInformationFromAddress,
     getResidencies: getResidencies
   };
 });
