@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = PushNotifications = ENV = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -34,7 +34,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup = $injector.get('Popup')
       sandbox.stub(Popup, 'displayError')
       sandbox.stub(Popup, 'displayTitleOnly')
-      PushNotifications = $injector.get('PushNotifications')
+      DeviceAssistant = $injector.get('DeviceAssistant')
 
       $httpBackend = $injector.get('$httpBackend')
       $timeout = $injector.get('$timeout')
@@ -49,7 +49,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $compile = $injector.get('$compile')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, PushNotifications: PushNotifications, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
+        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -439,7 +439,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup.displayError.should.have.been.called
       Customer.save.should.been.called
 
-    it "if there is no client side validation error, no server side error, PushNotifications.subscribe should be called and an error dialog should be displayed", ->
+    it "if there is no client side validation error, no server side error, DeviceAssistant.register should be called and an error dialog should be displayed", ->
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
                       .respond(
                         data:
@@ -452,7 +452,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
-      sandbox.stub(PushNotifications, 'subscribe').returns($q.reject(new Error('errorMessage')))
+      sandbox.stub(DeviceAssistant, 'register').returns($q.reject(new Error('errorMessage')))
       window.browserTrigger(formElement, 'submit')
       scope.submitRegisterForm(scope.registerForm)
       scope.$apply()
@@ -461,7 +461,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       Popup.displayError.should.have.been.called
       Credentials.set.should.have.been.called
-      PushNotifications.subscribe.should.have.been.called
+      DeviceAssistant.register.should.have.been.called
 
     it 'if there are no errors, the shown dom elements should change to display the further registration form', ->
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers')
@@ -476,7 +476,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
-      sandbox.stub(PushNotifications, 'subscribe', (form) ->
+      sandbox.stub(DeviceAssistant, 'register', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -506,7 +506,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
-      sandbox.stub(PushNotifications, 'subscribe', (form) ->
+      sandbox.stub(DeviceAssistant, 'register', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
