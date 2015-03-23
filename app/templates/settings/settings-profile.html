@@ -1,31 +1,54 @@
-<ion-view ng-controller="SettingsCtrl" title="{{'profileSettings'| translate }}">
-	<ion-content has-header="true">
-
-		<div class="no-margin list">
-			<label class="item item-input">
-				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-				<input ng-model="userSignup.firstName" type="text" placeholder="{{user.profile.firstName}}">
-			</label>
-			<label class="item item-input">
-				<i class="icon ion-ios7-person-outline placeholder-icon"></i>
-				<input ng-model="userSignup.lastName" type="text" placeholder="{{user.profile.lastName}}">
-			</label>
-			<label class="item item-input">
-				<i class="icon ion-ios7-telephone-outline placeholder-icon"></i>
-				<input ng-model="userSignup.phoneNumber" type="tel" placeholder="{{user.profile.phoneNumber}}">
-			</label>
-			<label class="item item-input">
-				<i class="icon ion-ios7-location-outline placeholder-icon"></i>
-				<input ng-model="userSignup.address" type="text" placeholder="{{user.profile.adress}}">
-			</label>
+<form name="form.customerEdit" ng-submit-force="true" novalidate>
+	<div class="item item-divider">
+		<md-icon md-svg-src="/lib/material-design-icons/action/svg/production/ic_home_24px.svg"></md-icon>
+		{{ 'deliveryAddress' | translate }}
+	</div>
+	<label class="item item-input item-select">
+		<div class="input-label">
+			<md-icon></md-icon>
 		</div>
-
-		<button ui-sref='settings' class="button button-full button-outline no-margin">
-   		   <text id="new-command-text">{{ 'save' | translate }}<text/>
-   		</button>
-
-   		<button ui-sref='first-page' class="button button-full button-outline no-margin">
-   		   <text id="new-command-text">{{ 'disconnect' | translate }}<text/>
-   		</button>
-	</ion-content>
-</ion-view>
+		<select ng-model="customer.residency" ng-options="residency | translate for residency in residencies">
+		</select>
+	</label>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
+	</md-input-container>
+	<div class="item item-divider">
+		<md-icon md-svg-src="/lib/material-design-icons/social/svg/production/ic_person_24px.svg"></md-icon>
+		{{ 'otherDeliveryInformation' | translate }}
+	</div>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
+	</md-input-container>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
+	</md-input-container>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}" ge-phone-format>
+		<div ng-messages="furtherRegisterForm.phoneNumber.$error">
+			<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
+		</div>
+	</md-input-container>
+	<div class="item item-divider">
+		<md-icon md-svg-src="/lib/material-design-icons/action/svg/production/ic_lock_24px.svg"></md-icon>
+		{{ 'editPassword' | translate }}
+	</div>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.currentPassword" name="currentPassword" type="password" placeholder="{{ 'currentPassword' | translate }}" ng-minlength="6">
+		<div ng-messages="customerEditForm.currentPassword.$error">
+			<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
+		</div>
+	</md-input-container>
+	<md-input-container md-no-float>
+		<md-icon></md-icon>
+		<input ng-model="customer.newPassword" name="newPassword" type="password" placeholder="{{ 'newPassword' | translate }}" ng-minlength="6">
+		<div ng-messages="customerEditForm.newPassword.$error">
+			<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
+		</div>
+	</md-input-container>
+</form>

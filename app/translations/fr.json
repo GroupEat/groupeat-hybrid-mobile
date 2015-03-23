@@ -1,7 +1,7 @@
 {
   "cancel": "Annuler",
   "ok": "Ok",
-  "and": "et", 
+  "and": "et",
   "send": "Envoyer",
   "back": "Retour",
   "add": "Ajouter",
@@ -14,6 +14,8 @@
   "register": "S'inscrire",
   "email": "E-mail",
   "password": "Mot de passe",
+  "currentPassword": "Mot de passe actuel",
+  "newPassword": "Nouveau mot de passe",
   "firstName": "Prénom",
   "lastName": "Nom",
   "phoneNumber": "Numéro de téléphone",
@@ -32,6 +34,11 @@
   "emailSentTo": "E-mail envoyé à",
   "unableToAccessAddress": "Nous n'arrivons pas à accéder à votre addresse",
 
+  "editPassword": "Changement de mot de passe",
+  "deliveryAddress": "Adresse de Livraison",
+  "otherDeliveryInformation": "Autres infos de livraison",
+  "customerEdited": "Paramètres sauvegardés !",
+
   "orders": "Commandes",
   "newOrder": "Nouvelle commande",
   "pizza": "Pizza",
@@ -42,7 +49,7 @@
   "noGroupOrder": "Aucune commande en cours actuellement",
 
   "settings": "Réglages",
-  "editProfile": "Editer mon profil",
+  "editProfile": "Mes Infos",
   "profileSettings": "Profil",
   "pushSettings": "Notifications",
   "pushActivation": "Activer les notifications",
