@@ -162,32 +162,32 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it 'the validateForm promise should initially reject requiredErrorKey either if the email field is empty or the email field is valid and the password field empty', ->
       # Both fields are empty
       form = submitFormWithViewValues()
-      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
       # The email field is present and valid
       form = submitFormWithViewValues('campusemail@ensta.fr')
-      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
       # The password field is present and valid
       form = submitFormWithViewValues('', 'validpassword')
-      scope.validateForm(form).should.be.rejectedWith('requiredErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('requiredErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject an emailErrorKey Error if the view value is not an email', ->
       form = submitFormWithViewValues('not a valid email')
-      scope.validateForm(form).should.be.rejectedWith('emailErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('emailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a geEmailErrorKey Error if the view value is not a valid campus email but a valid email', ->
       form = submitFormWithViewValues('notacampusemail@gmail.com')
-      scope.validateForm(form).should.be.rejectedWith('geCampusEmailErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('geCampusEmailErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should reject a minlengthErrorKey Error if the email is valid but the password field less than 6 characters', ->
       form = submitFormWithViewValues('campusemail@ensta.fr', 'short')
-      scope.validateForm(form).should.be.rejectedWith('minlengthErrorKey')
+      ElementModifier.validate(form).should.be.rejectedWith('minlengthErrorKey')
       $timeout.flush()
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
@@ -199,12 +199,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
       form = submitFormWithViewValues('campusemail@ensta.fr', 'longer')
-      scope.validateForm(form).should.be.fulfilled
+      ElementModifier.validate(form).should.be.fulfilled
       $timeout.flush()
 
     it 'if there is a validation error, an error dialog should be displayed', ->
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
+      sandbox.stub(ElementModifier, 'validate').returns($q.reject(new Error('errorMessage')))
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
@@ -219,7 +219,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it 'if there is no client side validation error but an error from the server, an error dialog should be displayed', ->
       $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
       # We use a stub to make sure the validateForm promise is fulfilled
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -243,7 +243,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
       # We use a stub to make sure the validateForm promise is resolved
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -349,7 +349,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form = scope.resetPasswordForm
       $mdDialog.hide.should.not.have.been.called
 
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -373,7 +373,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form = scope.resetPasswordForm
       $mdDialog.hide.should.not.have.been.called
 
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -413,7 +413,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it "if there is a validation error, an error dialog should be displayed and Customer.save should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
+      sandbox.stub(ElementModifier, 'validate').returns($q.reject(new Error('errorMessage')))
 
       window.browserTrigger(formElement, 'submit')
       scope.submitRegisterForm(scope.registerForm)
@@ -425,7 +425,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(404, 'Error')
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -447,7 +447,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -471,7 +471,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
       # We use a stub to make sure the validateForm promise is resolved
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -501,7 +501,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
                           token: 'jklhkjhlkhl'
                       )
       # We use a stub to make sure the validateForm promise is resolved
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -617,7 +617,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form = scope.furtherRegisterForm
       scope.$apply()
       window.browserTrigger(formElement, 'submit')
-      scope.validateForm(form).should.be.fulfilled
+      ElementModifier.validate(form).should.be.fulfilled
       $timeout.flush()
 
     it 'the validateForm promise should be rejected if an invalid phone number is given', ->
@@ -627,7 +627,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form.phoneNumber.$setViewValue('notAPhoneNumber')
       scope.$apply()
       window.browserTrigger(formElement, 'submit')
-      scope.validateForm(form).should.be.rejectedWith('gePhoneFormatError')
+      ElementModifier.validate(form).should.be.rejectedWith('gePhoneFormatError')
       $timeout.flush()
 
     it 'the validateForm promise should be fulfilled if a proper phone number is given', ->
@@ -640,12 +640,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
       form.phoneNumber.$setViewValue('0606060606')
       scope.$apply()
       window.browserTrigger(formElement, 'submit')
-      scope.validateForm(form).should.be.fulfilled
+      ElementModifier.validate(form).should.be.fulfilled
       $timeout.flush()
 
     it "if there is a client side validation error, an error dialog should be displayed and Customer.update should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm').returns($q.reject(new Error('errorMessage')))
+      sandbox.stub(ElementModifier, 'validate').returns($q.reject(new Error('errorMessage')))
 
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
@@ -658,7 +658,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $httpBackend.expect('PUT', regex).respond(404, 'Error')
       scope.userId = 1
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -677,7 +677,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $httpBackend.expectPUT(regex).respond(404, 'Error')
       scope.userId = 1
       # We use a stub to make sure the validateForm promise is rejected
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
@@ -697,7 +697,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $httpBackend.expectPUT(regex).respond(200, 'Success')
       scope.userId = 1
       # We use a stub to make sure the validateForm promise is resolved
-      sandbox.stub(scope, 'validateForm', (form) ->
+      sandbox.stub(ElementModifier, 'validate', (form) ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
