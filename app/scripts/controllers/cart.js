@@ -32,14 +32,6 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
-	$scope.foodRushTimeData = [
-		{ label: $translate('fiveMin'), value: 5 },
-		{ label: $translate('tenMin'), value: 10 },
-		{ label: $translate('fifteenMin'), value: 15 },
-		{ label: $translate('thirtyMin'), value: 30 },
-		{ label: $translate('fortyFiveMin'), value: 45 }
-	];
-
 	$scope.addressTypes = [
 		{ label: $translate('myAddress'), value: 'myAddress' },
 		{ label: $translate('newAddress'), value: 'newAddress'},
@@ -73,6 +65,18 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 /* --------------------------------------------------------------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------------
+	Here comes method called when user interacts with slider. As long as the cart
+	is no more in cache, we have to store the foodRushTime choosed by user. It is 
+	directly made in the Order service.
+	   ------------------------------------------------------------------------
+	*/
+
+	$scope.onSliderChanged = function(foodRushTime) {
+		Order.setFoodRushTime(foodRushTime);
+	};
+
+/* --------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------
 	Here comes the loading methods. It's kind of constructor of ctrl, they are called
@@ -83,6 +87,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.loadCart = function() {
 		$scope.cart = Cart;
+		$scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
 		if (_.isEmpty(Cart.getProducts()))
 		{
 			$scope.messageBackdrop = {
@@ -234,7 +239,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
-		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === null)
+		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === 0)
 		{
 			deferred.reject($translate('missingFoodRushTime'));
 		}

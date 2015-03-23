@@ -65,6 +65,10 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		requestBody.comment = value;
 	},
 
+	getFoodRushTime = function() {
+		return requestBody.foodRushDurationInMinutes;
+	},
+
 	getCurrentOrder = function() {
 		return currentOrder;
 	},
@@ -121,7 +125,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		setCurrentOrder: setCurrentOrder,
 		save: save,
 		isNewOrder: isNewOrder,
-		getTimeDiff: getTimeDiff
+		getTimeDiff: getTimeDiff,
+		getFoodRushTime: getFoodRushTime
 	};
 }
 );

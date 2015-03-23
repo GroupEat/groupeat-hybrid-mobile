@@ -3,7 +3,7 @@
   <ge-loading-backdrop ng-show="loadingBackdrop.show">
   </ge-loading-backdrop>
 
-  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show || loadingBackdrop.show">
+  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show">
 
     <md-button id="new-order-button" class="md-raised center" on-tap="onNewGroupOrder()">
       <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>

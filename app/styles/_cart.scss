@@ -1,6 +1,8 @@
 .cart-foodrush-text {
-	margin-top: 16px;
+	margin-top: 0px;
 	margin-bottom: 0px;
+	text-align: center;
+	color: black;
 }
 
 .cart-checkboxes {
@@ -26,3 +28,51 @@
 	margin-bottom: 0;
 }
 
+.foodrush-slider {
+	color: $energized !important;
+	margin-left: 22px;
+	margin-right: 22px;
+	margin-top: 22px;
+}
+
+.foodrush-text-res {
+	margin: 8px;
+	text-align: center;
+	color: $assertive;
+}
+
+.select-foodrush {
+	text-align: center;
+	margin: 8px;
+	color: grey;
+	font-size: 16px;
+}
+
+md-slider.md-default-theme .md-thumb:after {
+	border-color: $energized;
+	background-color: $energized;
+}
+
+md-slider.md-default-theme .md-track-ticks {
+	background-color: transparent;
+}
+
+md-slider.md-default-theme .md-sign {
+	background-color: $energized;
+}
+
+md-slider.md-default-theme .md-sign:after {
+	background-color: transparent;
+}
+
+md-slider.md-default-theme .md-track.md-track-fill {
+	background-color: $energized;
+}
+
+md-slider.md-default-theme .md-sign:after {
+	border-top-color: $energized;
+}
+
+canvas {
+	height: 0px;
+}

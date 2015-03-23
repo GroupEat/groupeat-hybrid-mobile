@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Popup = Restaurant = $geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -18,6 +18,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Customer = $injector.get('Customer')
       Restaurant = $injector.get('Restaurant')
       MessageBackdrop = $injector.get('MessageBackdrop')
+      LoadingBackdrop = $injector.get('LoadingBackdrop')
       Network = $injector.get('Network')
       _ = $injector.get('_')
       $geolocation = $injector.get('$geolocation')
@@ -25,7 +26,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Popup = $injector.get('Popup')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, _: _, $geolocation: $geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, _: _, $geolocation: $geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -46,9 +47,17 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
   describe 'RestaurantsCtrl#onRestaurantTouch', ->
 
+    it 'should called LoadingBackdrop service with argument /with-bar-and-tabs/', ->
+      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
+      sandbox.spy(LoadingBackdrop, 'backdrop')
+      scope.onRestaurantTouch(1)
+      scope.$digest()
+      LoadingBackdrop.backdrop.should.have.been.calledWithExactly('with-bar-and-tabs')
+
     it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
       sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
       sandbox.stub(Popup, 'displayError')
+      sandbox.stub(LoadingBackdrop, 'noBackdrop')
       scope.onRestaurantTouch(1)
       scope.$digest()
       Popup.displayError.should.have.been.calledWithExactly('genericFailureDetails', 3000)
