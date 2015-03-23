@@ -40,8 +40,23 @@ angular.module('groupeat.services.address', [
     return defer.promise;
   },
 
+  getResidencyFromGeolocation = function(latitude, longitude) {
+    console.log(latitude + ', ' + longitude);
+    var response = null;
+    if(latitude === 48.709862 && longitude === 2.210241) {
+      response = 'polytechnique';
+    }
+    else if (latitude === 48.714258 && longitude === 2.203553) {
+      response = 'supoptique';
+    }
+    else if (latitude === 48.7107339 && longitude === 2.2182327) {
+      response = 'ENSTAParisTech';
+    }
+    return response;
+  },
+
   getAddressFromResidencyInformation = function(residency) {
-    var street, latitude, longitude;
+    var street, latitude, longitude = null;
     if (residency === 'polytechnique')
     {
       street = 'Boulevard des Maréchaux';
@@ -54,11 +69,11 @@ angular.module('groupeat.services.address', [
       latitude = 48.714258;
       longitude = 2.203553;
     }
-    else
+    else if (residency === 'ENSTAParisTech')
     {
       street = 'Boulevard des Maréchaux';
       latitude = 48.7107339;
-      longitude = 2.218232700000044;
+      longitude = 2.2182327;
     }
     return {
         street: street,
@@ -75,6 +90,7 @@ angular.module('groupeat.services.address', [
     get: get,
     update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation,
+    getResidencyFromGeolocation: getResidencyFromGeolocation,
     getResidencies: getResidencies
   };
 });
