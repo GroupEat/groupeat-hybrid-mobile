@@ -115,8 +115,10 @@ angular.module('groupeat.controllers.cart', [
 			$scope.userAddress = {
 				'residency' : Address.getResidencyInformationFromAddress(userAddress),
 				'details': userAddress.details,
+				'latitude': userAddress.latitude,
+				'longitude': userAddress.longitude,
+				'street': userAddress.street
 			};
-			console.log($scope.userAddress);
 			$scope.hasPredefinedPersonalAddress.value = _.isEmpty(userAddress.data);
 			$scope.hasPredefinedPersonalAddress.hasValue = true;
 		})
