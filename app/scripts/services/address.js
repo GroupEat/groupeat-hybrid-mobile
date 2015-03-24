@@ -2,12 +2,11 @@
 
 angular.module('groupeat.services.address', [
   'config',
-  'groupeat.services.lodash',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function($resource, $q, ENV, $filter, _) {
+.factory('Address', function($resource, $q, ENV, $filter) {
 
   var $translate = $filter('translate');
 
@@ -42,7 +41,7 @@ angular.module('groupeat.services.address', [
   },
 
   getAddressFromResidencyInformation = function(residency) {
-    var street, latitude, longitude;
+    var street, latitude, longitude = null;
     if (residency === 'polytechnique')
     {
       street = 'Boulevard des Maréchaux';
@@ -69,20 +68,18 @@ angular.module('groupeat.services.address', [
   },
 
   getResidencyInformationFromAddress = function(address) {
-    var residencyInformation = _.pick(address, 'details');
     if (address.latitude === 48.709862 && address.longitude === 2.210241)
     {
-      residencyInformation.residency = 'polytechnique';
+      return 'polytechnique';
     }
     else if (address.latitude === 48.714258 && address.longitude === 2.203553)
     {
-      residencyInformation.residency = 'supoptique';
+      return 'supoptique';
     }
     else
     {
-      residencyInformation.residency = 'ENSTAParisTech';
+      return 'ENSTAParisTech';
     }
-    return residencyInformation;
   },
 
   getResidencies = function() {

@@ -112,8 +112,14 @@ angular.module('groupeat.controllers.cart', [
 			return Address.get(Credentials.get().id);
 		})
 		.then(function(userAddress) {
-			$scope.userAddress = userAddress;
-			$scope.hasPredefinedPersonalAddress.value = _.isEmpty($scope.userAddress.data);
+			$scope.userAddress = {
+				'residency' : Address.getResidencyInformationFromAddress(userAddress),
+				'details': userAddress.details,
+				'latitude': userAddress.latitude,
+				'longitude': userAddress.longitude,
+				'street': userAddress.street
+			};
+			$scope.hasPredefinedPersonalAddress.value = _.isEmpty(userAddress.data);
 			$scope.hasPredefinedPersonalAddress.hasValue = true;
 		})
 		.catch(function() {
@@ -182,7 +188,7 @@ angular.module('groupeat.controllers.cart', [
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
 					Order.setStreet(residencyInformations.street);
-					Order.setDetails($scope.addressSupplement.value);
+					Order.setDetails($scope.deliveryAddress.value + ', ' + $scope.addressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);
 					Order.setLongitude(residencyInformations.longitude);
 
