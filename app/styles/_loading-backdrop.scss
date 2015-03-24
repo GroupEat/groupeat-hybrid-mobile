@@ -1,6 +1,6 @@
 .commun-backdrop {
 	display: block;
-	background-color: rgba(0, 0, 0, 0.1) ;
+	
 }
 
 .total-backdrop {
@@ -9,6 +9,7 @@
 	position: absolute;
 	top: 0;
 	left: 0;
+	background-image: radial-gradient(white, $energized);
 }
 
 .with-bar-and-tabs {
@@ -17,6 +18,7 @@
 	position: absolute;
 	top: 44px;
 	z-index: 85;
+	background-image: radial-gradient(white, $energized);
 }
 
 .with-sub-bar {
@@ -24,14 +26,16 @@
 	width: 100vw;
 	position: absolute;
 	top: 95px;
+	background-image: radial-gradient(white, $energized);
 }
 
 .with-dialog {
 	height: 100vh;
-	width: 80vw;
+	width: 100vw;
 	position: absolute;
 	top: 0;
 	z-index: 85;
+	background-color: rgba(0,0,0, 0.11);
 }
 
 #dialog-circular {
@@ -42,7 +46,7 @@
 
 #classical {
 	position: absolute;
-	top: 30vh;
+	top: calc(50vh - 25px - 44px);
 	left: calc(50vw - 25px);
 }
 
