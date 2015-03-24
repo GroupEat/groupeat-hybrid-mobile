@@ -6,6 +6,7 @@
 	width: calc(100vw - 32px);
 	margin-left: 16px;
 	margin-right: 16px !important;
+	padding: 1px;
 }
 
 .go-title {
@@ -16,8 +17,8 @@
 .go-details-list {
 	margin-left: 16px;
 	margin-right: 16px;
-	border-right: 1px solid;
-	border-color: $assertive;
+	border-right: 2px solid;
+	border-color: $energized;
 }
 
 .go-details {
@@ -64,15 +65,15 @@ md-toolbar.md-default-theme {
 	color: rgba(0,0,0,0.87);
 	box-shadow: 0 0 0 0;
 	border-bottom : 1px solid;
-	border-right: 1px solid;
-	border-color: $assertive;
+	border-right: 2px solid;
+	border-color: transparent $energized $assertive;
 	margin-right: 16px;
 }
 
 .go-divider {
 	margin-bottom: 2vh;
-	border-top: 1px solid;
-	border-top-color: $assertive !important;
+	border-top: 2px solid;
+	border-top-color: $energized !important;
 	margin-right: 16px;
 }
 
