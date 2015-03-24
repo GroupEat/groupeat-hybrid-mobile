@@ -79,6 +79,16 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 			'endingAt': null,
 			'currentDiscount': null
 		};
+		requestBody = {
+			'groupOrderId': null,
+			'foodRushDurationInMinutes': null,
+			'productFormats': {},
+			'street': null,
+			'details': null,
+			'latitude': null,
+			'longitude': null,
+			'comment': null
+		};
 	},
 
 	setCurrentOrder = function(id, date, discount) {

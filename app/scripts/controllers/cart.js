@@ -229,7 +229,7 @@ angular.module('groupeat.controllers.cart', [
 			})
 			.catch(function(errorMessage) {
 				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				return Popup.displayError(errorMessage, 4000);
+				return Popup.displayError($translate(errorMessage), 5000);
 	    });
 		}
 	};
