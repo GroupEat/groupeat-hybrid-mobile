@@ -5,26 +5,22 @@
 
   <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show">
 
-    <md-button id="new-order-button" class="md-raised center" on-tap="onNewGroupOrder()">
-      <text id="new-order-text">{{ 'newOrder' | translate }} !<text/>
-    </md-button>
+    <button id="new-order-button" class="button button-assertive center" on-tap="onNewGroupOrder()">
+      {{ 'newOrder' | translate }} !
+    </button>
 
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshGroupOrders()">
     </ion-refresher>
 
-      
-
-
-
     <md-list>
       <md-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
-        <md-item-content>
+        <md-item-content class="go-divider-header">
           <md-toolbar class="go-list-header">
             <span class="list-title"> <i class="italic">{{ 'pizzeria' | translate }} </i>: {{ groupOrder.restaurant.data.name }} </span>
           </md-toolbar>
 
         </md-item-content>
-        <md-item-content layout="row" layout-wrap>
+        <md-item-content layout="row" layout-wrap class="go-details-list">
 
             <div flex="50">
               <div class="go-details"> {{ 'remainingCapacity' | translate }} {{ groupOrder.remainingCapacity }}
