@@ -115,7 +115,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.closeResetPasswordDialog = function(form, cancel) {
     return (cancel) ? $mdDialog.hide() : ElementModifier.validate(form)
     .then(function() {
-      Authentication.resetPassword($scope.userReset)
+      Authentication.resetPassword($scope.userReset.email)
       .then(function() {
         $mdDialog.hide();
       })

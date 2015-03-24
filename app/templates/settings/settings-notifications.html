@@ -1,27 +1,49 @@
-<ion-toggle ng-model="select.pushActivation" ng-checked="select.pushActivation">
-	{{ 'pushActivation' | translate }}
-</ion-toggle>
+<div class="list">
 
-<div class="item item-divider">
-	{{ 'atNight' | translate }} :
-</div>
+  <div class="item item-toggle">
+     {{ 'enable' | translate}}
+     <label class="toggle toggle-assertive">
+       <input ng-model="notificationsPreferences.enable" type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </div>
 
-<label class="item item-input item-select">
-	<div class="input-label">
-		{{ 'dontPushAfter' | translate }} :</p>
+	<div ng-show="notificationsPreferences.enable">
+
+		<div class="item item-divider">
+			{{ 'afterMakingAnOrder' | translate }} :
+		</div>
+
+		<label class="item item-input item-select">
+			<div class="input-label">
+				{{ 'notifyMe' | translate }} :</p>
+			</div>
+			<select ng-model="notificationsPreferences.daysWithoutNotifying">
+		    <option
+		      ng-repeat="day in daysWithoutNotifying"
+		      ng-pluralize
+					ng-init="dayLabel='day'; daysLabel='days'"
+		      count="day"
+		      when="{0: '{{day}} {{dayLabel | translate}}', 1: '{{day}} {{dayLabel | translate}}', other: '{{day}} {{ daysLabel | translate }}'}"
+		    >{{day}}</option>
+	  	</select>
+		</label>
+
+		<div class="item item-divider">
+			{{ 'doNotNotifyMe' | translate }} :
+		</div>
+
+		<label class="item item-input item-select">
+			<div class="input-label">
+				{{ 'after' | translate }} :</p>
+			</div>
+			<select ng-model="notificationsPreferences.noNotificationAfter">
+				<option ng-repeat="hour in noNotificationAfterHours" value="{{hour}}">{{hour}}</option>
+			</select>
+		</label>
+
 	</div>
-	<select ng-model="select.dontPushAfter" ng-options="item.name for item in settings">
-	</select>
-</label>
 
-<div class="item item-divider">
-	{{ 'afterAnOrder' | translate }} :
 </div>
-
-<label class="item item-input item-select">
-	<div class="input-label">
-		{{ 'dontPushFor' | translate }} :
-	</div>
-	<select ng-model="select.dontPushFor" ng-options="item.name for item in settings">
-	</select>
-</label>

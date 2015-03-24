@@ -2,6 +2,7 @@
 
 angular.module('groupeat.controllers.settings', [
 	'groupeat.services.address',
+	'groupeat.services.authentication',
 	'groupeat.services.credentials',
 	'groupeat.services.customer',
 	'groupeat.services.element-modifier',
@@ -12,11 +13,17 @@ angular.module('groupeat.controllers.settings', [
 	'groupeat.services.popup'
 ])
 
-.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
+.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
 
 	var $translate = $filter('translate');
 
+	/*
+	Models
+	*/
+	$scope.customer = {};
 	$scope.form = {};
+	$scope.notificationsPreferences = {};
+
 	/*
 	Settings list
 	*/
@@ -29,6 +36,15 @@ angular.module('groupeat.controllers.settings', [
 	Loading
 	*/
 	$scope.onReload = function() {
+		// Loading notification related options
+		$scope.daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying();
+		$scope.noNotificationAfterHours = NotificationsSettings.getNoNotificationAfterHours();
+		$scope.notificationsPreferences = {
+			enable: true,
+			daysWithoutNotifying: 3,
+			noNotificationAfter: '22h00'
+		};
+		// Loading user information
 		$scope.residencies = Address.getResidencies();
 		if (!Network.hasConnectivity())
 		{
@@ -36,7 +52,6 @@ angular.module('groupeat.controllers.settings', [
 			return;
 		}
 		var customerId = Credentials.get().id;
-		$scope.customer = {};
 		Customer.get(customerId)
 		.then(function(customer) {
 			$scope.customer = customer;
@@ -65,30 +80,16 @@ angular.module('groupeat.controllers.settings', [
       var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.customer.residency), {details: $scope.customer.details});
       return Address.update({id: customerId}, addressParams);
     })
+		.then(function() {
+			var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
+			return Authentication.updatePassword(authenticationParams);
+		})
     .then(function() {
 			Popup.displayTitleOnly($translate('customerEdited'), 3000);
     })
     .catch(function(errorMessage) {
       Popup.displayError(errorMessage, 3000);
     });
-	};
-
-	$scope.settings = NotificationsSettings.pivotTableSettings;
-
-
-	// Model declaration
-	$scope.select = {};
-	//$scope.user.settings = NotificationsSettings.settings;
-	//$scope.select.pushActivation = $scope.user.settings.pushActivation;
-	//$scope.select.dontPushAfter = $scope.settings.dontPushAfter[$scope.user.settings.dontPushAfter];
-	//$scope.select.dontPushFor = $scope.settings.dontPushFor[$scope.user.settings.dontPushFor];
-
-	$scope.saveSettings = function() {
-		$scope.customer.settings.pushActivation = $scope.select.pushActivation;
-		$scope.customer.settings.dontPushFor = $scope.select.dontPushFor.id;
-		$scope.customer.settings.dontPushAfter = $scope.select.dontPushAfter.id;
-		NotificationsSettings.saveSettings($scope.customer.settings);
-		$state.go('settings');
 	};
 
 	$scope.onReload();

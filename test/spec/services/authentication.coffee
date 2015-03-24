@@ -56,15 +56,15 @@ describe 'Service: Authentication', ->
       Authentication.should.have.property('resetPassword')
 
     it 'should return a fulfilled promise when the server responds properly', ->
-      credentials = 'credentials'
+      email = 'email@ensta.fr'
       $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
-      Authentication.resetPassword(credentials).should.be.fulfilled
+      Authentication.resetPassword(email).should.be.fulfilled
       $httpBackend.flush()
 
     it 'should reject a promise with an error key when the server responds with an error', ->
       errorKeyFromBackend = 'errorKeyFromBackend'
       sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKeyFromBackend)
-      credentials = 'credentials'
+      email = 'email@ensta.fr'
       $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(404, 'Failure')
-      Authentication.resetPassword(credentials).should.be.rejectedWith(errorKeyFromBackend)
+      Authentication.resetPassword(email).should.be.rejectedWith(errorKeyFromBackend)
       $httpBackend.flush()
