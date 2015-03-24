@@ -39,8 +39,8 @@
 	</div>
 	<md-input-container md-no-float>
 		<md-icon></md-icon>
-		<input ng-model="customer.currentPassword" name="currentPassword" type="password" placeholder="{{ 'currentPassword' | translate }}" ng-minlength="6">
-		<div ng-messages="customerEditForm.currentPassword.$error">
+		<input ng-model="customer.oldPassword" name="oldPassword" type="password" placeholder="{{ 'oldPassword' | translate }}" ng-minlength="6">
+		<div ng-messages="customerEditForm.oldPassword.$error">
 			<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 		</div>
 	</md-input-container>
