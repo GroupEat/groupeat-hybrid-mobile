@@ -19,7 +19,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 			_.forEach(products, function(product) {
 				_.forEach(product.formats, function(format) {
 					if(format.id === formatId) {
-						quantityToReturn = format.quantity;
+						quantityToReturn = _.has(format, 'quantity') ? format.quantity : 0;
 					}
 				});
 			});
@@ -100,7 +100,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash'])
 
 		hasAtLeastOneProduct = function(productToTest) {
 			/*
-			if product.id is in products, that means there is at least 
+			if product.id is in products, that means there is at least
 			one product (senior, junior,.... whatever) added by user
 			 */
 			var isInProducts = false ;

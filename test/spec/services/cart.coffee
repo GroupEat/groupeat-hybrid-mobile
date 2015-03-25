@@ -16,6 +16,88 @@ describe 'Service: Cart', ->
       Cart = $injector.get('Cart')
       _ = $injector.get('_')
 
+  describe 'products setter and getter', ->
+
+    it 'getProducts should initially return an empty object', ->
+      Cart.getProducts().should.be.empty
+
+    it 'getProducts should return the object set by setProducts', ->
+      products = ['firstProduct', 'secondProduct']
+      Cart.setProducts(products)
+      Cart.getProducts().should.equal(products)
+
+  describe 'totalQuantity setter and getter', ->
+
+    it 'getTotalQuantity should initially return 0', ->
+      Cart.getTotalQuantity().should.equal(0)
+
+    it 'getTotalQuantity should return the value set by setTotalQuantity', ->
+      totalQuantity = 2
+      Cart.setTotalQuantity(totalQuantity)
+      Cart.getTotalQuantity().should.equal(totalQuantity)
+
+  describe 'totalPrice setter and getter', ->
+
+    it 'getTotalPrice should initially return 0', ->
+      Cart.getTotalPrice().should.equal(0)
+
+    it 'getTotalPrice should return the value set by setTotalPrice', ->
+      totalPrice = 100
+      Cart.setTotalPrice(totalPrice)
+      Cart.getTotalPrice().should.equal(totalPrice)
+
+  describe 'discountRate setter and getter', ->
+
+    it 'getDiscountRate should initially return 0', ->
+      Cart.getDiscountRate().should.equal(0)
+
+    it 'getTotalPrice should return the value set by setTotalPrice', ->
+      discountRate = 0.3
+      Cart.setDiscountRate(discountRate)
+      Cart.getDiscountRate().should.equal(discountRate)
+
+  describe 'Cart#getFormatQuantity', ->
+
+    it 'should return 0 if there are no products', ->
+      Cart.getFormatQuantity(2014).should.equal(0)
+
+    it 'should return 0 if there are only products with no format', ->
+      products = [
+        formats: []
+      ]
+      Cart.setProducts(products)
+      Cart.getFormatQuantity(2014).should.equal(0)
+
+    it 'should return 0 if there are no formats matching the given format id', ->
+      products = [
+        formats: [
+          {id: 1},
+          {id: 2}
+        ]
+      ]
+      Cart.setProducts(products)
+      Cart.getFormatQuantity(2014).should.equal(0)
+
+    it 'should return 0 if there is a format matching the given format id and if it has no quantity property', ->
+      products = [
+        formats: [
+          {id: 1},
+          {id: 2014}
+        ]
+      ]
+      Cart.setProducts(products)
+      Cart.getFormatQuantity(2014).should.equal(0)
+
+    it 'should return the quantity of the format matching the given format id if it has the quantity property', ->
+      products = [
+        formats: [
+          {id: 1},
+          {id: 2014, quantity: 2}
+        ]
+      ]
+      Cart.setProducts(products)
+      Cart.getFormatQuantity(2014).should.equal(2)
+
   describe "Cart Service contents :", ->
     it "should create an objet of products", ->
       expect(Cart).not.to.equal(null)
