@@ -14,6 +14,7 @@ angular.module('groupeat', [
   'ngCordova',
   'ngCookies',
   'ngMaterial',
+  'ngMdIcons',
   'ngMessages',
   'pascalprecht.translate',
   'permission',

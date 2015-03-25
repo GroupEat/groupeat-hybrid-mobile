@@ -1,6 +1,6 @@
 <form name="form.customerEdit" ng-submit-force="true" novalidate>
 	<div class="item item-divider">
-		<md-icon md-svg-src="/lib/material-design-icons/action/svg/production/ic_home_24px.svg"></md-icon>
+		<ng-md-icon icon="home"></ng-md-icon>
 		{{ 'deliveryAddress' | translate }}
 	</div>
 	<label class="item item-input item-select">
@@ -15,7 +15,7 @@
 		<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
 	</md-input-container>
 	<div class="item item-divider">
-		<md-icon md-svg-src="/lib/material-design-icons/social/svg/production/ic_person_24px.svg"></md-icon>
+		<ng-md-icon icon="person"></ng-md-icon>
 		{{ 'otherDeliveryInformation' | translate }}
 	</div>
 	<md-input-container md-no-float>
@@ -34,7 +34,7 @@
 		</div>
 	</md-input-container>
 	<div class="item item-divider">
-		<md-icon md-svg-src="/lib/material-design-icons/action/svg/production/ic_lock_24px.svg"></md-icon>
+		<ng-md-icon icon="lock"></ng-md-icon>
 		{{ 'editPassword' | translate }}
 	</div>
 	<md-input-container md-no-float>

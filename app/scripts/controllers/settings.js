@@ -58,8 +58,8 @@ angular.module('groupeat.controllers.settings', [
 			return Address.get(customerId);
 		})
 		.then(function(address) {
-			var residencyInformation = Address.getResidencyInformationFromAddress(address);
-			$scope.customer = _.merge($scope.customer, residencyInformation);
+			var residency = Address.getResidencyInformationFromAddress(address);
+			$scope.customer = _.merge($scope.customer, {'residency': residency, 'details': address.details});
 		})
 		.catch(function() {
 			$scope.messageBackdrop = MessageBackdrop.genericFailure();
