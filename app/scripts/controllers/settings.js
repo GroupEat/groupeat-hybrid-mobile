@@ -10,7 +10,8 @@ angular.module('groupeat.controllers.settings', [
 	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
 	'groupeat.services.notifications-settings',
-	'groupeat.services.popup'
+	'groupeat.services.popup',
+	'jcs-autoValidate'
 ])
 
 .controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
