@@ -30,10 +30,6 @@ angular.module('groupeat.services.push-notification', [
 
   platform,
 
-  // message,
-  //
-  // modal,
-
   deferredRegistration;
 
 
