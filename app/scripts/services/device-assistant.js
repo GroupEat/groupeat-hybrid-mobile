@@ -2,14 +2,12 @@
 
 
 angular.module('groupeat.services.device-assistant', [
-  'ionic',
   'ngResource',
-  'ngCordova',
-  'groupeat.services.notification-handlers'
+  'groupeat.services.push-notification'
 ])
 
 
-.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $cordovaPush, GCMNotificationHandler) {
+.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, PushNotification) {
 
   var
 
@@ -17,7 +15,7 @@ angular.module('groupeat.services.device-assistant', [
 
   device,
 
-  notificationHandler,
+  platform,
 
   notificationToken,
 
@@ -25,36 +23,6 @@ angular.module('groupeat.services.device-assistant', [
 
 
   var
-
-  /**
-  * @ngdoc function
-  * @name DeviceAssistant#subscribeToNotificationService
-  * @methodOf DeviceAssistant
-  *
-  * @description
-  * Subscribe to a Push Notifications service and register the device
-  * Currently supported push notifications services :
-  *   * Google Cloud Messaging (GCM) : Android
-  *
-  */
-  subscribeToNotificationService = function() {
-    var deferred = $q.defer();
-    var config = notificationHandler.config();
-
-    $cordovaPush.register(config)
-    .then(function() {
-      notificationHandler.initialize();
-      $rootScope.$on('$cordovaPush:notificationReceived', notificationHandler.onNotification);
-      return notificationHandler.promise();
-    })
-    .then(function(registrationToken) {
-      deferred.resolve(registrationToken);
-    })
-    .catch(function(err) {
-      deferred.reject(err);
-    });
-    return deferred.promise;
-  },
 
   /**
   * @ngdoc function
@@ -66,20 +34,23 @@ angular.module('groupeat.services.device-assistant', [
   */
   registerDevice = function() {
     var deferred = $q.defer();
+
     var requestBody = {
-      'hardwareId': device.uuid,
+      'UUID': device.uuid,
       'notificationToken': notificationToken,
-      'operatingSystemId': '1',
-      'operatingSystemVersion': device.version,
+      'platform': platform,
+      'version': device.version,
       'model': device.model,
       'latitude': 48.7173,  // TODO: discuss the necessity of passing coordinates here and implement if needed
       'longitude': 2.23935  // TODO: s.a.
     };
+
     resource.save({id: Credentials.get().id}, requestBody).$promise
-    .then(function() {
+    .then(function(result) {
       deferred.resolve();
     })
-    .catch(function() {
+    .catch(function(err) {
+      window.alert('Saving failed : ' + JSON.stringify(err));
       deferred.reject();
     });
     return deferred.promise;
@@ -97,20 +68,24 @@ angular.module('groupeat.services.device-assistant', [
   var onDeviceReady = function() {
     device = window.device;
 
-    switch(device.platform) {
-      case 'Android':
-      case 'android':
-      case 'amazon-fireos':
-        notificationHandler = GCMNotificationHandler;
-        break;
-      default:
-        deferredRegistration.reject();
-        break;
-    }
-
-    if (notificationHandler)
+    if (device)
     {
-      subscribeToNotificationService()
+      switch(device.platform) {
+        case 'Android':
+        case 'android':
+        case 'amazon-fireos':
+          platform = 'android';
+          break;
+        case 'iOS':
+        case 'ios':
+          platform = 'ios';
+          break;
+        default:
+          deferredRegistration.reject();
+          break;
+      }
+
+      PushNotification.subscribe(platform)
       .then(function(registrationToken) {
         notificationToken = registrationToken;
         return registerDevice();
@@ -121,9 +96,10 @@ angular.module('groupeat.services.device-assistant', [
       .catch(function() {
         deferredRegistration.reject();
       });
+
     }
 
-  },
+  };
 
   /**
   * @ngdoc function
@@ -134,7 +110,7 @@ angular.module('groupeat.services.device-assistant', [
   * Initiate the registration process of the device
   *
   */
-  register = function() {
+  var register = function() {
     deferredRegistration = $q.defer();
     document.addEventListener('deviceready', onDeviceReady, false);
     return deferredRegistration.promise;
@@ -142,7 +118,7 @@ angular.module('groupeat.services.device-assistant', [
 
 
   return {
-    register: register,
+    register: register
   };
 
 });
