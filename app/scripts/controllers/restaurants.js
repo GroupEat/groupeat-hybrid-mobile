@@ -12,7 +12,7 @@ angular.module('groupeat.controllers.restaurants', [
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Popup, Restaurant, _, $geolocation) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Popup, Restaurant, _, $geolocation) {
 
   var $translate = $filter('translate');
 
@@ -20,90 +20,61 @@ angular.module('groupeat.controllers.restaurants', [
 
   $scope.initCtrl = function() {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-get', 'with-bar-and-tabs');
-    if (!Network.hasConnectivity())
-    {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      $scope.messageBackdrop = MessageBackdrop.noNetwork();
-      $scope.$broadcast('scroll.refreshComplete');
-      return;
-    }
-    $geolocation.getCurrentPosition()
-    .then(function(currentPosition) {
-      Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
-      .then(function(restaurants) {
-        $scope.restaurants = restaurants;
-        $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-        if (_.isEmpty(restaurants))
-        {
-          $scope.messageBackdrop = {
-            show: true,
-            title: 'noRestaurantsTitle',
-            details: 'noRestaurantsDetails',
-            iconClasses: 'ion-android-restaurant',
-            button: {
-              text: 'reload',
-              action: 'onRefreshRestaurants()'
-            }
-          };
-        }
-        else
-        {
-          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-        }
-      })
-      .catch(function() {
-        $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
-      });
-    })
-    .catch(function() {
-      $scope.messageBackdrop = MessageBackdrop.noGeolocation();
-    })
+    $scope.onRefreshRestaurants()
     .finally(function() {
-      $scope.$broadcast('scroll.refreshComplete');
+      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
 
   $scope.onRefreshRestaurants = function() {
+    var deferred = $q.defer();
+
     if (!Network.hasConnectivity())
     {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       $scope.$broadcast('scroll.refreshComplete');
-      return;
+      deferred.reject();
     }
-    $geolocation.getCurrentPosition()
-    .then(function(currentPosition) {
-      Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
-      .then(function(restaurants) {
-        $scope.restaurants = restaurants;
-        if (_.isEmpty(restaurants))
-        {
-          $scope.messageBackdrop = {
-            show: true,
-            title: 'noRestaurantsTitle',
-            details: 'noRestaurantsDetails',
-            iconClasses: 'ion-android-restaurant',
-            button: {
-              text: 'reload',
-              action: 'onRefreshRestaurants()'
-            }
-          };
-        }
-        else
-        {
-          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-        }
+    else
+    {
+      $geolocation.getCurrentPosition()
+      .then(function(currentPosition) {
+        Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
+        .then(function(restaurants) {
+          $scope.restaurants = restaurants;
+          if (_.isEmpty(restaurants))
+          {
+            $scope.messageBackdrop = {
+              show: true,
+              title: 'noRestaurantsTitle',
+              details: 'noRestaurantsDetails',
+              iconClasses: 'ion-android-restaurant',
+              button: {
+                text: 'reload',
+                action: 'onRefreshRestaurants()'
+              }
+            };
+          }
+          else
+          {
+            $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+          }
+          deferred.resolve();
+        })
+        .catch(function() {
+          $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
+          deferred.reject();
+        });
       })
       .catch(function() {
-        $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
+        $scope.messageBackdrop = MessageBackdrop.noGeolocation();
+        deferred.reject();
+      })
+      .finally(function() {
+        $scope.$broadcast('scroll.refreshComplete');
       });
-    })
-    .catch(function() {
-      $scope.messageBackdrop = MessageBackdrop.noGeolocation();
-    })
-    .finally(function() {
-      $scope.$broadcast('scroll.refreshComplete');
-    });
+    }
+    return deferred.promise;
   };
 
   $scope.onRestaurantTouch = function(restaurantId) {

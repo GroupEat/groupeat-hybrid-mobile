@@ -21,7 +21,7 @@
 	<form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<div class="loginViewButtons">
-				<md-button type="button" class="md-primary loginViewsButtons" ng-click="showResetPasswordDialog($event)">
+				<md-button type="button" class="md-primary loginViewsButtons" on-tap="showResetPasswordDialog($event)">
 					{{ 'forgotPassword' | translate }}
 				</md-button>
 			</div>

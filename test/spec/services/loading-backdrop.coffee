@@ -28,16 +28,20 @@ describe 'Service: LoadingBackdrop', ->
     it 'should return an object with a show property set to true', ->
       LoadingBackdrop.backdrop().show.should.be.true
 
-    it 'should return an object with a default class if none is given in the first argument', ->
-      LoadingBackdrop.backdrop().class.should.equal('total-backdrop')
+    it 'should return an object with a backdropType property given in the first argument', ->
+      backdropType = 'backdropType'
+      LoadingBackdrop.backdrop(backdropType).type.should.equal(backdropType)
 
-    it 'should return an object with the given class given in the first argument', ->
+    it 'should return an object with a default class if none is given in the second argument', ->
+      LoadingBackdrop.backdrop('backdrop-get').class.should.equal('total-backdrop')
+
+    it 'should return an object with the given class given in the second argument', ->
       backdropClass = 'backdropClass'
-      LoadingBackdrop.backdrop(backdropClass).class.should.equal(backdropClass)
+      LoadingBackdrop.backdrop('backdrop-get', backdropClass).class.should.equal(backdropClass)
 
-    it 'should return an object with a default circular property if none is given in the second argument', ->
-      LoadingBackdrop.backdrop(null).circular.should.equal('classical')
+    it 'should return an object with a default circular property if none is given in the third argument', ->
+      LoadingBackdrop.backdrop('backdrop-get', null).circular.should.equal('classical')
 
-    it 'should return an object with the given circular property given in the second argument', ->
+    it 'should return an object with the given circular property given in the third argument', ->
       circularClass = 'circularClass'
-      LoadingBackdrop.backdrop(null, circularClass).circular.should.equal(circularClass)
+      LoadingBackdrop.backdrop('backdrop-get', null, circularClass).circular.should.equal(circularClass)
