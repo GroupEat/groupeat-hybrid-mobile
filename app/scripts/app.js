@@ -28,6 +28,10 @@ angular.module('groupeat', [
   'groupeat.services.http-provider-interceptor'
 ])
 
+.config(function($ionicConfigProvider){
+  $ionicConfigProvider.tabs.position('bottom');
+})
+
 .config(function($httpProvider, $translateProvider) {
 
   $httpProvider.interceptors.push('HttpProviderInterceptor');
