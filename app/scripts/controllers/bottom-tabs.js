@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.controllers.bottom-tabs', [])
+angular.module('groupeat.controllers.bottom-tabs', ['ionic'])
 
 .controller('BottomTabsCtrl', function($scope) {
 
