@@ -46,7 +46,7 @@ angular.module('groupeat.services.device-assistant', [
     };
 
     resource.save({id: Credentials.get().id}, requestBody).$promise
-    .then(function(result) {
+    .then(function() {
       deferred.resolve();
     })
     .catch(function(err) {
