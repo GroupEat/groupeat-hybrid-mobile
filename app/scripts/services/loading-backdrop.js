@@ -12,9 +12,15 @@ angular.module('groupeat.services.loading-backdrop', ['ngMaterial'])
       };
     },
 
-    backdrop = function(backdropClass, circularClass) {
+    backdrop = function(backdropType, backdropClass, circularClass) {
+      /*
+      backdropType  = backdrop-get || backdrop-interact
+      backdropClass = with-bar-and-tabs || with-sub-bar || with-dialog
+      circularClass = dialog-circular || classical
+      */
       return {
         show: true,
+        type: backdropType,
         class: backdropClass || 'total-backdrop',
         circular: circularClass || 'classical'
       };
