@@ -1,65 +1,97 @@
 'use strict';
 
-angular.module('groupeat.controllers.settings', ['groupeat.services.notifications-settings'])
+angular.module('groupeat.controllers.settings', [
+	'groupeat.services.address',
+	'groupeat.services.authentication',
+	'groupeat.services.credentials',
+	'groupeat.services.customer',
+	'groupeat.services.element-modifier',
+	'groupeat.services.lodash',
+	'groupeat.services.message-backdrop',
+	'groupeat.services.network',
+	'groupeat.services.notifications-settings',
+	'groupeat.services.popup'
+])
 
-.controller('SettingsCtrl', function($scope, $state, $ionicModal, NotificationsSettings) {
+.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
+
+	var $translate = $filter('translate');
+
+	/*
+	Models
+	*/
+	$scope.customer = {};
+	$scope.form = {};
+	$scope.notificationsPreferences = {};
 
 	/*
 	Settings list
 	*/
+	$scope.tabs = [
+		{ title: 'editProfile', url: 'templates/settings/settings-profile.html' },
+		{ title: 'pushSettings', url: 'templates/settings/settings-notifications.html' }
+	];
 
-	$scope.settingsList = [
-	    { name: 'editProfile', state:'settings-profile'},
-	    { name: 'pushSettings', state:'settings-notifications'}
-		];
-
-	$scope.user = {
-		profile: {
-			firstName:   'Phillipe',
-			lastName:    'Fessier',
-			phoneNumber: '0685958687',
-			adress:      'Palaiseau',
+	/*
+	Loading
+	*/
+	$scope.onReload = function() {
+		// Loading notification related options
+		$scope.daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying();
+		$scope.noNotificationAfterHours = NotificationsSettings.getNoNotificationAfterHours();
+		$scope.notificationsPreferences = {
+			enable: true,
+			daysWithoutNotifying: 3,
+			noNotificationAfter: '22h00'
+		};
+		// Loading user information
+		$scope.residencies = Address.getResidencies();
+		if (!Network.hasConnectivity())
+		{
+			$scope.messageBackdrop = MessageBackdrop.noNetwork();
+			return;
 		}
-	};
-
-	$scope.user.settings = NotificationsSettings.settings;
-
-	$scope.settings = NotificationsSettings.pivotTableSettings;
-
-
-	// Model declaration
-	$scope.select = {};
-	$scope.select.pushActivation = $scope.user.settings.pushActivation;
-	$scope.select.dontPushAfter = $scope.settings.dontPushAfter[$scope.user.settings.dontPushAfter];
-	$scope.select.dontPushFor = $scope.settings.dontPushFor[$scope.user.settings.dontPushFor];
-
-	$scope.saveSettings = function() {
-		$scope.user.settings.pushActivation = $scope.select.pushActivation;
-		$scope.user.settings.dontPushFor = $scope.select.dontPushFor.id;
-		$scope.user.settings.dontPushAfter = $scope.select.dontPushAfter.id;
-		NotificationsSettings.saveSettings($scope.user.settings);
-		$state.go('settings');
+		var customerId = Credentials.get().id;
+		Customer.get(customerId)
+		.then(function(customer) {
+			$scope.customer = customer;
+			return Address.get(customerId);
+		})
+		.then(function(address) {
+			var residency = Address.getResidencyInformationFromAddress(address);
+			$scope.customer = _.merge($scope.customer, {'residency': residency, 'details': address.details});
+		})
+		.catch(function() {
+			$scope.messageBackdrop = MessageBackdrop.genericFailure();
+		});
 	};
 
 	/*
-	---------------- Profile Editing ----------------------------------
+	Saving
 	*/
-
-	$ionicModal.fromTemplateUrl('templates/modals/register.html', {
-		scope: $scope,
-		animation: 'slide-in-up'
-	})
-	.then(function(modal) {
-		$scope.registerModal = modal;
-	});
-
-	$scope.openRegisterModal = function() {
-		$scope.registerModal.show();
-		$scope.userRegister = {};
-
+	$scope.onSave = function() {
+		var customerId = Credentials.get().id;
+		ElementModifier.validate($scope.form.customerEdit)
+    .then(function() {
+      var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
+      return Customer.update({id : customerId}, customerParams);
+    })
+    .then(function() {
+      var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.customer.residency), {details: $scope.customer.details});
+      return Address.update({id: customerId}, addressParams);
+    })
+		.then(function() {
+			var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
+			return Authentication.updatePassword(authenticationParams);
+		})
+    .then(function() {
+			Popup.displayTitleOnly($translate('customerEdited'), 3000);
+    })
+    .catch(function(errorMessage) {
+      Popup.displayError(errorMessage, 3000);
+    });
 	};
-	$scope.closeRegisterModal = function() {
-		$scope.registerModal.hide();
-	};
+
+	$scope.onReload();
 
 });

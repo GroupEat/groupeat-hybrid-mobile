@@ -32,14 +32,6 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
-	$scope.foodRushTimeData = [
-		{ label: $translate('fiveMin'), value: 5 },
-		{ label: $translate('tenMin'), value: 10 },
-		{ label: $translate('fifteenMin'), value: 15 },
-		{ label: $translate('thirtyMin'), value: 30 },
-		{ label: $translate('fortyFiveMin'), value: 45 }
-	];
-
 	$scope.addressTypes = [
 		{ label: $translate('myAddress'), value: 'myAddress' },
 		{ label: $translate('newAddress'), value: 'newAddress'},
@@ -73,6 +65,18 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 /* --------------------------------------------------------------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------------
+	Here comes method called when user interacts with slider. As long as the cart
+	is no more in cache, we have to store the foodRushTime choosed by user. It is 
+	directly made in the Order service.
+	   ------------------------------------------------------------------------
+	*/
+
+	$scope.onSliderChanged = function(foodRushTime) {
+		Order.setFoodRushTime(foodRushTime);
+	};
+
+/* --------------------------------------------------------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------
 	Here comes the loading methods. It's kind of constructor of ctrl, they are called
@@ -83,6 +87,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.loadCart = function() {
 		$scope.cart = Cart;
+		$scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
 		if (_.isEmpty(Cart.getProducts()))
 		{
 			$scope.messageBackdrop = {
@@ -104,11 +109,18 @@ angular.module('groupeat.controllers.cart', [
 		PredefinedAddresses.get()
 		.then(function(predefinedAddresses) {
 			$scope.predefinedAddresses = predefinedAddresses;
+			console.log($scope.predefinedAddresses);
 			return Address.get(Credentials.get().id);
 		})
 		.then(function(userAddress) {
-			$scope.userAddress = userAddress;
-			$scope.hasPredefinedPersonalAddress.value = _.isEmpty($scope.userAddress.data);
+			$scope.userAddress = {
+				'residency' : Address.getResidencyInformationFromAddress(userAddress),
+				'details': userAddress.details,
+				'latitude': userAddress.latitude,
+				'longitude': userAddress.longitude,
+				'street': userAddress.street
+			};
+			$scope.hasPredefinedPersonalAddress.value = _.isEmpty(userAddress.data);
 			$scope.hasPredefinedPersonalAddress.hasValue = true;
 		})
 		.catch(function() {
@@ -162,7 +174,7 @@ angular.module('groupeat.controllers.cart', [
 		}
 		else
 		{
-			$scope.loadingBackdrop = LoadingBackdrop.backdrop('with-dialog', 'dialog-circular');
+			$scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-interact' ,'with-dialog', 'dialog-circular');
 			$scope.validateAddress($scope.addressTypeSelected.value)
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')
@@ -177,7 +189,7 @@ angular.module('groupeat.controllers.cart', [
 					/* TODO : get information from residency */
 					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
 					Order.setStreet(residencyInformations.street);
-					Order.setDetails($scope.addressSupplement.value);
+					Order.setDetails($scope.deliveryAddress.value + ', ' + $scope.addressSupplement.value);
 					Order.setLatitude(residencyInformations.latitude);
 					Order.setLongitude(residencyInformations.longitude);
 
@@ -195,9 +207,12 @@ angular.module('groupeat.controllers.cart', [
 				}
 				else if ($scope.addressTypeSelected.value === 'predefinedAddress')
 				{
-					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
-						if (predefinedAddress.details === $scope.PredefinedDeliveryAddress.value)
+					console.log('im here');
+					_.forEach($scope.predefinedAddresses, function(predefinedAddress) {
+						console.log(predefinedAddress);
+						if (predefinedAddress.details === $scope.predefinedDeliveryAddress.value)
 						{
+							console.log(predefinedAddress);
 							Order.setStreet(predefinedAddress.street);
 							Order.setDetails(predefinedAddress.details);
 							Order.setLatitude(predefinedAddress.latitude);
@@ -218,7 +233,7 @@ angular.module('groupeat.controllers.cart', [
 			})
 			.catch(function(errorMessage) {
 				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				return Popup.displayError(errorMessage, 4000);
+				return Popup.displayError($translate(errorMessage), 5000);
 	    });
 		}
 	};
@@ -234,7 +249,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
-		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === null)
+		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === 0)
 		{
 			deferred.reject($translate('missingFoodRushTime'));
 		}

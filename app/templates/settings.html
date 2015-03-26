@@ -1,22 +1,21 @@
 <ion-view ng-controller="SettingsCtrl" title="{{ 'settings' | translate }}" >
 
-  <!-- view for test -->
+  <ion-nav-buttons side="right">
+    <button on-tap="onSave()" class="button button-clear button-positives">{{ 'save' | translate }}</button>
+  </ion-nav-buttons>
 
-  <ion-content has-header="true">
-    <div class="list">
-      <a ng-repeat="setting in settingsList" ui-sref='{{setting.state}}' class="item item-icon-right">
-      {{ setting.name | translate }}
-      <i class="icon ion-chevron-right"></i>
-      </a>
-    </div>
-
+  <ion-content class="has-header has-footer">
+    <md-tabs md-selected="selectedIndex" flex>
+      <md-tab ng-repeat="tab in tabs"
+              ng-disabled="tab.disabled"
+              label="{{tab.title | translate}}">
+        <ng-include src="tab.url" />
+      </md-tab>
+    </md-tabs>
   </ion-content>
 
-
-  	<ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
-      	<ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
-      	</ion-tab>
+  <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
+    <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
+    </ion-tab>
 	</ion-tabs>
 </ion-view>
-
-

@@ -5,39 +5,34 @@ describe 'Service: Notifications-Settings', ->
     module 'groupeat.services.notifications-settings'
     module 'templates'
 
-  NotificationSettings = scope = {}
+  NotificationsSettings = scope = {}
 
   beforeEach ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
-      NotificationSettings = $injector.get('NotificationsSettings')
+      NotificationsSettings = $injector.get('NotificationsSettings')
 
-  describe 'User settings', ->
-    it 'should not be empty', ->
-      expect(NotificationSettings.settings).not.to.equal(null)
-    it 'should have a Push activation property', ->
-      NotificationSettings.settings.should.have.property('pushActivation')
-    it 'should have a Dont Push After property', ->
-      NotificationSettings.settings.should.have.property('dontPushAfter')
-    it 'should have a dont Push For property', ->
-      NotificationSettings.settings.should.have.property('dontPushFor')
+  describe 'NotificationsSettings#getNoNotificationAfterHours', ->
 
-  describe 'User settings values', ->
-    it 'should not be empty', ->
-      expect(NotificationSettings.settingslabel).not.to.equal(null)
-    it 'should have a Push activation property', ->
-      NotificationSettings.settingsLabel.should.have.property('pushActivation')
-    it 'should have a Dont Push After property', ->
-      NotificationSettings.settingsLabel.should.have.property('dontPushAfter')
-    it 'should have a dont Push For property', ->
-      NotificationSettings.settingsLabel.should.have.property('dontPushFor')
+    it 'should exist', ->
+      NotificationsSettings.should.have.property('getNoNotificationAfterHours')
 
+    it 'should return a non empty array', ->
+      noNotificationAfterHours = NotificationsSettings.getNoNotificationAfterHours()
+      noNotificationAfterHours.should.be.instanceof(Array)
+      noNotificationAfterHours.should.be.not.empty
 
-  describe 'Pivot Table settings', ->
-    it 'should have a Dont Push After property', ->
-      NotificationSettings.pivotTableSettings.should.have.property('dontPushAfter')
-    it 'should have a dont Push For property', ->
-      NotificationSettings.pivotTableSettings.should.have.property('dontPushFor')
+  describe 'NotificationsSettings#getDaysWithoutNotifying', ->
 
-  # describe 'Save settings function', ->
-  #   it 'should modify the settings and send it to the backend'
+    it 'should exist', ->
+      NotificationsSettings.should.have.property('getDaysWithoutNotifying')
+
+    it 'should return a non empty array', ->
+      daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying()
+      daysWithoutNotifying.should.be.instanceof(Array)
+      daysWithoutNotifying.should.be.not.empty
+
+    it 'should return a sorted array', ->
+      daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying()
+      sortedDaysWithoutNotifying = daysWithoutNotifying.sort()
+      daysWithoutNotifying.should.equal(sortedDaysWithoutNotifying)

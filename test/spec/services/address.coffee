@@ -103,6 +103,24 @@ describe 'Service: Address', ->
       address.latitude.should.equal(latitude)
       address.longitude.should.equal(longitude)
 
+  describe 'Address#getAddressFromResidencyInformation', ->
+
+    it 'should return polytechnique if the coordinates match polytechnique residency', ->
+      address =
+        latitude: 48.709862
+        longitude: 2.210241
+      Address.getResidencyInformationFromAddress(address).should.equal('polytechnique')
+
+    it 'should return supoptique if the coordinates match supoptique residency', ->
+      address =
+        latitude: 48.714258
+        longitude: 2.203553
+      Address.getResidencyInformationFromAddress(address).should.equal('supoptique')
+
+    it 'should return ENSTAParisTech in other cases', ->
+      address = {}
+      Address.getResidencyInformationFromAddress(address).should.equal('ENSTAParisTech')
+
   describe 'Address#getResidencies', ->
 
     it 'should have a getResidencies method', ->

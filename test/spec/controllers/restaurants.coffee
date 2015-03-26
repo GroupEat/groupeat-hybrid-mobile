@@ -47,13 +47,6 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
   describe 'RestaurantsCtrl#onRestaurantTouch', ->
 
-    it 'should called LoadingBackdrop service with argument /with-bar-and-tabs/', ->
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
-      sandbox.spy(LoadingBackdrop, 'backdrop')
-      scope.onRestaurantTouch(1)
-      scope.$digest()
-      LoadingBackdrop.backdrop.should.have.been.calledWithExactly('with-bar-and-tabs')
-
     it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
       sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
       sandbox.stub(Popup, 'displayError')
@@ -104,6 +97,28 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: id})
 
+  describe 'RestaurantsCtrl#initCtrl', ->
+
+    it 'should show a loading backdrop', ->
+      sandbox.stub(LoadingBackdrop, 'backdrop')
+      scope.initCtrl()
+      LoadingBackdrop.backdrop.should.have.been.calledWithExactly('backdrop-get', 'with-bar-and-tabs')
+
+    it 'should call onRefreshRestaurants', ->
+      sandbox.stub(LoadingBackdrop, 'backdrop')
+      sandbox.stub(scope, 'onRefreshRestaurants').returns($q.defer().promise)
+      scope.initCtrl()
+      scope.onRefreshRestaurants.should.have.been.called
+
+    it 'should remove the loading backdrop once the promise returned by onRefreshRestaurants is rejected', ->
+      sandbox.stub(LoadingBackdrop, 'backdrop')
+      sandbox.stub(LoadingBackdrop, 'noBackdrop')
+      sandbox.stub(scope, 'onRefreshRestaurants').returns($q.reject())
+      scope.initCtrl()
+      LoadingBackdrop.noBackdrop.should.have.not.been.called
+      scope.$digest()
+      LoadingBackdrop.noBackdrop.should.have.been.called
+
   describe 'RestaurantsCtrl#onRefreshRestaurants', ->
 
     currentPosition =
@@ -117,7 +132,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     it 'should show an absence of connectivity message backdrop when there is no connectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       sandbox.spy(MessageBackdrop, 'noNetwork')
-      scope.onRefreshRestaurants()
+      scope.onRefreshRestaurants().should.be.rejected
       messageBackdrop = MessageBackdrop.noNetwork()
       scope.messageBackdrop.should.deep.equal(messageBackdrop)
 
@@ -130,7 +145,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
       sandbox.stub($geolocation, 'getCurrentPosition').returns($q.reject())
       sandbox.spy(MessageBackdrop, 'noGeolocation')
-      scope.onRefreshRestaurants()
+      scope.onRefreshRestaurants().should.be.rejected
       scope.$digest()
       messageBackdrop = MessageBackdrop.noGeolocation()
       scope.messageBackdrop.should.deep.equal(messageBackdrop)
@@ -150,7 +165,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         return deferred.promise
       )
       sandbox.stub(Restaurant, 'get').returns($q.reject())
-      scope.onRefreshRestaurants()
+      scope.onRefreshRestaurants().should.be.rejected
       scope.$digest()
       Restaurant.get.should.have.been.calledWithExactly(1, 1)
       messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()')
@@ -180,7 +195,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve([])
         return deferred.promise
       )
-      scope.onRefreshRestaurants()
+      scope.onRefreshRestaurants().should.be.fulfilled
       scope.$digest()
       scope.messageBackdrop.show.should.be.true
       scope.messageBackdrop.title.should.equal('noRestaurantsTitle')
@@ -201,7 +216,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(['restaurant'])
         return deferred.promise
       )
-      scope.onRefreshRestaurants()
+      scope.onRefreshRestaurants().should.be.fulfilled
       scope.$digest()
       scope.messageBackdrop.show.should.be.false
 

@@ -48,17 +48,20 @@
 			</md-item>
 		</md-list>
 
+		<div ng-show="isNewOrder.value" layout="row" layout-wrap>
+		<style scoped>
+		    canvas { height: 0px; }
+		  </style>
+			<md-slider flex md-discrete  min="5" max="60" ng-model="foodRushTime.value" aria-label="foodRushSlider" ng-change="onSliderChanged(foodRushTime.value)" class="foodrush-slider">
+     		 </md-slider>
+			
+		</div>
 		<h5 ng-show="isNewOrder.value" class="login-text-first-page cart-foodrush-text">
 			{{ 'howLongFoodRush' | translate }} <a class="energized">Food</a><a class="assertive">Rush</a> ?
 		</h5>
 
-		<div ng-show="isNewOrder.value" layout="row" layout-wrap>
-			<md-radio-group flex="20" ng-model="foodRushTime.value" ng-repeat="d in foodRushTimeData">
-				<md-radio-button ng-value="d.value" class="center cart-checkboxes">
-				</md-radio-button>
-				<a class="center"> {{ d.label }} &nbsp &nbsp </a>
-			</md-radio-group>
-		</div>
+   		<h3 ng-show="isNewOrder.value && foodRushTime.value!==0" class="foodrush-text-res">{{ foodRushTime.value }} {{ 'min' | translate }}</h3>
+   		<h4 ng-show="isNewOrder.value && foodRushTime.value===0" class="select-foodrush"> {{ 'selectFoodRush' | translate }} </h4>
 
 		<div class="list list-inset">
 			<label class="item item-input">

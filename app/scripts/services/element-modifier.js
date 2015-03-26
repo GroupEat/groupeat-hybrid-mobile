@@ -2,7 +2,7 @@
 
 angular.module('groupeat.services.element-modifier', [])
 
-.factory('ElementModifier', function () {
+.factory('ElementModifier', function($timeout, $q) {
 
     var scopeErrorMsg = {};
 
@@ -79,6 +79,34 @@ angular.module('groupeat.services.element-modifier', [])
         return scopeErrorMsg[formName][fieldName];
       }
       return undefined;
+    },
+
+    /**
+    * @ngdoc function
+    * @name ElementModifier#validate
+    * @methodOf ElementModifier
+    *
+    * @description
+    * Returns a promise
+    * if resolved, the form is properly validated
+    * if rejected, it will reject the error message of the form
+    *
+    * @param {Object} form - The form to validate
+    */
+    validate = function(form) {
+      var deferred = $q.defer();
+      $timeout(function() {
+          if (form.$invalid)
+          {
+            var errorMessage = getErrorMsg(form.$name);
+            deferred.reject(errorMessage);
+          }
+          else
+          {
+            deferred.resolve();
+          }
+        });
+      return deferred.promise;
     };
 
     return {
@@ -86,6 +114,7 @@ angular.module('groupeat.services.element-modifier', [])
       makeInvalid: makeInvalid,
       makeDefault: makeDefault,
       errorMsg: getErrorMsg,
+      validate: validate,
       key: 'ElementModifier'
     };
   }

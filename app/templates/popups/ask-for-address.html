@@ -1,7 +1,7 @@
 <md-dialog class="dialog-size dialog-address-box">
 	<ge-loading-backdrop ng-show="loadingBackdrop.show">
 	</ge-loading-backdrop>
-	
+
 	<md-content>
 		<h3 class="title-margin">{{ 'deliveryAddress' | translate }}</h3>
 
@@ -12,8 +12,8 @@
 
         <div ng-show="addressType.value=='newAddress'">
         	<md-select ng-change="detectPlaceholder()" ng-disabled="addressTypeSelected.value!='newAddress'" ng-model="deliveryAddress.value" placeholder="{{ 'residency' | translate }}" class="full-width select-content-item">
-				<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
-			</md-select>
+						<md-option ng-value="res" ng-repeat="res in residencies">{{ res | translate }}</md-option>
+					</md-select>
 
 			<md-input-container class="no-validation-messages" flex>
 				<label>
@@ -30,18 +30,18 @@
         </div>
         <div ng-hide="addressType.value=='predefinedAddress'" class="line-divider">
   			<span class="text-divider">
-    			 &nbsp OU &nbsp 
+    			 &nbsp OU &nbsp
   			</span>
 		</div>
 		<div ng-show="addressType.value=='predefinedAddress'" class="end-line-divider">
-  			
+
 		</div>
         <!-- <md-divider></md-divider> -->
     </md-radio-group>
-    
 
 
-<!-- 
+
+<!--
 		<md-item>
 			<md-item-content>
 				<md-radio-button ng-value="addressType[0].value" class="first-radio-button">
@@ -76,13 +76,13 @@
 				<md-radio-button ng-value="addressType[2].value" class="first-radio-button">
 					{{ addressType[2].label }}
         		</md-radio-button>
-        	</md-item-content>	
+        	</md-item-content>
 			<md-item-content class="select-content-real-item">
 				<md-select class="full-width select-content-item" ng-model="deliveryAddress" placeholder="Lieux communs">
     				<md-option ng-value="place.details" ng-repeat="place in predefinedAddresses.data">{{ place.details }}</md-option>
   				</md-select>
 			</md-item-content>
-		
+
 			<md-divider class="divider-margin"></md-divider>
 		</md-item>
 		</md-radio-group>
@@ -117,7 +117,7 @@
 				<div ng-show="addressSupplement.hasValue">
 					{{ addressSupplement.value }}
 				</div>
-				
+
 				<div ng-hide="deliveryAddress.hasValue" class="placeholder">
 					{{ 'selectResidency' | translate }} <br/>
 				</div>
@@ -136,14 +136,14 @@
 			</div>
 
 		</md-item>
- 
+
 	</md-content>
 
 	<div class="md-actions">
-		<md-button ng-click="closeAskForAddressDialog(true)">
+		<md-button on-tap="closeAskForAddressDialog(true)">
 			{{ 'cancel' | translate }}
 		</md-button>
-		<md-button class="md-primary" ng-click="closeAskForAddressDialog(false)" ng-disabled="shouldAddressDialogConfirmButtonBeDisable()"> <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
+		<md-button class="md-primary" on-tap="closeAskForAddressDialog(false)" ng-disabled="shouldAddressDialogConfirmButtonBeDisable()"> <!-- ng disabled to improve ?? -> check before user confirmation, kinf of pre-validation.... not ininteresting -->
 			{{ 'ok' | translate }}
 		</md-button>
 	</div>
@@ -160,4 +160,4 @@
         		<label>Details (Bâtiment, étage,...)</label>
           		<input ng-model="newAddressDetails">
         	</md-input-container>
- -->   
+ -->

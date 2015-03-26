@@ -82,24 +82,8 @@ angular.module('groupeat.controllers.authentication', [
   ----------------------    Login    --------------------------
   */
 
-  $scope.validateForm = function(form) {
-    var deferred = $q.defer();
-    $timeout(function() {
-        if (form.$invalid)
-        {
-          var errorMessage = ElementModifier.errorMsg(form.$name);
-          deferred.reject(errorMessage);
-        }
-        else
-        {
-          deferred.resolve();
-        }
-      });
-    return deferred.promise;
-  };
-
   $scope.submitLoginForm = function(form) {
-    $scope.validateForm(form)
+    ElementModifier.validate(form)
     .then(function() {
       return Authentication.getToken($scope.userLogin);
     })
@@ -129,9 +113,9 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.closeResetPasswordDialog = function(form, cancel) {
-    return (cancel) ? $mdDialog.hide() : $scope.validateForm(form)
+    return (cancel) ? $mdDialog.hide() : ElementModifier.validate(form)
     .then(function() {
-      Authentication.resetPassword($scope.userReset)
+      Authentication.resetPassword($scope.userReset.email)
       .then(function() {
         $mdDialog.hide();
       })
@@ -157,7 +141,7 @@ angular.module('groupeat.controllers.authentication', [
   */
 
   $scope.submitRegisterForm = function(form) {
-    return $scope.validateForm(form)
+    return ElementModifier.validate(form)
     .then(function() {
       // TODO : Fetch proper locale
       var requestBody = _.merge($scope.userRegister, {'locale': 'fr'});
@@ -219,7 +203,7 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.submitFurtherRegisterForm = function(form) {
-    $scope.validateForm(form)
+    ElementModifier.validate(form)
     .then(function() {
       var customerParams = _.pick($scope.userRegister, ['firstName', 'lastName', 'phoneNumber']);
       return Customer.update({id : $scope.userId}, customerParams);
