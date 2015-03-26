@@ -19,7 +19,7 @@ angular.module('groupeat.controllers.restaurants', [
   $scope.restaurants = {};
 
   $scope.initCtrl = function() {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop('with-bar-and-tabs');
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-get', 'with-bar-and-tabs');
     $scope.onRefreshRestaurants()
     .finally(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
@@ -79,7 +79,7 @@ angular.module('groupeat.controllers.restaurants', [
 
   $scope.onRestaurantTouch = function(restaurantId) {
     // Checking if the customer has provided the needed further information before going further
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop('with-bar-and-tabs');
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-interact' ,'with-bar-and-tabs');
     Customer.checkMissingInformation()
     .then(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
