@@ -109,6 +109,7 @@ angular.module('groupeat.controllers.cart', [
 		PredefinedAddresses.get()
 		.then(function(predefinedAddresses) {
 			$scope.predefinedAddresses = predefinedAddresses;
+			console.log($scope.predefinedAddresses);
 			return Address.get(Credentials.get().id);
 		})
 		.then(function(userAddress) {
@@ -173,7 +174,7 @@ angular.module('groupeat.controllers.cart', [
 		}
 		else
 		{
-			$scope.loadingBackdrop = LoadingBackdrop.backdrop('with-dialog', 'dialog-circular');
+			$scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-interact' ,'with-dialog', 'dialog-circular');
 			$scope.validateAddress($scope.addressTypeSelected.value)
 			.then(function() {
 				if ($scope.addressTypeSelected.value === 'myAddress')
@@ -206,9 +207,12 @@ angular.module('groupeat.controllers.cart', [
 				}
 				else if ($scope.addressTypeSelected.value === 'predefinedAddress')
 				{
-					_.forEach($scope.predefinedAddresses.data, function(predefinedAddress) {
-						if (predefinedAddress.details === $scope.PredefinedDeliveryAddress.value)
+					console.log('im here');
+					_.forEach($scope.predefinedAddresses, function(predefinedAddress) {
+						console.log(predefinedAddress);
+						if (predefinedAddress.details === $scope.predefinedDeliveryAddress.value)
 						{
+							console.log(predefinedAddress);
 							Order.setStreet(predefinedAddress.street);
 							Order.setDetails(predefinedAddress.details);
 							Order.setLatitude(predefinedAddress.latitude);
