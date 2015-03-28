@@ -15,3 +15,7 @@ plugins
 
 app/scripts/config.js
 .idea
+
+*.license
+*.strings
+*.plist
