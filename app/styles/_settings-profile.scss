@@ -1,0 +1,20 @@
+label.item.item-input.item-select {
+	margin-left: 56px;
+	margin-top: 1px;
+	margin-bottom: 22px;
+	padding-bottom: 0px;
+	padding-left: 0px ;
+	border-left-color: transparent;
+	border-top-color: transparent;
+
+}
+
+.item-select select {
+	left: 0 !important;
+	direction: ltr;
+}
+
+select.ng-valid.ng-touched.ng-dirty.ng-valid-parse {
+	padding-left: 0;
+	margin-left: 0;
+}
