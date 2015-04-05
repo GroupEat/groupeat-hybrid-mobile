@@ -3,14 +3,14 @@
   <div class="item item-toggle">
      {{ 'enable' | translate}}
      <label class="toggle toggle-assertive">
-       <input ng-model="notificationsPreferences.enable" type="checkbox">
+       <input ng-model="customerSettings.notificationsEnabled" type="checkbox">
        <div class="track">
          <div class="handle"></div>
        </div>
      </label>
   </div>
 
-	<div ng-show="notificationsPreferences.enable">
+	<div ng-show="customerSettings.notificationsEnabled">
 
 		<div class="item item-divider">
 			{{ 'afterMakingAnOrder' | translate }} :
@@ -20,9 +20,9 @@
 			<div class="input-label">
 				{{ 'notifyMe' | translate }} :</p>
 			</div>
-			<select ng-model="notificationsPreferences.daysWithoutNotifying">
+			<select ng-model="customerSettings.daysWithoutNotifying">
 		    <option
-		      ng-repeat="day in daysWithoutNotifying"
+		      ng-repeat="day in daysWithoutNotifyingOptions"
 		      ng-pluralize
 					ng-init="dayLabel='day'; daysLabel='days'"
 		      count="day"
@@ -39,8 +39,8 @@
 			<div class="input-label">
 				{{ 'after' | translate }} :</p>
 			</div>
-			<select ng-model="notificationsPreferences.noNotificationAfter">
-				<option ng-repeat="hour in noNotificationAfterHours" value="{{hour}}">{{hour}}</option>
+			<select ng-model="customerSettings.noNotificationAfter.value">
+				<option ng-repeat="hour in noNotificationAfterOptions" value="{{hour.value}}">{{hour.label}}</option>
 			</select>
 		</label>
 

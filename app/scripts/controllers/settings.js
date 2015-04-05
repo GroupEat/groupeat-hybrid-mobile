@@ -5,16 +5,16 @@ angular.module('groupeat.controllers.settings', [
 	'groupeat.services.authentication',
 	'groupeat.services.credentials',
 	'groupeat.services.customer',
+	'groupeat.services.customer-settings',
 	'groupeat.services.element-modifier',
 	'groupeat.services.lodash',
 	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
-	'groupeat.services.notifications-settings',
 	'groupeat.services.popup',
 	'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
+.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup) {
 
 	var $translate = $filter('translate');
 
@@ -38,15 +38,10 @@ angular.module('groupeat.controllers.settings', [
 	*/
 	$scope.onReload = function() {
 		// Loading notification related options
-		$scope.daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying();
-		$scope.noNotificationAfterHours = NotificationsSettings.getNoNotificationAfterHours();
-		$scope.notificationsPreferences = {
-			enable: true,
-			daysWithoutNotifying: 3,
-			noNotificationAfter: '22h00'
-		};
-		// Loading user information
+		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
+		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
+
 		if (!Network.hasConnectivity())
 		{
 			$scope.messageBackdrop = MessageBackdrop.noNetwork();
@@ -59,8 +54,18 @@ angular.module('groupeat.controllers.settings', [
 			return Address.get(customerId);
 		})
 		.then(function(address) {
-			var residency = Address.getResidencyInformationFromAddress(address);
-			$scope.customer = _.merge($scope.customer, {'residency': residency, 'details': address.details});
+			if (address)
+			{
+				var residency = Address.getResidencyInformationFromAddress(address);
+				$scope.customer = _.merge($scope.customer, {'residency': residency, 'details': address.details});
+			}
+			return CustomerSettings.get(customerId);
+		})
+		.then(function(customerSettings) {
+			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
+				return (option.value === customerSettings.noNotificationAfter);
+			});
 		})
 		.catch(function() {
 			$scope.messageBackdrop = MessageBackdrop.genericFailure();

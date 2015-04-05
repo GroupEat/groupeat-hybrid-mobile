@@ -2,11 +2,12 @@
 
 angular.module('groupeat.services.address', [
   'config',
+  'groupeat.services.backend-utils',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function($resource, $q, ENV, $filter) {
+.factory('Address', function($filter, $resource, $q, BackendUtils, ENV) {
 
   var $translate = $filter('translate');
 
@@ -29,15 +30,23 @@ angular.module('groupeat.services.address', [
   },
 
   get = function(userId) {
-    var defer = $q.defer();
+    var deferred = $q.defer();
     resource.get({id: userId}).$promise
     .then(function(response) {
-      defer.resolve(response.data);
+      deferred.resolve(response.data);
     })
-    .catch(function() {
-      defer.reject();
+    .catch(function(errorResponse) {
+      var errorKey = BackendUtils.errorKeyFromBackend(errorResponse);
+      if (errorKey === 'noAddressForThisCustomer')
+      {
+        deferred.resolve();
+      }
+      else
+      {
+        deferred.reject();
+      }
     });
-    return defer.promise;
+    return deferred.promise;
   },
 
   getAddressFromResidencyInformation = function(residency) {

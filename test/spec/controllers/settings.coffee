@@ -7,7 +7,7 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  sandbox = ctrl = scope = $compile = $httpBackend = $filter = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = MessageBackdrop = Network = NotificationsSettings = Popup = {}
+  sandbox = ctrl = scope = $compile = $httpBackend = $filter = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = MessageBackdrop = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -31,10 +31,10 @@ describe 'Ctrl: SettingsCtrl', ->
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
       MessageBackdrop = $injector.get('MessageBackdrop')
       Network = $injector.get('Network')
-      NotificationsSettings = $injector.get('NotificationsSettings')
+      CustomerSettings = $injector.get('CustomerSettings')
       Popup = $injector.get('Popup')
       ENV = $injector.get('ENV')
-      ctrl = $controller('SettingsCtrl', ($filter: $filter, $scope:scope, $state: $state, _: _, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, ElementModifier: ElementModifier, MessageBackdrop: MessageBackdrop, Network: Network, NotificationsSettings: NotificationsSettings, Popup: Popup))
+      ctrl = $controller('SettingsCtrl', ($filter: $filter, $scope:scope, $state: $state, _: _, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, ElementModifier: ElementModifier, MessageBackdrop: MessageBackdrop, Network: Network, CustomerSettings: CustomerSettings, Popup: Popup))
       $httpBackend = $injector.get('$httpBackend')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(200, 'Success')
@@ -70,20 +70,17 @@ describe 'Ctrl: SettingsCtrl', ->
 
   describe 'SettingsCtrl#onReload', ->
 
-    it 'should load the non empty array of daysWithoutNotifying', ->
-      sandbox.spy(NotificationsSettings, 'getDaysWithoutNotifying')
+    it 'should load the non empty array of daysWithoutNotifyingOptions', ->
+      sandbox.spy(CustomerSettings, 'getDaysWithoutNotifying')
       scope.onReload()
-      NotificationsSettings.getDaysWithoutNotifying.should.have.been.called
-      scope.daysWithoutNotifying.should.be.not.empty
+      CustomerSettings.getDaysWithoutNotifying.should.have.been.called
+      scope.daysWithoutNotifyingOptions.should.be.not.empty
 
     it 'should load the non empty array of noNotificationAfterHours', ->
-      sandbox.spy(NotificationsSettings, 'getNoNotificationAfterHours')
+      sandbox.spy(CustomerSettings, 'getNoNotificationAfterHours')
       scope.onReload()
-      NotificationsSettings.getNoNotificationAfterHours.should.have.been.called
-      scope.noNotificationAfterHours.should.be.not.empty
-
-    it 'should load notification preferences', ->
-      # TODO : Connect with backend
+      CustomerSettings.getNoNotificationAfterHours.should.have.been.called
+      scope.noNotificationAfterOptions.should.be.not.empty
 
     it 'should load the non empty array of residencies', ->
       sandbox.spy(Address, 'getResidencies')
@@ -172,6 +169,7 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve(address)
         return deferred.promise
       )
+      sandbox.stub(CustomerSettings, 'get').returns($q.defer().promise)
       sandbox.stub(Address, 'getResidencyInformationFromAddress').returns(residency)
       scope.onReload()
       scope.$digest()
