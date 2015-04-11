@@ -61,8 +61,8 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.form.should.be.instanceof(Object)
       scope.form.should.be.empty
 
-    it 'should create notificationsPreferences object', ->
-      scope.notificationsPreferences.should.be.instanceof(Object)
+    it 'should create customerSettings object', ->
+      scope.customerSettings.should.be.instanceof(Object)
 
     it 'should create an array of 2 tabs', ->
       scope.tabs.should.be.instanceof(Array)
@@ -152,12 +152,13 @@ describe 'Ctrl: SettingsCtrl', ->
       MessageBackdrop.genericFailure.should.have.been.called
       scope.messageBackdrop.should.deep.equal(messageBackdrop)
 
-    it 'should add residency and details information ot the customer in scope if getting the customer address succeeds', ->
+    it 'should add residency and details information to the customer in scope if getting the customer address succeeds', ->
       customer = {}
       details = 'details'
       residency = 'residency'
       address =
         details: details
+        residency: residency
       sandbox.stub(Network, 'hasConnectivity').returns(true)
       sandbox.stub(Customer, 'get', ->
         deferred = $q.defer()
@@ -170,10 +171,8 @@ describe 'Ctrl: SettingsCtrl', ->
         return deferred.promise
       )
       sandbox.stub(CustomerSettings, 'get').returns($q.defer().promise)
-      sandbox.stub(Address, 'getResidencyInformationFromAddress').returns(residency)
       scope.onReload()
       scope.$digest()
-      Address.getResidencyInformationFromAddress.should.have.been.called
       scope.customer.details.should.equal(details)
       scope.customer.residency.should.equal(residency)
 
@@ -234,20 +233,23 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       Customer.update.should.have.been.called
 
-    it 'should display an error popup if client side validation fails but Customer#update fails', ->
+    it 'should display an error popup if client side validation succeeds but Customer#update fails', ->
       errorMessage = 'errorMessage'
       sandbox.stub(ElementModifier, 'validate', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
       )
+      scope.customerSettings =
+        noNotificationAfter:
+          value: '22:00:00'
       sandbox.stub(Customer, 'update').returns($q.reject(errorMessage))
       sandbox.stub(Popup, 'displayError')
       scope.onSave()
       scope.$digest()
       Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
 
-    it 'should call Address#update if client side validation and Customer#update', ->
+    it 'should call Address#update if client side validation and Customer#update succeed', ->
       sandbox.stub(ElementModifier, 'validate', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -258,7 +260,12 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
+      address = 'address'
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.defer().promise)
+      scope.customerSettings =
+        noNotificationAfter:
+          value: '22:00:00'
       scope.onSave()
       scope.$digest()
       Address.update.should.have.been.called
@@ -275,8 +282,13 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
+      address = 'address'
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.reject(errorMessage))
       sandbox.stub(Popup, 'displayError')
+      scope.customerSettings =
+        noNotificationAfter:
+          value: '22:00:00'
       scope.onSave()
       scope.$digest()
       Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
@@ -325,6 +337,37 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
 
+    it 'should call CustomerSettings#update if client side validation, Customer#update, Address#update and Authentication#updatePassword succeed', ->
+      sandbox.stub(ElementModifier, 'validate', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Customer, 'update', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Address, 'update', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Authentication, 'updatePassword', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(CustomerSettings, 'update').returns($q.defer().promise)
+      address = 'address'
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
+      scope.customerSettings =
+        noNotificationAfter:
+          value: '22:00:00'
+      scope.onSave()
+      scope.$digest()
+      CustomerSettings.update.should.have.been.called
+
     it 'should display a confirmation popup if all previous steps succeeded', ->
       sandbox.stub(ElementModifier, 'validate', ->
         deferred = $q.defer()
@@ -346,7 +389,19 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
+      customerSettings =
+        noNotificationAfter: '22:00:00'
+      sandbox.stub(CustomerSettings, 'update', ->
+        deferred = $q.defer()
+        deferred.resolve(customerSettings)
+        return deferred.promise
+      )
       sandbox.stub(Popup, 'displayTitleOnly')
+      address = 'address'
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
+      scope.customerSettings =
+        noNotificationAfter:
+          value: '22:00:00'
       scope.onSave()
       scope.$digest()
       Popup.displayTitleOnly.should.have.been.calledWithExactly('customerEdited', 3000)

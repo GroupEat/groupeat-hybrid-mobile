@@ -7,7 +7,10 @@ angular.module('groupeat.services.customer-settings', [
 
 .factory('CustomerSettings', function($resource, $q, ENV) {
 
-  var resource = $resource(ENV.apiEndpoint+'/customers/:id/settings');
+  var resource = $resource(ENV.apiEndpoint+'/customers/:id/settings', null,
+  {
+    'update': { method: 'PUT'}
+  });
 
   var
   getNoNotificationAfterHours = function() {
@@ -59,11 +62,34 @@ angular.module('groupeat.services.customer-settings', [
       defer.reject();
     });
     return defer.promise;
+  },
+
+  /**
+  * @ngdoc function
+  * @name CustomerSettings#update
+  * @methodOf CustomerSettings
+  *
+  * @description
+  * Returns a promise which, if resolved includes the list of customer settings
+  * https://groupeat.fr/docs
+  *
+  */
+  update = function(customerSettings) {
+    var defer = $q.defer();
+    resource.update(null, customerSettings).$promise
+    .then(function(response) {
+      defer.resolve(response.data);
+    })
+    .catch(function() {
+      defer.reject();
+    });
+    return defer.promise;
   };
 
   return {
     getNoNotificationAfterHours : getNoNotificationAfterHours,
     getDaysWithoutNotifying : getDaysWithoutNotifying,
-    get: get
+    get: get,
+    update: update
   };
 });

@@ -25,8 +25,12 @@ describe 'Service: Address', ->
       Address.should.have.property('update')
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
+      response =
+        data:
+          longitude: 1
+          latitude: 1
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
-      $httpBackend.whenPUT(regex).respond(200 , 'Success')
+      $httpBackend.whenPUT(regex).respond(response)
       Address.update({id: 1}, null).should.be.fulfilled
       $httpBackend.flush()
 
@@ -40,13 +44,17 @@ describe 'Service: Address', ->
       Address.should.have.property('get')
 
     it 'should return a fulfilled promise when the get request returns a 200 status', ->
+      residency = 'ENSTAParisTech'
+      details = 'details'
       data = []
       response =
         data:
-          data
+          details: details
+          latitude: 48.7107339
+          longitude: 2.2182327
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenGET(regex).respond(response)
-      Address.get(1).should.become(data)
+      Address.get(1).should.become({residency: residency, details: details})
       $httpBackend.flush()
 
     it 'should reject a promise when the server responds with an error to the get request', ->
@@ -59,22 +67,6 @@ describe 'Service: Address', ->
 
     it 'should have a getAddressFromResidencyInformation method', ->
       Address.should.have.property('getAddressFromResidencyInformation')
-
-    it 'the address should have street, latitude and longitude properties', ->
-      address = Address.getAddressFromResidencyInformation('residency')
-      address.should.have.property('street')
-      address.should.have.property('latitude')
-      address.should.have.property('longitude')
-
-    it 'the address street should be a non empty string', ->
-      address = Address.getAddressFromResidencyInformation('residency')
-      address.street.should.be.a('string')
-      address.street.should.not.be.empty
-
-    it 'the latitude and longitude should be valid latitude and longitude', ->
-      address = Address.getAddressFromResidencyInformation('residency')
-      address.latitude.should.be.within(-90, 90)
-      address.longitude.should.be.within(-180, 180)
 
     it 'should return the address of polytechnique when requested', ->
       street = 'Boulevard des Maréchaux'
@@ -94,14 +86,17 @@ describe 'Service: Address', ->
       address.latitude.should.equal(latitude)
       address.longitude.should.equal(longitude)
 
-    it 'should return the address of ENSTA ParisTech otherwise', ->
+    it 'should return the address of ENSTA ParisTech when requested', ->
       street = 'Boulevard des Maréchaux'
       latitude = 48.7107339
-      longitude = 2.218232700000044
-      address = Address.getAddressFromResidencyInformation('residency')
+      longitude = 2.2182327
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
       address.street.should.equal(street)
       address.latitude.should.equal(latitude)
       address.longitude.should.equal(longitude)
+
+    it 'should return undefined for other requests', ->
+      expect(Address.getAddressFromResidencyInformation('residency')).to.be.undefined
 
   describe 'Address#getAddressFromResidencyInformation', ->
 
@@ -117,9 +112,17 @@ describe 'Service: Address', ->
         longitude: 2.203553
       Address.getResidencyInformationFromAddress(address).should.equal('supoptique')
 
-    it 'should return ENSTAParisTech in other cases', ->
-      address = {}
+    it 'should return ENSTAParisTech if the coordinates match ENSTA residency', ->
+      address =
+        latitude: 48.7107339
+        longitude: 2.2182327
       Address.getResidencyInformationFromAddress(address).should.equal('ENSTAParisTech')
+
+    it 'should return undefined for other coordinates', ->
+      address =
+        latitude: 48
+        longitude: 2
+      expect(Address.getResidencyInformationFromAddress(address)).to.be.undefined
 
   describe 'Address#getResidencies', ->
 

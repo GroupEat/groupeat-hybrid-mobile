@@ -81,8 +81,8 @@ angular.module('groupeat.services.customer', [
   update = function(parameters, requestBody) {
     var defer = $q.defer();
     resource.update(parameters, requestBody).$promise
-    .then(function() {
-      defer.resolve();
+    .then(function(response) {
+      defer.resolve(response.data);
     })
     .catch(function(errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
