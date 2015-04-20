@@ -160,7 +160,11 @@
   "foodrush": "FoodRush !",
 
   "missingPropertiesTitle": "Informations Manquantes !",
-  "missingCustomerInformationMessage": "Il vous faut fournir votre {{missingProperties}} avant de pouvoir rejoindre une commande"
+  "missingCustomerInformationMessage": "Il vous faut fournir votre {{missingProperties}} avant de pouvoir rejoindre une commande",
 
+  "order": "Commande",
+  "myOrders": "Mes Commandes",
+  "noOrdersTitle": "Aucune commande",
+  "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat"
 
 }

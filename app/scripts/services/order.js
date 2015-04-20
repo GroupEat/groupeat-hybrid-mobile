@@ -4,7 +4,9 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 
 .service('Order', function(ENV, $q, $resource, BackendUtils) {
 
-	var resource = $resource(ENV.apiEndpoint+'/orders');
+	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
+	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
+	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=restaurant');
 
 	var
 	currentOrder = {
@@ -120,11 +122,49 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 			response = Math.abs(endingTime - currentTime)/1000;
 		}
 		return response;
+	},
+
+	get = function(orderId) {
+		var defer = $q.defer();
+		resource.get({id: orderId}).$promise
+		.then(function(response) {
+			defer.resolve(response.data);
+		})
+		.catch(function() {
+			defer.reject();
+		});
+		return defer.promise;
+	},
+
+	queryForGroupOrder = function(customerId, groupOrderId) {
+    var defer = $q.defer();
+    fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
+    .then(function(response) {
+      defer.resolve(response.data);
+    })
+    .catch(function() {
+      defer.reject();
+    });
+    return defer.promise;
+  },
+
+	queryForCustomer = function(customerId) {
+		var defer = $q.defer();
+		forCustomerResource.get({customerId: customerId}).$promise
+		.then(function(response) {
+			defer.resolve(response.data);
+		})
+		.catch(function() {
+			defer.reject();
+		});
+		return defer.promise;
 	};
 
-
 	return {
+		get: get,
 		getCurrentOrder: getCurrentOrder,
+		queryForGroupOrder: queryForGroupOrder,
+		queryForCustomer: queryForCustomer,
 		getRequestBody: getRequestBody,
 		setGroupOrderId: setGroupOrderId,
 		setFoodRushTime: setFoodRushTime,

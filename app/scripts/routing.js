@@ -42,6 +42,16 @@ angular.module('routing', [])
       }
     }
   })
+  .state('orders', {
+    url: '/orders',
+    templateUrl: 'templates/orders.html',
+    data: {
+      permissions: {
+        only: ['customer'],
+        redirectTo: 'authentication'
+      }
+    }
+  })
   .state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',

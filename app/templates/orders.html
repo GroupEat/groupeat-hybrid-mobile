@@ -1,0 +1,55 @@
+<ion-view ng-controller="OrdersCtrl" view-title="{{ 'myOrders' | translate }}" >
+
+	<ge-loading-backdrop ng-show="loadingBackdrop.show">
+	</ge-loading-backdrop>
+
+	<ion-content has-header="true" ng-show="!messageBackdrop.show">
+
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshRestaurants()">
+    </ion-refresher>
+
+		<md-list>
+      <md-item ng-repeat="order in orders" on-tap="onTapOrder(order)">
+        <md-item-content class="go-divider-header">
+          <md-toolbar class="go-list-header">
+            <span class="list-title"> <i class="italic">{{ 'pizzeria' | translate }} </i>: {{ order.restaurant.data.name }} </span>
+          </md-toolbar>
+
+        </md-item-content>
+        <md-item-content layout="row" layout-wrap class="go-details-list">
+
+            <div flex="50">
+              <div class="go-details"> {{ 'remainingCapacity' | translate }} {{ order.createdAt }}
+              </div>
+
+            </div>
+
+            <div flex="25" class="center">
+              <i class="ion-arrow-graph-down-right assertive go-icon"></i>
+              <b class="go-discount"> {{ order.rawPrice }}%</b>
+            </div>
+
+						<div flex="25" class="center">
+              <i class="ion-arrow-graph-down-right assertive go-icon"></i>
+              <b class="go-discount"> {{ order.discountedPrice }}%</b>
+            </div>
+        </md-item-content>
+
+
+        <md-divider class="go-divider"></md-divider>
+      </md-item>
+    </md-list>
+
+  </ion-content>
+
+  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
+    <ge-message-backdrop>
+    </ge-message-backdrop>
+  </ion-content>
+
+  <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
+        <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
+      </ion-tab>
+  </ion-tabs>
+
+</ion-view>
