@@ -36,3 +36,24 @@ describe 'Service: CustomerSettings', ->
       daysWithoutNotifying = CustomerSettings.getDaysWithoutNotifying()
       sortedDaysWithoutNotifying = daysWithoutNotifying.sort()
       daysWithoutNotifying.should.equal(sortedDaysWithoutNotifying)
+      
+  describe 'CustomerSettings#get', ->
+
+    it 'should have an get method', ->
+      GroupOrder.should.have.property('get')
+
+    it 'should return a fulfilled promise when the request returns a 200 status', ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=1&include=restaurant$')
+      orders = []
+      response =
+        data:
+          orders
+      $httpBackend.expect('GET', regex).respond(response)
+      GroupOrder.get(1, 1).should.become(orders)
+      $httpBackend.flush()
+
+    it 'should reject a promise with an error message when the server responds with an error', ->
+      regex = new RegExp('^'+ENV.apiEndpoint+'/groupOrders\\?joinable=1&around=1&latitude=\\d+&longitude=\\d+&include=restaurant$')
+      $httpBackend.expect('GET', regex).respond(400, 'Failure')
+      GroupOrder.get(1, 1).should.be.rejected
+      $httpBackend.flush()
