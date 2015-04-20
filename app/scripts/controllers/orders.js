@@ -33,10 +33,7 @@ angular.module('groupeat.controllers.orders', [
       .then(function(orders) {
         deferred.resolve();
         $scope.orders = orders;
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-      })
-      .catch(function(errorKey) {
-        if (errorKey === 'notFound')
+        if (_.isEmpty($scope.orders))
         {
           $scope.messageBackdrop = {
             show: true,
@@ -51,8 +48,11 @@ angular.module('groupeat.controllers.orders', [
         }
         else
         {
-          $scope.messageBackdrop = MessageBackdrop.genericFailure();
+          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
         }
+      })
+      .catch(function(errorKey) {
+        $scope.messageBackdrop = MessageBackdrop.genericFailure();
         deferred.reject();
       })
       .finally(function() {
