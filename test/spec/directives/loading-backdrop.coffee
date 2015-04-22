@@ -16,23 +16,13 @@ describe 'Directive: geLoadingBackdrop', ->
   afterEach ->
     sandbox.restore()
 
+   it 'should inject a div with the loading-backdrop class', ->
+    element = $compile("<ge-loading-backdrop></ge-loading-backdrop>")($rootScope)
+    $rootScope.$digest()
+    element.html().should.contain('<div class="loading-backdrop visible active">')
+
   it 'should inject a md-progress-circular html tag', ->
     element = $compile("<ge-loading-backdrop></ge-loading-backdrop>")($rootScope)
     $rootScope.$digest()
-    element.html().should.contain('<md-progress-circular')
+    element.html().should.contain('</md-progress-circular>')
 
-  it 'the icon in the message backdrop should have classes mentioned in scope.messageBackdrop', ->
-    element = $compile("<ge-loading-backdrop></ge-loading-backdrop>")($rootScope)
-    loadingBackdropClass = 'class'
-    $rootScope.loadingBackdrop =
-      class: loadingBackdropClass
-    $rootScope.$digest()
-    element.find('div').hasClass(loadingBackdropClass).should.be.true
-
-  it 'the scope should have a call method', ->
-    element = $compile("<ge-loading-backdrop></ge-loading-backdrop>")($rootScope)
-    circular = 'circular'
-    $rootScope.loadingBackdrop =
-      circular: circular
-    $rootScope.$digest()
-    element.find('md-progress-circular').attr('id').should.equal(circular)

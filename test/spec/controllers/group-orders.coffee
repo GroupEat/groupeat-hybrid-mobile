@@ -90,7 +90,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     it 'should show a loading backdrop', ->
       sandbox.stub(LoadingBackdrop, 'backdrop')
       scope.initCtrl()
-      LoadingBackdrop.backdrop.should.have.been.calledWithExactly('backdrop-get', 'with-bar-and-tabs')
+      LoadingBackdrop.backdrop.should.have.been.calledWithExactly()
 
     it 'should call onRefreshGroupOrders', ->
       sandbox.stub(LoadingBackdrop, 'backdrop')

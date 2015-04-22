@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('groupeat.directives.loading-backdrop', [])
+angular.module('groupeat.directives.loading-backdrop', ['pascalprecht.translate'])
 
 .directive('geLoadingBackdrop', function() {
   return {
