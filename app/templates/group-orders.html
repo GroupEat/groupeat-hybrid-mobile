@@ -3,7 +3,7 @@
   <ge-loading-backdrop ng-show="loadingBackdrop.show">
   </ge-loading-backdrop>
 
-  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show">
+  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show || loadingBackdrop.show">
 
     <button id="new-order-button" class="button button-assertive center" on-tap="onNewGroupOrder()">
       {{ 'newOrder' | translate }} !
