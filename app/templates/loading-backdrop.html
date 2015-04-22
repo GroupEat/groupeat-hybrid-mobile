@@ -1,5 +1,15 @@
-<div class="{{ loadingBackdrop.class }} {{ loadingBackdrop.type }} commun-backdrop">
-  <md-progress-circular id="{{ loadingBackdrop.circular }}" class="md-warn classical" md-mode="indeterminate"> 
-  </md-progress-circular>
+<div class="loading-backdrop visible active">
+  <div class="center">
+    <div class="card card-shadow">
+      <div class="item item-divider">
+        <h2>{{ 'loading' | translate }}</h2>
+      </div>
+      <div class="item item-text-wrap">
+        <div>
+		  <md-progress-circular class="md-warn loading-circle" md-mode="indeterminate"> 
+		  </md-progress-circular>
+		</div>
+      </div>
+    </div>
+  </div>
 </div>
-

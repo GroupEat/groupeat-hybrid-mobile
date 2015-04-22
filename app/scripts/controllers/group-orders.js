@@ -27,7 +27,7 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.initCtrl = function() {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-get', 'with-bar-and-tabs');
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     $scope.onRefreshGroupOrders()
     .finally(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
@@ -90,7 +90,7 @@ angular.module('groupeat.controllers.group-orders', [
 
   $scope.onJoinOrderTouch = function(groupOrder) {
     // Checking if the customer has provided the needed further information before going further
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-interact','with-bar-and-tabs');
+    $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkMissingInformation()
     .then(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();

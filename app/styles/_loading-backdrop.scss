@@ -1,60 +1,19 @@
-.commun-backdrop {
-	display: block;
-	
+.loading-circle {
+	margin : auto;
 }
 
-.total-backdrop {
+.loading-backdrop {
 	height: 100vh;
 	width: 100vw;
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-.backdrop-get {
-	background-image: radial-gradient(white, $energized);
-}
-
-.backdrop-interact {
+	margin: 0;
+	padding: auto;
+	padding-top: 30vh;
 	background-color: rgba(0,0,0, 0.11);
 }
 
-.with-bar-and-tabs {
-	height: calc(100vh - 93px);
-	width: 100vw;
-	position: absolute;
-	top: 44px;
-	z-index: 85;
+.card-shadow {
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 27px 24px 0px;
 }
-
-.with-sub-bar {
-	height: calc(100vh - 95px);
-	width: 100vw;
-	position: absolute;
-	top: 95px;
-}
-
-.with-dialog {
-	height: 100vh;
-	width: 100vw;
-	position: absolute;
-	top: 0;
-	z-index: 85;
-}
-
-#dialog-circular {
-	position: absolute;
-	top: 30vh;
-	left: calc(40vw - 25px);
-}
-
-#classical {
-	position: absolute;
-	top: calc(50vh - 25px - 44px);
-	left: calc(50vw - 25px);
-}
-
-
 
 md-progress-circular.md-default-theme.md-warn .md-inner .md-left .md-half-circle {
 	border-left-color: $assertive;
