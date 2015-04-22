@@ -2,11 +2,6 @@
 
 <!-- - - - - - - - - - - - - - - - - - - NAV BAR - - - - - - - - - - - - - - - - - -->
 
-  <ion-nav-buttons side="right">
-    <button class="button button-clear ion-ios-cart-outline right-header-bar-icon" ui-sref="cart">
-    </button>
-  </ion-nav-buttons>
-
   <ion-nav-buttons side="left">
     <button class="button button-clear ion-ios-arrow-back" on-tap="onLeaveRestaurant()"> {{ 'back' | translate }}
     </button>
@@ -119,6 +114,16 @@
       </md-item>
     </md-list>
     </ion-scroll>
+
+    <div class="center cart-button">
+      <style scoped>
+          .md-button { padding: 3px; }
+          .md-button.md-default-theme.md-fab { background-color: #e67e22; }
+      </style>
+      <md-button class="md-fab" ui-sref="cart">
+        <i class="button button-clear ion-ios-cart-outline right-header-bar-icon" ></i>
+      </md-button>
+    </div>
   </md-content>
 
 <!-- - - - - - - - - - - - - - - - - - - BACKDROP MESSAGE - - - - - - - - - - - - - - - - - -->
