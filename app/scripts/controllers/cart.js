@@ -159,6 +159,65 @@ angular.module('groupeat.controllers.cart', [
 				templateUrl: 'templates/popups/ask-for-address.html',
 				clickOutsideToClose: false,
 				controller: 'CartCtrl',
+			})
+			.then(function() {
+				$scope.loadingBackdrop = LoadingBackdrop.backdrop();
+				$scope.validateAddress($scope.addressTypeSelected.value)
+				.then(function() {
+					if ($scope.addressTypeSelected.value === 'myAddress')
+					{
+						Order.setStreet($scope.userAddress.street);
+						Order.setDetails($scope.userAddress.details);
+						Order.setLatitude($scope.userAddress.latitude);
+						Order.setLongitude($scope.userAddress.longitude);
+					}
+					else if ($scope.addressTypeSelected.value === 'newAddress')
+					{
+						/* TODO : get information from residency */
+						var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
+						Order.setStreet(residencyInformations.street);
+						Order.setDetails($scope.deliveryAddress.value + ', ' + $scope.addressSupplement.value);
+						Order.setLatitude(residencyInformations.latitude);
+						Order.setLongitude(residencyInformations.longitude);
+
+						/* Update User address code, keeping for calzone or later...
+						if ($scope.SaveNewAddress.value)
+						{
+							var addressParams = {
+								'street': residencyInformations.street,
+								'details': $scope.AddressSupplement.value,
+								'latitude': residencyInformations.latitude,
+								'longitude': residencyInformations.longitude
+							};
+							Address.update({id: $scope.userCredit.id}, addressParams);
+						}*/
+					}
+					else if ($scope.addressTypeSelected.value === 'predefinedAddress')
+					{
+						_.forEach($scope.predefinedAddresses, function(predefinedAddress) {
+							if (predefinedAddress.details === $scope.predefinedDeliveryAddress.value)
+							{
+								Order.setStreet(predefinedAddress.street);
+								Order.setDetails(predefinedAddress.details);
+								Order.setLatitude(predefinedAddress.latitude);
+								Order.setLongitude(predefinedAddress.longitude);
+							}
+						});
+					}
+					return Order.save();
+				})
+				.then(function() {
+					$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+					Cart.reset();
+					Order.resetCurrentOrder();
+					$ionicHistory.clearCache();
+					$state.go('group-orders');
+					Popup.displayTitleOnly($translate('ordered'), 3000);
+				})
+				.catch(function(errorMessage) {
+					$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+					return Popup.displayError($translate(errorMessage), 5000);
+				});
 			});
 		})
 		.catch(function(errorMessage) {
@@ -173,64 +232,7 @@ angular.module('groupeat.controllers.cart', [
 		}
 		else
 		{
-			$scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-interact' ,'with-dialog', 'dialog-circular');
-			$scope.validateAddress($scope.addressTypeSelected.value)
-			.then(function() {
-				if ($scope.addressTypeSelected.value === 'myAddress')
-				{
-					Order.setStreet($scope.userAddress.street);
-					Order.setDetails($scope.userAddress.details);
-					Order.setLatitude($scope.userAddress.latitude);
-					Order.setLongitude($scope.userAddress.longitude);
-				}
-				else if ($scope.addressTypeSelected.value === 'newAddress')
-				{
-					/* TODO : get information from residency */
-					var residencyInformations = Address.getAddressFromResidencyInformation($scope.deliveryAddress.value);
-					Order.setStreet(residencyInformations.street);
-					Order.setDetails($scope.deliveryAddress.value + ', ' + $scope.addressSupplement.value);
-					Order.setLatitude(residencyInformations.latitude);
-					Order.setLongitude(residencyInformations.longitude);
-
-					/* Update User address code, keeping for calzone or later...
-					if ($scope.SaveNewAddress.value)
-					{
-						var addressParams = {
-							'street': residencyInformations.street,
-							'details': $scope.AddressSupplement.value,
-							'latitude': residencyInformations.latitude,
-							'longitude': residencyInformations.longitude
-						};
-						Address.update({id: $scope.userCredit.id}, addressParams);
-					}*/
-				}
-				else if ($scope.addressTypeSelected.value === 'predefinedAddress')
-				{
-					_.forEach($scope.predefinedAddresses, function(predefinedAddress) {
-						if (predefinedAddress.details === $scope.predefinedDeliveryAddress.value)
-						{
-							Order.setStreet(predefinedAddress.street);
-							Order.setDetails(predefinedAddress.details);
-							Order.setLatitude(predefinedAddress.latitude);
-							Order.setLongitude(predefinedAddress.longitude);
-						}
-					});
-				}
-				return Order.save();
-			})
-			.then(function() {
-				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				$mdDialog.hide();
-				Cart.reset();
-				Order.resetCurrentOrder();
-				$ionicHistory.clearCache();
-				$state.go('group-orders');
-				Popup.displayTitleOnly($translate('ordered'), 3000);
-			})
-			.catch(function(errorMessage) {
-				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				return Popup.displayError($translate(errorMessage), 5000);
-	    });
+			$mdDialog.hide();
 		}
 	};
 
