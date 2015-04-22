@@ -2,11 +2,12 @@
 
 angular.module('groupeat.services.address', [
   'config',
+  'groupeat.services.backend-utils',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function($resource, $q, ENV, $filter) {
+.factory('Address', function($filter, $resource, $q, BackendUtils, ENV) {
 
   var $translate = $filter('translate');
 
@@ -17,27 +18,44 @@ angular.module('groupeat.services.address', [
 
   var
   update = function(parameters, requestBody) {
-    var defer = $q.defer();
+    var deferred = $q.defer();
     resource.update(parameters, requestBody).$promise
-    .then(function() {
-      defer.resolve();
+    .then(function(response) {
+      deferred.resolve({'residency': getResidencyInformationFromAddress(response.data), 'details': response.data.details});
     })
     .catch(function() {
-      defer.reject($translate('invalidAddressErrorKey'));
+      deferred.reject($translate('invalidAddressErrorKey'));
     });
-    return defer.promise;
+    return deferred.promise;
   },
 
   get = function(userId) {
-    var defer = $q.defer();
+    var deferred = $q.defer();
     resource.get({id: userId}).$promise
     .then(function(response) {
-      defer.resolve(response.data);
+      var address = response.data;
+      if (address)
+			{
+				var residency = getResidencyInformationFromAddress(address);
+				deferred.resolve({'residency': residency, 'details': address.details});
+			}
+      else
+      {
+        deferred.resolve();
+      }
     })
-    .catch(function() {
-      defer.reject();
+    .catch(function(errorResponse) {
+      var errorKey = BackendUtils.errorKeyFromBackend(errorResponse);
+      if (errorKey === 'noAddressForThisCustomer')
+      {
+        deferred.resolve();
+      }
+      else
+      {
+        deferred.reject();
+      }
     });
-    return defer.promise;
+    return deferred.promise;
   },
 
   getAddressFromResidencyInformation = function(residency) {
@@ -54,11 +72,15 @@ angular.module('groupeat.services.address', [
       latitude = 48.714258;
       longitude = 2.203553;
     }
-    else
+    else if (residency === 'ENSTAParisTech')
     {
       street = 'Boulevard des Maréchaux';
       latitude = 48.7107339;
-      longitude = 2.218232700000044;
+      longitude = 2.2182327;
+    }
+    else
+    {
+      return undefined;
     }
     return {
         street: street,
@@ -76,10 +98,11 @@ angular.module('groupeat.services.address', [
     {
       return 'supoptique';
     }
-    else
+    else if (address.latitude === 48.7107339 && address.longitude === 2.2182327)
     {
       return 'ENSTAParisTech';
     }
+    return undefined;
   },
 
   getResidencies = function() {

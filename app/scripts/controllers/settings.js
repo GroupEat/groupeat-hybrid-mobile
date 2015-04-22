@@ -5,16 +5,16 @@ angular.module('groupeat.controllers.settings', [
 	'groupeat.services.authentication',
 	'groupeat.services.credentials',
 	'groupeat.services.customer',
+	'groupeat.services.customer-settings',
 	'groupeat.services.element-modifier',
 	'groupeat.services.lodash',
 	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
-	'groupeat.services.notifications-settings',
 	'groupeat.services.popup',
 	'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function($filter, $scope, $state, _, Address, Authentication, Credentials, Customer, ElementModifier, MessageBackdrop, Network, NotificationsSettings, Popup) {
+.controller('SettingsCtrl', function($filter, $q, $scope, $state, _, Address, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup) {
 
 	var $translate = $filter('translate');
 
@@ -23,7 +23,7 @@ angular.module('groupeat.controllers.settings', [
 	*/
 	$scope.customer = {};
 	$scope.form = {};
-	$scope.notificationsPreferences = {};
+	$scope.customerSettings = {};
 
 	/*
 	Settings list
@@ -38,15 +38,10 @@ angular.module('groupeat.controllers.settings', [
 	*/
 	$scope.onReload = function() {
 		// Loading notification related options
-		$scope.daysWithoutNotifying = NotificationsSettings.getDaysWithoutNotifying();
-		$scope.noNotificationAfterHours = NotificationsSettings.getNoNotificationAfterHours();
-		$scope.notificationsPreferences = {
-			enable: true,
-			daysWithoutNotifying: 3,
-			noNotificationAfter: '22h00'
-		};
-		// Loading user information
+		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
+		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
+
 		if (!Network.hasConnectivity())
 		{
 			$scope.messageBackdrop = MessageBackdrop.noNetwork();
@@ -59,8 +54,14 @@ angular.module('groupeat.controllers.settings', [
 			return Address.get(customerId);
 		})
 		.then(function(address) {
-			var residency = Address.getResidencyInformationFromAddress(address);
-			$scope.customer = _.merge($scope.customer, {'residency': residency, 'details': address.details});
+			$scope.customer = _.merge($scope.customer, address);
+			return CustomerSettings.get(customerId);
+		})
+		.then(function(customerSettings) {
+			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
+				return (option.value === customerSettings.noNotificationAfter);
+			});
 		})
 		.catch(function() {
 			$scope.messageBackdrop = MessageBackdrop.genericFailure();
@@ -77,15 +78,34 @@ angular.module('groupeat.controllers.settings', [
       var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
       return Customer.update({id : customerId}, customerParams);
     })
-    .then(function() {
-      var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.customer.residency), {details: $scope.customer.details});
+    .then(function(customer) {
+			$scope.customer = _.merge($scope.customer, customer);
+			var addressParams = Address.getAddressFromResidencyInformation($scope.customer.residency);
+			if (!addressParams)
+			{
+				// If no residency was provided, not requesting the Address update
+				return $q.defer().resolve();
+			}
+			addressParams = _.merge(addressParams, {details: $scope.customer.details});
       return Address.update({id: customerId}, addressParams);
     })
-		.then(function() {
+		.then(function(address) {
+			$scope.customer = _.merge($scope.customer, address);
 			var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
 			return Authentication.updatePassword(authenticationParams);
 		})
-    .then(function() {
+		.then(function() {
+			$scope.oldPassword = '';
+			$scope.newPassword = '';
+			var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			customerSettings.noNotificationAfter = $scope.customerSettings.noNotificationAfter.value;
+			return CustomerSettings.update(customerSettings);
+		})
+    .then(function(customerSettings) {
+			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
+				return (option.value === customerSettings.noNotificationAfter);
+			});
 			Popup.displayTitleOnly($translate('customerEdited'), 3000);
     })
     .catch(function(errorMessage) {

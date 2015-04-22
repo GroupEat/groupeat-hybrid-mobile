@@ -4,7 +4,7 @@
     <button on-tap="onSave()" class="button button-clear button-positives">{{ 'save' | translate }}</button>
   </ion-nav-buttons>
 
-  <ion-content class="has-header has-footer">
+  <ion-content class="has-header has-footer" ng-show="!messageBackdrop.show">
     <md-tabs md-selected="selectedIndex" flex>
       <md-tab ng-repeat="tab in tabs"
               ng-disabled="tab.disabled"
@@ -12,6 +12,11 @@
         <ng-include src="tab.url" />
       </md-tab>
     </md-tabs>
+  </ion-content>
+
+  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
+    <ge-message-backdrop>
+    </ge-message-backdrop>
   </ion-content>
 
   <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">

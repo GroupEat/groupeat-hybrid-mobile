@@ -28,9 +28,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.spy(Credentials, 'reset')
       Customer = $injector.get('Customer')
       sandbox.spy(Customer, 'save')
-      sandbox.spy(Customer, 'update')
       Address = $injector.get('Address')
-      sandbox.spy(Address, 'update')
       Popup = $injector.get('Popup')
       sandbox.stub(Popup, 'displayError')
       sandbox.stub(Popup, 'displayTitleOnly')
@@ -646,6 +644,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it "if there is a client side validation error, an error dialog should be displayed and Customer.update should not be called", ->
       # We use a stub to make sure the validateForm promise is rejected
       sandbox.stub(ElementModifier, 'validate').returns($q.reject(new Error('errorMessage')))
+      sandbox.spy(Customer, 'update')
 
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
@@ -654,6 +653,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Customer.update.should.have.not.been.called
 
     it "if there are no client side validation errors but Customer.update returns an error, an error dialog should be displayed", ->
+      sandbox.spy(Customer, 'update')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(404, 'Error')
       scope.userId = 1
@@ -682,6 +682,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
+      sandbox.spy(Customer, 'update')
+      sandbox.spy(Address, 'update')
+
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
       $httpBackend.flush()
@@ -690,22 +693,25 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Address.update.should.have.been.called
 
     it 'if there are no errors, the onSkipFurtherRegisterButtonTouch should be called', ->
-      sandbox.spy(scope, 'onSkipFurtherRegisterButtonTouch')
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('PUT', regex).respond(200, 'Success')
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
-      $httpBackend.expectPUT(regex).respond(200, 'Success')
-      scope.userId = 1
-      # We use a stub to make sure the validateForm promise is resolved
-      sandbox.stub(ElementModifier, 'validate', (form) ->
+      sandbox.stub(ElementModifier, 'validate', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
       )
+      sandbox.stub(Customer, 'update', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Address, 'update', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.spy(scope, 'onSkipFurtherRegisterButtonTouch')
 
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
-      $httpBackend.flush()
 
       Customer.update.should.have.been.called
       Address.update.should.have.been.called

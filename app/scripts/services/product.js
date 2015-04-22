@@ -15,8 +15,7 @@ angular.module('groupeat.services.product', [
   * @methodOf Product
   *
   * @description
-  * Returns the list of products for a given restaurant id
-  * if rejected, an error message in proper locale will be rejected
+  * Returns a promise which, if resolved, has the list of products for a given restaurant id
   * https://groupeat.fr/docs
   *
   */
