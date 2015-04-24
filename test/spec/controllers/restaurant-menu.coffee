@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     module 'groupeat.controllers.restaurant-menu'
     module 'templates'
 
-  ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = {}
+  ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = Popup = {}
 
   cartTest =
     cartTotalPrice: 88
@@ -68,9 +68,10 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope = $rootScope.$new()
       $state = $injector.get('$state')
       Cart = $injector.get('Cart')
+      Popup = $injector.get('Popup')
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
-      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), $mdDialog: $injector.get('$mdDialog'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
+      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), $mdDialog: $injector.get('$mdDialog'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, Popup: Popup, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
       Order: $injector.get('Order'), $ionicHistory: $injector.get('$ionicHistory'), _: $injector.get('_')))
 
       ENV = $injector.get('ENV')
@@ -102,11 +103,23 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     beforeEach ->
       $httpBackend.flush()
 
-    it 'should call Cart service function add product', ->
+    it 'should call Cart service function add product if totalQuantity is not equal to remaingCapacity ', ->
       callback = sandbox.stub(Cart, 'addProduct')
       scope.onAddProduct(productTest, productTest.formats[0])
       assert(callback.calledOnce)
       assert(callback.calledWithExactly(productTest, productTest.formats[0]))
+
+    it 'should not call Cart service function add product if totalQuantity is equal to remaingCapacity ', ->
+      callback = sandbox.stub(Cart, 'addProduct')
+      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
+      scope.onAddProduct(productTest, productTest.formats[0])
+      callback.should.not.have.been.called
+
+    it 'should called Popup service if totalQuantity is equal to remaingCapacity ', ->
+      callback = sandbox.stub(Popup, 'displayError')
+      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
+      scope.onAddProduct(productTest, productTest.formats[0])
+      assert(callback.calledOnce)
 
     it 'should call Cart service function remove product', ->
       callback = sandbox.stub(Cart, 'removeProduct')
