@@ -94,7 +94,7 @@ angular.module('groupeat.controllers.group-orders', [
     Customer.checkMissingInformation()
     .then(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate);
+      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
 		  $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
     })
     .catch(function(missingPropertiesString) {

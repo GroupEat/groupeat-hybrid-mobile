@@ -6,13 +6,14 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
+  'groupeat.services.order',
   'groupeat.services.popup',
   'groupeat.services.restaurant',
   'ngGeolocation',
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Popup, Restaurant, _, $geolocation) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, $geolocation) {
 
   var $translate = $filter('translate');
 
@@ -77,13 +78,14 @@ angular.module('groupeat.controllers.restaurants', [
     return deferred.promise;
   };
 
-  $scope.onRestaurantTouch = function(restaurantId) {
+  $scope.onRestaurantTouch = function(restaurant) {
     // Checking if the customer has provided the needed further information before going further
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkMissingInformation()
     .then(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      $state.go('restaurant-menu', {restaurantId: restaurantId});
+      Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
+      $state.go('restaurant-menu', {restaurantId: restaurant.id});
     })
     .catch(function(missingPropertiesString) {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();

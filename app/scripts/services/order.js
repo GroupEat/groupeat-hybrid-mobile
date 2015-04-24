@@ -10,7 +10,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 	currentOrder = {
 		'groupOrderId': null,
 		'endingAt': null,
-		'currentDiscount': null
+		'currentDiscount': null,
+		'remainingCapacity': null
 	},
 
 	requestBody = {
@@ -77,7 +78,8 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		currentOrder = {
 			'groupOrderId': null,
 			'endingAt': null,
-			'currentDiscount': null
+			'currentDiscount': null,
+			'remainingCapacity': null
 		};
 		requestBody = {
 			'groupOrderId': null,
@@ -91,10 +93,11 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		};
 	},
 
-	setCurrentOrder = function(id, date, discount) {
+	setCurrentOrder = function(id, date, discount, capacity) {
 		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
 		currentOrder.currentDiscount = discount;
+		currentOrder.remainingCapacity = capacity;
 	},
 
 	save = function() {
