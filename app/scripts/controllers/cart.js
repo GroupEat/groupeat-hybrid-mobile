@@ -112,8 +112,9 @@ angular.module('groupeat.controllers.cart', [
 			return Address.get(Credentials.get().id);
 		})
 		.then(function(userAddress) {
+			console.log(userAddress);
 			$scope.userAddress = {
-				'residency' : Address.getResidencyInformationFromAddress(userAddress),
+				'residency' : userAddress.residency,
 				'details': userAddress.details,
 				'latitude': userAddress.latitude,
 				'longitude': userAddress.longitude,
