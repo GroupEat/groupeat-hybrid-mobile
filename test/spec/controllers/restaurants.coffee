@@ -88,16 +88,16 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $state.go.should.have.not.been.called
 
     it 'should set currentOrder with correspond deliveryCapacity if there are no missing customer information', ->
-     restaurant = { 'deliveryCapacity' : 5 }
-     callback = sandbox.stub(Order, 'setCurrentOrder')
-     sandbox.stub(Customer, 'checkMissingInformation', ->
+      restaurant = { 'deliveryCapacity' : 5 }
+      callback = sandbox.stub(Order, 'setCurrentOrder')
+      sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
-     )
-     scope.onRestaurantTouch(restaurant)
-     scope.$digest()
-     assert(callback.calledWithExactly(null, null, null, restaurant.deliveryCapacity)) 
+      )
+      scope.onRestaurantTouch(restaurant)
+      scope.$digest()
+      assert(callback.calledWithExactly(null, null, null, restaurant.deliveryCapacity))
 
     it 'should change the state with the given restaurant id if there are no missing customer information', ->
       restaurant = { 'id' : 1 }
@@ -249,6 +249,30 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onRefreshRestaurants()
       scope.$digest()
       scope.restaurants.should.equal(restaurants)
+
+    it 'should display logo placeholder if restaurant data from back does not have one', ->
+      sandbox.stub(Network, 'hasConnectivity').returns(true)
+      sandbox.stub($geolocation, 'getCurrentPosition', ->
+        deferred = $q.defer()
+        deferred.resolve(currentPosition)
+        return deferred.promise
+      )
+      restaurants = [{
+        name :'firstRestaurant',
+        logo : null,
+        } ,{
+        name : 'secondRestaurant',
+        logo : 'there is something hein !',
+        }]
+      sandbox.stub(Restaurant, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve(restaurants)
+        return deferred.promise
+      )
+      scope.onRefreshRestaurants()
+      scope.$digest()
+      scope.restaurants[0].logo.should.equal('images/flat-pizza.png')
+      scope.restaurants[1].logo.should.not.equal('images/flat-pizza.png')
 
     it 'should eventually broadcast scroll.refreshComplete if the server returns a list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
