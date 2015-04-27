@@ -176,6 +176,52 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.customer.details.should.equal(details)
       scope.customer.residency.should.equal(residency)
 
+    it 'should show a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
+      messageBackdrop = MessageBackdrop.genericFailure()
+      sandbox.stub(Network, 'hasConnectivity').returns(true)
+      sandbox.stub(Customer, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(CustomerSettings, 'get').returns($q.reject())
+      sandbox.spy(MessageBackdrop, 'genericFailure')
+      scope.onReload()
+      scope.$digest()
+      MessageBackdrop.genericFailure.should.have.been.called
+      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+
+    it 'should not show any message backdrop if getting the customer, address and settings succeed', ->
+      messageBackdrop = MessageBackdrop.noBackdrop()
+      sandbox.stub(Network, 'hasConnectivity').returns(true)
+      sandbox.stub(Customer, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      customerSettings =
+        noNotificationAfter: '22:00:00'
+      sandbox.stub(CustomerSettings, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve(customerSettings)
+        return deferred.promise
+      )
+      sandbox.spy(MessageBackdrop, 'noBackdrop')
+      scope.onReload()
+      scope.$digest()
+      MessageBackdrop.noBackdrop.should.have.been.called
+      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+
   describe 'SettingsCtrl#onSave', ->
 
     submitFormWithViewValues = (oldPassword, newPassword, phoneNumber) ->
