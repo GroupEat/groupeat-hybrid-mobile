@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -24,9 +24,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $geolocation = $injector.get('$geolocation')
       $mdDialog = $injector.get('$mdDialog')
       Popup = $injector.get('Popup')
+      Order = $injector.get('Order')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, _: _, $geolocation: $geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, $geolocation: $geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -86,16 +87,28 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $mdDialog.show.should.be.called
       $state.go.should.have.not.been.called
 
+    it 'should set currentOrder with correspond deliveryCapacity if there are no missing customer information', ->
+     restaurant = { 'deliveryCapacity' : 5 }
+     callback = sandbox.stub(Order, 'setCurrentOrder')
+     sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+     )
+     scope.onRestaurantTouch(restaurant)
+     scope.$digest()
+     assert(callback.calledWithExactly(null, null, null, restaurant.deliveryCapacity)) 
+
     it 'should change the state with the given restaurant id if there are no missing customer information', ->
-      id = 1
+      restaurant = { 'id' : 1 }
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
       )
-      scope.onRestaurantTouch(id)
+      scope.onRestaurantTouch(restaurant)
       scope.$digest()
-      $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: id})
+      $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: restaurant.id})
 
   describe 'RestaurantsCtrl#initCtrl', ->
 

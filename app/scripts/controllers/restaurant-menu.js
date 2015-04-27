@@ -11,9 +11,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.network',
 	'groupeat.services.order',
 	'groupeat.services.product',
+	'groupeat.services.popup'
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, LoadingBackdrop,  MessageBackdrop, Network, Product, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
 
@@ -83,7 +84,12 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.onAddProduct = function(product, format) {
-		Cart.addProduct(product, format);
+		if ($scope.cart.getTotalQuantity() >= $scope.currentOrder.remainingCapacity) {
+			Popup.displayError($translate('tooManyProducts'), 3000);
+		}
+		else {
+			Cart.addProduct(product, format);
+		}
 	};
 
 	$scope.onLeaveRestaurant = function() {

@@ -21,7 +21,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       'data': {
         'id': 5
       }
-    }
+    },
+    'remainingCapacity': 7
   }
 
   groupOrderEmptyListMock = {
@@ -321,7 +322,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       )
       scope.onJoinOrderTouch(groupOrderMock)
       scope.$digest()
-      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate)
+      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate, groupOrderMock.remainingCapacity)
 
     it 'should go to restaurant menu view corresponding to the selected groupOrder if no customer information are missing', ->
       sandbox.stub(scope, 'getTimeDiff').returns(1000)

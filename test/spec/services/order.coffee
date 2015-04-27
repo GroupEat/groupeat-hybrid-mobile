@@ -70,25 +70,28 @@ describe 'Service: Order', ->
       expect(testRequestBody.comment).to.equal('pas inintéressant')
 
     it '#currentOrder : should set currentOrder', ->
-      Order.setCurrentOrder('123', '2015-01-30 16:39:26', 17)
+      Order.setCurrentOrder('123', '2015-01-30 16:39:26', 17, 8)
 
       expect(Order.getCurrentOrder().groupOrderId).to.equal('123')
       expect(Order.getCurrentOrder().endingAt).to.equal('2015-01-30 16:39:26')
       expect(Order.getCurrentOrder().currentDiscount).to.equal(17)
+      expect(Order.getCurrentOrder().remainingCapacity).to.equal(8)
 
     it '#currentOrder : should get currentOrder', ->
       testCurrentOrder = Order.getCurrentOrder()
       testCurrentOrder.should.have.property('groupOrderId')
       testCurrentOrder.should.have.property('endingAt')
       testCurrentOrder.should.have.property('currentDiscount')
+      testCurrentOrder.should.have.property('remainingCapacity')
 
     it '#currentOrder : should reset currentOrder', ->
-      Order.setCurrentOrder('123', '2015-01-30 16:39:26', 17)
+      Order.setCurrentOrder('123', '2015-01-30 16:39:26', 17, 8)
       Order.resetCurrentOrder()
 
       expect(Order.getCurrentOrder().groupOrderId).to.equal(null)
       expect(Order.getCurrentOrder().endingAt).to.equal(null)
       expect(Order.getCurrentOrder().currentDiscount).to.equal(null)
+      expect(Order.getCurrentOrder().remainingCapacity).to.equal(null)
 
     it '#getTimeDiff : should return difference between current date and input', ->
       # Help wanted : this test has to be improved....
