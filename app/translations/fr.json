@@ -64,6 +64,7 @@
 
   "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
   "chooseARestaurant": "Choisissez un restaurant",
+  "restaurantPlaceholderDescription": "Cette pizzeria n'a pas souhaité ajouter de description.",
   "restaurantMenu": "Carte du restaurant",
   "tooManyProducts": "Aïe aïe aïe, ce restaurant ne peut pas livrer plus de pizzas...",
   "japanese": "Japonais",

@@ -43,6 +43,12 @@ angular.module('groupeat.controllers.restaurants', [
         Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
         .then(function(restaurants) {
           $scope.restaurants = restaurants;
+          _.forEach($scope.restaurants, function(restaurant) {
+            if(restaurant.logo === null || restaurant.logo === undefined) {
+              restaurant.logo = 'images/flat-pizza.png';
+            }
+          });
+
           if (_.isEmpty(restaurants))
           {
             $scope.messageBackdrop = {

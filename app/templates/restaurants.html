@@ -12,12 +12,12 @@
 		  <md-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
 		    <md-item-content>
 		      <div class="md-tile-left">
-		        <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+		        <img src="{{ restaurant.logo }}" class="face">
 		      </div>
 		      <div class="md-tile-content">
 		        <h3>{{ restaurant.name }}</h3>
 		        <p>
-		          un super restaurant de pizza
+		          {{ restaurant.description || 'restaurantPlaceholderDescription' | translate }}
 		        </p>
 		      </div>
 		    </md-item-content>
