@@ -105,6 +105,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
     it 'should call Cart service function add product if totalQuantity is not equal to remaingCapacity ', ->
       callback = sandbox.stub(Cart, 'addProduct')
+      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity() + 1
       scope.onAddProduct(productTest, productTest.formats[0])
       assert(callback.calledOnce)
       assert(callback.calledWithExactly(productTest, productTest.formats[0]))
