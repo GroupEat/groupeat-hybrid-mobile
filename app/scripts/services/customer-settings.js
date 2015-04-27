@@ -2,10 +2,11 @@
 
 angular.module('groupeat.services.customer-settings', [
   'config',
+  'groupeat.services.backend-utils',
   'ngResource'
 ])
 
-.factory('CustomerSettings', function($resource, $q, ENV) {
+.factory('CustomerSettings', function($resource, $q, BackendUtils, ENV) {
 
   var resource = $resource(ENV.apiEndpoint+'/customers/:id/settings', null,
   {
@@ -74,14 +75,14 @@ angular.module('groupeat.services.customer-settings', [
   * https://groupeat.fr/docs
   *
   */
-  update = function(customerSettings) {
+  update = function(customerId, customerSettings) {
     var defer = $q.defer();
-    resource.update(null, customerSettings).$promise
+    resource.update({id: customerId}, customerSettings).$promise
     .then(function(response) {
       defer.resolve(response.data);
     })
-    .catch(function() {
-      defer.reject();
+    .catch(function(errorResponse) {
+      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
   };

@@ -38,7 +38,6 @@ angular.module('groupeat.controllers.settings', [
 	Loading
 	*/
 	$scope.onReload = function() {
-
 		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
 
 		// Loading notification related options
@@ -67,65 +66,64 @@ angular.module('groupeat.controllers.settings', [
 			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
 				return (option.value === customerSettings.noNotificationAfter);
 			});
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
 		})
 		.catch(function() {
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 			$scope.messageBackdrop = MessageBackdrop.genericFailure();
+		})
+		.finally(function() {
+			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
 	};
 
 	/*
 	Saving
 	*/
-	$scope.onSave = function(isLoadingBackdropDisplaying) {
-		if(!isLoadingBackdropDisplaying) {
-
-			$scope.loadingBackdrop = LoadingBackdrop.backdrop();
-			var customerId = Credentials.get().id;
-			ElementModifier.validate($scope.form.customerEdit)
-			.then(function() {
-				var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
-				return Customer.update({id : customerId}, customerParams);
-			})
-			.then(function(customer) {
-				$scope.customer = _.merge($scope.customer, customer);
-				var addressParams = Address.getAddressFromResidencyInformation($scope.customer.residency);
-				if (!addressParams)
-				{
-					// If no residency was provided, not requesting the Address update
-					return $q.defer().resolve();
-				}
-				addressParams = _.merge(addressParams, {details: $scope.customer.details});
-				return Address.update({id: customerId}, addressParams);
-			})
-			.then(function(address) {
-				$scope.customer = _.merge($scope.customer, address);
-				var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
-				return Authentication.updatePassword(authenticationParams);
-			})
-			.then(function() {
-				$scope.oldPassword = '';
-				$scope.newPassword = '';
-				var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
-				customerSettings.noNotificationAfter = $scope.customerSettings.noNotificationAfter.value;
-				return CustomerSettings.update(customerSettings);
-			})
-			.then(function(customerSettings) {
-				$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
-				$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
-					return (option.value === customerSettings.noNotificationAfter);
-				});
-				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				Popup.displayTitleOnly($translate('customerEdited'), 3000);
-			})
-			.catch(function(errorMessage) {
-				$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-				Popup.displayError(errorMessage, 3000);
+	$scope.onSave = function() {
+		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
+		var customerId = Credentials.get().id;
+		ElementModifier.validate($scope.form.customerEdit)
+		.then(function() {
+			var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
+			return Customer.update({id : customerId}, customerParams);
+		})
+		.then(function(customer) {
+			$scope.customer = _.merge($scope.customer, customer);
+			var addressParams = Address.getAddressFromResidencyInformation($scope.customer.residency);
+			if (!addressParams)
+			{
+				// If no residency was provided, not requesting the Address update
+				return $q.defer().resolve();
+			}
+			addressParams = _.merge(addressParams, {details: $scope.customer.details});
+			return Address.update({id: customerId}, addressParams);
+		})
+		.then(function(address) {
+			$scope.customer = _.merge($scope.customer, address);
+			var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
+			return Authentication.updatePassword(authenticationParams);
+		})
+		.then(function() {
+			$scope.oldPassword = '';
+			$scope.newPassword = '';
+			var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			customerSettings.noNotificationAfter = $scope.customerSettings.noNotificationAfter.value;
+			return CustomerSettings.update(customerSettings);
+		})
+		.then(function(customerSettings) {
+			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
+			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
+				return (option.value === customerSettings.noNotificationAfter);
 			});
-		}
-	};
+			Popup.displayTitleOnly($translate('customerEdited'), 3000);
+		})
+		.catch(function(errorMessage) {
+			Popup.displayError(errorMessage, 3000);
+		})
+		.finally(function() {
+			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+		});
+	}
 
-		
 	$scope.onReload();
 });
