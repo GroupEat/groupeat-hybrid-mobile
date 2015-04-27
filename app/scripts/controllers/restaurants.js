@@ -40,6 +40,7 @@ angular.module('groupeat.controllers.restaurants', [
     {
       $geolocation.getCurrentPosition()
       .then(function(currentPosition) {
+        $scope.userCurrentPosition = currentPosition;
         Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
         .then(function(restaurants) {
           $scope.restaurants = restaurants;
@@ -89,9 +90,23 @@ angular.module('groupeat.controllers.restaurants', [
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkMissingInformation()
     .then(function() {
+      return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+    })
+    .then(function(groupOrders) {
+      var isAlreadyAJoinableGroupOrder = false ;
+      _.forEach(groupOrders, function(groupOrder) {
+        if(groupOrder.restaurant.data.id == restaurant.id) {
+          isAlreadyAJoinableGroupOrder = true;
+        }
+      });
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
-      $state.go('restaurant-menu', {restaurantId: restaurant.id});
+      if (isAlreadyAJoinableGroupOrder) {
+        Popup.displayTitleAndContent($translate('alreadyAGroupOrder'), $translate('pleaseChangeRestaurantOrJoinGroupOrder'), 5000);
+      }
+      else {
+        Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
+        $state.go('restaurant-menu', {restaurantId: restaurant.id});
+      }
     })
     .catch(function(missingPropertiesString) {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();

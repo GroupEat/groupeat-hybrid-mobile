@@ -64,11 +64,30 @@ angular.module('groupeat.services.popup', [
         }, timeout);
       }
       return popup;
+    },
+
+    displayTitleAndContent = function(title, contentMessage, timeout) {
+      var popup = $mdDialog.show(
+        $mdDialog.alert({
+          parent: angular.element(document.body)
+        })
+        .title(title)
+        .content(contentMessage)
+        .ok($translate('ok'))
+      );
+      if (timeout)
+      {
+        $timeout(function() {
+          $mdDialog.hide();
+        }, timeout);
+      }
+      return popup;
     };
 
     return {
       displayError: displayError,
-      displayTitleOnly: displayTitleOnly
+      displayTitleOnly: displayTitleOnly,
+      displayTitleAndContent: displayTitleAndContent
     };
   }
 );

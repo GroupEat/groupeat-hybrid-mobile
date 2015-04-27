@@ -123,7 +123,7 @@ angular.module('groupeat.controllers.settings', [
 		.finally(function() {
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
-	}
+	};
 
 	$scope.onReload();
 });
