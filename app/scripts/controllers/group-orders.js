@@ -10,20 +10,21 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.order',
   'groupeat.services.popup',
   'groupeat.services.loading-backdrop',
+  'groupeat.controllers.side-menu',
   'config',
   'ngGeolocation',
   'ngMaterial',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
 
   var $translate = $filter('translate');
 
   $scope.groupOrders = {};
 
   $scope.onNewGroupOrder = function() {
-    $state.go('restaurants');
+    $location.path('side-menu/restaurants');
   };
 
   $scope.initCtrl = function() {

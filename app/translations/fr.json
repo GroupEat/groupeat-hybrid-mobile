@@ -42,6 +42,10 @@
   "oldPasswordNotProvided": "Le mot de passe actuel doit être fourni",
 
   "orders": "Commandes",
+  "settings": "Réglages",
+  "order": "Mes commandes",
+  "menu": "Menu",
+
   "newOrder": "Nouvelle commande",
   "pizza": "Pizza",
   "pizzeria": "Pizzeria",
@@ -49,8 +53,7 @@
   "toOrder": "Commander",
   "remainingCapacity": "Pizzas restantes :",
   "noGroupOrder": "Aucune commande en cours actuellement",
-
-  "settings": "Réglages",
+  
   "editProfile": "Mes Infos",
   "profileSettings": "Profil",
   "pushSettings": "Notifications",
