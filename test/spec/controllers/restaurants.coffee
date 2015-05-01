@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -17,6 +17,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
       Customer = $injector.get('Customer')
       Restaurant = $injector.get('Restaurant')
+      GroupOrder = $injector.get('GroupOrder')
       MessageBackdrop = $injector.get('MessageBackdrop')
       LoadingBackdrop = $injector.get('LoadingBackdrop')
       Network = $injector.get('Network')
@@ -27,7 +28,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Order = $injector.get('Order')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, $geolocation: $geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, $geolocation: $geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -87,28 +88,62 @@ describe 'Ctrl: RestaurantsCtrl', ->
       $mdDialog.show.should.be.called
       $state.go.should.have.not.been.called
 
-    it 'should set currentOrder with correspond deliveryCapacity if there are no missing customer information', ->
+    it 'should set currentOrder with correspond deliveryCapacity if there are no missing customer information and if there is not already a joinable GO', ->
       restaurant = { 'deliveryCapacity' : 5 }
+      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
       callback = sandbox.stub(Order, 'setCurrentOrder')
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
       )
+      sandbox.stub(GroupOrder, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve([])
+        return deferred.promise
+      )
       scope.onRestaurantTouch(restaurant)
       scope.$digest()
       assert(callback.calledWithExactly(null, null, null, restaurant.deliveryCapacity))
 
-    it 'should change the state with the given restaurant id if there are no missing customer information', ->
+    it 'should change the state with the given restaurant id if there are no missing customer information and no joinable GO', ->
       restaurant = { 'id' : 1 }
+      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
+      groupOrders = [ {'restaurant': { 'data': { 'id': 2}}}]
+
       sandbox.stub(Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
       )
+      sandbox.stub(GroupOrder, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrders)
+        return deferred.promise
+      )
       scope.onRestaurantTouch(restaurant)
       scope.$digest()
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: restaurant.id})
+
+    it 'should display a popup if there are no missing customer information but a joinable GO', ->
+      restaurant = { 'id' : 1 }
+      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
+      groupOrders = [ {'restaurant': { 'data': { 'id': 1}}}]
+      callback = sandbox.stub(Popup, 'displayTitleAndContent')
+
+      sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        return deferred.promise
+      )
+      sandbox.stub(GroupOrder, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve(groupOrders)
+        return deferred.promise
+      )
+      scope.onRestaurantTouch(restaurant)
+      scope.$digest()
+      callback.should.have.been.called
 
   describe 'RestaurantsCtrl#initCtrl', ->
 

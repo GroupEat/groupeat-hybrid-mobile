@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.customer',
   'groupeat.services.lodash',
   'groupeat.services.loading-backdrop',
+  'groupeat.services.group-order',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
@@ -13,7 +14,7 @@ angular.module('groupeat.controllers.restaurants', [
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, $geolocation) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, $geolocation) {
 
   var $translate = $filter('translate');
 
@@ -90,12 +91,13 @@ angular.module('groupeat.controllers.restaurants', [
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkMissingInformation()
     .then(function() {
-      return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
+      return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
     })
     .then(function(groupOrders) {
+    // Checking if the restaurant has already a groupOrder that the customer could join
       var isAlreadyAJoinableGroupOrder = false ;
       _.forEach(groupOrders, function(groupOrder) {
-        if(groupOrder.restaurant.data.id == restaurant.id) {
+        if(groupOrder.restaurant.data.id === restaurant.id) {
           isAlreadyAJoinableGroupOrder = true;
         }
       });
