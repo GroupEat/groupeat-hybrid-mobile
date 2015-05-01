@@ -4,7 +4,8 @@ angular.module('groupeat.controllers.side-menu', [
   'ionic',
 ])
 
-.controller('SideMenuCtrl', function($scope) {
+.controller('SideMenuCtrl', function($scope, $ionicSideMenuDelegate) {
+
   $scope.menuItems = [
     {
       'title'     : 'orders',
@@ -22,4 +23,9 @@ angular.module('groupeat.controllers.side-menu', [
       'stateTarget'     :'order' 
     }
   ];
+
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+
 });
