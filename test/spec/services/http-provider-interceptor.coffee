@@ -46,8 +46,8 @@ describe 'Service: HttpProviderInterceptor', ->
     sandbox.stub(Credentials, 'get', ->
       token: token
     )
-    $httpBackend.expectGET(ENV.apiEndpoint, (headers) ->
+    $httpBackend.expectGET(ENV.apiEndpoint + 'side-menu/', (headers) ->
       headers.Authorization.should.contain(token)
     ).respond(200, '')
-    $http.get(ENV.apiEndpoint)
+    $http.get(ENV.apiEndpoint + 'side-menu/')
     $httpBackend.flush()
