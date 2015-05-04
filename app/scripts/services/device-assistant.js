@@ -112,7 +112,11 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function() {
     deferredRegistration = $q.defer();
-    document.addEventListener('deviceready', onDeviceReady, false);
+    if (window.device && window.cordova) {
+      document.addEventListener('deviceready', onDeviceReady, false);
+    } else {
+      deferredRegistration.resolve();
+    }
     return deferredRegistration.promise;
   };
 
