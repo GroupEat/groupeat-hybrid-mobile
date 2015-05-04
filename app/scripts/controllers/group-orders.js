@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.group-orders', [
-  'config',
+  'env-config',
   'groupeat.services.customer',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
@@ -11,7 +11,6 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.popup',
   'groupeat.services.loading-backdrop',
   'groupeat.controllers.side-menu',
-  'config',
   'ngGeolocation',
   'ngMaterial',
   'timer'

@@ -50,8 +50,8 @@ module.exports = function (grunt) {
       options: {
         space: '  ',
         wrap: '"use strict";\n\n {%= __ngModule %}',
-        name: 'config',
-        dest: '<%= yeoman.app %>/scripts/config.js'
+        name: 'env-config',
+        dest: '<%= yeoman.app %>/scripts/env-config.js'
       },
       development: {
         constants: {
@@ -433,7 +433,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'app/templates/**/*.html',
           'test/utils/**/*.js',
-          'test/spec/**/*.coffee'
+          'test/spec/**/http-provider-interceptor.coffee'
         ],
         autoWatch: false,
         reporters: ['dots', 'coverage'],

@@ -8,13 +8,11 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
   'config',
+  'env-config',
   'ionic',
   'jcs-autoValidate',
-  'LocalStorageModule',
   'ngCordova',
   'ngCookies',
-  'ngMaterial',
-  'ngMdIcons',
   'ngMessages',
   'pascalprecht.translate',
   'permission',
@@ -24,37 +22,8 @@ angular.module('groupeat', [
   'groupeat.directives',
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
-  'groupeat.services.error-message-resolver',
-  'groupeat.services.http-provider-interceptor'
+  'groupeat.services.error-message-resolver'
 ])
-
-.config(function($ionicConfigProvider){
-  $ionicConfigProvider.tabs.position('bottom');
-})
-
-.config(function($httpProvider, $translateProvider) {
-
-  $httpProvider.interceptors.push('HttpProviderInterceptor');
-
-  $translateProvider
-  .useStaticFilesLoader({
-    prefix: 'translations/',
-    suffix: '.json'
-  })
-  .preferredLanguage('fr')
-  .fallbackLanguage(['fr']).useLocalStorage();
-
-})
-
-.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-  .primaryPalette('orange');
-})
-
-.config(function (localStorageServiceProvider) {
-  localStorageServiceProvider
-  .setPrefix('groupeat');
-})
 
 .run([
   'validator',
