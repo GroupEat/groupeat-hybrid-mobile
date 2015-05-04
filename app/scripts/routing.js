@@ -121,5 +121,5 @@ angular.module('routing', [])
     }
   });
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/authentication');
 });
