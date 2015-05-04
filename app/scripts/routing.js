@@ -125,5 +125,5 @@ angular.module('routing', [])
     }
   });
 
-  $urlRouterProvider.otherwise('/side-menu/');
+  $urlRouterProvider.otherwise('/');
 });
