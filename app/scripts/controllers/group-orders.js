@@ -24,7 +24,7 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.groupOrders = {};
 
   $scope.onNewGroupOrder = function() {
-    $state.go('side-menu.restaurants');
+    $state.go('restaurants');
   };
 
   $scope.initCtrl = function() {

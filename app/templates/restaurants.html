@@ -1,5 +1,9 @@
 <ion-view ng-controller="RestaurantsCtrl" title="{{ 'chooseARestaurant' | translate }}" cache-view="false">
 
+	<ion-nav-buttons side="left">
+	    <button class="button button-clear ion-ios-arrow-back" on-tap="onRestaurantsListLeave()"> {{ 'back' | translate }}
+	    </button>
+  	</ion-nav-buttons>
 	<ge-loading-backdrop ng-show="loadingBackdrop.show">
 	</ge-loading-backdrop>
 

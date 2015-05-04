@@ -1,12 +1,10 @@
-<ion-side-menus ng-controller="SideMenuCtrl" enable-menu-with-back-views="true">
+<ion-side-menus ng-controller="SideMenuCtrl">
 
   <ion-pane ion-side-menu-content>
     <ion-nav-bar class="bar-energized bar-header">
-      
       <ion-nav-buttons side="left">
         <a class="button icon ion-navicon no-border" ng-click="toggleLeft()"></a>
       </ion-nav-buttons>
-      <ion-nav-back-button class="button-clear"><a class="icon ion-ios-arrow-back"></a> {{ 'nothing' | translate }}</ion-nav-back-button>
     </ion-nav-bar>
 
     <ion-nav-view name="menuContent" animation="slide-left-right">
@@ -22,7 +20,7 @@
         <ion-item class="item-icon-left" ng-repeat="menuItem in menuItems" nav-clear menu-close href="#/side-menu/{{menuItem.stateTarget}}">
           <i class="icon {{ menuItem.iconClasses }}"></i>
             {{ menuItem.title | translate }}
-          
+
         </ion-item>
       </ion-list>
     </ion-content>

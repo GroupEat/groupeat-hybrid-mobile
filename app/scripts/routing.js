@@ -64,13 +64,9 @@ angular.module('routing', [])
       }
     }
   })
-  .state('side-menu.restaurants', {
+  .state('restaurants', {
     url: '/restaurants',
-    views: {
-      'menuContent' :{
-        templateUrl: 'templates/restaurants.html'
-      }
-    },
+    templateUrl: 'templates/restaurants.html',
     data: {
       permissions: {
         only: ['customer'],

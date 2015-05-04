@@ -28,6 +28,10 @@ angular.module('groupeat.controllers.restaurants', [
     });
   };
 
+  $scope.onRestaurantsListLeave = function() {
+    $state.go('side-menu.group-orders');
+  };
+
   $scope.onRefreshRestaurants = function() {
     var deferred = $q.defer();
 
