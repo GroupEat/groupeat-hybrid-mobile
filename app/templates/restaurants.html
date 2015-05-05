@@ -2,14 +2,14 @@
 
 	<ge-loading-backdrop ng-show="loadingBackdrop.show">
 	</ge-loading-backdrop>
-	
+
 	<ion-content has-header="true" ng-show="!messageBackdrop.show">
 
 		<ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshRestaurants()">
 		</ion-refresher>
 
 		<md-list>
-		  <md-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
+		  <md-list-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
 		    <md-item-content>
 		      <div class="md-tile-left">
 		        <img src="{{ restaurant.logo }}" class="face">
@@ -21,7 +21,7 @@
 		        </p>
 		      </div>
 		    </md-item-content>
-		  </md-item>
+		  </md-list-item>
 		</md-list>
 
 	</ion-content>
