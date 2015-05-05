@@ -3,50 +3,50 @@
   <div class="list">
 
     <div class="item item-toggle">
-       {{ 'enable' | translate}}
-       <label class="toggle toggle-assertive">
-         <input ng-model="customerSettings.notificationsEnabled" name="notificationsEnabled" type="checkbox">
-         <div class="track">
-           <div class="handle"></div>
-         </div>
-       </label>
+      {{ 'enable' | translate}}
+      <label class="toggle toggle-assertive">
+        <input ng-model="customerSettings.notificationsEnabled" name="notificationsEnabled" type="checkbox">
+        <div class="track">
+          <div class="handle"></div>
+        </div>
+      </label>
     </div>
 
-  	<div ng-show="customerSettings.notificationsEnabled">
+    <div ng-show="customerSettings.notificationsEnabled">
 
-  		<div class="item item-divider">
-  			{{ 'afterMakingAnOrder' | translate }} :
-  		</div>
+      <div class="item item-divider">
+        {{ 'afterMakingAnOrder' | translate }} :
+      </div>
 
-  		<label class="item item-input item-select">
-  			<div class="input-label">
-  				{{ 'notifyMe' | translate }} :</p>
-  			</div>
-  			<select ng-model="customerSettings.daysWithoutNotifying" name="daysWithoutNotifying">
-  		    <option
-  		      ng-repeat="day in daysWithoutNotifyingOptions"
-  		      ng-pluralize
-  					ng-init="dayLabel='day'; daysLabel='days'"
-  		      count="day"
-  		      when="{0: '{{day}} {{dayLabel | translate}}', 1: '{{day}} {{dayLabel | translate}}', other: '{{day}} {{ daysLabel | translate }}'}"
-  		    >{{day}}</option>
-  	  	</select>
-  		</label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          {{ 'notifyMe' | translate }} :
+        </div>
+        <select ng-model="customerSettings.daysWithoutNotifying" name="daysWithoutNotifying">
+          <option
+          ng-repeat="day in daysWithoutNotifyingOptions"
+          ng-pluralize
+          ng-init="dayLabel='day'; daysLabel='days'"
+          count="day"
+          when="{0: '{{day}} {{dayLabel | translate}}', 1: '{{day}} {{dayLabel | translate}}', other: '{{day}} {{ daysLabel | translate }}'}"
+          >{{day}}</option>
+        </select>
+      </label>
 
-  		<div class="item item-divider">
-  			{{ 'doNotNotifyMe' | translate }} :
-  		</div>
+      <div class="item item-divider">
+        {{ 'doNotNotifyMe' | translate }} :
+      </div>
 
-  		<label class="item item-input item-select">
-  			<div class="input-label">
-  				{{ 'after' | translate }} :</p>
-  			</div>
-  			<select ng-model="customerSettings.noNotificationAfter.value" name="noNotificationAfter">
-  				<option ng-repeat="hour in noNotificationAfterOptions" value="{{hour.value}}">{{hour.label}}</option>
-  			</select>
-  		</label>
+      <label class="item item-input item-select">
+        <div class="input-label">
+          {{ 'after' | translate }} :</p>
+        </div>
+        <select ng-model="customerSettings.noNotificationAfter.value" name="noNotificationAfter">
+          <option ng-repeat="hour in noNotificationAfterOptions" value="{{hour.value}}">{{hour.label}}</option>
+        </select>
+      </label>
 
-  	</div>
+    </div>
 
   </div>
 

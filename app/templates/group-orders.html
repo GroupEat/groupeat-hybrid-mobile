@@ -1,5 +1,5 @@
 <ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
-  
+
   <ge-loading-backdrop ng-show="loadingBackdrop.show">
   </ge-loading-backdrop>
 
@@ -13,7 +13,7 @@
     </ion-refresher>
 
     <md-list>
-      <md-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
+      <md-list-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
         <md-item-content class="go-divider-header">
           <md-toolbar class="go-list-header">
             <span class="list-title"> <i class="italic">{{ 'pizzeria' | translate }} </i>: {{ groupOrder.restaurant.data.name }} </span>
@@ -25,7 +25,7 @@
             <div flex="50">
               <div class="go-details"> {{ 'remainingCapacity' | translate }} {{ groupOrder.remainingCapacity }}
               </div>
-              
+
             </div>
 
             <div flex="25" class="center">
@@ -38,10 +38,10 @@
               <b class="go-chrono"><timer countdown="getTimeDiff(groupOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer></b>
             </div>
         </md-item-content>
-        
+
 
         <md-divider class="go-divider"></md-divider>
-      </md-item>
+      </md-list-item>
     </md-list>
 
   </ion-content>

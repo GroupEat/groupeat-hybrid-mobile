@@ -7,61 +7,62 @@
 
 	<ion-content has-header="true" ng-hide="messageBackdrop.show || loadingBackdrop.show">
 		<md-list>
-			<md-item>
-				<md-item-content layout="row" layout-wrap>
+			<md-list-item>
+				<md-item-content layout="row" flex>
 					<div flex="70" class="md-tile-content">
-						<h3> <b>{{ 'description' | translate }}</b></h3>
+						<h3><b>{{ 'description' | translate }}</b></h3>
 					</div>
 					<div flex="30" class="md-tile-content">
 						<h3><b>{{ 'price' | translate }} </b></h3>
 					</div>
 				</md-item-content>
-			</md-item>
+			</md-list-item>
 		</md-list>
 		<h6 class="rm-sub-header-energized-divider"></h6>
 
 		<md-list>
-			<md-item ng-repeat="product in cart.getProducts()">
-				<md-item-content layout="row" layout-wrap>
-					<div flex="70" class="md-tile-content">							<h3><b>{{ product.name }}</b></h3>
-						<h4 ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.name }}
-						</h4>
+			<md-list-item ng-repeat="product in cart.getProducts()">
+				<md-item-content layout="row" flex>
+					<div flex="70" class="md-tile-content">
+						<h4><b>{{ product.name }}</b></h4>
+						<h5 ng-show="formats.quantity" ng-repeat="formats in product.formats" class="border-less">{{ formats.quantity }} {{ formats.name }}
+						</h5>
 					</div>
-
 					<div flex="30" class="md-tile-content">
-							{{ product.totalPrice | number : 2}}€
+						{{ product.totalPrice | number : 2}}€
 					</div>
 				</md-item-content>
 				<md-divider ng-if="!$last"></md-divider>
-			</md-item>
+			</md-list-item>
 		</md-list>
 
 		<md-list>
-			<md-item>
+			<md-list-item>
 				<h6 class="rm-sub-header-assertive-divider"></h6>
-				<md-item-content layout="row" layout-wrap>
+				<md-item-content layout="row" flex>
 					<div class="center md-tile-content">
 						<b>{{ 'Total' | translate }} :&nbsp</b> <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>, {{ cart.getTotalPrice() | number : 2}}€.  <a ng-show="currentOrder.groupOrderId">&nbsp Au lieu de {{ cart.getTotalPrice()/((100-currentOrder.currentDiscount)/100) | number : 2}} € </a>
 					</div>
 				</md-item-content>
 				<h6 class="rm-sub-header-assertive-divider"></h6>
-			</md-item>
+			</md-list-item>
 		</md-list>
 
-		<div ng-show="isNewOrder.value" layout="row" layout-wrap>
-		<style scoped>
-		    canvas { height: 0px; }
-		  </style>
+		<div ng-show="isNewOrder.value" layout="row" flex>
+			<style scoped>
+			canvas { height: 0px; }
+			</style>
 			<md-slider flex md-discrete  min="5" max="60" ng-model="foodRushTime.value" aria-label="foodRushSlider" ng-change="onSliderChanged(foodRushTime.value)" class="foodrush-slider">
-     		 </md-slider>
-			
+			</md-slider>
+
 		</div>
+
 		<h5 ng-show="isNewOrder.value" class="login-text-first-page cart-foodrush-text">
 			{{ 'howLongFoodRush' | translate }} <a class="energized">Food</a><a class="assertive">Rush</a> ?
 		</h5>
 
-   		<h3 ng-show="isNewOrder.value && foodRushTime.value!==0" class="foodrush-text-res">{{ foodRushTime.value }} {{ 'min' | translate }}</h3>
-   		<h4 ng-show="isNewOrder.value && foodRushTime.value===0" class="select-foodrush"> {{ 'selectFoodRush' | translate }} </h4>
+		<h3 ng-show="isNewOrder.value && foodRushTime.value!==0" class="foodrush-text-res">{{ foodRushTime.value }} {{ 'min' | translate }}</h3>
+		<h4 ng-show="isNewOrder.value && foodRushTime.value===0" class="select-foodrush"> {{ 'selectFoodRush' | translate }} </h4>
 
 		<div class="list list-inset">
 			<label class="item item-input">
@@ -71,9 +72,9 @@
 
 		<div ng-hide="isNewOrder.value" class="cart-chrono">
 			<h3 class="cart-chrono-text">
-            <i class="ion-android-stopwatch energized"></i>
-            <timer countdown="getTimeDiff(currentOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer>
-          </h3>
+				<i class="ion-android-stopwatch energized"></i>
+				<timer countdown="getTimeDiff(currentOrder.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle"> {{mminutes}}:{{sseconds}} </timer>
+			</h3>
 		</div>
 
 		<div class="center">
@@ -81,8 +82,6 @@
 				<a class="cart-button-text"> {{ 'confirmOrder' | translate }}</a>
 			</md-button>
 		</div>
-
-
 	</ion-content>
 
 	<ion-content has-header="true" scroll="false" ng-show="messageBackdrop.show">
@@ -92,8 +91,8 @@
 
 	<ion-content has-header="true" scroll="false" ng-show="loadingBackdrop.show">
 		<ge-loading-backdrop ng-show="loadingBackdrop.show">
-  </ge-loading-backdrop>
-</ion-content>
-	
+		</ge-loading-backdrop>
+	</ion-content>
+
 
 </ion-view>
