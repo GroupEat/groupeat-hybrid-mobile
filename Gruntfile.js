@@ -433,7 +433,7 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'app/templates/**/*.html',
           'test/utils/**/*.js',
-          'test/spec/**/http-provider-interceptor.coffee'
+          'test/spec/**/*.coffee'
         ],
         autoWatch: false,
         reporters: ['dots', 'coverage'],

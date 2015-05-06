@@ -35,6 +35,4 @@
 .config(function (localStorageServiceProvider) {
   localStorageServiceProvider
   .setPrefix('groupeat');
-})
-
-;
+});

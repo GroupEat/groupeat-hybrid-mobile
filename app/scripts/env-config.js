@@ -3,8 +3,8 @@
  angular.module("env-config", [])
 
 .constant("ENV", {
-  "name": "development",
-  "apiEndpoint": "http://groupeat.dev/api"
+  "name": "production",
+  "apiEndpoint": "https://groupeat.fr/api"
 })
 
 ;

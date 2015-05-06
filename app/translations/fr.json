@@ -41,9 +41,9 @@
   "newPasswordNotProvided": "Le nouveau mot de passe doit comporter au minimum 6 caractères",
   "oldPasswordNotProvided": "Le mot de passe actuel doit être fourni",
 
-  "orders": "Commandes",
+  "group-orders": "Commandes groupées",
   "settings": "Réglages",
-  "order": "Mes commandes",
+  "orders": "Mes commandes",
   "menu": "Menu",
   "nothing": "",
 
