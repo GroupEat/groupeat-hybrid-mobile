@@ -13,14 +13,14 @@ angular.module('groupeat.controllers.side-menu', [
       'stateTarget'    : 'group-orders'
     },
     {
-      'title'     : 'settings',
-      'iconClasses'  : 'ion-gear-a',
-      'stateTarget'    : 'settings'
-    },
-    {
       'title'     : 'orders',
       'iconClasses'  : 'ion-clock',
       'stateTarget'     :'order'
+    },
+    {
+      'title'     : 'settings',
+      'iconClasses'  : 'ion-gear-a',
+      'stateTarget'    : 'settings'
     }
   ];
 
