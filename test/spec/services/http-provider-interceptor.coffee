@@ -4,8 +4,9 @@ describe 'Service: HttpProviderInterceptor', ->
 
   # Load the controller's module
   beforeEach ->
-    module 'groupeat'
     module 'groupeat.services.http-provider-interceptor'
+    module 'config'
+    module 'env-config'
     module 'templates'
 
   # Initialize the controller and a mock scope
@@ -46,8 +47,8 @@ describe 'Service: HttpProviderInterceptor', ->
     sandbox.stub(Credentials, 'get', ->
       token: token
     )
-    $httpBackend.expectGET(ENV.apiEndpoint, (headers) ->
+    $httpBackend.expectGET(ENV.apiEndpoint + '/restaurants', (headers) ->
       headers.Authorization.should.contain(token)
-    ).respond(200, '')
-    $http.get(ENV.apiEndpoint)
+    ).respond(404, '')
+    $http.get(ENV.apiEndpoint + '/restaurants')
     $httpBackend.flush()

@@ -52,10 +52,5 @@
     <ge-message-backdrop>
     </ge-message-backdrop>
   </ion-content>
-
-  <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
-        <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
-      </ion-tab>
-  </ion-tabs>
   
 </ion-view>

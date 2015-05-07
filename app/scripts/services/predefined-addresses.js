@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('groupeat.services.predefined-addresses', [
-  'config',
+  'env-config',
   'ngResource'
 ])
 

@@ -5,7 +5,7 @@
 angular.module('groupeat.services.push-notification', [
   'ionic',
   'ngCordova',
-  'config',
+  'env-config',
   'groupeat.services.element-modifier'
 ])
 

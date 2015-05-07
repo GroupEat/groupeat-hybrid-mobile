@@ -14,10 +14,10 @@ angular.module('routing', [])
       }
     }
   })
-
-  .state('group-orders', {
-    url: '/',
-    templateUrl: 'templates/group-orders.html',
+  .state('side-menu', {
+    url: '/side-menu',
+    abstract: true,
+    templateUrl: '/templates/side-menu.html',
     data: {
       permissions: {
         only: ['customer'],
@@ -25,9 +25,28 @@ angular.module('routing', [])
       }
     }
   })
-  .state('order', {
+  .state('side-menu.group-orders', {
+    url: '/',
+    views: {
+      'menuContent' :{
+        templateUrl: 'templates/group-orders.html'
+      }
+    },
+    data: {
+      permissions: {
+        only: ['customer'],
+        redirectTo: 'authentication'
+      }
+    }
+  })
+
+  .state('side-menu.order', {
     url: '/order',
-    templateUrl: 'templates/order.html',
+    views: {
+      'menuContent' :{
+        templateUrl: 'templates/order.html'
+      }
+    },
     data: {
       permissions: {
         only: ['customer'],
@@ -67,9 +86,13 @@ angular.module('routing', [])
   })
 
   // states of settings
-  .state('settings', {
+  .state('side-menu.settings', {
     url: '/settings',
-    templateUrl: 'templates/settings.html',
+    views: {
+      'menuContent' :{
+        templateUrl: 'templates/settings.html'
+      }
+    },
     data: {
       permissions: {
         only: ['customer'],
@@ -98,5 +121,5 @@ angular.module('routing', [])
     }
   });
 
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise('/side-menu/');
 });

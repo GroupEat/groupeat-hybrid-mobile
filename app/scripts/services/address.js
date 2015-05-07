@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('groupeat.services.address', [
-  'config',
+  'env-config',
   'groupeat.services.backend-utils',
   'ngResource',
   'pascalprecht.translate'
