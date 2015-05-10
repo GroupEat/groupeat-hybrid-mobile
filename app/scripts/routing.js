@@ -26,16 +26,10 @@ angular.module('routing', [])
     }
   })
   .state('side-menu.group-orders', {
-    url: '/',
+    url: '/group-orders',
     views: {
       'menuContent' :{
         templateUrl: 'templates/group-orders.html'
-      }
-    },
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
       }
     }
   })
@@ -45,12 +39,6 @@ angular.module('routing', [])
     views: {
       'menuContent' :{
         templateUrl: 'templates/order.html'
-      }
-    },
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
       }
     }
   })
@@ -84,42 +72,14 @@ angular.module('routing', [])
       }
     }
   })
-
-  // states of settings
   .state('side-menu.settings', {
     url: '/settings',
     views: {
       'menuContent' :{
         templateUrl: 'templates/settings.html'
       }
-    },
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
-      }
-    }
-  })
-  .state('settings-notifications', {
-    url: '/settings/settings-notifications',
-    templateUrl: 'templates/settings/settings-notifications.html',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
-      }
-    }
-  })
-  .state('settings-profile', {
-    url: '/settings-profile',
-    templateUrl: 'templates/settings/settings-profile.html',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
-      }
     }
   });
 
-  $urlRouterProvider.otherwise('/side-menu/');
+  $urlRouterProvider.otherwise('/side-menu/group-orders');
 });
