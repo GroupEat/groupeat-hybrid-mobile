@@ -91,7 +91,7 @@ angular.module('groupeat.controllers.authentication', [
       var responseData = response.data;
       Credentials.set(responseData.id, responseData.token);
 
-      $state.go('group-orders');
+      $state.go('side-menu.group-orders');
 
       return response;
     })

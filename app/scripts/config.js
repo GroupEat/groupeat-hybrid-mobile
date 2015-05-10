@@ -9,10 +9,6 @@ angular.module('config', [
   'pascalprecht.translate',
 ])
 
-.config(function($ionicConfigProvider){
-  $ionicConfigProvider.tabs.position('bottom');
-})
-
 .config(function($httpProvider, $translateProvider) {
 
   $httpProvider.interceptors.push('HttpProviderInterceptor');
