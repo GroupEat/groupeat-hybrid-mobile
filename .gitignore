@@ -18,3 +18,5 @@ plugins
 *.license
 *.strings
 *.plist
+
+app/scripts/constants.js

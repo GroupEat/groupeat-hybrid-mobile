@@ -3,10 +3,10 @@
 /* exported onNotification */
 
 angular.module('groupeat.services.push-notification', [
+  'constants',
+  'groupeat.services.element-modifier',
   'ionic',
-  'ngCordova',
-  'env-config',
-  'groupeat.services.element-modifier'
+  'ngCordova'
 ])
 
 

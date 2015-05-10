@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
- angular.module("config", [
- 	'groupeat.services.http-provider-interceptor',
- 	'ionic',
- 	'LocalStorageModule',
-  	'ngCookies',
- 	'ngMaterial',
- 	'pascalprecht.translate',
- ])
+angular.module('config', [
+  'groupeat.services.http-provider-interceptor',
+  'ionic',
+  'LocalStorageModule',
+  'ngCookies',
+  'ngMaterial',
+  'pascalprecht.translate',
+])
 
 .config(function($ionicConfigProvider){
   $ionicConfigProvider.tabs.position('bottom');

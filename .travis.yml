@@ -4,6 +4,7 @@ env:
 node_js:
   - "0.10.26"
 before_script:
+  - cp app/scripts/constants-test.js app/scripts/constants.js
   - npm install -g bower
   - bower install
   - source ~/.rvm/scripts/rvm && rvm install ruby-1.9.3-p551 && rvm use 1.9.3
