@@ -428,7 +428,6 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/lib/angular-messages/angular-messages.js',
           '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
           '<%= yeoman.app %>/lib/angular-permission/dist/angular-permission.js',
-          '<%= yeoman.app %>/lib/hammerjs/hammer.js',
           '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
           '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
           'app/templates/**/*.html',
