@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.group-orders', [
-  'env-config',
+  'constants',
   'groupeat.services.customer',
   'groupeat.services.group-order',
   'groupeat.services.lodash',

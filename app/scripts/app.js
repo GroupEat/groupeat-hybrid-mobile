@@ -8,7 +8,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('groupeat', [
   'config',
-  'env-config',
+  'constants',
   'ionic',
   'jcs-autoValidate',
   'ngCordova',

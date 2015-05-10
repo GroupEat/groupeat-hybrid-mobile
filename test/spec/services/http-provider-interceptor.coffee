@@ -6,7 +6,7 @@ describe 'Service: HttpProviderInterceptor', ->
   beforeEach ->
     module 'groupeat.services.http-provider-interceptor'
     module 'config'
-    module 'env-config'
+    module 'constants'
     module 'templates'
 
   # Initialize the controller and a mock scope
