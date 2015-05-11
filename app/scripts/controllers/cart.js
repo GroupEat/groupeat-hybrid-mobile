@@ -16,12 +16,6 @@ angular.module('groupeat.controllers.cart', [
 
 .controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, LoadingBackdrop, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
-	/* -------------------------------------------------------------------------
-	All variables are defined here.
-	It is usual here to define an object to use its 'value' propoerty, and its 'hasValue' one
-	It is an angular way, especially if those variables are used in ngModels
-	   ------------------------------------------------------------------------
-	*/
 	var $translate = $filter('translate');
 
 	$scope.currentOrder = Order.getCurrentOrder();
@@ -64,26 +58,9 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
-/* --------------------------------------------------------------------------------------------------------------------------- */
-	/* -------------------------------------------------------------------------
-	Here comes method called when user interacts with slider. As long as the cart
-	is no more in cache, we have to store the foodRushTime choosed by user. It is 
-	directly made in the Order service.
-	   ------------------------------------------------------------------------
-	*/
-
 	$scope.onSliderChanged = function(foodRushTime) {
 		Order.setFoodRushTime(foodRushTime);
 	};
-
-/* --------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------
-	Here comes the loading methods. It's kind of constructor of ctrl, they are called
-	when ctrl is created, and could be recalled if they have to.
-	They load information, such as user address, predefined addresses, cart,...
-	   ------------------------------------------------------------------------
-	*/
 
 	$scope.loadCart = function() {
 		$scope.cart = Cart;
@@ -126,17 +103,6 @@ angular.module('groupeat.controllers.cart', [
 			$scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshGroupOrders()');
 		});
 	};
-
-/* --------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------
-	Here comes the confirm order part. After user has fulled information, such as the 
-	wanted time for FoodRush, a Popup shows to ask for the delivery address.
-	There is here two functions : the first sets the Order and calls the popup ;
-	the second is calling when user leaves popup. This is the second function in which 
-	all validation is made, and in which we process to the backend request PlaceOrder
-	   ------------------------------------------------------------------------
-	*/
 
 	$scope.onConfirmOrderTouch = function(ev) {
 		$scope.validateOrder()
@@ -211,7 +177,7 @@ angular.module('groupeat.controllers.cart', [
 					Cart.reset();
 					Order.resetCurrentOrder();
 					$ionicHistory.clearCache();
-					$state.go('group-orders');
+					$state.go('side-menu.group-orders');
 					Popup.displayTitleOnly($translate('ordered'), 3000);
 				})
 				.catch(function(errorMessage) {
@@ -236,15 +202,6 @@ angular.module('groupeat.controllers.cart', [
 		}
 	};
 
-/* --------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------
-	Here comes the validation functions.
-	The first is calling when user first confirms its order (after choosing foodrush time)
-	The second is calling when user confirm its delivery Address.
-	   ------------------------------------------------------------------------
-	*/
-
 	$scope.validateOrder = function() {
 		var deferred = $q.defer();
 		if(Order.getCurrentOrder().groupOrderId === null && $scope.foodRushTime.value === 0)
@@ -264,14 +221,6 @@ angular.module('groupeat.controllers.cart', [
 		deferred.resolve();
 		return deferred.promise;
 	};
-
-/* --------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------
-	Here comes the beautiful binding between html and ctrl.
-	We handle here to update variables in html according to user interaction.
-	   ------------------------------------------------------------------------
-	*/
 
 	$scope.detectPlaceholder = function() {
 		/*
@@ -346,11 +295,6 @@ angular.module('groupeat.controllers.cart', [
 	};
 
 	$scope.resetDeliveryAddress = function() {
-		/*
-		this function is called when user interact with radio button,
-		which means when user changes the type of delivery address 
-		(personal, predefined, or new)
-		*/
 		$scope.deliveryAddress.value = null;
 		$scope.addressSupplement.value = null;
 		$scope.predefinedDeliveryAddress.value = null;
@@ -360,19 +304,8 @@ angular.module('groupeat.controllers.cart', [
 	$scope.getTimeDiff = function (endingAt) {
 		return Order.getTimeDiff(endingAt);
 	};
-/* --------------------------------------------------------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------
-	Here comes the "construction" part of the ctrl. 
-	   ------------------------------------------------------------------------
-	*/
 
 	$scope.loadCart();
 	$scope.loadAddressInformation();
 
 });
-
-	/* -------------------------------------------------------------------------
-	Here comes the sun... 
-	   ------------------------------------------------------------------------
-	*/

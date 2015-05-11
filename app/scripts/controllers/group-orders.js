@@ -114,7 +114,7 @@ angular.module('groupeat.controllers.group-orders', [
         .cancel($translate('cancel'));
         $mdDialog.show(confirm)
         .then(function() {
-          $state.go('settings');
+          $state.go('side-menu.settings');
         });
       }
     });

@@ -542,7 +542,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it 'should take the state to group-orders when skipping further registering, and show a welcome popup', ->
       scope.onSkipFurtherRegisterButtonTouch()
-      $state.go.should.have.been.calledWith('group-orders')
+      $state.go.should.have.been.calledWith('side-menu.group-orders')
 
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
       scope.userRegister.firstName = 'firstName'

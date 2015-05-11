@@ -182,7 +182,7 @@ angular.module('groupeat.controllers.authentication', [
   -------------------    Further Registering (Skippable) -------------------------
   */
   $scope.onSkipFurtherRegisterButtonTouch = function () {
-    $state.go('group-orders') ;
+    $state.go('side-menu.group-orders') ;
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
     return Popup.displayTitleOnly($translate('welcome', {firstName: firstName}), 3000);
   };

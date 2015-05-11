@@ -8,19 +8,19 @@ angular.module('groupeat.controllers.side-menu', [
 
   $scope.menuItems = [
     {
-      'title'     : 'group-orders',
-      'iconClasses'  : 'ion-fork',
-      'stateTarget'    : 'group-orders'
+      'title': 'group-orders',
+      'iconClasses': 'ion-fork',
+      'stateTarget': 'group-orders'
     },
     {
-      'title'     : 'orders',
-      'iconClasses'  : 'ion-clock',
-      'stateTarget'     :'order'
+      'title': 'orders',
+      'iconClasses': 'ion-clock',
+      'stateTarget': 'orders'
     },
     {
-      'title'     : 'settings',
-      'iconClasses'  : 'ion-gear-a',
-      'stateTarget'    : 'settings'
+      'title': 'settings',
+      'iconClasses': 'ion-gear-a',
+      'stateTarget': 'settings'
     }
   ];
 

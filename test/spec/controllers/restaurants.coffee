@@ -77,7 +77,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onRestaurantTouch(1)
       scope.$digest()
       $mdDialog.show.should.be.called
-      $state.go.should.have.been.calledWithExactly('settings')
+      $state.go.should.have.been.calledWithExactly('side-menu.settings')
 
     it 'should not change the state to settings if the user confirms the dialog', ->
       sandbox.stub($mdDialog, 'show').returns($q.reject())
