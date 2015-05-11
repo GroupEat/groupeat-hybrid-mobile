@@ -177,7 +177,7 @@ angular.module('groupeat.controllers.cart', [
 					Cart.reset();
 					Order.resetCurrentOrder();
 					$ionicHistory.clearCache();
-					$state.go('group-orders');
+					$state.go('side-menu.group-orders');
 					Popup.displayTitleOnly($translate('ordered'), 3000);
 				})
 				.catch(function(errorMessage) {
