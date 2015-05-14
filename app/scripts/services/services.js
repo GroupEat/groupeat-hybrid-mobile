@@ -2,6 +2,7 @@
 
 angular.module('groupeat.services', [
   'groupeat.services.address',
+  'groupeat.services.analytics',
   'groupeat.services.authentication',
   'groupeat.services.backend-utils',
   'groupeat.services.cart',
