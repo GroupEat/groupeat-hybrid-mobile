@@ -34,8 +34,8 @@ angular.module('routing', [])
     }
   })
 
-  .state('side-menu.orders', {
-    url: '/orders',
+  .state('side-menu.order', {
+    url: '/order/:orderId',
     views: {
       'menuContent' :{
         templateUrl: 'templates/order.html'

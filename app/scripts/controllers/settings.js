@@ -2,6 +2,7 @@
 
 angular.module('groupeat.controllers.settings', [
 	'groupeat.services.address',
+	'groupeat.services.analytics',
 	'groupeat.services.authentication',
 	'groupeat.services.credentials',
 	'groupeat.services.customer',
@@ -15,9 +16,11 @@ angular.module('groupeat.controllers.settings', [
 	'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function($filter, $q, $scope, $state, _, Address, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
+.controller('SettingsCtrl', function($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
 
 	var $translate = $filter('translate');
+
+	Analytics.trackView('Restaurants');
 
 	/*
 	Models

@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurant-menu', [
-	'ionic',
-	'ngMaterial',
-	'pascalprecht.translate',
+	'groupeat.services.analytics',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
 	'groupeat.services.loading-backdrop',
@@ -11,12 +9,17 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.network',
 	'groupeat.services.order',
 	'groupeat.services.product',
-	'groupeat.services.popup'
+	'groupeat.services.popup',
+	'ionic',
+	'ngMaterial',
+	'pascalprecht.translate'
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
 
 	var $translate = $filter('translate');
+
+	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
 	$scope.isNewOrder = {
 		value: null

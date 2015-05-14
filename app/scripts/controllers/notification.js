@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('groupeat.controllers.notification', [
+  'groupeat.services.analytics',
   'groupeat.services.device-assistant'
 ])
 
-.controller('NotificationCtrl', function($rootScope, $scope) {
+.controller('NotificationCtrl', function($rootScope, $scope, Analytics) {
 
+  Analytics.trackView('Notification');
 
   $scope.hideModal = function() {
     if ($rootScope.notificationModal) {
