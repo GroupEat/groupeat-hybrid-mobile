@@ -5,6 +5,7 @@ angular.module('groupeat.controllers.cart', [
 	'ngAutocomplete',
 	'pascalprecht.translate',
 	'groupeat.services.address',
+	'groupeat.services.analytics',
 	'groupeat.services.cart',
 	'groupeat.services.credentials',
 	'groupeat.services.lodash',
@@ -14,9 +15,11 @@ angular.module('groupeat.controllers.cart', [
 	'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Cart, Order, $q, LoadingBackdrop, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
+.controller('CartCtrl', function($scope, $state, $ionicHistory, _, Analytics, Cart, Order, $q, LoadingBackdrop, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
 
 	var $translate = $filter('translate');
+
+	Analytics.trackView('Cart');
 
 	$scope.currentOrder = Order.getCurrentOrder();
 	$scope.foodRushTime = {

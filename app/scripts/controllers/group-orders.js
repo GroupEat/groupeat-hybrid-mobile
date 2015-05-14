@@ -2,6 +2,7 @@
 
 angular.module('groupeat.controllers.group-orders', [
   'constants',
+  'groupeat.services.analytics',
   'groupeat.services.customer',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
@@ -16,9 +17,11 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
 
   var $translate = $filter('translate');
+
+  Analytics.trackView('Group Orders');
 
   $scope.groupOrders = {};
 

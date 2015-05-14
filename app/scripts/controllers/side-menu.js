@@ -1,10 +1,13 @@
 'use strict';
 
 angular.module('groupeat.controllers.side-menu', [
+  'groupeat.services.analytics',
   'ionic',
 ])
 
-.controller('SideMenuCtrl', function($scope, $ionicSideMenuDelegate) {
+.controller('SideMenuCtrl', function($scope, $ionicSideMenuDelegate, Analytics) {
+
+  Analytics.trackView('Side Menu');
 
   $scope.menuItems = [
     {

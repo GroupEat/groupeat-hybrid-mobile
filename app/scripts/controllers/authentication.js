@@ -5,8 +5,9 @@ angular.module('groupeat.controllers.authentication', [
   'jcs-autoValidate',
   'ngMaterial',
   'pascalprecht.translate',
-  'groupeat.services.authentication',
   'groupeat.services.address',
+  'groupeat.services.authentication',
+  'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.device-assistant',
@@ -17,9 +18,11 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _) {
 
   var $translate = $filter('translate');
+
+  Analytics.trackView('Authentication');
 
   /**
   Scope Initializations

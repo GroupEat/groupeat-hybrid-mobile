@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurants', [
+  'groupeat.services.analytics',
   'groupeat.services.customer',
   'groupeat.services.lodash',
   'groupeat.services.loading-backdrop',
@@ -14,9 +15,11 @@ angular.module('groupeat.controllers.restaurants', [
   'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, $geolocation) {
+.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, $geolocation) {
 
   var $translate = $filter('translate');
+
+  Analytics.trackView('Restaurants');
 
   $scope.restaurants = {};
 
