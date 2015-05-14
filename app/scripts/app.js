@@ -20,6 +20,7 @@ angular.module('groupeat', [
   'validation.match',
   'groupeat.controllers',
   'groupeat.directives',
+  'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver'
@@ -36,7 +37,7 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function($ionicPlatform, $translate, $rootScope, $state, Permission, Credentials) {
+.run(function($ionicPlatform, $translate, $rootScope, $state, Analytics, Credentials, Permission) {
 
   Permission.defineRole('customer', function () {
     // If the returned value is *truthy* then the user has the role, otherwise they don't
@@ -64,6 +65,8 @@ angular.module('groupeat', [
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    Analytics.startTrackerWithId('UA-62863405-1');
 
   });
 
