@@ -51,6 +51,10 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.validationError = undefined;
 
+  /* Analytics Timing */
+  var d = new Date();
+  $scope.initialTime = d.getTime();
+
   /*
   ---------------------- Initial --------------------------
   */
@@ -86,6 +90,7 @@ angular.module('groupeat.controllers.authentication', [
   */
 
   $scope.submitLoginForm = function(form) {
+    Analytics.trackEvent('Authentication', 'Tries to Login');
     ElementModifier.validate(form)
     .then(function() {
       return Authentication.getToken($scope.userLogin);
@@ -93,6 +98,9 @@ angular.module('groupeat.controllers.authentication', [
     .then(function(response) {
       var responseData = response.data;
       Credentials.set(responseData.id, responseData.token);
+
+      Analytics.trackEvent('Authentication', 'Logs In');
+      Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
 
       $state.go('side-menu.group-orders');
 
@@ -184,7 +192,11 @@ angular.module('groupeat.controllers.authentication', [
   /*
   -------------------    Further Registering (Skippable) -------------------------
   */
-  $scope.onSkipFurtherRegisterButtonTouch = function () {
+  $scope.onSkipFurtherRegisterButtonTouch = function (skipped) {
+
+    Analytics.trackEvent('Authentication', 'Registered', 'Skipped : ' + skipped);
+    Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Register', 'Skipped : ' + skipped)
+
     $state.go('side-menu.group-orders') ;
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
     return Popup.displayTitleOnly($translate('welcome', {firstName: firstName}), 3000);
@@ -206,6 +218,7 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.submitFurtherRegisterForm = function(form) {
+    Analytics.trackEvent('Authentication', 'Tries to Register');
     ElementModifier.validate(form)
     .then(function() {
       var customerParams = _.pick($scope.userRegister, ['firstName', 'lastName', 'phoneNumber']);
@@ -216,7 +229,7 @@ angular.module('groupeat.controllers.authentication', [
       return Address.update({id: $scope.userId}, addressParams);
     })
     .then(function() {
-      $scope.onSkipFurtherRegisterButtonTouch();
+      $scope.onSkipFurtherRegisterButtonTouch(false);
     })
     .catch(function(errorMessage) {
       return Popup.displayError(errorMessage, 3000);
