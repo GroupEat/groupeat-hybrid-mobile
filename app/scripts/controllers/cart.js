@@ -25,15 +25,16 @@ angular.module('groupeat.controllers.cart', [
 	$scope.foodRushTime = {
 		value: null
 	};
-	$scope.addressTypeSelected = {
-		value: null
-	};
 
 	$scope.addressTypes = [
 		{ label: $translate('myAddress'), value: 'myAddress' },
 		{ label: $translate('newAddress'), value: 'newAddress'},
 		{ label: $translate('predefinedAddress'), value: 'predefinedAddress'}
 	];
+
+	$scope.addressTypeSelected = {
+		value: $scope.addressTypes[0].value
+	};
 
 	$scope.deliveryAddress = {
 		hasValue: false,
@@ -135,10 +136,11 @@ angular.module('groupeat.controllers.cart', [
 				.then(function() {
 					if ($scope.addressTypeSelected.value === 'myAddress')
 					{
-						Order.setStreet($scope.userAddress.street);
+						var requestBodyAddress = Address.getAddressFromResidencyInformation($scope.userAddress.residency);
+						Order.setStreet(requestBodyAddress.street);
 						Order.setDetails($scope.userAddress.details);
-						Order.setLatitude($scope.userAddress.latitude);
-						Order.setLongitude($scope.userAddress.longitude);
+						Order.setLatitude(requestBodyAddress.latitude);
+						Order.setLongitude(requestBodyAddress.longitude);
 					}
 					else if ($scope.addressTypeSelected.value === 'newAddress')
 					{
