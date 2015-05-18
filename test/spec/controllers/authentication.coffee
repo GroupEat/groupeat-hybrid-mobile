@@ -541,12 +541,12 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.$digest()
 
     it 'should take the state to group-orders when skipping further registering, and show a welcome popup', ->
-      scope.onSkipFurtherRegisterButtonTouch()
+      scope.hasRegistered(true)
       $state.go.should.have.been.calledWith('side-menu.group-orders')
 
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
       scope.userRegister.firstName = 'firstName'
-      scope.onSkipFurtherRegisterButtonTouch()
+      scope.hasRegistered(true)
       Popup.displayTitleOnly.should.have.been.calledWith('welcome', 3000)
 
     it 'should watch on all fields of the second step of userRegister', ->
@@ -692,7 +692,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup.displayError.should.have.been.called
       Address.update.should.have.been.called
 
-    it 'if there are no errors, the onSkipFurtherRegisterButtonTouch should be called', ->
+    it 'if there are no errors, the hasRegistered should be called', ->
       sandbox.stub(ElementModifier, 'validate', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -708,7 +708,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
-      sandbox.spy(scope, 'onSkipFurtherRegisterButtonTouch')
+      sandbox.spy(scope, 'hasRegistered')
 
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
@@ -716,4 +716,4 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Customer.update.should.have.been.called
       Address.update.should.have.been.called
       Popup.displayError.should.have.not.been.called
-      scope.onSkipFurtherRegisterButtonTouch.should.have.been.called
+      scope.hasRegistered.should.have.been.calledWithExactly(false)
