@@ -61,11 +61,19 @@ module.exports = function (grunt) {
           }
         }
       },
+      staging: {
+        constants: {
+          ENV: {
+            name: 'staging',
+            apiEndpoint: 'http://staging.groupeat.fr/api'
+          }
+        }
+      },
       production: {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://staging.groupeat.fr/api'
+            apiEndpoint: 'https://groupeat.fr/api'
           }
         }
       }
@@ -603,16 +611,14 @@ module.exports = function (grunt) {
     grunt.config('concurrent.ionic.tasks', ['ionic:run:' + this.args.join(), 'watch']);
     return grunt.task.run(['init', 'concurrent:ionic']);
   });
+
   grunt.registerTask('build', function() {
     return grunt.task.run(['init', 'ionic:build:' + this.args.join()]);
-  });
-  grunt.registerTask('release', function() {
-    return grunt.task.run(['compress', 'ionic:build:' + this.args.join()]);
   });
 
   grunt.registerTask('init', [
     'clean',
-    'ngconstant:development',
+    'ngconstant:' + grunt.option('env') || 'development',
     'wiredep',
     'concurrent:server',
     'autoprefixer',
@@ -623,7 +629,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('compress', [
     'clean',
-    'ngconstant:production',
+    'ngconstant:'+ grunt.option('env') || 'staging',
     'wiredep',
     'useminPrepare',
     'concurrent:dist',
