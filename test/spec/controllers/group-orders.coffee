@@ -97,22 +97,14 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should call onRefreshGroupOrders', ->
       sandbox.stub(LoadingBackdrop, 'backdrop')
-      sandbox.stub(scope, 'onRefreshGroupOrders', ->
-        return $q.defer().promise
-      )
+      sandbox.stub(scope, 'onRefreshGroupOrders').returns($q.defer().promise)
       scope.initCtrl()
       scope.onRefreshGroupOrders.should.have.been.called
 
     it 'should remove the loading backdrop once the promise returned by onRefreshGroupOrders is rejected', ->
       sandbox.stub(LoadingBackdrop, 'noBackdrop')
-      sandbox.stub(Network, 'hasConnectivity', ->
-        return false
-      )
-      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
-        deferred = $q.defer()
-        deferred.reject()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns(false)
+      sandbox.stub(GroupOrder, 'get').returns($q.defer().promise)
       scope.initCtrl()
       scope.$digest()
       LoadingBackdrop.noBackdrop.should.have.been.called
@@ -194,10 +186,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return deferred.promise
       )
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
-      scope.onRefreshGroupOrders()
-      scope.$digest()
-
       scope.onRefreshGroupOrders().should.be.fulfilled
+      scope.$digest()
       expect(scope.groupOrders).to.be.equal(groupOrderEmptyListMock)
 
     it 'should show a generic failure backdrop message if encountered pb loading groupOrders', ->
@@ -216,10 +206,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred.reject()
         return deferred.promise
       )
-      scope.onRefreshGroupOrders()
-      scope.$digest()
       scope.onRefreshGroupOrders().should.be.rejected
-
+      scope.$digest()
       MessageBackdrop.genericFailure.should.have.been.calledWithExactly('onRefreshGroupOrders()')
 
     it 'should show backdrop message if data is empty (no GroupOrder)', ->
@@ -237,9 +225,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return deferred.promise
       )
 
-      scope.onRefreshGroupOrders()
-      scope.$digest()
       scope.onRefreshGroupOrders().should.be.fulfilled
+      scope.$digest()
 
       expect(scope.messageBackdrop.show).to.be.equal(true)
       expect(scope.messageBackdrop.title).to.be.equal('noGroupOrdersTitle')
@@ -264,9 +251,8 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return deferred.promise
       )
 
-      scope.onRefreshGroupOrders()
-      scope.$digest()
       scope.onRefreshGroupOrders().should.be.fulfilled
+      scope.$digest()
 
       expect(scope.messageBackdrop.show).to.be.equal(false)
       MessageBackdrop.noBackdrop.should.have.been.called
