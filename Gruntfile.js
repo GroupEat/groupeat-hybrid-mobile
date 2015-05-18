@@ -613,27 +613,30 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build', function() {
-    return grunt.task.run(['init', 'ionic:build:' + this.args.join()]);
+    var tasks = ['init'];
+    var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
+    tasks.push(preparationTask);
+    tasks.push('ionic:build:' + this.args.join());
+    return grunt.task.run(tasks);
   });
 
+  var env = grunt.option('env') || 'development';
   grunt.registerTask('init', [
     'clean',
-    'ngconstant:' + grunt.option('env') || 'development',
+    'ngconstant:' + env,
     'wiredep',
+    'autoprefixer'
+  ]);
+
+  grunt.registerTask('expand', [
     'concurrent:server',
-    'autoprefixer',
     'newer:copy:app',
     'newer:copy:tmp'
   ]);
 
-
   grunt.registerTask('compress', [
-    'clean',
-    'ngconstant:'+ grunt.option('env') || 'staging',
-    'wiredep',
     'useminPrepare',
     'concurrent:dist',
-    'autoprefixer',
     'concat',
     'ngAnnotate',
     'copy:dist',
@@ -649,6 +652,7 @@ module.exports = function (grunt) {
     'newer:jshint',
     'newer:coffeelint:tests',
     'karma:continuous',
+    'init',
     'compress'
   ]);
 
