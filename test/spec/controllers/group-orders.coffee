@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = LoadingBackdrop = MessageBackdrop = Network = Order = Popup = $geolocation = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = Geolocation = LoadingBackdrop = MessageBackdrop = Network = Order = Popup = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -43,7 +43,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       MessageBackdrop = $injector.get('MessageBackdrop')
       Order = $injector.get('Order')
       Popup = $injector.get('Popup')
-      $geolocation = $injector.get('$geolocation')
+      Geolocation = $injector.get('Geolocation')
       $mdDialog = $injector.get('$mdDialog')
       GroupOrder = $injector.get('GroupOrder')
       Network = $injector.get('Network')
@@ -57,11 +57,13 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $q = $injector.get('$q')
       $compile = $injector.get('$compile')
 
+      sandbox.stub(Network, 'hasConnectivity').returns(false)
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, $geolocation: $geolocation, _: $injector.get('_')
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
       })
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
+
 
   cleanDialog = ->
     body = angular.element(document.body)
@@ -70,15 +72,11 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     dialogElement.remove()
     scope.$digest()
 
-  afterEach ->
-    sandbox.restore()
-    #cleanDialog()
-
-  beforeEach ->
-    scope.$digest()
-    #cleanDialog()
 
   describe "Constructor", ->
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
 
     it 'should initialize groupOrders and isLoadingView variables (isLoadingView is a boolean which turns true when receive date from backend)', ->
       scope.groupOrders.should.be.empty
@@ -87,6 +85,10 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       # TODO test if the method onRefreshGroupOrders is calling when GroupOrderCtrl
 
   describe 'GroupOrders#initCtrl', ->
+
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
 
     it 'should show a loading backdrop', ->
       sandbox.stub(LoadingBackdrop, 'backdrop')
@@ -100,16 +102,19 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.onRefreshGroupOrders.should.have.been.called
 
     it 'should remove the loading backdrop once the promise returned by onRefreshGroupOrders is rejected', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
       sandbox.stub(LoadingBackdrop, 'noBackdrop')
-      sandbox.stub(scope, 'onRefreshGroupOrders').returns($q.reject())
+      sandbox.stub(Network, 'hasConnectivity').returns(false)
+      sandbox.stub(GroupOrder, 'get').returns($q.defer().promise)
       scope.initCtrl()
-      LoadingBackdrop.noBackdrop.should.have.not.been.called
       scope.$digest()
       LoadingBackdrop.noBackdrop.should.have.been.called
 
   describe "GroupOrders#onRefreshGroupOrders", ->
 
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
+      
     it 'should check connectivity', ->
       callback = sandbox.stub(Network, 'hasConnectivity')
       scope.onRefreshGroupOrders()
@@ -119,7 +124,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       callback = sandbox.stub(MessageBackdrop, 'noNetwork')
       scope.onRefreshGroupOrders().should.be.rejected
-      scope.$digest()
       assert(callback.calledOnce)
 
     it 'should NOT show backdrop message if Network', ->
@@ -129,24 +133,18 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       assert(callback.notCalled)
 
     it 'should check user current position', ->
-      sandbox.spy($geolocation, 'getCurrentPosition')
+      sandbox.spy(Geolocation, 'getGeolocation')
       # We make network working to test geolocation access
       sandbox.stub(Network, 'hasConnectivity').returns(true)
       scope.onRefreshGroupOrders()
-      $geolocation.getCurrentPosition.should.have.been.called
+      Geolocation.getGeolocation.should.have.been.called
 
     it 'should show backdrop message if unable to access to user geolocation', ->
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
-        deferred = $q.defer()
-        deferred.reject('cest le bordel...')
-        return deferred.promise
-      )
-      sandbox.stub(Network, 'hasConnectivity', () ->
-        return true
-      )
+      sandbox.stub(Geolocation, 'getGeolocation').returns($q.reject())
+      sandbox.stub(Network, 'hasConnectivity').returns(true)
       sandbox.stub(MessageBackdrop, 'noGeolocation')
       scope.onRefreshGroupOrders().should.be.rejected
-      scope.$apply()
+      scope.$digest()
       MessageBackdrop.noGeolocation.should.have.been.calledOnce
 
     it 'should show NO geolocation backdrop message if able to access to user geolocation', ->
@@ -154,7 +152,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return true
       )
       # We make user location accessible
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+      sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
         return deferred.promise
@@ -177,7 +175,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return true
       )
       # We make user location accessible
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+      sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
         return deferred.promise
@@ -190,7 +188,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
       scope.onRefreshGroupOrders().should.be.fulfilled
       scope.$digest()
-
       expect(scope.groupOrders).to.be.equal(groupOrderEmptyListMock)
 
     it 'should show a generic failure backdrop message if encountered pb loading groupOrders', ->
@@ -199,7 +196,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         return true
       )
       # We make user location accessible
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+      sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
         return deferred.promise
@@ -209,18 +206,15 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred.reject()
         return deferred.promise
       )
-      $httpBackend.expectGET(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=48&longitude=2&include=restaurant').respond(groupOrderEmptyListMock)
       scope.onRefreshGroupOrders().should.be.rejected
       scope.$digest()
-
       MessageBackdrop.genericFailure.should.have.been.calledWithExactly('onRefreshGroupOrders()')
 
     it 'should show backdrop message if data is empty (no GroupOrder)', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
-      # We make user location accessible
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+      sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
         return deferred.promise
@@ -246,8 +240,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
-      # We make user location accessible
-      sandbox.stub($geolocation, 'getCurrentPosition', () ->
+      sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
         return deferred.promise
@@ -257,6 +250,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred.resolve(groupOrderNotEmptyListMock.data)
         return deferred.promise
       )
+
       scope.onRefreshGroupOrders().should.be.fulfilled
       scope.$digest()
 

@@ -12,6 +12,7 @@ angular.module('groupeat.services', [
   'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
+  'groupeat.services.geolocation',
   'groupeat.services.group-order',
   'groupeat.services.http-provider-interceptor',
   'groupeat.services.lodash',
