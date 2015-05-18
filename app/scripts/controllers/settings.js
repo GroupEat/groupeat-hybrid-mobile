@@ -111,7 +111,7 @@ angular.module('groupeat.controllers.settings', [
 			$scope.newPassword = '';
 			var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
 			customerSettings.noNotificationAfter = $scope.customerSettings.noNotificationAfter.value;
-			return CustomerSettings.update(customerSettings);
+			return CustomerSettings.update(customerId, customerSettings);
 		})
 		.then(function(customerSettings) {
 			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
