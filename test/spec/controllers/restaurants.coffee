@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = $geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -22,22 +22,23 @@ describe 'Ctrl: RestaurantsCtrl', ->
       LoadingBackdrop = $injector.get('LoadingBackdrop')
       Network = $injector.get('Network')
       _ = $injector.get('_')
-      $geolocation = $injector.get('$geolocation')
+      Geolocation = $injector.get('Geolocation')
       $mdDialog = $injector.get('$mdDialog')
       Popup = $injector.get('Popup')
       Order = $injector.get('Order')
+      ENV = $injector.get('ENV')
 
+      sandbox.stub(Network, 'hasConnectivity').returns(false)
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, $geolocation: $geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
+
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
-  afterEach ->
-    sandbox.restore()
-
   beforeEach ->
-    scope.$apply()
+    scope.$digest()
+    Network.hasConnectivity.restore()
 
   describe 'Constructor', ->
 
@@ -175,7 +176,12 @@ describe 'Ctrl: RestaurantsCtrl', ->
         longitude: 1
 
     beforeEach ->
+      sandbox.restore()
       sandbox.spy(scope, '$broadcast')
+
+    afterEach ->
+      scope.$digest()
+      sandbox.restore()
 
     it 'should show an absence of connectivity message backdrop when there is no connectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns(false)
@@ -190,24 +196,22 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
     it 'should show a lack of geolocation permission message backdrop if the current position cannot be aquired', ->
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition').returns($q.reject())
+      sandbox.stub(Geolocation, 'getGeolocation').returns($q.reject())
       sandbox.spy(MessageBackdrop, 'noGeolocation')
       scope.onRefreshRestaurants().should.be.rejected
       scope.$digest()
-      messageBackdrop = MessageBackdrop.noGeolocation()
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+      scope.messageBackdrop.should.deep.equal(MessageBackdrop.noGeolocation())
 
     it 'should eventually broadcast scroll.refreshComplete if the current position cannot be aquired', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition').returns($q.reject())
+      sandbox.stub(Geolocation, 'getGeolocation').returns($q.reject())
       scope.onRefreshRestaurants()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
     it 'should show a generic network failure message backdrop if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -221,7 +225,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should eventually broadcast scroll.refreshComplete if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -233,7 +237,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should show a message backdrop when no restaurants are returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -254,7 +258,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should not show any backdrop if at least one restaurant is returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -270,7 +274,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should load restaurants in the scope if at least one is returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -287,7 +291,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should display logo placeholder if restaurant data from back does not have one', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise
@@ -311,7 +315,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should eventually broadcast scroll.refreshComplete if the server returns a list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub($geolocation, 'getCurrentPosition', ->
+      sandbox.stub(Geolocation, 'getGeolocation', ->
         deferred = $q.defer()
         deferred.resolve(currentPosition)
         return deferred.promise

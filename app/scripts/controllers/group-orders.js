@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.group-orders', [
   'constants',
   'groupeat.services.analytics',
   'groupeat.services.customer',
+  'groupeat.services.geolocation',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
   'groupeat.services.message-backdrop',
@@ -12,12 +13,12 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.popup',
   'groupeat.services.loading-backdrop',
   'groupeat.controllers.side-menu',
-  'ngGeolocation',
   'ngMaterial',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, $geolocation, _) {
+
+.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, Geolocation, _) {
 
   var $translate = $filter('translate');
 
@@ -47,7 +48,7 @@ angular.module('groupeat.controllers.group-orders', [
     }
     else
     {
-      $geolocation.getCurrentPosition()
+      Geolocation.getGeolocation()
       .then(function(currentPosition) {
         $scope.userCurrentPosition = currentPosition;
         GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude)
