@@ -139,12 +139,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
-      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
-        deferred = $q.defer()
-        deferred.reject()
-        return deferred.promise
-      )
-
       sandbox.stub(MessageBackdrop, 'noGeolocation')
       scope.onRefreshGroupOrders().should.be.rejected
       scope.$digest()
@@ -221,7 +215,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
-      # We make user location accessible
       sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
@@ -249,7 +242,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox.stub(Network, 'hasConnectivity', () ->
         return true
       )
-      # We make user location accessible
       sandbox.stub(Geolocation, 'getGeolocation', () ->
         deferred = $q.defer()
         deferred.resolve(positionMock)
@@ -281,11 +273,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
   describe 'GroupOrdersCtrl#onNewOrderTouch', ->
 
     it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
-      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
-        deferred = $q.defer()
-        deferred.reject()
-        return deferred.promise
-      )
       sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
       sandbox.stub(Popup, 'displayError')
       scope.onJoinOrderTouch(groupOrderMock)
@@ -294,11 +281,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should open a confirm dialog dialog if customer information are missing', ->
       # TODO : Test could be better (spying on the chained methods)
-      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
-        deferred = $q.defer()
-        deferred.reject()
-        return deferred.promise
-      )
       sandbox.spy($mdDialog, 'confirm')
       missingPropertiesString =  'missingPropertiesString'
       sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
@@ -307,11 +289,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $mdDialog.confirm.should.be.called
 
     it 'should change the state to settings if the user confirms the dialog', ->
-      sandbox.stub(GroupOrder, 'get', (latitude, longitude) ->
-        deferred = $q.defer()
-        deferred.reject()
-        return deferred.promise
-      )
       sandbox.stub($mdDialog, 'show', ->
         deferred = $q.defer()
         deferred.resolve()
