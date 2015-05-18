@@ -61,6 +61,14 @@ module.exports = function (grunt) {
           }
         }
       },
+      staging: {
+        constants: {
+          ENV: {
+            name: 'staging',
+            apiEndpoint: 'http://staging.groupeat.fr/api'
+          }
+        }
+      },
       production: {
         constants: {
           ENV: {
@@ -603,31 +611,32 @@ module.exports = function (grunt) {
     grunt.config('concurrent.ionic.tasks', ['ionic:run:' + this.args.join(), 'watch']);
     return grunt.task.run(['init', 'concurrent:ionic']);
   });
+
   grunt.registerTask('build', function() {
-    return grunt.task.run(['init', 'ionic:build:' + this.args.join()]);
-  });
-  grunt.registerTask('release', function() {
-    return grunt.task.run(['compress', 'ionic:build:' + this.args.join()]);
+    var tasks = ['init'];
+    var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
+    tasks.push(preparationTask);
+    tasks.push('ionic:build:' + this.args.join());
+    return grunt.task.run(tasks);
   });
 
+  var env = grunt.option('env') || 'development';
   grunt.registerTask('init', [
     'clean',
-    'ngconstant:development',
+    'ngconstant:' + env,
     'wiredep',
+    'autoprefixer'
+  ]);
+
+  grunt.registerTask('expand', [
     'concurrent:server',
-    'autoprefixer',
     'newer:copy:app',
     'newer:copy:tmp'
   ]);
 
-
   grunt.registerTask('compress', [
-    'clean',
-    'ngconstant:production',
-    'wiredep',
     'useminPrepare',
     'concurrent:dist',
-    'autoprefixer',
     'concat',
     'ngAnnotate',
     'copy:dist',
@@ -643,12 +652,13 @@ module.exports = function (grunt) {
     'newer:jshint',
     'newer:coffeelint:tests',
     'karma:continuous',
+    'init',
     'compress'
   ]);
 
   grunt.registerTask('pull', ['gitpull:task','npm-install']);
 
   grunt.registerTask('upload', function() {
-    return grunt.task.run(['compress', 'ionic:upload' + this.args.join()]);
+    return grunt.task.run(['init', 'compress', 'ionic:upload' + this.args.join()]);
   });
 };
