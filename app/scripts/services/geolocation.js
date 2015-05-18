@@ -9,7 +9,7 @@ angular.module('groupeat.services.geolocation', [
 .factory('Geolocation', function($q, ENV, $geolocation) {
   var getGeolocation = function() {
     var defer = $q.defer();
-    if(ENV.name === 'development') {
+    if(ENV.name !== 'production') {
       var response = {'coords': {'latitude': 48.7107340, 'longitude': 2.2182329}};
       defer.resolve(response);
     }
