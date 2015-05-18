@@ -659,6 +659,6 @@ module.exports = function (grunt) {
   grunt.registerTask('pull', ['gitpull:task','npm-install']);
 
   grunt.registerTask('upload', function() {
-    return grunt.task.run(['compress', 'ionic:upload' + this.args.join()]);
+    return grunt.task.run(['init', 'compress', 'ionic:upload' + this.args.join()]);
   });
 };
