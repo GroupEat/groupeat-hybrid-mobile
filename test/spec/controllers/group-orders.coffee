@@ -57,6 +57,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $q = $injector.get('$q')
       $compile = $injector.get('$compile')
 
+      sandbox.stub(Network, 'hasConnectivity').returns(false)
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
         $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
       })
@@ -71,7 +72,11 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     dialogElement.remove()
     scope.$digest()
 
+
   describe "Constructor", ->
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
 
     it 'should initialize groupOrders and isLoadingView variables (isLoadingView is a boolean which turns true when receive date from backend)', ->
       scope.groupOrders.should.be.empty
@@ -80,6 +85,10 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       # TODO test if the method onRefreshGroupOrders is calling when GroupOrderCtrl
 
   describe 'GroupOrders#initCtrl', ->
+
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
 
     it 'should show a loading backdrop', ->
       sandbox.stub(LoadingBackdrop, 'backdrop')
@@ -110,6 +119,10 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   describe "GroupOrders#onRefreshGroupOrders", ->
 
+    beforeEach ->
+      scope.$digest()
+      Network.hasConnectivity.restore()
+      
     it 'should check connectivity', ->
       callback = sandbox.stub(Network, 'hasConnectivity')
       scope.onRefreshGroupOrders()
@@ -136,9 +149,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should show backdrop message if unable to access to user geolocation', ->
       sandbox.stub(Geolocation, 'getGeolocation').returns($q.reject())
-      sandbox.stub(Network, 'hasConnectivity', () ->
-        return true
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns(true)
       sandbox.stub(MessageBackdrop, 'noGeolocation')
       scope.onRefreshGroupOrders().should.be.rejected
       scope.$digest()
