@@ -192,7 +192,7 @@ angular.module('groupeat.controllers.authentication', [
   /*
   -------------------    Further Registering (Skippable) -------------------------
   */
-  $scope.onSkipFurtherRegisterButtonTouch = function (skipped) {
+  $scope.hasRegistered = function (skipped) {
 
     Analytics.trackEvent('Authentication', 'Registered', 'Skipped : ' + skipped);
     Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Register', 'Skipped : ' + skipped)
@@ -229,7 +229,7 @@ angular.module('groupeat.controllers.authentication', [
       return Address.update({id: $scope.userId}, addressParams);
     })
     .then(function() {
-      $scope.onSkipFurtherRegisterButtonTouch(false);
+      $scope.hasRegistered(false);
     })
     .catch(function(errorMessage) {
       return Popup.displayError(errorMessage, 3000);
