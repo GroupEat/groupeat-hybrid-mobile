@@ -6,7 +6,8 @@ angular.module('groupeat.controllers.orders', [
   'groupeat.services.lodash',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
-  'groupeat.services.order'
+  'groupeat.services.order',
+  'timer'
 ])
 
 .controller('OrdersCtrl', function(_, $q, $scope, $state, $stateParams, Credentials, LoadingBackdrop, MessageBackdrop, Network, Order) {
@@ -51,7 +52,7 @@ angular.module('groupeat.controllers.orders', [
           $scope.messageBackdrop = MessageBackdrop.noBackdrop();
         }
       })
-      .catch(function(errorKey) {
+      .catch(function() {
         $scope.messageBackdrop = MessageBackdrop.genericFailure();
         deferred.reject();
       })
@@ -60,6 +61,10 @@ angular.module('groupeat.controllers.orders', [
       });
     }
     return deferred.promise;
+  };
+
+  $scope.getTimeDiff = function (endingAt) {
+    return Order.getTimeDiff(endingAt);
   };
 
   $scope.initCtrl();
