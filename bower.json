@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "ionic": "1.0.0",
-    "lodash": "v2.4.1",
-    "angular-lodash": "~0.1.2",
+    "lodash": "3.9.3",
     "angular-translate": "~2.6.1",
     "angular-translate-loader-static-files": "~2.6.1",
     "angular-translate-storage-local": "~2.6.1",
