@@ -1,12 +1,16 @@
 'use strict';
 
-angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
+angular.module('groupeat.services.order', [
+	'constants',
+	'groupeat.services.backend-utils',
+	'groupeat.services.lodash'
+])
 
-.service('Order', function(ENV, $q, $resource, BackendUtils) {
+.service('Order', function(_, $q, $resource, BackendUtils, ENV) {
 
 	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
 	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
-	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=restaurant');
+	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant');
 
 	var
 	currentOrder = {
@@ -152,7 +156,23 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		var defer = $q.defer();
 		forCustomerResource.get({customerId: customerId}).$promise
 		.then(function(response) {
-			defer.resolve(response.data);
+			var orders = [], oldOrders = [];
+			_.forEach(response.data, function(rawOrder) {
+        var order = {'discountedPrice': rawOrder.discountedPrice/100};
+				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
+				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
+				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
+				order.endingAt = new Date(rawOrder.groupOrder.data.endingAt);
+				if (order.closedAt)
+				{
+					oldOrders.push(order);
+				}
+				else
+				{
+					orders.push(order);
+				}
+      });
+      defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
 		})
 		.catch(function() {
 			defer.reject();
