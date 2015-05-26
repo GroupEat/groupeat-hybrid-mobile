@@ -595,13 +595,13 @@ module.exports = function (grunt) {
     'watch:karma'
   ]);
 
-  grunt.registerTask('serve', function (target) {
-    if (target === 'compress') {
-      return grunt.task.run(['compress', 'ionic:serve']);
-    }
-
+  grunt.registerTask('serve', function () {
+    var tasks = ['init'];
+    var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
+    tasks.push(preparationTask);
+    tasks.push('concurrent:ionic');
     grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch']);
-    grunt.task.run(['init', 'concurrent:ionic']);
+    grunt.task.run(tasks);
   });
   grunt.registerTask('emulate', function() {
     grunt.config('concurrent.ionic.tasks', ['ionic:emulate:' + this.args.join(), 'watch']);
