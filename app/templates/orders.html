@@ -5,39 +5,33 @@
 
 	<ion-content has-header="true" ng-show="!messageBackdrop.show">
 
-    <ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshRestaurants()">
+    <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
     </ion-refresher>
 
 		<md-list>
-      <md-item ng-repeat="order in orders" on-tap="onTapOrder(order)">
-        <md-item-content class="go-divider-header">
-          <md-toolbar class="go-list-header">
-            <span class="list-title"> <i class="italic">{{ 'pizzeria' | translate }} </i>: {{ order.restaurant.data.name }} </span>
-          </md-toolbar>
+			<md-list-item ng-repeat="order in orders" on-tap="onTapOrder(order)" class="md-3-line">
+				<div class="md-list-item-text">
+					<h3>{{ order.restaurant }}</h3>
+					<h4 ng-if="order.closedAt">{{ order.closedAt | date:'dd/MM/yyyy'}}</h4>
+					<div ng-if="!order.closedAt">
+						<i class="ion-android-stopwatch assertive"></i>
+						<timer countdown="getTimeDiff(order.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle">
+							{{mminutes}}:{{sseconds}}
+						</timer>
+					</div>
+					<h4 class="assertive" ng-if="!order.closedAt">{{ order.endingAt | date:'HH:mm:ss'}}</h4>
+					<div layout="row">
+						<div flex class="center">
+			        <b>{{ order.discountedPrice }} <i class="ion-social-euro assertive"></i></b>
+			      </div>
+			      <div flex class="center">
+			        <b> {{ order.discount | number: 2 }}% <i class="ion-arrow-graph-down-right assertive"></i></b>
+			      </div>
+					</p>
+				</div>
+				<md-divider></md-divider>
+      </md-list-item>
 
-        </md-item-content>
-        <md-item-content layout="row" layout-wrap class="go-details-list">
-
-            <div flex="50">
-              <div class="go-details"> {{ 'remainingCapacity' | translate }} {{ order.createdAt }}
-              </div>
-
-            </div>
-
-            <div flex="25" class="center">
-              <i class="ion-arrow-graph-down-right assertive go-icon"></i>
-              <b class="go-discount"> {{ order.rawPrice }}%</b>
-            </div>
-
-						<div flex="25" class="center">
-              <i class="ion-arrow-graph-down-right assertive go-icon"></i>
-              <b class="go-discount"> {{ order.discountedPrice }}%</b>
-            </div>
-        </md-item-content>
-
-
-        <md-divider class="go-divider"></md-divider>
-      </md-item>
     </md-list>
 
   </ion-content>
@@ -46,10 +40,5 @@
     <ge-message-backdrop>
     </ge-message-backdrop>
   </ion-content>
-
-  <ion-tabs id="bottom-tabs" ng-hide="$root.hideTabs" ng-controller="BottomTabsCtrl" class="tabs-energized tabs-icon-top">
-        <ion-tab ng-repeat="tab in bottomTabs" title="{{ tab.title | translate }}" icon-on="{{ tab.iconClasses }}" icon-off="{{ tab.iconClasses }}" ui-sref="{{ tab.stateTarget }}">
-      </ion-tab>
-  </ion-tabs>
 
 </ion-view>
