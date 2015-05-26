@@ -118,11 +118,14 @@ angular.module('groupeat.services.order', [
 		return defer.promise;
 	},
 
-	getTimeDiff = function(date) {
+	getTimeDiff = function(endingTime) {
 		var response = null;
-		if(date !== null) {
-			var currentTime = new Date() ;
-			var endingTime = new Date(date.replace(/-/g, '/'));
+		if(endingTime !== null) {
+			var currentTime = new Date();
+			if (!(endingTime instanceof Date))
+			{
+				endingTime = new Date(endingTime.replace(/-/g, '/'));
+			}
 			response = Math.abs(endingTime - currentTime)/1000;
 		}
 		return response;
