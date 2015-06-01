@@ -43,6 +43,14 @@ angular.module('groupeat.services.analytics', [])
     }
   },
 
+  trackTimingSinceTime = function(category, initialTime, variable, label) {
+    if (typeof analytics !== 'undefined')
+    {
+      var d = new Date();
+      analytics.trackTiming(category, d.getTime()-initialTime, variable, label);
+    }
+  },
+
   /**
   * @ngdoc function
   * @name Analytics#trackView
@@ -62,6 +70,7 @@ angular.module('groupeat.services.analytics', [])
   return {
     startTrackerWithId: startTrackerWithId,
     trackEvent: trackEvent,
+    trackTimingSinceTime: trackTimingSinceTime,
     trackView: trackView
   };
 }
