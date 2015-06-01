@@ -1,0 +1,25 @@
+machine:
+    node:
+        version: 0.10.22
+    environment:
+        CODECLIMATE_REPO_TOKEN: a3d17e89ce9838fc779c7b88522cc25db043e31d1529ff9b17d11b26509d00df
+    pre:
+        - source ~/.rvm/scripts/rvm
+        - rvm use 1.9.3
+
+checkout:
+    post:
+        - cp app/scripts/constants-test.js app/scripts/constants.js
+
+dependencies:
+    pre:
+        - npm install -g bower grunt-cli
+        - rvm install ruby-1.9.3-p551
+        - gem install compass
+        - bower install
+        - grunt init
+
+test:
+  post:
+      - npm install -g codeclimate-test-reporter
+      - codeclimate < coverage/lcov/lcov.info
