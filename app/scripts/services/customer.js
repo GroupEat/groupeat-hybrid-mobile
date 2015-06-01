@@ -118,8 +118,11 @@ angular.module('groupeat.services.customer', [
         }
       });
       Address.get(customerId)
-      .catch(function() {
-        missingProperties.push('address');
+      .then(function(address) {
+        if (!address)
+        {
+          missingProperties.push('address');
+        }
       })
       .finally(function() {
         if (_.isEmpty(missingProperties))

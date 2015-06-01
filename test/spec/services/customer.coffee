@@ -125,7 +125,10 @@ describe 'Service: Customer', ->
           lastName: 'lastName'
           phoneNumber: '0606060606'
       sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get').returns($q.reject())
+      sandbox.stub Address, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
 
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
@@ -138,7 +141,7 @@ describe 'Service: Customer', ->
       sandbox.stub(Credentials, 'get').returns(id: 1)
       sandbox.stub(Address, 'get', ->
         deferred = $q.defer()
-        deferred.resolve()
+        deferred.resolve('address')
         return deferred.promise
       )
 
@@ -154,7 +157,7 @@ describe 'Service: Customer', ->
       sandbox.stub(Credentials, 'get').returns(id: 1)
       sandbox.stub(Address, 'get', ->
         deferred = $q.defer()
-        deferred.resolve()
+        deferred.resolve('address')
         return deferred.promise
       )
 
