@@ -6,6 +6,7 @@ angular.module('groupeat.controllers', [
   'groupeat.controllers.group-orders',
   'groupeat.controllers.notification',
   'groupeat.controllers.order',
+  'groupeat.controllers.orders',
   'groupeat.controllers.restaurant-menu',
   'groupeat.controllers.restaurants',
   'groupeat.controllers.settings',

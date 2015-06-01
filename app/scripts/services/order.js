@@ -1,10 +1,16 @@
 'use strict';
 
-angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
+angular.module('groupeat.services.order', [
+	'constants',
+	'groupeat.services.backend-utils',
+	'groupeat.services.lodash'
+])
 
-.service('Order', function(ENV, $q, $resource, BackendUtils) {
+.service('Order', function(_, $q, $resource, BackendUtils, ENV) {
 
-	var resource = $resource(ENV.apiEndpoint+'/orders');
+	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
+	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
+	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant');
 
 	var
 	currentOrder = {
@@ -112,19 +118,76 @@ angular.module('groupeat.services.order', ['groupeat.services.backend-utils'])
 		return defer.promise;
 	},
 
-	getTimeDiff = function(date) {
+	getTimeDiff = function(endingTime) {
 		var response = null;
-		if(date !== null) {
-			var currentTime = new Date() ;
-			var endingTime = new Date(date.replace(/-/g, '/'));
+		if(endingTime !== null) {
+			var currentTime = new Date();
+			if (!(endingTime instanceof Date))
+			{
+				endingTime = new Date(endingTime.replace(/-/g, '/'));
+			}
 			response = Math.abs(endingTime - currentTime)/1000;
 		}
 		return response;
+	},
+
+	get = function(orderId) {
+		var defer = $q.defer();
+		resource.get({id: orderId}).$promise
+		.then(function(response) {
+			defer.resolve(response.data);
+		})
+		.catch(function() {
+			defer.reject();
+		});
+		return defer.promise;
+	},
+
+	queryForGroupOrder = function(customerId, groupOrderId) {
+    var defer = $q.defer();
+    fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
+    .then(function(response) {
+      defer.resolve(response.data);
+    })
+    .catch(function() {
+      defer.reject();
+    });
+    return defer.promise;
+  },
+
+	queryForCustomer = function(customerId) {
+		var defer = $q.defer();
+		forCustomerResource.get({customerId: customerId}).$promise
+		.then(function(response) {
+			var orders = [], oldOrders = [];
+			_.forEach(response.data, function(rawOrder) {
+        var order = {'discountedPrice': rawOrder.discountedPrice/100};
+				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
+				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
+				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
+				order.endingAt = new Date(rawOrder.groupOrder.data.endingAt);
+				if (order.closedAt)
+				{
+					oldOrders.push(order);
+				}
+				else
+				{
+					orders.push(order);
+				}
+      });
+      defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
+		})
+		.catch(function() {
+			defer.reject();
+		});
+		return defer.promise;
 	};
 
-
 	return {
+		get: get,
 		getCurrentOrder: getCurrentOrder,
+		queryForGroupOrder: queryForGroupOrder,
+		queryForCustomer: queryForCustomer,
 		getRequestBody: getRequestBody,
 		setGroupOrderId: setGroupOrderId,
 		setFoodRushTime: setFoodRushTime,

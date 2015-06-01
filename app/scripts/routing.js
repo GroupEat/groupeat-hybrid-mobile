@@ -5,6 +5,7 @@ angular.module('routing', [])
 .config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
+
   .state('authentication', {
     url:'/authentication',
     templateUrl: 'templates/authentication.html',
@@ -14,6 +15,7 @@ angular.module('routing', [])
       }
     }
   })
+
   .state('side-menu', {
     url: '/side-menu',
     abstract: true,
@@ -25,6 +27,7 @@ angular.module('routing', [])
       }
     }
   })
+
   .state('side-menu.group-orders', {
     url: '/group-orders',
     views: {
@@ -34,14 +37,15 @@ angular.module('routing', [])
     }
   })
 
-  .state('side-menu.order', {
-    url: '/order/:orderId',
+  .state('side-menu.orders', {
+    url: '/orders',
     views: {
       'menuContent' :{
-        templateUrl: 'templates/order.html'
+        templateUrl: 'templates/orders.html'
       }
     }
   })
+
   .state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',
@@ -52,6 +56,7 @@ angular.module('routing', [])
       }
     }
   })
+
   .state('restaurants', {
     url: '/restaurants',
     templateUrl: 'templates/restaurants.html',
@@ -62,6 +67,7 @@ angular.module('routing', [])
       }
     }
   })
+
   .state('restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html',
@@ -72,6 +78,7 @@ angular.module('routing', [])
       }
     }
   })
+
   .state('side-menu.settings', {
     url: '/settings',
     views: {

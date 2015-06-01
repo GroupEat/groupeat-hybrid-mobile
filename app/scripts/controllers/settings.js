@@ -107,6 +107,7 @@ angular.module('groupeat.controllers.settings', [
 			return Authentication.updatePassword(authenticationParams);
 		})
 		.then(function() {
+			// Clearing both passwords
 			$scope.oldPassword = '';
 			$scope.newPassword = '';
 			var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
