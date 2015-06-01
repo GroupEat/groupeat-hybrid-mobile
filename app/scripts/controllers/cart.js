@@ -26,15 +26,15 @@ angular.module('groupeat.controllers.cart', [
 		value: null
 	};
 
+	$scope.addressTypeSelected = {
+		value: null
+	};
+
 	$scope.addressTypes = [
 		{ label: $translate('myAddress'), value: 'myAddress' },
 		{ label: $translate('newAddress'), value: 'newAddress'},
 		{ label: $translate('predefinedAddress'), value: 'predefinedAddress'}
 	];
-
-	$scope.addressTypeSelected = {
-		value: $scope.addressTypes[0].value
-	};
 
 	$scope.deliveryAddress = {
 		hasValue: false,
@@ -127,6 +127,8 @@ angular.module('groupeat.controllers.cart', [
 			$mdDialog.show({
 				targetEvent: ev,
 				templateUrl: 'templates/popups/ask-for-address.html',
+				scope: $scope,
+				preserveScope: true,
 				clickOutsideToClose: false,
 				controller: 'CartCtrl',
 			})
