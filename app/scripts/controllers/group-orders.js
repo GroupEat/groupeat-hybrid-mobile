@@ -18,9 +18,7 @@ angular.module('groupeat.controllers.group-orders', [
 ])
 
 
-.controller('GroupOrdersCtrl', function($filter, $scope, $state, $mdDialog, $q, $location, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, Geolocation, _) {
-
-  var $translate = $filter('translate');
+.controller('GroupOrdersCtrl', function($scope, $state, $mdDialog, $q, $location, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Popup, Geolocation, _) {
 
   Analytics.trackView('Group Orders');
 
@@ -93,34 +91,17 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-    // Checking if the customer has provided the needed further information before going further
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    Customer.checkMissingInformation()
+    Customer.checkActivatedAccount()
     .then(function() {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
-		  $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+      return Customer.checkMissingInformation();
     })
-    .catch(function(missingPropertiesString) {
+    .then(function() {
+      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
+	    $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+    })
+    .finally(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      if (!missingPropertiesString)
-      {
-        Popup.displayError($translate('genericFailureDetails'), 3000);
-      }
-      else
-      {
-        var confirm = $mdDialog.confirm({
-          parent: angular.element(document.body)
-        })
-        .title($translate('missingPropertiesTitle'))
-        .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
-        .ok($translate('settings'))
-        .cancel($translate('cancel'));
-        $mdDialog.show(confirm)
-        .then(function() {
-          $state.go('side-menu.settings');
-        });
-      }
     });
   };
 
