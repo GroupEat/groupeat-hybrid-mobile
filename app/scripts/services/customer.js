@@ -185,6 +185,24 @@ angular.module('groupeat.services.customer', [
             missingPropertiesString += $translate(missingProperties[missingProperties.length-1]);
           }
           deferred.reject(missingPropertiesString);
+          if (!missingPropertiesString)
+          {
+            Popup.displayError($translate('genericFailureDetails'), 3000);
+          }
+          else
+          {
+            var confirm = $mdDialog.confirm({
+              parent: angular.element(document.body)
+            })
+            .title($translate('missingPropertiesTitle'))
+            .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
+            .ok($translate('settings'))
+            .cancel($translate('cancel'));
+            $mdDialog.show(confirm)
+            .then(function() {
+              $state.go('side-menu.settings');
+            });
+          }
         }
       });
     })
