@@ -1,0 +1,44 @@
+<ion-view ng-controller="OrdersCtrl" view-title="{{ 'myOrders' | translate }}" >
+
+	<ge-loading-backdrop ng-show="loadingBackdrop.show">
+	</ge-loading-backdrop>
+
+	<ion-content has-header="true" ng-show="!messageBackdrop.show">
+
+    <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
+    </ion-refresher>
+
+		<md-list>
+			<md-list-item ng-repeat="order in orders" on-tap="onTapOrder(order)" class="md-3-line">
+				<div class="md-list-item-text">
+					<h3>{{ order.restaurant }}</h3>
+					<h4 ng-if="order.closedAt">{{ order.closedAt | date:'dd/MM/yyyy'}}</h4>
+					<div ng-if="!order.closedAt">
+						<i class="ion-android-stopwatch assertive"></i>
+						<timer countdown="getTimeDiff(order.endingAt)" max-time-unit="'minute'" interval="1000" id="chrono-syle">
+							{{mminutes}}:{{sseconds}}
+						</timer>
+					</div>
+					<h4 class="assertive" ng-if="!order.closedAt">{{ order.endingAt | date:'HH:mm:ss'}}</h4>
+					<div layout="row">
+						<div flex class="center">
+			        <b>{{ order.discountedPrice }} <i class="ion-social-euro assertive"></i></b>
+			      </div>
+			      <div flex class="center">
+			        <b> {{ order.discount | number: 2 }}% <i class="ion-arrow-graph-down-right assertive"></i></b>
+			      </div>
+					</p>
+				</div>
+				<md-divider></md-divider>
+      </md-list-item>
+
+    </md-list>
+
+  </ion-content>
+
+  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
+    <ge-message-backdrop>
+    </ge-message-backdrop>
+  </ion-content>
+
+</ion-view>
