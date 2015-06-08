@@ -6,7 +6,7 @@ angular.module('groupeat.services.order', [
 	'groupeat.services.lodash'
 ])
 
-.service('Order', function(_, $q, $resource, BackendUtils, ENV) {
+.service('Order', function(ENV, $q, $resource, BackendUtils, _) {
 
 	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
 	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
@@ -17,7 +17,8 @@ angular.module('groupeat.services.order', [
 		'groupOrderId': null,
 		'endingAt': null,
 		'currentDiscount': null,
-		'remainingCapacity': null
+		'remainingCapacity': null,
+		'discountPolicy': null
 	},
 
 	requestBody = {
@@ -72,6 +73,69 @@ angular.module('groupeat.services.order', [
 		requestBody.comment = value;
 	},
 
+	setCurrentDiscount = function (newDiscount) {
+		currentOrder.currentDiscount = newDiscount;
+	},
+
+	/*
+	The next function compute the discount with the discount policy
+	Being linear piecewise, we just need the two values given by the
+	restaurant between which the total price of cart is. Then, with 
+	some maths, we can compute the discount for this total price. 
+	Formula :
+	y = A.x + y1 - A.x1
+	with A = (y1 - y2)/(x1 - x2), y the unknown discount, and x the current totalPrice
+	*/
+	computeDiscount = function (discount1, discount2, price1, price2, totalPrice) {
+		// if price1 = price2, that means we are no more in an interval, but greater than the biggest discount. Saturation is the solution
+		if(price1 === price2) {
+			return discount2;
+		}
+		else {
+			return (totalPrice*(discount1-discount2)/(price1-price2) + discount1 - price1*(discount1-discount2)/(price1-price2));
+		}
+	},
+
+	updateCurrentDiscount = function (totalPrice) {
+		/*
+		Algorithm has to be improved : function of last current discount, 
+		we know the interval in which the total price must be...
+		*/
+		if (totalPrice !== 0) {
+			var newDiscount, priceUp, priceDown;
+			var completeDiscountPolicy = currentOrder.discountPolicy;
+			completeDiscountPolicy['0'] = 0;
+			var discountPricesHundred = _.keys(completeDiscountPolicy);
+			var discountPrices = [] ;
+			for (var i=0 ; i < _.size(discountPricesHundred) ; i++) {
+				discountPrices[i] = parseInt(discountPricesHundred[i])/100 ;
+			}
+
+			// We find the interval in which is the total price
+			for(i=0 ; i < _.size(discountPrices) ; i++) {
+				if(totalPrice > discountPrices[i]) {
+					priceDown = discountPrices[i];
+					if( i === _.size(discountPrices) - 1) {
+						priceUp = discountPrices[i];
+					}
+					else {
+						priceUp = discountPrices[i+1];
+					}
+				}
+			}
+
+			var priceUpHundred = (priceUp*100).toString();
+			var priceDownHundred = (priceDown*100).toString();
+
+			// Compute the new discount, and set it
+			newDiscount = computeDiscount(completeDiscountPolicy[priceUpHundred], completeDiscountPolicy[priceDownHundred], priceUp, priceDown, totalPrice);
+			setCurrentDiscount(newDiscount);
+		}
+		else {
+			setCurrentDiscount(0);
+		}
+	},
+
 	getFoodRushTime = function() {
 		return requestBody.foodRushDurationInMinutes;
 	},
@@ -99,11 +163,12 @@ angular.module('groupeat.services.order', [
 		};
 	},
 
-	setCurrentOrder = function(id, date, discount, capacity) {
+	setCurrentOrder = function(id, date, discount, capacity, discountPolicy) {
 		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
 		currentOrder.currentDiscount = discount;
 		currentOrder.remainingCapacity = capacity;
+		currentOrder.discountPolicy = discountPolicy;
 	},
 
 	save = function() {
@@ -200,6 +265,7 @@ angular.module('groupeat.services.order', [
 		resetCurrentOrder: resetCurrentOrder,
 		setCurrentOrder: setCurrentOrder,
 		save: save,
+		updateCurrentDiscount: updateCurrentDiscount,
 		isNewOrder: isNewOrder,
 		getTimeDiff: getTimeDiff,
 		getFoodRushTime: getFoodRushTime

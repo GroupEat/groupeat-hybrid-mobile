@@ -56,23 +56,11 @@ describe 'Ctrl: RestaurantsCtrl', ->
           latitude: 1
           longitude: 1
 
-    it 'should initially create a loading backdrop', ->
-      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
-      scope.onRestaurantTouch 1
-      scope.$digest()
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.backdrop()
-
     it 'should check if the customer account is activated', ->
       sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
       scope.onRestaurantTouch 1
       scope.$digest()
       Customer.checkActivatedAccount.should.have.been.called
-
-    it 'should remove the loading backdrop if the customer account is not activated', ->
-      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.reject()
-      scope.onRestaurantTouch 1
-      scope.$digest()
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
     it 'should check for missing information is the customer account is activated', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->
@@ -85,18 +73,6 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
 
       Customer.checkMissingInformation.should.have.been.called
-
-    it 'should remove the loading backdrop if we were unable to determine if customer information is missing', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
-
-      scope.onRestaurantTouch 1
-      scope.$digest()
-
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
     it 'should call GroupOrder#get if customer information are available', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->
@@ -159,13 +135,13 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
       restaurant =
         deliveryCapacity: 10
+        discountPolicy: 'discountPolicy'
         id: 1
       scope.onRestaurantTouch restaurant
       scope.$digest()
 
-      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, null, 10)
+      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, null, 10, 'discountPolicy')
       $state.go.should.have.been.calledWithExactly('restaurant-menu', restaurantId: 1)
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
   describe 'RestaurantsCtrl#initCtrl', ->
 

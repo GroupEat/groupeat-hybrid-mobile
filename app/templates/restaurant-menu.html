@@ -15,10 +15,10 @@
   <!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
   <ion-content has-header="true" ng-hide="messageBackdrop.show">
     <div layout="row">
-      <div flex class="rm-sub-header-content" ng-hide="isNewOrder.value">
+      <div flex class="rm-sub-header-content">
         <h4 class="rm-sub-header-text">
           <i class="ion-arrow-graph-down-right energized"></i>
-          {{ currentOrder.currentDiscount }} %
+          {{ currentOrder.currentDiscount | number : 2}} %
         </h4>
       </div>
       <div flex class="rm-sub-header-content" ng-hide="isNewOrder.value">
@@ -62,10 +62,10 @@
             <md-list flex>
               <md-list-item ng-repeat="format in product.formats.data" ng-show="areDetailsShown(product)">
                 <div flex layout="row">
-                  <div flex="60" ng-show="isNewOrder.value" class="md-tile-content">
+                  <div flex="60" ng-show="currentOrder.currentDiscount===0" class="md-tile-content">
                     {{ format.name }} ({{ format.price }} €)
                   </div>
-                  <div flex="60" ng-hide="isNewOrder.value" class="md-tile-content">
+                  <div flex="60" ng-hide="currentOrder.currentDiscount===0" class="md-tile-content">
                     {{ format.name }} (<strike>{{ format.price }}€</strike> {{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}} €)
                   </div>
                   <div flex="10">

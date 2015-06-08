@@ -71,6 +71,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.onDeleteProduct = function(product, formatIndex) {
 		Cart.removeProduct(product, formatIndex);
+		Order.updateCurrentDiscount($scope.cart.getTotalPrice());
 	};
 
 	$scope.onAddProduct = function(product, format) {
@@ -79,6 +80,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		}
 		else {
 			Cart.addProduct(product, format);
+			Order.updateCurrentDiscount($scope.cart.getTotalPrice());
 		}
 	};
 
