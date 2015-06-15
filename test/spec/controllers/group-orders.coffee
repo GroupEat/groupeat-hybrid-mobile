@@ -72,7 +72,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     dialogElement.remove()
     scope.$digest()
 
-
   describe "Constructor", ->
     beforeEach ->
       scope.$digest()
@@ -114,7 +113,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     beforeEach ->
       scope.$digest()
       Network.hasConnectivity.restore()
-      
+
     it 'should check connectivity', ->
       callback = sandbox.stub(Network, 'hasConnectivity')
       scope.onRefreshGroupOrders()
@@ -267,67 +266,67 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should return time in sec between two dates', ->
 
-  describe 'GroupOrdersCtrl#onNewOrderTouch', ->
+  describe 'GroupOrdersCtrl#onJoinOrderTouch', ->
 
-    it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
-      sandbox.stub(Popup, 'displayError')
-      scope.onJoinOrderTouch(groupOrderMock)
+    it 'should initially create a loading backdrop', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
+      scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly('genericFailureDetails', 3000)
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.backdrop()
 
-    it 'should open a confirm dialog dialog if customer information are missing', ->
-      # TODO : Test could be better (spying on the chained methods)
-      sandbox.spy($mdDialog, 'confirm')
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onJoinOrderTouch(groupOrderMock)
+    it 'should check if the customer account is activated', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
+      scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
-      $mdDialog.confirm.should.be.called
+      Customer.checkActivatedAccount.should.have.been.called
 
-    it 'should change the state to settings if the user confirms the dialog', ->
-      sandbox.stub($mdDialog, 'show', ->
+    it 'should remove the loading backdrop if the customer account is not activated', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.reject()
+      scope.onJoinOrderTouch groupOrderMock
+      scope.$digest()
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
+
+    it 'should check for missing information is the customer account is activated', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
         deferred = $q.defer()
         deferred.resolve()
-        return deferred.promise
-      )
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onJoinOrderTouch(groupOrderMock)
-      scope.$digest()
-      $mdDialog.show.should.be.called
-      $state.go.should.have.been.calledWithExactly('side-menu.settings')
+        deferred.promise
+      sandbox.stub Customer, 'checkMissingInformation'
 
-    it 'should not change the state to settings if the user confirms the dialog', ->
-      sandbox.stub($mdDialog, 'show').returns($q.reject())
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onJoinOrderTouch(groupOrderMock)
+      scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
-      $mdDialog.show.should.be.called
-      $state.go.should.have.not.been.called
 
-    it 'should set the current Order (service) when joining a groupOrder if no customer information are missing', ->
+      Customer.checkMissingInformation.should.have.been.called
+
+    it 'should remove the loading backdrop if the customer has not provided all information', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub(Customer, 'checkMissingInformation').returns $q.reject()
+
+      scope.onJoinOrderTouch groupOrderMock
+      scope.$digest()
+
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
+
+    it 'should call Order.setCurrentOrder and change the state if the customer is activated and has provided all information', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
       sandbox.spy(Order, 'setCurrentOrder')
-      sandbox.stub(Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      scope.onJoinOrderTouch(groupOrderMock)
-      scope.$digest()
-      Order.setCurrentOrder.should.have.been.calledWithExactly(groupOrderMock.id, groupOrderMock.endingAt, groupOrderMock.discountRate, groupOrderMock.remainingCapacity)
 
-    it 'should go to restaurant menu view corresponding to the selected groupOrder if no customer information are missing', ->
-      sandbox.stub(scope, 'getTimeDiff').returns(1000)
-      sandbox.stub(Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      scope.onJoinOrderTouch(groupOrderMock)
+      scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
+
+      Order.setCurrentOrder.should.have.been.called
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: groupOrderMock.restaurant.data.id})
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
   describe 'GroupOrdersCtrl#onNewGroupOrder', ->
 
