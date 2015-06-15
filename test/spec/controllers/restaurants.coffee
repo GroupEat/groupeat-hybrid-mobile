@@ -50,101 +50,122 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
   describe 'RestaurantsCtrl#onRestaurantTouch', ->
 
-    it 'should open a generic failure dialog if we were unable to determine if customer information is missing', ->
+    beforeEach ->
+      scope.userCurrentPosition =
+        coords:
+          latitude: 1
+          longitude: 1
+
+    it 'should initially create a loading backdrop', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
+      scope.onRestaurantTouch 1
+      scope.$digest()
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.backdrop()
+
+    it 'should check if the customer account is activated', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
+      scope.onRestaurantTouch 1
+      scope.$digest()
+      Customer.checkActivatedAccount.should.have.been.called
+
+    it 'should remove the loading backdrop if the customer account is not activated', ->
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.reject()
+      scope.onRestaurantTouch 1
+      scope.$digest()
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
+
+    it 'should check for missing information is the customer account is activated', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub(Customer, 'checkMissingInformation').returns $q.defer().promise
+
+      scope.onRestaurantTouch 1
+      scope.$digest()
+
+      Customer.checkMissingInformation.should.have.been.called
+
+    it 'should remove the loading backdrop if we were unable to determine if customer information is missing', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
       sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject())
-      sandbox.stub(Popup, 'displayError')
-      sandbox.stub(LoadingBackdrop, 'noBackdrop')
-      scope.onRestaurantTouch(1)
-      scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly('genericFailureDetails', 3000)
 
-    it 'should open a confirm dialog dialog if customer information are missing', ->
-      # TODO : Test could be better (spying on the chained methods)
-      sandbox.spy($mdDialog, 'confirm')
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onRestaurantTouch(1)
+      scope.onRestaurantTouch 1
       scope.$digest()
-      $mdDialog.confirm.should.be.called
 
-    it 'should change the state to settings if the user confirms the dialog', ->
-      sandbox.stub($mdDialog, 'show', ->
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
+
+    it 'should call GroupOrder#get if customer information are available', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
         deferred = $q.defer()
         deferred.resolve()
-        return deferred.promise
-      )
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onRestaurantTouch(1)
-      scope.$digest()
-      $mdDialog.show.should.be.called
-      $state.go.should.have.been.calledWithExactly('side-menu.settings')
-
-    it 'should not change the state to settings if the user confirms the dialog', ->
-      sandbox.stub($mdDialog, 'show').returns($q.reject())
-      missingPropertiesString =  'missingPropertiesString'
-      sandbox.stub(Customer, 'checkMissingInformation').returns($q.reject(missingPropertiesString))
-      scope.onRestaurantTouch(1)
-      scope.$digest()
-      $mdDialog.show.should.be.called
-      $state.go.should.have.not.been.called
-
-    it 'should set currentOrder with correspond deliveryCapacity if there are no missing customer information and if there is not already a joinable GO', ->
-      restaurant = { 'deliveryCapacity' : 5 }
-      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
-      callback = sandbox.stub(Order, 'setCurrentOrder')
-      sandbox.stub(Customer, 'checkMissingInformation', ->
+        deferred.promise
+      sandbox.stub Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
         deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(GroupOrder, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve([])
-        return deferred.promise
-      )
-      scope.onRestaurantTouch(restaurant)
+        deferred.promise
+      sandbox.stub(GroupOrder, 'get').returns $q.defer().promise
+
+      scope.onRestaurantTouch 1
       scope.$digest()
-      assert(callback.calledWithExactly(null, null, null, restaurant.deliveryCapacity))
 
-    it 'should change the state with the given restaurant id if there are no missing customer information and no joinable GO', ->
-      restaurant = { 'id' : 1 }
-      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
-      groupOrders = [ {'restaurant': { 'data': { 'id': 2}}}]
+      Customer.checkMissingInformation.should.have.been.called
 
-      sandbox.stub(Customer, 'checkMissingInformation', ->
+    it 'should call Restaurant#checkGroupOrders when the group orders were fetched', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
         deferred = $q.defer()
         deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(GroupOrder, 'get', ->
+        deferred.promise
+      sandbox.stub Customer, 'checkMissingInformation', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      groupOrders = []
+      sandbox.stub GroupOrder, 'get', ->
         deferred = $q.defer()
         deferred.resolve(groupOrders)
-        return deferred.promise
-      )
-      scope.onRestaurantTouch(restaurant)
+        deferred.promise
+      sandbox.stub(Restaurant, 'checkGroupOrders').returns $q.defer().promise
+
+      restaurant =
+        id: 1
+      scope.onRestaurantTouch restaurant
       scope.$digest()
-      $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: restaurant.id})
 
-    it 'should display a popup if there are no missing customer information but a joinable GO', ->
-      restaurant = { 'id' : 1 }
-      scope.userCurrentPosition = { 'coords' : { 'latitude': 1, 'longitude': 1}}
-      groupOrders = [ {'restaurant': { 'data': { 'id': 1}}}]
-      callback = sandbox.stub(Popup, 'displayTitleAndContent')
+      Restaurant.checkGroupOrders.should.have.been.calledWithExactly(1, groupOrders)
 
-      sandbox.stub(Customer, 'checkMissingInformation', ->
+    it 'should change the state to settings if all previous chains were resolved', ->
+      sandbox.stub Customer, 'checkActivatedAccount', ->
         deferred = $q.defer()
         deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(GroupOrder, 'get', ->
+        deferred.promise
+      sandbox.stub Customer, 'checkMissingInformation', ->
         deferred = $q.defer()
-        deferred.resolve(groupOrders)
-        return deferred.promise
-      )
-      scope.onRestaurantTouch(restaurant)
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub GroupOrder, 'get', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Restaurant, 'checkGroupOrders', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+
+      sandbox.spy(Order, 'setCurrentOrder')
+
+      restaurant =
+        deliveryCapacity: 10
+        id: 1
+      scope.onRestaurantTouch restaurant
       scope.$digest()
-      callback.should.have.been.called
+
+      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, null, 10)
+      $state.go.should.have.been.calledWithExactly('restaurant-menu', restaurantId: 1)
+      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
   describe 'RestaurantsCtrl#initCtrl', ->
 

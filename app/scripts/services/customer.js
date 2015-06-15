@@ -4,10 +4,12 @@ angular.module('groupeat.services.customer', [
   'groupeat.services.address',
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
-  'groupeat.services.lodash'
+  'groupeat.services.lodash',
+  'groupeat.services.popup',
+  'ngMaterial'
 ])
 
-.factory('Customer', function($filter, $resource, $q, ENV, _, Address, BackendUtils, Credentials) {
+.factory('Customer', function($filter, $mdDialog, $resource, $q, $state, ENV, _, Address, BackendUtils, Credentials, Popup) {
 
   var $translate = $filter('translate');
 
@@ -92,6 +94,37 @@ angular.module('groupeat.services.customer', [
 
   /**
   * @ngdoc function
+  * @name Customer#checkActivatedAccount
+  * @methodOf Customer
+  *
+  * @description Returns a promise informing wether or not the customer has already activated his/her account
+  */
+  checkActivatedAccount = function() {
+    var deferred = $q.defer();
+    if(ENV.name === 'development') {
+      deferred.resolve();
+    }
+    else {
+      var customerId = Credentials.get().id;
+      get(customerId)
+      .then(function(customer) {
+        if (!customer.activated)
+        {
+          deferred.reject();
+          Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
+        }
+        else
+        {
+          deferred.resolve();
+        }
+      });
+    }
+
+    return deferred.promise;
+  },
+
+  /**
+  * @ngdoc function
   * @name Customer#checkMissingInformation
   * @methodOf Customer
   *
@@ -152,6 +185,24 @@ angular.module('groupeat.services.customer', [
             missingPropertiesString += $translate(missingProperties[missingProperties.length-1]);
           }
           deferred.reject(missingPropertiesString);
+          if (!missingPropertiesString)
+          {
+            Popup.displayError($translate('genericFailureDetails'), 3000);
+          }
+          else
+          {
+            var confirm = $mdDialog.confirm({
+              parent: angular.element(document.body)
+            })
+            .title($translate('missingPropertiesTitle'))
+            .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
+            .ok($translate('settings'))
+            .cancel($translate('cancel'));
+            $mdDialog.show(confirm)
+            .then(function() {
+              $state.go('side-menu.settings');
+            });
+          }
         }
       });
     })
@@ -165,6 +216,7 @@ angular.module('groupeat.services.customer', [
     get: get,
     save: save,
     update: update,
+    checkActivatedAccount: checkActivatedAccount,
     checkMissingInformation: checkMissingInformation
   };
 });

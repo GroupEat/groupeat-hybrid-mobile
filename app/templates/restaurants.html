@@ -1,4 +1,4 @@
-<ion-view ng-controller="RestaurantsCtrl" title="{{ 'chooseARestaurant' | translate }}" cache-view="false">
+<ion-view ng-init="initCtrl()" ng-controller="RestaurantsCtrl" title="{{ 'chooseARestaurant' | translate }}" cache-view="false">
 
 	<ion-nav-buttons side="left">
 	    <button class="button button-clear ion-ios-arrow-back" on-tap="onRestaurantsListLeave()"> {{ 'back' | translate }}

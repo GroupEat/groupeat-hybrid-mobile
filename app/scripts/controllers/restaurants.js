@@ -17,8 +17,6 @@ angular.module('groupeat.controllers.restaurants', [
 
 .controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, Geolocation) {
 
-  var $translate = $filter('translate');
-
   Analytics.trackView('Restaurants');
 
   $scope.restaurants = {};
@@ -94,52 +92,24 @@ angular.module('groupeat.controllers.restaurants', [
   };
 
   $scope.onRestaurantTouch = function(restaurant) {
-    // Checking if the customer has provided the needed further information before going further
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    Customer.checkMissingInformation()
+    Customer.checkActivatedAccount()
+    .then(function() {
+      return Customer.checkMissingInformation();
+    })
     .then(function() {
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
     })
     .then(function(groupOrders) {
-    // Checking if the restaurant has already a groupOrder that the customer could join
-      var isAlreadyAJoinableGroupOrder = false ;
-      _.forEach(groupOrders, function(groupOrder) {
-        if(groupOrder.restaurant.data.id === restaurant.id) {
-          isAlreadyAJoinableGroupOrder = true;
-        }
-      });
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      if (isAlreadyAJoinableGroupOrder) {
-        Popup.displayTitleAndContent($translate('alreadyAGroupOrder'), $translate('pleaseChangeRestaurantOrJoinGroupOrder'), 5000);
-      }
-      else {
-        Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
-        $state.go('restaurant-menu', {restaurantId: restaurant.id});
-      }
+      return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
     })
-    .catch(function(missingPropertiesString) {
+    .then(function() {
+      Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
+      $state.go('restaurant-menu', {restaurantId: restaurant.id});
+    })
+    .finally(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-      if (!missingPropertiesString)
-      {
-        Popup.displayError($translate('genericFailureDetails'), 3000);
-      }
-      else
-      {
-        var confirm = $mdDialog.confirm({
-          parent: angular.element(document.body)
-        })
-        .title($translate('missingPropertiesTitle'))
-        .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
-        .ok($translate('settings'))
-        .cancel($translate('cancel'));
-        $mdDialog.show(confirm)
-        .then(function() {
-          $state.go('side-menu.settings');
-        });
-      }
     });
   };
-
-  $scope.initCtrl();
 
 });

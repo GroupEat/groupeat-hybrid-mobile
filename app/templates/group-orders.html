@@ -1,4 +1,4 @@
-<ion-view ng-controller="GroupOrdersCtrl" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
+<ion-view ng-controller="GroupOrdersCtrl" ng-init="initCtrl()" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
 
   <ge-loading-backdrop ng-show="loadingBackdrop.show">
   </ge-loading-backdrop>
