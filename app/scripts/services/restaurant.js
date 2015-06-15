@@ -37,9 +37,10 @@ angular.module('groupeat.services.restaurant', [
 
   /**
   * @ngdoc function
-  * @name Customer#checkActivatedAccount
+  * @name Customer#checkGroupOrders
   * @methodOf Customer
   * @param {integer} restaurantId
+  * @param {array} groupOrders
   *
   * @description Returns a promise informing wether or not the customer has already activated his/her account
   */

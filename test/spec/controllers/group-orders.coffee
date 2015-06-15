@@ -286,7 +286,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
       scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
-    it 'should check for missing information is the customer account is activated', ->
+    it 'should check for missing information if the customer account is activated', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->
         deferred = $q.defer()
         deferred.resolve()
