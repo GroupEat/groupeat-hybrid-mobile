@@ -68,6 +68,7 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.loadCart = function() {
 		$scope.cart = Cart;
+		$scope.currentDiscount = Order.getCurrentDiscount();
 		$scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
 		if (_.isEmpty(Cart.getProducts()))
 		{
@@ -310,6 +311,10 @@ angular.module('groupeat.controllers.cart', [
 
 	$scope.getTimeDiff = function (endingAt) {
 		return Order.getTimeDiff(endingAt);
+	};
+
+	$scope.getDiscountPrice = function() {
+		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
 	};
 
 	$scope.loadCart();
