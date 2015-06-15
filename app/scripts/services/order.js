@@ -77,6 +77,10 @@ angular.module('groupeat.services.order', [
 		currentOrder.currentDiscount = newDiscount;
 	},
 
+	getCurrentDiscount = function () {
+		return currentOrder.currentDiscount ;
+	},
+
 	/*
 	The next function compute the discount with the discount policy
 	Being linear piecewise, we just need the two values given by the
@@ -268,7 +272,8 @@ angular.module('groupeat.services.order', [
 		updateCurrentDiscount: updateCurrentDiscount,
 		isNewOrder: isNewOrder,
 		getTimeDiff: getTimeDiff,
-		getFoodRushTime: getFoodRushTime
+		getFoodRushTime: getFoodRushTime,
+		getCurrentDiscount: getCurrentDiscount
 	};
 }
 );

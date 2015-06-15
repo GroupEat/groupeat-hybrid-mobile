@@ -105,4 +105,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return Order.getTimeDiff(endingAt);
 	};
 
+	$scope.getDiscountPrice = function() {
+		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
+	};
 });

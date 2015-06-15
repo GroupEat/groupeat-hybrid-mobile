@@ -33,8 +33,11 @@
         </h4>
       </div>
       <div flex class="rm-sub-header-content">
-        <h4 class="rm-sub-header-text">
-          {{ cart.getTotalPrice() | number : 2}}€
+        <h4 ng-show="getDiscountPrice()===cart.getTotalPrice()" class="rm-sub-header-text">
+          {{ getDiscountPrice() | number : 2}}€
+        </h4>
+        <h4 ng-hide="getDiscountPrice()===cart.getTotalPrice()" class="rm-sub-header-text">
+          (<strike>{{ cart.getTotalPrice() | number : 2 }}€</strike>) {{ getDiscountPrice() | number : 2}}€
         </h4>
       </div>
     </div>
