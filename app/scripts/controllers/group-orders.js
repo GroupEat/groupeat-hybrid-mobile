@@ -104,7 +104,4 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
-
-  $scope.initCtrl();
-
 });

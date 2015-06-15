@@ -112,6 +112,4 @@ angular.module('groupeat.controllers.restaurants', [
     });
   };
 
-  $scope.initCtrl();
-
 });
