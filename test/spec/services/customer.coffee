@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Address = Credentials = Customer = scope = $httpBackend = $q = ENV = sandbox = BackendUtils = {}
+  Address = Credentials = Customer = scope = $httpBackend = $mdDialog = $q = ENV = sandbox = BackendUtils = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -20,6 +20,8 @@ describe 'Service: Customer', ->
       $q = $injector.get('$q')
       BackendUtils = $injector.get('BackendUtils')
       sandbox = sinon.sandbox.create()
+      $mdDialog = $injector.get('$mdDialog')
+      sandbox.stub($mdDialog, 'show')
 
   afterEach ->
     sandbox.restore()
