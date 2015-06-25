@@ -1,0 +1,49 @@
+/**
+ * Typography Rules
+ */
+
+
+body {
+  color: $font-base;
+  font-family: $base-font-family !important;
+  font-feature-settings: "kern", "liga", "pnum";
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $base-font-family !important;
+  margin: 0 0;
+}
+
+p {
+  margin: 0 0;
+}
+
+a {
+  color: $green;
+  text-decoration: none;
+  transition: color 0.1s linear;
+
+  &:active,
+  &:focus,
+  &:hover {
+    color: darken($green, 15%);
+  }
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}
+
+img,
+picture,
+video {
+  margin: 0;
+  max-width: 100%;
+}
