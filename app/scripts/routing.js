@@ -16,10 +16,10 @@ angular.module('routing', [])
     }
   })
 
-  .state('side-menu', {
-    url: '/side-menu',
+  .state('app', {
+    url: '/',
     abstract: true,
-    templateUrl: '/templates/side-menu.html',
+    templateUrl: '/templates/layouts/app.html',
     data: {
       permissions: {
         only: ['customer'],
@@ -28,20 +28,22 @@ angular.module('routing', [])
     }
   })
 
-  .state('side-menu.group-orders', {
-    url: '/group-orders',
+  .state('app.group-orders', {
+    url: '',
     views: {
-      'menuContent' :{
-        templateUrl: 'templates/group-orders.html'
+      'app' :{
+        templateUrl: 'templates/group-orders.html',
+        controller: 'GroupOrdersCtrl'
       }
     }
   })
 
-  .state('side-menu.orders', {
+  .state('app.orders', {
     url: '/orders',
     views: {
-      'menuContent' :{
-        templateUrl: 'templates/orders.html'
+      'app' :{
+        templateUrl: 'templates/orders.html',
+        controller: 'OrdersCtrl'
       }
     }
   })
@@ -49,6 +51,7 @@ angular.module('routing', [])
   .state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',
+    controller: 'CartCtrl',
     data: {
       permissions: {
         only: ['customer'],
@@ -60,6 +63,7 @@ angular.module('routing', [])
   .state('restaurants', {
     url: '/restaurants',
     templateUrl: 'templates/restaurants.html',
+    controller: 'RestaurantsCtrl',
     data: {
       permissions: {
         only: ['customer'],
@@ -71,6 +75,7 @@ angular.module('routing', [])
   .state('restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html',
+    controller: 'RestaurantMenuCtrl',
     data: {
       permissions: {
         only: ['customer'],
@@ -79,14 +84,15 @@ angular.module('routing', [])
     }
   })
 
-  .state('side-menu.settings', {
+  .state('app.settings', {
     url: '/settings',
     views: {
-      'menuContent' :{
-        templateUrl: 'templates/settings.html'
+      'app' :{
+        templateUrl: 'templates/settings.html',
+        controller: 'SettingsCtrl'
       }
     }
   });
 
-  $urlRouterProvider.otherwise('/side-menu/group-orders');
+  $urlRouterProvider.otherwise('/');
 });

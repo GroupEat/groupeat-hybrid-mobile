@@ -30,7 +30,7 @@ angular.module('groupeat.controllers.restaurants', [
   };
 
   $scope.onRestaurantsListLeave = function() {
-    $state.go('side-menu.group-orders');
+    $state.go('app.group-orders');
   };
 
   $scope.onRefreshRestaurants = function() {

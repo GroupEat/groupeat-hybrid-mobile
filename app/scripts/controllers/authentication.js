@@ -102,7 +102,7 @@ angular.module('groupeat.controllers.authentication', [
       Analytics.trackEvent('Authentication', 'Logs In');
       Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
 
-      $state.go('side-menu.group-orders');
+      $state.go('app.group-orders');
 
       return response;
     })
