@@ -1,4 +1,13 @@
-<ion-view ng-controller="GroupOrdersCtrl" ng-init="initCtrl()" view-title="{{ 'orders' | translate }}" hide-back-button="true" cache-view="false">
+<ion-view ng-init="initCtrl()" hide-back-button="true" cache-view="false">
+  <ion-nav-buttons side="primary" >
+    <button class="button button-icon icon ion-gear-a" ui-sref="app.settings"></button>
+  </ion-nav-buttons>
+  <ion-nav-title>
+    {{ 'orders' | translate }}
+  </ion-nav-title>
+  <ion-nav-buttons side="secondary" >
+    <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
+  </ion-nav-buttons>
 
   <ge-loading-backdrop ng-show="loadingBackdrop.show">
   </ge-loading-backdrop>
