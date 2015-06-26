@@ -119,15 +119,14 @@ angular.module('groupeat.controllers.settings', [
 			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
 				return (option.value === customerSettings.noNotificationAfter);
 			});
-			Popup.displayTitleOnly($translate('customerEdited'), 3000);
+			Popup.title('customerEdited');
 		})
 		.catch(function(errorMessage) {
-			Popup.displayError(errorMessage, 3000);
+			Popup.error(errorMessage);
 		})
 		.finally(function() {
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
 	};
 
-	$scope.onReload();
 });

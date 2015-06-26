@@ -88,7 +88,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.onAddProduct = function(product, format) {
 		if ($scope.cart.getTotalQuantity() >= $scope.currentOrder.remainingCapacity) {
-			Popup.displayError($translate('tooManyProducts'), 3000);
+			Popup.error('tooManyProducts');
 		}
 		else {
 			Cart.addProduct(product, format);
