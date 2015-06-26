@@ -11,72 +11,59 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.product',
 	'groupeat.services.popup',
 	'ionic',
-	'ngMaterial',
-	'pascalprecht.translate'
 ])
 
-.controller('RestaurantMenuCtrl', function($scope, $state, $stateParams, $filter, $mdDialog, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory) {
 
-	var $translate = $filter('translate');
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
+	$scope.products = [];
 	$scope.isNewOrder = {
 		value: null
 	};
 
-	$scope.initCart = function() {
+	$scope.initCtrl = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
+		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
+		$scope.onReload()
+		.finally(function() {
+			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
+		});
 	};
 
-	$scope.onRefreshRestaurantMenu = function() {
-		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
-		if (!Network.hasConnectivity())
-		{
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-			$scope.messageBackdrop = MessageBackdrop.noNetwork();
-			return;
-		}
-		// Loading the menu of the restaurant
-		Product.get($stateParams.restaurantId)
+	$scope.onReload = function() {
+		var deferred = $q.defer();
+		Network.hasConnectivity()
+		.then(function() {
+			return Product.get($stateParams.restaurantId);
+		})
 		.then(function(products) {
 			$scope.products = products;
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 			if (_.isEmpty(products)) {
-				$scope.messageBackdrop = {
-					show: true,
-					title: 'emptyMenuTitle',
-					details: 'emptyMenuDetails',
-					iconClasses: 'ion-android-pizza',
-					button: {
-						text: 'reload',
-						action: 'onRefreshRestaurantMenu()'
-					}
-				};
-			}
-			else {
+				$scope.messageBackdrop = MessageBackdrop.backdrop('emptyMenu', 'ion-android-pizza');
+			} else {
 				$scope.messageBackdrop = MessageBackdrop.noBackdrop();
 			}
+			deferred.resolve();
 		})
-		.catch(function() {
-			$scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurantMenu()');
+		.catch(function(errorKey) {
+			$scope.messageBackdrop = MessageBackdrop.backdropFrom(errorKey);
+			deferred.reject();
 		})
 		.finally(function() {
 			$scope.$broadcast('scroll.refreshComplete');
 		});
+
+		return deferred.promise;
 	};
 
 	$scope.toggleDetails = function(product) {
-	    if ($scope.areDetailsShown(product)) {
-	      $scope.detailedProduct = null;
-	    }
-	    else {
-	      $scope.detailedProduct = product;
-	    }
-		};
+		$scope.detailedProduct = $scope.areDetailsShown(product) ? null : product;
+	};
 
 	$scope.areDetailsShown = function(product) {
 		return $scope.detailedProduct === product;
@@ -101,16 +88,13 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			$ionicHistory.goBack();
 		}
 		else {
-			var leaveOrder = $mdDialog.confirm()
-			.title($translate('leaveOrder'))
-			.content($translate('cartWillBeDestroyed'))
-			.ok($translate('ok'))
-			.cancel($translate('cancel'));
-			$mdDialog.show(leaveOrder)
-			.then(function() {
-				Cart.reset();
-				Order.resetCurrentOrder();
-				$ionicHistory.goBack();
+			Popup.confirm('leaveOrder', 'cartWillBeDestroyed')
+			.then(function(res) {
+				if(res) {
+					Cart.reset();
+					Order.resetCurrentOrder();
+					$ionicHistory.goBack();
+				}
 			});
 		}
 	};
@@ -118,8 +102,5 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.getTimeDiff = function (endingAt) {
 		return Order.getTimeDiff(endingAt);
 	};
-
-	$scope.initCart();
-	$scope.onRefreshRestaurantMenu();
 
 });
