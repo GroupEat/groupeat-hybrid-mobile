@@ -2,8 +2,7 @@
 
 angular.module('groupeat.services.message-backdrop', [])
 
-.factory('MessageBackdrop', [
-  function() {
+.factory('MessageBackdrop', function($parse) {
 
     var /**
     * @ngdoc function
@@ -19,6 +18,9 @@ angular.module('groupeat.services.message-backdrop', [])
     * @param {String} buttonAction
     */
     backdrop = function(errorKey, iconClasses, buttonTitle, buttonAction) {
+      buttonTitle = buttonTitle || 'reload';
+      buttonAction = buttonAction || 'onReload()';
+
       return {
         show: true,
         title: errorKey+'Title',
@@ -42,11 +44,14 @@ angular.module('groupeat.services.message-backdrop', [])
     * @param {String} errorKey
     */
     backdropFromErrorKey = function(errorKey) {
-      var fn = this[errorKey];
-      if (typeof fn === 'function') {
-        return fn();
+      switch (errorKey) {
+        case 'noNetwork':
+          return noNetwork();
+        case 'noGeolocation':
+          return noGeolocation();
+        default:
+          return genericFailure();
       }
-      return genericFailure();
     },
 
     /**
@@ -54,7 +59,7 @@ angular.module('groupeat.services.message-backdrop', [])
     * @name MessageBackdrop#noBackdrop
     * @methodOf MessageBackdrop
     *
-    * @return Returns the appropriate message backdrop or a generic failure default
+    * @return Returns a message backdrop which will not be displayed
     *
     */
     noBackdrop = function() {
@@ -63,16 +68,40 @@ angular.module('groupeat.services.message-backdrop', [])
       };
     },
 
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#noNetwork
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop for lack of network connectivity
+    *
+    */
     noNetwork = function() {
-      return backdrop('noNetwork', 'ion-wifi', 'reload', 'onReload()');
+      return backdrop('noNetwork', 'ion-wifi');
     },
 
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#noGeolocation
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop for lack of geolocation
+    *
+    */
     noGeolocation = function() {
-      return backdrop('noGeolocation', 'ion-wifi', 'reload', 'onReload()');
+      return backdrop('noGeolocation', 'ion-location');
     },
 
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#genericFailure
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop displaying a generic failure
+    *
+    */
     genericFailure = function() {
-      return backdrop('genericFailure', 'ion-alert-circle', 'reload', 'onReload()');
+      return backdrop('genericFailure', 'ion-alert-circled');
     };
 
     return {
@@ -82,4 +111,4 @@ angular.module('groupeat.services.message-backdrop', [])
     };
 
   }
-]);
+);
