@@ -22,6 +22,8 @@ describe 'Ctrl: SettingsCtrl', ->
       Address = $injector.get('Address')
       Authentication = $injector.get('Authentication')
       Credentials = $injector.get('Credentials')
+      sandbox.stub(Credentials, 'get').returns
+        id: 1
       Customer = $injector.get('Customer')
       validator = $injector.get('validator')
       ElementModifier = $injector.get('ElementModifier')
@@ -48,9 +50,6 @@ describe 'Ctrl: SettingsCtrl', ->
   afterEach ->
     sandbox.restore()
 
-  beforeEach ->
-    scope.$digest()
-
   describe 'Constructor', ->
 
     it 'should create an empty customer object', ->
@@ -68,89 +67,99 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.tabs.should.be.instanceof(Array)
       scope.tabs.should.have.length(2)
 
-  describe 'SettingsCtrl#onReload', ->
+  describe 'SettingsCtrl#initCtrl', ->
 
     it 'should load the non empty array of daysWithoutNotifyingOptions', ->
       sandbox.spy(CustomerSettings, 'getDaysWithoutNotifying')
-      scope.onReload()
+      scope.initCtrl()
       CustomerSettings.getDaysWithoutNotifying.should.have.been.called
       scope.daysWithoutNotifyingOptions.should.be.not.empty
 
     it 'should load the non empty array of noNotificationAfterHours', ->
       sandbox.spy(CustomerSettings, 'getNoNotificationAfterHours')
-      scope.onReload()
+      scope.initCtrl()
       CustomerSettings.getNoNotificationAfterHours.should.have.been.called
       scope.noNotificationAfterOptions.should.be.not.empty
 
     it 'should load the non empty array of residencies', ->
       sandbox.spy(Address, 'getResidencies')
-      scope.onReload()
+      scope.initCtrl()
       Address.getResidencies.should.have.been.called
       scope.residencies.should.be.not.empty
 
+  describe 'SettingsCtrl#onReload', ->
+
     it 'should show a no network message backdrop if no network is available', ->
-      messageBackdrop = MessageBackdrop.noNetwork()
-      sandbox.stub(Network, 'hasConnectivity').returns(false)
-      sandbox.spy(MessageBackdrop, 'noNetwork')
-      scope.onReload()
-      MessageBackdrop.noNetwork.should.have.been.called
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
-
-    it 'should call Customer#get if connectivity is available', ->
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get').returns($q.defer().promise)
-      scope.onReload()
-      Customer.get.should.have.been.called
-
-    it 'should show a generic failure message backdrop if getting the customer fails', ->
-      messageBackdrop = MessageBackdrop.genericFailure()
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get').returns($q.reject())
-      sandbox.spy(MessageBackdrop, 'genericFailure')
+      messageBackdrop = MessageBackdrop.backdropFromErrorKey 'noNetwork'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject 'noNetwork'
       scope.onReload()
       scope.$digest()
-      MessageBackdrop.genericFailure.should.have.been.called
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+      scope.messageBackdrop.should.deep.equal messageBackdrop
+
+    it 'should call Customer#get if connectivity is available', ->
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub(Customer, 'get').returns $q.defer().promise
+      scope.onReload()
+      scope.$digest()
+      Customer.get.should.have.been.calledWithExactly(1)
+
+    it 'should show a generic failure message backdrop if getting the customer fails', ->
+      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub(Customer, 'get').returns($q.reject())
+      scope.onReload()
+      scope.$digest()
+      scope.messageBackdrop.should.deep.equal messageBackdrop
 
     it 'should load the customer in the scope if getting the customer succeeds', ->
       customer = 'customer'
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get', ->
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve(customer)
         return deferred.promise
-      )
       sandbox.stub(Address, 'get').returns($q.defer().promise)
       scope.onReload()
       scope.$digest()
       scope.customer.should.equal(customer)
 
     it 'should call Address#get if getting the customer succeeds', ->
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get', ->
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
-      )
       sandbox.stub(Address, 'get').returns($q.defer().promise)
       scope.onReload()
       scope.$digest()
       Address.get.should.have.been.called
 
     it 'should show a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
-      messageBackdrop = MessageBackdrop.genericFailure()
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get', ->
+      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve()
         return deferred.promise
-      )
-      sandbox.stub(Address, 'get').returns($q.reject())
-      sandbox.spy(MessageBackdrop, 'genericFailure')
+      sandbox.stub(Address, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      MessageBackdrop.genericFailure.should.have.been.called
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+      scope.messageBackdrop.should.deep.equal messageBackdrop
 
     it 'should add residency and details information to the customer in scope if getting the customer address succeeds', ->
       customer = {}
@@ -159,26 +168,30 @@ describe 'Ctrl: SettingsCtrl', ->
       address =
         details: details
         residency: residency
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
-      sandbox.stub(Customer, 'get', ->
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
+      sandbox.stub Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve(customer)
         return deferred.promise
-      )
-      sandbox.stub(Address, 'get', ->
+      sandbox.stub Address, 'get', ->
         deferred = $q.defer()
         deferred.resolve(address)
         return deferred.promise
-      )
-      sandbox.stub(CustomerSettings, 'get').returns($q.defer().promise)
+      sandbox.stub(CustomerSettings, 'get').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
       scope.customer.details.should.equal(details)
       scope.customer.residency.should.equal(residency)
 
     it 'should show a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
-      messageBackdrop = MessageBackdrop.genericFailure()
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
+      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
       sandbox.stub(Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -189,16 +202,17 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve()
         return deferred.promise
       )
-      sandbox.stub(CustomerSettings, 'get').returns($q.reject())
-      sandbox.spy(MessageBackdrop, 'genericFailure')
+      sandbox.stub(CustomerSettings, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      MessageBackdrop.genericFailure.should.have.been.called
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+      scope.messageBackdrop.should.deep.equal messageBackdrop
 
     it 'should not show any message backdrop if getting the customer, address and settings succeed', ->
       messageBackdrop = MessageBackdrop.noBackdrop()
-      sandbox.stub(Network, 'hasConnectivity').returns(true)
+      sandbox.stub Network, 'hasConnectivity', ->
+        deferred = $q.defer()
+        deferred.resolve()
+        deferred.promise
       sandbox.stub(Customer, 'get', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -263,10 +277,10 @@ describe 'Ctrl: SettingsCtrl', ->
     it 'should display an error popup if client side validation fails', ->
       errorMessage = 'errorMessage'
       sandbox.stub(ElementModifier, 'validate').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'error')
       scope.onSave()
       scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
+      Popup.error.should.have.been.calledWithExactly(errorMessage)
 
     it 'should call Customer#update if client side validation succeeds', ->
       sandbox.stub(ElementModifier, 'validate', ->
@@ -290,10 +304,10 @@ describe 'Ctrl: SettingsCtrl', ->
         noNotificationAfter:
           value: '22:00:00'
       sandbox.stub(Customer, 'update').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'error')
       scope.onSave()
       scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
+      Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call Address#update if client side validation and Customer#update succeed', ->
       sandbox.stub(ElementModifier, 'validate', ->
@@ -331,13 +345,13 @@ describe 'Ctrl: SettingsCtrl', ->
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'error')
       scope.customerSettings =
         noNotificationAfter:
           value: '22:00:00'
       scope.onSave()
       scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
+      Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call Authentication#updatePassword if client side validation, Customer#update and Address#update succeed', ->
       sandbox.stub(ElementModifier, 'validate', ->
@@ -378,10 +392,10 @@ describe 'Ctrl: SettingsCtrl', ->
         return deferred.promise
       )
       sandbox.stub(Authentication, 'updatePassword').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'displayError')
+      sandbox.stub(Popup, 'error')
       scope.onSave()
       scope.$digest()
-      Popup.displayError.should.have.been.calledWithExactly(errorMessage, 3000)
+      Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call CustomerSettings#update if client side validation, Customer#update, Address#update and Authentication#updatePassword succeed', ->
       sandbox.stub(ElementModifier, 'validate', ->
@@ -442,7 +456,7 @@ describe 'Ctrl: SettingsCtrl', ->
         deferred.resolve(customerSettings)
         return deferred.promise
       )
-      sandbox.stub(Popup, 'displayTitleOnly')
+      sandbox.stub Popup, 'title'
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       scope.customerSettings =
@@ -450,4 +464,4 @@ describe 'Ctrl: SettingsCtrl', ->
           value: '22:00:00'
       scope.onSave()
       scope.$digest()
-      Popup.displayTitleOnly.should.have.been.calledWithExactly('customerEdited', 3000)
+      Popup.title.should.have.been.calledWithExactly 'customerEdited'
