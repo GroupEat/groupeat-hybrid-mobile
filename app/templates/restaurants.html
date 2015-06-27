@@ -1,32 +1,25 @@
 <ion-view ng-init="initCtrl()" hide-back-button="true" title="{{ 'chooseARestaurant' | translate }}" cache-view="false">
 
 	<ion-nav-buttons side="left">
-	    <button class="button button-clear ion-ios-arrow-back" on-tap="onRestaurantsListLeave()"> {{ 'back' | translate }}
-	    </button>
-  	</ion-nav-buttons>
+		<button class="button button-clear ion-ios-arrow-back" on-tap="onRestaurantsListLeave()">
+			{{ 'back' | translate }}
+		</button>
+	</ion-nav-buttons>
+
 	<ge-loading-backdrop ng-show="loadingBackdrop.show">
 	</ge-loading-backdrop>
 
 	<ion-content has-header="true" ng-show="!messageBackdrop.show">
 
-		<ion-refresher pulling-text="Pull to refresh..." on-refresh="onRefreshRestaurants()">
+		<ion-refresher pulling-text="{{ 'Pull to refresh...' | translate }}" on-refresh="onReload()">
 		</ion-refresher>
 
-		<md-list>
-		  <md-list-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
-		    <md-item-content>
-		      <div class="md-tile-left">
-		        <img src="{{ restaurant.logo }}" class="face">
-		      </div>
-		      <div class="md-tile-content">
-		        <h3>{{ restaurant.name }}</h3>
-		        <p>
-		          {{ restaurant.description || 'restaurantPlaceholderDescription' | translate }}
-		        </p>
-		      </div>
-		    </md-item-content>
-		  </md-list-item>
-		</md-list>
+		<ion-item ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
+			<p>{{ restaurant.name }}</p>
+			<p>
+				{{ restaurant.description || 'restaurantPlaceholderDescription' | translate }}
+			</p>
+		</ion-item>
 
 	</ion-content>
 
