@@ -197,7 +197,7 @@ angular.module('groupeat.controllers.authentication', [
     Analytics.trackEvent('Authentication', 'Registered', 'Skipped : ' + skipped);
     Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Register', 'Skipped : ' + skipped);
 
-    $state.go('side-menu.group-orders') ;
+    $state.go('app.group-orders') ;
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
     return Popup.displayTitleOnly($translate('welcome', {firstName: firstName}), 3000);
   };
