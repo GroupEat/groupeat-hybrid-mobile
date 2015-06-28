@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.analytics',
   'groupeat.services.customer',
@@ -13,51 +12,35 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.popup',
   'groupeat.services.restaurant',
   'ngMaterial'
-])
-
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, Geolocation) {
-
+]).controller('RestaurantsCtrl', function ($filter, $mdDialog, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, Geolocation) {
   Analytics.trackView('Restaurants');
-
   $scope.restaurants = {};
-
-  $scope.initCtrl = function() {
+  $scope.initCtrl = function () {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    $scope.onRefreshRestaurants()
-    .finally(function() {
+    $scope.onRefreshRestaurants().finally(function () {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
-
-  $scope.onRestaurantsListLeave = function() {
+  $scope.onRestaurantsListLeave = function () {
     $state.go('app.group-orders');
   };
-
-  $scope.onRefreshRestaurants = function() {
+  $scope.onRefreshRestaurants = function () {
     var deferred = $q.defer();
-
-    if (!Network.hasConnectivity())
-    {
+    if (!Network.hasConnectivity()) {
       $scope.messageBackdrop = MessageBackdrop.noNetwork();
       $scope.$broadcast('scroll.refreshComplete');
       deferred.reject();
-    }
-    else
-    {
-      Geolocation.getGeolocation()
-      .then(function(currentPosition) {
+    } else {
+      Geolocation.getGeolocation().then(function (currentPosition) {
         $scope.userCurrentPosition = currentPosition;
-        Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
-        .then(function(restaurants) {
+        Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude).then(function (restaurants) {
           $scope.restaurants = restaurants;
-          _.forEach($scope.restaurants, function(restaurant) {
-            if(restaurant.logo === null || restaurant.logo === undefined) {
+          _.forEach($scope.restaurants, function (restaurant) {
+            if (restaurant.logo === null || restaurant.logo === undefined) {
               restaurant.logo = 'images/flat-pizza.png';
             }
           });
-
-          if (_.isEmpty(restaurants))
-          {
+          if (_.isEmpty(restaurants)) {
             $scope.messageBackdrop = {
               show: true,
               title: 'noRestaurantsTitle',
@@ -68,48 +51,36 @@ angular.module('groupeat.controllers.restaurants', [
                 action: 'onRefreshRestaurants()'
               }
             };
-          }
-          else
-          {
+          } else {
             $scope.messageBackdrop = MessageBackdrop.noBackdrop();
           }
           deferred.resolve();
-        })
-        .catch(function() {
+        }).catch(function () {
           $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
           deferred.reject();
         });
-      })
-      .catch(function() {
+      }).catch(function () {
         $scope.messageBackdrop = MessageBackdrop.noGeolocation();
         deferred.reject();
-      })
-      .finally(function() {
+      }).finally(function () {
         $scope.$broadcast('scroll.refreshComplete');
       });
     }
     return deferred.promise;
   };
-
-  $scope.onRestaurantTouch = function(restaurant) {
+  $scope.onRestaurantTouch = function (restaurant) {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    Customer.checkActivatedAccount()
-    .then(function() {
+    Customer.checkActivatedAccount().then(function () {
       return Customer.checkMissingInformation();
-    })
-    .then(function() {
+    }).then(function () {
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
-    })
-    .then(function(groupOrders) {
+    }).then(function (groupOrders) {
       return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
-    })
-    .then(function() {
+    }).then(function () {
       Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
-      $state.go('restaurant-menu', {restaurantId: restaurant.id});
-    })
-    .finally(function() {
+      $state.go('restaurant-menu', { restaurantId: restaurant.id });
+    }).finally(function () {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
-
 });

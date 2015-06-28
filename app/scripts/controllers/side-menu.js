@@ -1,14 +1,9 @@
 'use strict';
-
 angular.module('groupeat.controllers.side-menu', [
   'groupeat.services.analytics',
-  'ionic',
-])
-
-.controller('SideMenuCtrl', function($scope, $ionicSideMenuDelegate, Analytics) {
-
+  'ionic'
+]).controller('SideMenuCtrl', function ($scope, $ionicSideMenuDelegate, Analytics) {
   Analytics.trackView('Side Menu');
-
   $scope.menuItems = [
     {
       'title': 'group-orders',
@@ -26,9 +21,7 @@ angular.module('groupeat.controllers.side-menu', [
       'stateTarget': 'settings'
     }
   ];
-
-  $scope.toggleLeft = function() {
+  $scope.toggleLeft = function () {
     $ionicSideMenuDelegate.toggleLeft();
   };
-
 });

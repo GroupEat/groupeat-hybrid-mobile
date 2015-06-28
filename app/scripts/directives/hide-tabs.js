@@ -1,16 +1,12 @@
 'use strict';
-
-angular.module('groupeat.directives.hide-tabs', [])
-
-.directive('geHideTabs', function($rootScope) {
+angular.module('groupeat.directives.hide-tabs', []).directive('geHideTabs', function ($rootScope) {
   return {
     restrict: 'A',
-    link: function($scope) {
+    link: function ($scope) {
       $rootScope.hideTabs = true;
-      $scope.$on('$destroy', function() {
+      $scope.$on('$destroy', function () {
         $rootScope.hideTabs = false;
-      });
-      /* TODO : on cached --> hideTabs = false ; */
+      });  /* TODO : on cached --> hideTabs = false ; */
     }
   };
 });
