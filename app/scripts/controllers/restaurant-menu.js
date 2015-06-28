@@ -15,7 +15,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 .controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory) {
 
-
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
 	$scope.products = [];

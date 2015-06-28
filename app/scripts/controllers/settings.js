@@ -1,44 +1,48 @@
 'use strict';
 
 angular.module('groupeat.controllers.settings', [
-	'groupeat.services.address',
-	'groupeat.services.analytics',
-	'groupeat.services.authentication',
-	'groupeat.services.credentials',
-	'groupeat.services.customer',
-	'groupeat.services.customer-settings',
-	'groupeat.services.element-modifier',
-	'groupeat.services.lodash',
-	'groupeat.services.loading-backdrop',
-	'groupeat.services.message-backdrop',
-	'groupeat.services.network',
-	'groupeat.services.popup',
-	'jcs-autoValidate'
+  'groupeat.services.address',
+  'groupeat.services.analytics',
+  'groupeat.services.authentication',
+  'groupeat.services.credentials',
+  'groupeat.services.customer',
+  'groupeat.services.customer-settings',
+  'groupeat.services.element-modifier',
+  'groupeat.services.lodash',
+  'groupeat.services.loading-backdrop',
+  'groupeat.services.message-backdrop',
+  'groupeat.services.network',
+  'groupeat.services.popup',
+  'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
+.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
 
 	Analytics.trackView('Restaurants');
 
 	/*
 	Models
 	*/
-	$scope.customer = {};
-	$scope.form = {};
-	$scope.customerSettings = {};
-
-	/*
+  $scope.customer = {};
+  $scope.form = {};
+  $scope.customerSettings = {};
+  /*
 	Settings list
 	*/
-	$scope.tabs = [
-		{ title: 'editProfile', url: 'templates/settings/settings-profile.html' },
-		{ title: 'pushSettings', url: 'templates/settings/settings-notifications.html' }
-	];
+  $scope.tabs = [
+    {
+      title: 'editProfile',
+      url: 'templates/settings/settings-profile.html'
+    },
+    {
+      title: 'pushSettings',
+      url: 'templates/settings/settings-notifications.html'
+    }
+  ];
 
-	/*
+  /*
 	Loading
 	*/
-
 	$scope.initCtrl = function() {
 		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
@@ -54,6 +58,7 @@ angular.module('groupeat.controllers.settings', [
 	$scope.onReload = function() {
 		var deferred = $q.defer();
 		var customerId = Credentials.get().id;
+
 		Network.hasConnectivity()
 		.then(function() {
 			return Customer.get(customerId);

@@ -287,5 +287,4 @@ angular.module('groupeat.services.order', [
 		getFoodRushTime: getFoodRushTime,
 		getCurrentDiscount: getCurrentDiscount
 	};
-}
-);
+});

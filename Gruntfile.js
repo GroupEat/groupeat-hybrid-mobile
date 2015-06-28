@@ -20,6 +20,9 @@ module.exports = function (grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
+  //Auto Js-fixer based on linting
+  grunt.loadNpmTasks('grunt-fixmyjs');
+
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
@@ -39,6 +42,18 @@ module.exports = function (grunt) {
       task: {
         options: {
         }
+      }
+    },
+
+    fixmyjs: {
+      options: {
+        jshintrc: '.jshintrc',
+        indentpref: 'spaces'
+      },
+      all: {
+        files: [
+          {expand: true, cwd: '<%= yeoman.app %>/<%= yeoman.scripts %>', src: ['**/*.js'], dest: '<%= yeoman.app %>/<%= yeoman.scripts %>', ext: '.js'}
+        ]
       }
     },
 
@@ -632,6 +647,10 @@ module.exports = function (grunt) {
     'concurrent:server',
     'newer:copy:app',
     'newer:copy:tmp'
+  ]);
+
+  grunt.registerTask('fixAllJs', [
+    'fixmyjs:all'
   ]);
 
   grunt.registerTask('compress', [

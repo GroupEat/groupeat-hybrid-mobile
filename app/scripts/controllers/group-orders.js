@@ -14,7 +14,6 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-
 .controller('GroupOrdersCtrl', function($scope, $state, $q, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Geolocation, _) {
 
   Analytics.trackView('Group Orders');
@@ -24,8 +23,8 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.onNewGroupOrder = function() {
     $state.go('restaurants');
   };
-
-  $scope.initCtrl = function() {
+  
+  $scope.initCtrl = function () {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     $scope.onReload()
     .finally(function() {

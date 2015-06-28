@@ -1,0 +1,35 @@
+<div class="order-card" >
+  <div class="top" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
+    <h3>-{{order.discountRate}}<span>%</span></h3>
+    <div class="time-left">
+      <span>
+        <timer end-time="order.endingAt" interval="1000"> {{mminutes}}</timer>mn
+        </span> left
+    </div>
+  </div>
+  <div class="content">
+    <h1>{{order.restaurant.data.name}}</h1>
+    <div class="stars clearfix">
+      <i class="ion-ios-star" ng-repeat="i in setArrayFromInt(4) track by $index"></i>
+      <i class="ion-ios-star-outline" ng-repeat="i in setArrayFromInt(1) track by $index"></i>
+    </div>
+    <div class="capacity">
+      <h4 class="small-title">
+        {{ 'remainingCapacity' | translate }} <b>{{order.remainingCapacity}}</b>
+      </h4>
+      <div class="clearfix">
+        <ul>
+          <li ng-repeat="i in setArrayFromInt(order.restaurant.data.deliveryCapacity - order.remainingCapacity) track by $index">
+            <span class="pizza filled"></span>
+          </li>
+          <li ng-repeat="i in setArrayFromInt(order.remainingCapacity) track by $index">
+            <span class="pizza"></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <a href="#" on-tap="onJoinOrderTouch(order)" class="btn btn-bloc btn-green btn-lg">
+      <i class="ion-plus-round"></i> Passer commande
+    </a>
+  </div>
+</div>
