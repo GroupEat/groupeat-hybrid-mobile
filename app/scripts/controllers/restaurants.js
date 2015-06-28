@@ -10,20 +10,18 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
-  'groupeat.services.popup',
   'groupeat.services.restaurant',
-  'ngMaterial'
 ])
 
-.controller('RestaurantsCtrl', function($filter, $mdDialog, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Popup, Restaurant, _, Geolocation) {
+.controller('RestaurantsCtrl', function($filter, $q, $scope, $state, Analytics, GroupOrder, Customer, LoadingBackdrop, MessageBackdrop, Network, Order, Restaurant, _, Geolocation) {
 
   Analytics.trackView('Restaurants');
 
-  $scope.restaurants = {};
+  $scope.restaurants = [];
 
   $scope.initCtrl = function() {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    $scope.onRefreshRestaurants()
+    $scope.onReload()
     .finally(function() {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
@@ -33,61 +31,36 @@ angular.module('groupeat.controllers.restaurants', [
     $state.go('app.group-orders');
   };
 
-  $scope.onRefreshRestaurants = function() {
+  $scope.onReload = function() {
     var deferred = $q.defer();
-
-    if (!Network.hasConnectivity())
-    {
-      $scope.messageBackdrop = MessageBackdrop.noNetwork();
-      $scope.$broadcast('scroll.refreshComplete');
+    Network.hasConnectivity()
+    .then(function() {
+      return Geolocation.getGeolocation();
+    })
+    .then(function(currentPosition) {
+      $scope.userCurrentPosition = currentPosition;
+      return Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude);
+    })
+    .then(function(restaurants) {
+      $scope.restaurants = restaurants;
+      if (_.isEmpty(restaurants))
+      {
+        $scope.messageBackdrop = MessageBackdrop.backdrop('noRestaurants','ion-android-restaurant');
+      }
+      else
+      {
+        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+      }
+      deferred.resolve();
+    })
+    .catch(function(errorKey) {
+      $scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
       deferred.reject();
-    }
-    else
-    {
-      Geolocation.getGeolocation()
-      .then(function(currentPosition) {
-        $scope.userCurrentPosition = currentPosition;
-        Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude)
-        .then(function(restaurants) {
-          $scope.restaurants = restaurants;
-          _.forEach($scope.restaurants, function(restaurant) {
-            if(restaurant.logo === null || restaurant.logo === undefined) {
-              restaurant.logo = 'images/flat-pizza.png';
-            }
-          });
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });
 
-          if (_.isEmpty(restaurants))
-          {
-            $scope.messageBackdrop = {
-              show: true,
-              title: 'noRestaurantsTitle',
-              details: 'noRestaurantsDetails',
-              iconClasses: 'ion-android-restaurant',
-              button: {
-                text: 'reload',
-                action: 'onRefreshRestaurants()'
-              }
-            };
-          }
-          else
-          {
-            $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-          }
-          deferred.resolve();
-        })
-        .catch(function() {
-          $scope.messageBackdrop = MessageBackdrop.genericFailure('onRefreshRestaurants()');
-          deferred.reject();
-        });
-      })
-      .catch(function() {
-        $scope.messageBackdrop = MessageBackdrop.noGeolocation();
-        deferred.reject();
-      })
-      .finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
-      });
-    }
     return deferred.promise;
   };
 

@@ -30,8 +30,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.spy(Customer, 'save')
       Address = $injector.get('Address')
       Popup = $injector.get('Popup')
-      sandbox.stub(Popup, 'displayError')
-      sandbox.stub(Popup, 'displayTitleOnly')
+      sandbox.stub Popup, 'error'
+      sandbox.stub Popup, 'title'
       DeviceAssistant = $injector.get('DeviceAssistant')
 
       $httpBackend = $injector.get('$httpBackend')
@@ -211,8 +211,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Credentials.set.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
-      # Popup.displayError should be called
-      Popup.displayError.should.have.been.called
+      # Popup.error should be called
+      Popup.error.should.have.been.called
 
     it 'if there is no client side validation error but an error from the server, an error dialog should be displayed', ->
       $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
@@ -230,8 +230,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Credentials.set.should.have.not.been.called
       # The state should not change
       $state.go.should.have.not.been.called
-      #Popup.displayError should be called
-      Popup.displayError.should.have.been.called
+      #Popup.error should be called
+      Popup.error.should.have.been.called
 
     it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
       $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token')
@@ -256,8 +256,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Credentials.set.should.have.been.called
       # The state should change
       $state.go.should.have.been.called
-      #Popup.displayError should not be called
-      Popup.displayError.should.have.not.been.called
+      #Popup.error should not be called
+      Popup.error.should.have.not.been.called
 
   describe 'Forgot password', ->
 
@@ -417,7 +417,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitRegisterForm(scope.registerForm)
       scope.$apply()
 
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Customer.save.should.have.not.been.called
 
     it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
@@ -434,7 +434,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Customer.save.should.been.called
 
     it "if there is no client side validation error, no server side error, DeviceAssistant.register should be called and an error dialog should be displayed", ->
@@ -457,7 +457,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.flush()
 
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Credentials.set.should.have.been.called
       DeviceAssistant.register.should.have.been.called
 
@@ -547,7 +547,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it 'should show a welcome popup when skipping further registering, which should disappear after a timeout', ->
       scope.userRegister.firstName = 'firstName'
       scope.hasRegistered(true)
-      Popup.displayTitleOnly.should.have.been.calledWith('welcome', 3000)
+      Popup.title.should.have.been.calledWith 'welcome'
 
     it 'should watch on all fields of the second step of userRegister', ->
       sandbox.spy(scope, 'updateFurtherRegisterButton')
@@ -649,7 +649,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitFurtherRegisterForm(scope.registerForm)
       scope.$digest()
 
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Customer.update.should.have.not.been.called
 
     it "if there are no client side validation errors but Customer.update returns an error, an error dialog should be displayed", ->
@@ -667,7 +667,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.$digest()
       $httpBackend.flush()
 
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Customer.update.should.have.been.called
 
     it "if there are no errors for updating the customer but Address.update returns an error, an error dialog should be displayed", ->
@@ -689,7 +689,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.$digest()
       $httpBackend.flush()
       Customer.update.should.have.been.called
-      Popup.displayError.should.have.been.called
+      Popup.error.should.have.been.called
       Address.update.should.have.been.called
 
     it 'if there are no errors, the hasRegistered should be called', ->
@@ -715,5 +715,5 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       Customer.update.should.have.been.called
       Address.update.should.have.been.called
-      Popup.displayError.should.have.not.been.called
+      Popup.error.should.have.not.been.called
       scope.hasRegistered.should.have.been.calledWithExactly(false)

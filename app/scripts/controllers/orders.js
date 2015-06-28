@@ -22,51 +22,34 @@ angular.module('groupeat.controllers.orders', [
 
   $scope.onReload = function() {
     var deferred = $q.defer();
-    if (!Network.hasConnectivity())
-    {
-      $scope.messageBackdrop = MessageBackdrop.noNetwork();
-      $scope.$broadcast('scroll.refreshComplete');
+    Network.hasConnectivity()
+    .then(function() {
+      return Order.queryForCustomer(Credentials.get().id);
+    })
+    .then(function(orders) {
+      $scope.orders = orders;
+      if (_.isEmpty($scope.orders))
+      {
+        $scope.messageBackdrop = MessageBackdrop.backdrop('noOrders', 'ion-thumbsdown', 'reload', 'onReload()');
+      }
+      else
+      {
+        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
+      }
+      deferred.resolve();
+    })
+    .catch(function(errorKey) {
+      $scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
       deferred.reject();
-    }
-    else
-    {
-      Order.queryForCustomer(Credentials.get().id)
-      .then(function(orders) {
-        deferred.resolve();
-        $scope.orders = orders;
-        if (_.isEmpty($scope.orders))
-        {
-          $scope.messageBackdrop = {
-            show: true,
-            title: 'noOrdersTitle',
-            details: 'noOrdersDetails',
-            iconClasses: 'ion-thumbsdown',
-            button: {
-              text: 'reload',
-              action: 'onReload()'
-            }
-          };
-        }
-        else
-        {
-          $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-        }
-      })
-      .catch(function() {
-        $scope.messageBackdrop = MessageBackdrop.genericFailure();
-        deferred.reject();
-      })
-      .finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
-      });
-    }
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });
     return deferred.promise;
   };
 
   $scope.getTimeDiff = function (endingAt) {
     return Order.getTimeDiff(endingAt);
   };
-
-  $scope.initCtrl();
 
 });

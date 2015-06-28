@@ -40,22 +40,26 @@ angular.module('groupeat.controllers.settings', [
 	/*
 	Loading
 	*/
-	$scope.onReload = function() {
-		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
 
-		// Loading notification related options
+	$scope.initCtrl = function() {
 		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
 
-		if (!Network.hasConnectivity())
-		{
+		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
+		$scope.onReload()
+		.finally(function() {
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-			$scope.messageBackdrop = MessageBackdrop.noNetwork();
-			return;
-		}
+		});
+	};
+
+	$scope.onReload = function() {
+		var deferred = $q.defer();
 		var customerId = Credentials.get().id;
-		Customer.get(customerId)
+		Network.hasConnectivity()
+		.then(function() {
+			return Customer.get(customerId);
+		})
 		.then(function(customer) {
 			$scope.customer = customer;
 			return Address.get(customerId);
@@ -70,13 +74,17 @@ angular.module('groupeat.controllers.settings', [
 				return (option.value === customerSettings.noNotificationAfter);
 			});
 			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
+			deferred.resolve();
 		})
-		.catch(function() {
-			$scope.messageBackdrop = MessageBackdrop.genericFailure();
+		.catch(function(errorKey) {
+			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
+			deferred.reject();
 		})
 		.finally(function() {
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
+
+		return deferred.promise;
 	};
 
 	/*
@@ -119,15 +127,14 @@ angular.module('groupeat.controllers.settings', [
 			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
 				return (option.value === customerSettings.noNotificationAfter);
 			});
-			Popup.displayTitleOnly($translate('customerEdited'), 3000);
+			Popup.title('customerEdited');
 		})
 		.catch(function(errorMessage) {
-			Popup.displayError(errorMessage, 3000);
+			Popup.error(errorMessage);
 		})
 		.finally(function() {
 			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
 	};
 
-	$scope.onReload();
 });

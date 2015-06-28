@@ -107,7 +107,7 @@ angular.module('groupeat.controllers.authentication', [
       return response;
     })
     .catch(function(errorResponse) {
-      return Popup.displayError(errorResponse, 3000);
+      return Popup.error(errorResponse);
     });
   };
 
@@ -179,7 +179,7 @@ angular.module('groupeat.controllers.authentication', [
       return response;
     })
     .catch(function(errorResponse) {
-      Popup.displayError(errorResponse);
+      Popup.error(errorResponse);
     });
   };
 
@@ -199,7 +199,7 @@ angular.module('groupeat.controllers.authentication', [
 
     $state.go('side-menu.group-orders') ;
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
-    return Popup.displayTitleOnly($translate('welcome', {firstName: firstName}), 3000);
+    return Popup.title($translate('welcome', {firstName: firstName}));
   };
 
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
@@ -232,7 +232,7 @@ angular.module('groupeat.controllers.authentication', [
       $scope.hasRegistered(false);
     })
     .catch(function(errorMessage) {
-      return Popup.displayError(errorMessage, 3000);
+      return Popup.error(errorMessage);
     });
   };
 

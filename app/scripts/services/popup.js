@@ -1,93 +1,82 @@
 'use strict';
 
 angular.module('groupeat.services.popup', [
-  'ngMaterial',
+  'ionic',
   'pascalprecht.translate'
 ])
 
-.factory('Popup', function ($filter, $mdDialog, $timeout) {
+.factory('Popup', function ($filter, $ionicPopup) {
 
     var $translate = $filter('translate');
 
     var /**
     * @ngdoc function
-    * @name Popup#displayError
+    * @name Popup#alert
+    * @methodOf Popup
+    *
+    * @description
+    * Displays and return a generic popup with a custom title and content
+    * @param {String} title - The content of the error popup
+    * @param {String} content - The content of the error popup
+    */
+    alert = function (title, content) {
+      return $ionicPopup.alert({
+        title: $translate(title),
+        template: $translate(content)
+      });
+    },
+
+    /**
+    * @ngdoc function
+    * @name Popup#confirm
+    * @methodOf Popup
+    *
+    * @description
+    * Displays and return a confirm popup with a custom title and content
+    * @param {String} title - The content of the error popup
+    * @param {String} content - The content of the error popup
+    */
+    confirm = function (title, content) {
+      return $ionicPopup.confirm({
+        title: $translate(title),
+        template: $translate(content)
+      });
+    },
+
+
+    /**
+    * @ngdoc function
+    * @name Popup#error
     * @methodOf Popup
     *
     * @description
     * Displays and return a generic error popup with a custom content
     *
-    * @param {String} contentMessage - The content of the error popup
-    * @param {Bool} timeout - Time in ms after which the popup automatically closes (with 0, it never will)
+    * @param {String} content - The content of the error popup
     */
-    displayError = function (contentMessage, timeout) {
-      var popup = $mdDialog.show(
-        $mdDialog.alert({
-          parent: angular.element(document.body)
-        })
-        .title($translate('whoops'))
-        .content(contentMessage)
-        .ok($translate('ok'))
-      );
-      if (timeout)
-      {
-        $timeout(function() {
-          $mdDialog.hide();
-        }, timeout);
-      }
-      return popup;
+    error = function (content) {
+      return alert('whoops', content);
     },
 
     /**
     * @ngdoc function
-    * @name Popup#displayTitleOnly
+    * @name Popup#title
     * @methodOf Popup
     *
     * @description
     * Displays and return a generic popup with a custom title and no content
     *
     * @param {String} title - The title of the popup
-    * @param {Bool} timeout - Time in ms after which the popup automatically closes (with 0, it never will)
     */
-    displayTitleOnly = function(title, timeout) {
-      var popup = $mdDialog.show(
-        $mdDialog.alert({
-          parent: angular.element(document.body)
-        })
-        .title(title)
-        .ok($translate('ok'))
-      );
-      if (timeout)
-      {
-        $timeout(function() {
-          $mdDialog.hide();
-        }, timeout);
-      }
-      return popup;
-    },
-
-    displayTitleAndContent = function(title, contentMessage, timeout) {
-      var popup = $mdDialog.show(
-        $mdDialog.alert({
-          parent: angular.element(document.body)
-        })
-        .title(title)
-        .content(contentMessage)
-        .ok($translate('ok'))
-      );
-      if (timeout)
-      {
-        $timeout(function() {
-          $mdDialog.hide();
-        }, timeout);
-      }
-      return popup;
+    title = function(title) {
+      return alert(title, '');
     };
 
     return {
-      displayError: displayError,
-      displayTitleOnly: displayTitleOnly,
-      displayTitleAndContent: displayTitleAndContent
+      alert: alert,
+      confirm: confirm,
+      error: error,
+      title: title
     };
   }
 );
