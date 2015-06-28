@@ -22,6 +22,11 @@
  */
 
 @import "components/buttons";
+@import "components/backgrounds";
+@import "components/titles";
+@import "components/order-card";
+@import "components/create-order-footer";
+@import "components/empty-container";
 
 /**
  * VENDORS
@@ -31,3 +36,5 @@
 /**
  * PAGES
  */
+
+ @import "pages/group-orders";

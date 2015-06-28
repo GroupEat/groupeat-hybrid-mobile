@@ -1,26 +1,21 @@
 'use strict';
-
 angular.module('groupeat.services.error-message-resolver', [
   'pascalprecht.translate',
   'sprintf',
   'groupeat.services.order'
-])
-
-/*global vsprintf:true*/
-.factory('ErrorMessageResolver', [
+])  /*global vsprintf:true*/.factory('ErrorMessageResolver', [
   '$q',
   '$filter',
   function ($q, $filter) {
-
     var $translate = $filter('translate');
-
-    var isInteger = function(data) {
+    var isInteger = function (data) {
       var n = ~~Number(data);
       return String(n) === data && n >= 0;
     };
-
-    var attributesWithMandatoryValues = {'minlength': isInteger, 'maxlength': isInteger};
-
+    var attributesWithMandatoryValues = {
+      'minlength': isInteger,
+      'maxlength': isInteger
+    };
     /**
     * @ngdoc function
     * @name ErrorMessageResolver#formatErrorMessage
@@ -36,33 +31,24 @@ angular.module('groupeat.services.error-message-resolver', [
     * @returns {String} The error message with the validation attribute values inserted
     */
     var formatErrorMessage = function (errorType, el, errorMessage) {
-      var parameter,
-      parameters = [];
+      var parameter, parameters = [];
       if (el && el.attr) {
         parameter = el.attr(errorType);
         if (parameter === undefined) {
           parameter = el.attr('data-ng-' + errorType) || el.attr('ng-' + errorType);
         }
-
-        if (errorType in attributesWithMandatoryValues)
-        {
-          if (!parameter)
-          {
+        if (errorType in attributesWithMandatoryValues) {
+          if (!parameter) {
             throw new Error($translate('missingMandatoryAttributeValueError'));
-          }
-          else if (!attributesWithMandatoryValues[errorType](parameter))
-          {
+          } else if (!attributesWithMandatoryValues[errorType](parameter)) {
             throw new Error($translate('invalidMandatoryAttributeValueTypeError'));
           }
         }
-
         parameters.push(parameter || '');
-
         return vsprintf(errorMessage, parameters);
       }
       return errorMessage;
     };
-
     /**
     * @ngdoc function
     * @name ErrorMessageResolver#resolve
@@ -77,20 +63,16 @@ angular.module('groupeat.services.error-message-resolver', [
     */
     var resolve = function (errorType, el) {
       var defer = $q.defer();
-      if (!el[0].name)
-      {
+      if (!el[0].name) {
         return $q.reject(new Error($translate('missingFieldNameError')));
-      }
-      else
-      {
-        var fieldName = $translate(el[0].name+'FieldName');
-        var errorMessage = $translate(errorType+'ErrorKey', { fieldName: fieldName });
+      } else {
+        var fieldName = $translate(el[0].name + 'FieldName');
+        var errorMessage = $translate(errorType + 'ErrorKey', { fieldName: fieldName });
         errorMessage = formatErrorMessage(errorType, el, errorMessage);
         defer.resolve(errorMessage);
       }
       return defer.promise;
     };
-
     return {
       formatErrorMessage: formatErrorMessage,
       resolve: resolve

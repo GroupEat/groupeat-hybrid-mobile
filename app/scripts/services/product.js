@@ -1,15 +1,11 @@
 'use strict';
-
 angular.module('groupeat.services.product', [
   'groupeat.services.backend-utils',
   'groupeat.services.lodash'
-])
-
-.factory('Product', function($resource, ENV, $q, _) {
-
-  var resource = $resource(ENV.apiEndpoint+'/restaurants/:restaurantId/products?include=formats');
-
-  var /**
+]).factory('Product', function ($resource, ENV, $q, _) {
+  var resource = $resource(ENV.apiEndpoint + '/restaurants/:restaurantId/products?include=formats');
+  var
+  /**
   * @ngdoc function
   * @name Product#get
   * @methodOf Product
@@ -19,25 +15,20 @@ angular.module('groupeat.services.product', [
   * https://groupeat.fr/docs
   *
   */
-  get = function(restaurantId) {
+  get = function (restaurantId) {
     var defer = $q.defer();
-    resource.get({restaurantId: restaurantId}).$promise
-    .then(function(response) {
+    resource.get({ restaurantId: restaurantId }).$promise.then(function (response) {
       var products = response.data;
-      _.forEach(products, function(product) {
-        _.forEach(product.formats.data, function(format) {
-          format.price = format.price / 100 ;
+      _.forEach(products, function (product) {
+        _.forEach(product.formats.data, function (format) {
+          format.price = format.price / 100;
         });
       });
       defer.resolve(products);
-    })
-    .catch(function() {
+    }).catch(function () {
       defer.reject();
     });
     return defer.promise;
   };
-
-  return {
-    get: get
-  };
+  return { get: get };
 });

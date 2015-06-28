@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('groupeat.services.customer', [
   'groupeat.services.address',
   'groupeat.services.backend-utils',
@@ -7,18 +6,11 @@ angular.module('groupeat.services.customer', [
   'groupeat.services.lodash',
   'groupeat.services.popup',
   'ngMaterial'
-])
-
-.factory('Customer', function($filter, $mdDialog, $resource, $q, $state, ENV, _, Address, BackendUtils, Credentials, Popup) {
-
+]).factory('Customer', function ($filter, $mdDialog, $resource, $q, $state, ENV, _, Address, BackendUtils, Credentials, Popup) {
   var $translate = $filter('translate');
-
-  var resource = $resource(ENV.apiEndpoint+'/customers/:id', null,
-  {
-    'update': { method: 'PUT' }
-  });
-
-  var /**
+  var resource = $resource(ENV.apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
+  var
+    /**
   * @ngdoc function
   * @name Customer#get
   * @methodOf Customer
@@ -30,19 +22,16 @@ angular.module('groupeat.services.customer', [
   *
   * @param {String} customerId - The id of the customer
   */
-  get = function(customerId) {
-    var defer = $q.defer();
-    resource.get({id: customerId}).$promise
-    .then(function(response) {
-      defer.resolve(response.data);
-    })
-    .catch(function() {
-      defer.reject();
-    });
-    return defer.promise;
-  },
-
-  /**
+    get = function (customerId) {
+      var defer = $q.defer();
+      resource.get({ id: customerId }).$promise.then(function (response) {
+        defer.resolve(response.data);
+      }).catch(function () {
+        defer.reject();
+      });
+      return defer.promise;
+    },
+    /**
   * @ngdoc function
   * @name Customer#save
   * @methodOf Customer
@@ -55,19 +44,16 @@ angular.module('groupeat.services.customer', [
   *
   * @param {Object} requestBody - must contain an 'email' and 'password' field
   */
-  save = function(requestBody) {
-    var defer = $q.defer();
-    resource.save(null, requestBody).$promise
-    .then(function(response) {
-      defer.resolve(response);
-    })
-    .catch(function(errorResponse) {
-      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
-    });
-    return defer.promise;
-  },
-
-  /**
+    save = function (requestBody) {
+      var defer = $q.defer();
+      resource.save(null, requestBody).$promise.then(function (response) {
+        defer.resolve(response);
+      }).catch(function (errorResponse) {
+        defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+      });
+      return defer.promise;
+    },
+    /**
   * @ngdoc function
   * @name Customer#update
   * @methodOf Customer
@@ -80,50 +66,40 @@ angular.module('groupeat.services.customer', [
   * @param {Object} parameters an object containing an 'id' field of the customer to update
   * @param {Object} requestBody the fields to update for the customer
   */
-  update = function(parameters, requestBody) {
-    var defer = $q.defer();
-    resource.update(parameters, requestBody).$promise
-    .then(function(response) {
-      defer.resolve(response.data);
-    })
-    .catch(function(errorResponse) {
-      defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
-    });
-    return defer.promise;
-  },
-
-  /**
+    update = function (parameters, requestBody) {
+      var defer = $q.defer();
+      resource.update(parameters, requestBody).$promise.then(function (response) {
+        defer.resolve(response.data);
+      }).catch(function (errorResponse) {
+        defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+      });
+      return defer.promise;
+    },
+    /**
   * @ngdoc function
   * @name Customer#checkActivatedAccount
   * @methodOf Customer
   *
   * @description Returns a promise informing wether or not the customer has already activated his/her account
   */
-  checkActivatedAccount = function() {
-    var deferred = $q.defer();
-    if(ENV.name === 'development') {
-      deferred.resolve();
-    }
-    else {
-      var customerId = Credentials.get().id;
-      get(customerId)
-      .then(function(customer) {
-        if (!customer.activated)
-        {
-          deferred.reject();
-          Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
-        }
-        else
-        {
-          deferred.resolve();
-        }
-      });
-    }
-
-    return deferred.promise;
-  },
-
-  /**
+    checkActivatedAccount = function () {
+      var deferred = $q.defer();
+      if (ENV.name === 'development') {
+        deferred.resolve();
+      } else {
+        var customerId = Credentials.get().id;
+        get(customerId).then(function (customer) {
+          if (!customer.activated) {
+            deferred.reject();
+            Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
+          } else {
+            deferred.resolve();
+          }
+        });
+      }
+      return deferred.promise;
+    },
+    /**
   * @ngdoc function
   * @name Customer#checkMissingInformation
   * @methodOf Customer
@@ -137,81 +113,59 @@ angular.module('groupeat.services.customer', [
   * It will however probably work fine for most locales (French, English, Spanish...)
   *
   */
-  checkMissingInformation = function() {
-    var deferred = $q.defer();
-    var customerId = Credentials.get().id;
-    var mandatoryCustomerProperties = ['firstName', 'lastName', 'phoneNumber'];
-    var missingProperties = [];
-    get(customerId)
-    .then(function(customer) {
-      _.forEach(mandatoryCustomerProperties, function(mandatoryProperty) {
-        if (!_.has(customer, mandatoryProperty) || !customer[mandatoryProperty])
-        {
-          missingProperties.push(mandatoryProperty);
-        }
-      });
-      Address.get(customerId)
-      .then(function(address) {
-        if (!address)
-        {
-          missingProperties.push('address');
-        }
-      })
-      .finally(function() {
-        if (_.isEmpty(missingProperties))
-        {
-          deferred.resolve();
-        }
-        else
-        {
-          var missingPropertiesString = '';
-          if (missingProperties.length === 1)
-          {
-            missingPropertiesString = $translate(missingProperties[0]);
+    checkMissingInformation = function () {
+      var deferred = $q.defer();
+      var customerId = Credentials.get().id;
+      var mandatoryCustomerProperties = [
+        'firstName',
+        'lastName',
+        'phoneNumber'
+      ];
+      var missingProperties = [];
+      get(customerId).then(function (customer) {
+        _.forEach(mandatoryCustomerProperties, function (mandatoryProperty) {
+          if (!_.has(customer, mandatoryProperty) || !customer[mandatoryProperty]) {
+            missingProperties.push(mandatoryProperty);
           }
-          else if (missingProperties.length === 2)
-          {
-            missingPropertiesString = $translate(missingProperties[0]) + ' ' + $translate('and') + ' ';
-            missingPropertiesString += $translate(missingProperties[1]);
+        });
+        Address.get(customerId).then(function (address) {
+          if (!address) {
+            missingProperties.push('address');
           }
-          else
-          {
-            var i;
-            for (i = 0; i < missingProperties.length-2; i++)
-            {
-              missingPropertiesString += $translate(missingProperties[i]) + ', ';
+        }).finally(function () {
+          if (_.isEmpty(missingProperties)) {
+            deferred.resolve();
+          } else {
+            var missingPropertiesString = '';
+            if (missingProperties.length === 1) {
+              missingPropertiesString = $translate(missingProperties[0]);
+            } else if (missingProperties.length === 2) {
+              missingPropertiesString = $translate(missingProperties[0]) + ' ' + $translate('and') + ' ';
+              missingPropertiesString += $translate(missingProperties[1]);
+            } else {
+              var i;
+              for (i = 0; i < missingProperties.length - 2; i++) {
+                missingPropertiesString += $translate(missingProperties[i]) + ', ';
+              }
+              missingPropertiesString += $translate(missingProperties[missingProperties.length - 2]) + ' ' + $translate('and') + ' ';
+              missingPropertiesString += $translate(missingProperties[missingProperties.length - 1]);
             }
-            missingPropertiesString += $translate(missingProperties[missingProperties.length-2]) + ' ' + $translate('and') + ' ';
-            missingPropertiesString += $translate(missingProperties[missingProperties.length-1]);
+            deferred.reject(missingPropertiesString);
+            if (!missingPropertiesString) {
+              Popup.displayError($translate('genericFailureDetails'), 3000);
+            } else {
+              var confirm = $mdDialog.confirm({ parent: angular.element(document.body) }).title($translate('missingPropertiesTitle')).content($translate('missingCustomerInformationMessage', { missingProperties: missingPropertiesString })).ok($translate('settings')).cancel($translate('cancel'));
+              $mdDialog.show(confirm).then(function () {
+                $state.go('side-menu.settings');
+              });
+            }
           }
-          deferred.reject(missingPropertiesString);
-          if (!missingPropertiesString)
-          {
-            Popup.displayError($translate('genericFailureDetails'), 3000);
-          }
-          else
-          {
-            var confirm = $mdDialog.confirm({
-              parent: angular.element(document.body)
-            })
-            .title($translate('missingPropertiesTitle'))
-            .content($translate('missingCustomerInformationMessage', {missingProperties: missingPropertiesString}))
-            .ok($translate('settings'))
-            .cancel($translate('cancel'));
-            $mdDialog.show(confirm)
-            .then(function() {
-              $state.go('side-menu.settings');
-            });
-          }
-        }
+        });
+      }).catch(function () {
+        deferred.reject();
       });
-    })
-    .catch(function() {
-      deferred.reject();
-    });
-    return deferred.promise;
-  };
-
+      return deferred.promise;
+    };
   return {
     get: get,
     save: save,
