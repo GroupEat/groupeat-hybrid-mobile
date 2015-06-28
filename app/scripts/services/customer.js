@@ -101,24 +101,19 @@ angular.module('groupeat.services.customer', [
   */
   checkActivatedAccount = function() {
     var deferred = $q.defer();
-    if(ENV.name === 'development') {
-      deferred.resolve();
-    }
-    else {
-      var customerId = Credentials.get().id;
-      get(customerId)
-      .then(function(customer) {
-        if (!customer.activated)
-        {
-          deferred.reject();
-          Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
-        }
-        else
-        {
-          deferred.resolve();
-        }
-      });
-    }
+    var customerId = Credentials.get().id;
+    get(customerId)
+    .then(function(customer) {
+      if (!customer.activated)
+      {
+        deferred.reject();
+        Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
+      }
+      else
+      {
+        deferred.resolve();
+      }
+    });
 
     return deferred.promise;
   },
