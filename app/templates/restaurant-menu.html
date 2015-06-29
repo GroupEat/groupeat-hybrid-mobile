@@ -23,10 +23,18 @@
     <div id="discount-placeholder">
       <div class="background" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
         <div class="content">
-          <div class="discount">
-            <h4>{{ currentOrder.currentDiscount }} <small>%</small></h4>
+          <div class="discount" ng-show="currentOrder.currentDiscount">
+            <h4>-{{ currentOrder.currentDiscount }}<small>%</small></h4>
           </div>
-          div.
+          <div class="food-rush">
+            <h3 class="time-value">{{foodRushTime.value}}<small>mn</small></h3>
+            <h5>{{ 'howLongFoodRush' | translate }} <b>Food Rush</b> ?</h5>
+            <div class="item range range-assertive">
+              5mn
+              <input type="range" min="5" max="60" ng-model="foodRushTime.value" step="5" name="volume">
+              60mn
+            </div>
+          </div>
         </div>
       </div>
     </div>

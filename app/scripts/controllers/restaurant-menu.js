@@ -17,6 +17,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
   Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
   $scope.isNewOrder = { value: null };
   $scope.groups = [];
+  $scope.foodRushTime = {};
+  $scope.foodRushTime.value = 35;
   $scope.initCart = function () {
     $scope.currentOrder = Order.getCurrentOrder();
     Cart.setDiscountRate($scope.currentOrder.currentDiscount);
