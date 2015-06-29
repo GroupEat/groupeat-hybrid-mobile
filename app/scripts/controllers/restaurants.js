@@ -76,7 +76,7 @@ angular.module('groupeat.controllers.restaurants', [
       return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
     })
     .then(function() {
-      Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity, restaurant.discountPolicy);
+      Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
       $state.go('restaurant-menu', {restaurantId: restaurant.id});
     });
   };

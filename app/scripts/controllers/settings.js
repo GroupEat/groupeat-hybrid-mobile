@@ -18,8 +18,6 @@ angular.module('groupeat.controllers.settings', [
 
 .controller('SettingsCtrl', function($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
 
-	var $translate = $filter('translate');
-
 	Analytics.trackView('Restaurants');
 
 	/*

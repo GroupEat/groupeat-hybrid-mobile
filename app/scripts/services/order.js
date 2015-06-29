@@ -112,7 +112,8 @@ angular.module('groupeat.services.order', [
 			if (currentOrder.groupOrderId !== null) {
 				totalPrice = totalPrice + currentOrder.groupOrderTotalPrice;
 			}
-			var newDiscount, priceUp, priceDown;
+			var newDiscount;
+			var priceDown = 0;
 			var completeDiscountPolicy = currentOrder.discountPolicy;
 			completeDiscountPolicy['0'] = 0;
 			var discountPricesHundred = _.keys(completeDiscountPolicy);
@@ -121,16 +122,16 @@ angular.module('groupeat.services.order', [
 				discountPrices[i] = parseInt(discountPricesHundred[i])/100 ;
 			}
 
+			var priceUp = _.max(discountPrices);
 			// We find the interval in which is the total price
 			for(i=0 ; i < _.size(discountPrices) ; i++) {
-				if(totalPrice > discountPrices[i]) {
-					priceDown = discountPrices[i];
-					if( i === _.size(discountPrices) - 1) {
-						priceUp = discountPrices[i];
-					}
-					else {
-						priceUp = discountPrices[i+1];
-					}
+				if(totalPrice >= discountPrices[i]) {
+					priceDown = _.max([discountPrices[i], priceDown]);
+					console.log(priceDown);
+				}
+				if(totalPrice <= discountPrices[i]) {
+					priceUp = _.min([discountPrices[i], priceUp]);
+					console.log(priceUp);
 				}
 			}
 

@@ -2,7 +2,7 @@
 
 angular.module('groupeat.services.message-backdrop', [])
 
-.factory('MessageBackdrop', function($parse) {
+.factory('MessageBackdrop', function() {
 
     var /**
     * @ngdoc function

@@ -140,7 +140,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onRestaurantTouch restaurant
       scope.$digest()
 
-      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, null, 10, 'discountPolicy')
+      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, 0, 10, 'discountPolicy')
       $state.go.should.have.been.calledWithExactly('restaurant-menu', restaurantId: 1)
 
   describe 'RestaurantsCtrl#initCtrl', ->
