@@ -127,11 +127,9 @@ angular.module('groupeat.services.order', [
 			for(i=0 ; i < _.size(discountPrices) ; i++) {
 				if(totalPrice >= discountPrices[i]) {
 					priceDown = _.max([discountPrices[i], priceDown]);
-					console.log(priceDown);
 				}
 				if(totalPrice <= discountPrices[i]) {
 					priceUp = _.min([discountPrices[i], priceUp]);
-					console.log(priceUp);
 				}
 			}
 
