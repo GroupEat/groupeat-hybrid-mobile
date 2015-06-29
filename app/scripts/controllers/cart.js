@@ -150,7 +150,7 @@ angular.module('groupeat.controllers.cart', [
           Cart.reset();
           Order.resetCurrentOrder();
           $ionicHistory.clearCache();
-          $state.go('side-menu.group-orders');
+          $state.go('app.group-orders');
           Popup.displayTitleOnly($translate('ordered'), 3000);
         }).catch(function (errorMessage) {
           $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();

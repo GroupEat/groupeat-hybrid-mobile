@@ -66,4 +66,15 @@ angular.module('groupeat.controllers.group-orders', [
     }
     return deferred.promise;
   };
+  $scope.setArrayFromInt = function (num) {
+    return new Array(num);
+  };
+  $scope.onJoinOrderTouch = function (groupOrder) {
+    Customer.checkActivatedAccount().then(function () {
+      return Customer.checkMissingInformation();
+    }).then(function () {
+      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
+      $state.go('restaurant-menu', { restaurantId: groupOrder.restaurant.data.id });
+    });
+  };
 });

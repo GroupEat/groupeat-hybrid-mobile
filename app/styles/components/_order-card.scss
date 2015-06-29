@@ -91,18 +91,13 @@
         margin-top: 10px;
         li {
           display: block;
-          margin: 5px;
+          text-align: center;
           -webkit-flex: 1 0 0px;
           span {
-            display: block;
-            width: 100%;
-            padding-top: 100%;
-            @include border-radius(100%);
-            &.pizza {
-              background-color: $bg-light;
-              &.filled {
-                background-color: $orange;
-              }
+            font-size: 30px;
+            color: $border-light;
+            &.filled {
+              color: $red;
             }
           }
         }
