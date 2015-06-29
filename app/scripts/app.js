@@ -12,7 +12,7 @@ angular.module('groupeat', [
   'jcs-autoValidate',
   'ngCordova',
   'ngCookies',
-  'ngMessages',,
+  'ngMessages',
   'ngAnimate',
   'pascalprecht.translate',
   'permission',

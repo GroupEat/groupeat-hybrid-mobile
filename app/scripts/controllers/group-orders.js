@@ -69,9 +69,6 @@ angular.module('groupeat.controllers.group-orders', [
     return deferred.promise;
   };
 
-  $scope.getTimeDiff = function(endingAt) {
-    return Order.getTimeDiff(endingAt);
-  };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
     Customer.checkActivatedAccount()
@@ -83,4 +80,10 @@ angular.module('groupeat.controllers.group-orders', [
 	    $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
     });
   };
+
+  $scope.setArrayFromInt = function (num) {
+    return new Array(num);
+  };
+
+
 });

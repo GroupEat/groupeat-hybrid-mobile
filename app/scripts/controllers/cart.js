@@ -243,6 +243,7 @@ angular.module('groupeat.controllers.cart', [
     }
     $scope.shouldAddressDialogConfirmButtonBeDisable();
   };
+
   $scope.shouldAddressDialogConfirmButtonBeDisable = function () {
     /*
 		This function return true if the OK button of popup should be disabled,
