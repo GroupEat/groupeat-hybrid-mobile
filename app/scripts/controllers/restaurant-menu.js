@@ -21,6 +21,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.isNewOrder = {
 		value: null
 	};
+  $scope.foodRushTime = {};
+  $scope.foodRushTime.value = 35;
 
 	$scope.initCtrl = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
