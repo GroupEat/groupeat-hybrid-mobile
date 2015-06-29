@@ -60,7 +60,7 @@
 
 	<!--	-	-	- REGISTER VIEW -	-	-	-->
 
-	<form name="registerForm" ng-show="showRegisterForm" ng-submit="submitRegisterForm(registerForm)" ng-submit-force="true" novalidate>
+	<form name="registerForm" ng-show="showRegisterForm"  ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<h6 class="login-text-first-page"> {{ 'enterYourCampusEmail' | translate }}</h6>
 			<md-input-container flex>
@@ -85,7 +85,7 @@
 				</div>
 			</md-input-container>
 		</div>
-		<button type="submit" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
+		<button on-tap="submitRegisterForm(registerForm)" type="submit" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 		</button>
 	</form>
 
