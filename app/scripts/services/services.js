@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('groupeat.services', [
   'groupeat.services.address',
   'groupeat.services.analytics',

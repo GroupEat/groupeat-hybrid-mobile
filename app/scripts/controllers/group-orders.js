@@ -14,7 +14,6 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-
 .controller('GroupOrdersCtrl', function($scope, $state, $q, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Geolocation, _) {
 
   Analytics.trackView('Group Orders');
@@ -24,8 +23,8 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.onNewGroupOrder = function() {
     $state.go('restaurants');
   };
-
-  $scope.initCtrl = function() {
+  
+  $scope.initCtrl = function () {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     $scope.onReload()
     .finally(function() {
@@ -70,9 +69,6 @@ angular.module('groupeat.controllers.group-orders', [
     return deferred.promise;
   };
 
-  $scope.getTimeDiff = function(endingAt) {
-    return Order.getTimeDiff(endingAt);
-  };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
     Customer.checkActivatedAccount()
@@ -84,4 +80,10 @@ angular.module('groupeat.controllers.group-orders', [
 	    $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
     });
   };
+
+  $scope.setArrayFromInt = function (num) {
+    return new Array(num);
+  };
+
+
 });

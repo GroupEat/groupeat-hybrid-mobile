@@ -27,7 +27,7 @@ angular.module('groupeat.controllers.restaurants', [
     });
   };
 
-  $scope.onRestaurantsListLeave = function() {
+  $scope.onRestaurantsListLeave = function () {
     $state.go('app.group-orders');
   };
 
@@ -60,7 +60,6 @@ angular.module('groupeat.controllers.restaurants', [
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
-
     return deferred.promise;
   };
 
@@ -68,11 +67,9 @@ angular.module('groupeat.controllers.restaurants', [
     Customer.checkActivatedAccount()
     .then(function() {
       return Customer.checkMissingInformation();
-    })
-    .then(function() {
+    }).then(function () {
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
-    })
-    .then(function(groupOrders) {
+    }).then(function (groupOrders) {
       return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
     })
     .then(function() {
@@ -80,5 +77,5 @@ angular.module('groupeat.controllers.restaurants', [
       $state.go('restaurant-menu', {restaurantId: restaurant.id});
     });
   };
-
+  
 });

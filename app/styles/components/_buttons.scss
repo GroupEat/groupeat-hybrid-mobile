@@ -3,16 +3,32 @@
  */
 
 .btn {
-	&.btn-lg {
-
-	}
-	&.btn-md {
-
-	}
-	&.btn-sm {
-
-	}
-	&.btn-bloc {
-
-	}
-}
+  line-height: 40px;
+  padding: 0 15px;
+  display: inline-block;
+  text-align:center;
+  text-decoration: none;
+  font-weight: 700;
+  @include border-radius(4px);
+  &.btn-bloc {
+  	display: block;
+  	padding: 0;
+  }
+  &.btn-green {
+    background: $green;
+    color: #FFF;
+  }
+  &.btn-lg {
+  	line-height: 50px;
+  	letter-spacing: 0.4px;
+    font-size: 16px;
+  }
+  &.btn-xlg {
+    line-height: 71px;
+    letter-spacing: 0.4px;
+    font-size: 16px;
+  }
+  &.btn-square {
+    @include border-radius(0);
+  }
+} 

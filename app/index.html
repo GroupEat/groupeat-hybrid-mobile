@@ -11,6 +11,8 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="lib/ionic/release/css/ionic.css" />
     <link rel="stylesheet" href="lib/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="lib/slick-carousel/slick/slick.css" />
+    <link rel="stylesheet" href="lib/slick-carousel/slick/slick-theme.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -32,10 +34,8 @@
           Icons provided by Ionicons: http://ionicons.com/
         -->
 
-    <ion-nav-bar class="bar-energized bar-header">
-        <ion-nav-back-button class='button button-clear'>
-          {{ 'back' | translate }}
-        </ion-nav-back-button>
+    <ion-nav-bar class="bar-energized">
+        <ion-nav-back-button class='button button-clear'></ion-nav-back-button>
     </ion-nav-bar>
 
         <!--
@@ -51,6 +51,7 @@
     <!-- build:js scripts/vendor.js -->
     <!-- <script src="vendor/someContribJs.js"></script> -->
     <!-- bower:js -->
+    <script src="lib/jquery/dist/jquery.js"></script>
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular-animate/angular-animate.js"></script>
     <script src="lib/angular-sanitize/angular-sanitize.js"></script>
@@ -77,6 +78,8 @@
     <script src="lib/angular-permission/dist/angular-permission.js"></script>
     <script src="lib/angular-material-icons/angular-material-icons.min.js"></script>
     <script src="lib/ngAutocomplete/src/ngAutocomplete.js"></script>
+    <script src="lib/slick-carousel/slick/slick.min.js"></script>
+    <script src="lib/angular-slick/dist/slick.js"></script>
     <!-- endbower -->
     <script src="lib/sprintf/src/angular-sprintf.js"></script>
 
@@ -137,7 +140,11 @@
     <script src="scripts/directives/phone-format.js"></script>
     <script src="scripts/directives/hide-tabs.js"></script>
     <script src="scripts/directives/touch.js"></script>
-
+    <script src="scripts/directives/order-card.js"></script>
+    <script src="scripts/directives/nav-bar-class.js"></script>
+    <script src="scripts/directives/empty-container.js"></script>
+    <script src="scripts/directives/header-shrink.js"></script>
+    
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
     <!-- endbuild -->
 

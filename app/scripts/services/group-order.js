@@ -1,12 +1,8 @@
 'use strict';
-
-angular.module('groupeat.services.group-order', ['groupeat.services.backend-utils'])
-
-.factory('GroupOrder', function($resource, $q, ENV) {
-
-  var resource = $resource(ENV.apiEndpoint+'/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
-
-  var /**
+angular.module('groupeat.services.group-order', ['groupeat.services.backend-utils']).factory('GroupOrder', function ($resource, $q, ENV) {
+  var resource = $resource(ENV.apiEndpoint + '/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
+  var
+  /**
   * @ngdoc function
   * @name GroupOrder#get
   * @methodOf GroupOrder
@@ -17,19 +13,17 @@ angular.module('groupeat.services.group-order', ['groupeat.services.backend-util
   * https://groupeat.fr/docs
   *
   */
-  get = function(latitude, longitude) {
+  get = function (latitude, longitude) {
     var defer = $q.defer();
-    resource.get({latitude: latitude, longitude: longitude}).$promise
-    .then(function(response) {
+    resource.get({
+      latitude: latitude,
+      longitude: longitude
+    }).$promise.then(function (response) {
       defer.resolve(response.data);
-    })
-    .catch(function() {
+    }).catch(function () {
       defer.reject();
     });
     return defer.promise;
   };
-
-  return {
-    get: get
-  };
+  return { get: get };
 });

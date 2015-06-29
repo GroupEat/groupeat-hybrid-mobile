@@ -1,12 +1,8 @@
 'use strict';
-
-angular.module('groupeat.services.element-modifier', [])
-
-.factory('ElementModifier', function($timeout, $q) {
-
-    var scopeErrorMsg = {};
-
-    var /**
+angular.module('groupeat.services.element-modifier', []).factory('ElementModifier', function ($timeout, $q) {
+  var scopeErrorMsg = {};
+  var
+    /**
     * @ngdoc function
     * @name ElementModifier#makeValid
     * @methodOf ElementModifier
@@ -20,12 +16,10 @@ angular.module('groupeat.services.element-modifier', [])
       var domElement = el[0];
       var formName = domElement.form.name;
       var elName = domElement.name;
-      if (formName in scopeErrorMsg)
-      {
+      if (formName in scopeErrorMsg) {
         delete scopeErrorMsg[formName][elName];
       }
     },
-
     /**
     * @ngdoc function
     * @name ElementModifier#makeInvalid
@@ -41,15 +35,11 @@ angular.module('groupeat.services.element-modifier', [])
       var domElement = el[0];
       var formName = domElement.form.name;
       var elName = domElement.name;
-
-      if (!(formName in scopeErrorMsg))
-      {
+      if (!(formName in scopeErrorMsg)) {
         scopeErrorMsg[formName] = {};
       }
       scopeErrorMsg[formName][elName] = errorMsg;
     },
-
-
     /**
     * @ngdoc function
     * @name ElementModifier#makeDefault
@@ -63,7 +53,6 @@ angular.module('groupeat.services.element-modifier', [])
     makeDefault = function (el) {
       makeValid(el);
     },
-
     /**
     * @ngdoc function
     * @name ElementModifier#getErrorMsg
@@ -74,13 +63,12 @@ angular.module('groupeat.services.element-modifier', [])
     *
     * @param {String} formName - The name of the form whose error is to be fetched
     */
-    getErrorMsg = function(formName) {
+    getErrorMsg = function (formName) {
       for (var fieldName in scopeErrorMsg[formName]) {
         return scopeErrorMsg[formName][fieldName];
       }
       return undefined;
     },
-
     /**
     * @ngdoc function
     * @name ElementModifier#validate
@@ -93,29 +81,24 @@ angular.module('groupeat.services.element-modifier', [])
     *
     * @param {Object} form - The form to validate
     */
-    validate = function(form) {
+    validate = function (form) {
       var deferred = $q.defer();
-      $timeout(function() {
-          if (form.$invalid)
-          {
-            var errorMessage = getErrorMsg(form.$name);
-            deferred.reject(errorMessage);
-          }
-          else
-          {
-            deferred.resolve();
-          }
-        });
+      $timeout(function () {
+        if (form.$invalid) {
+          var errorMessage = getErrorMsg(form.$name);
+          deferred.reject(errorMessage);
+        } else {
+          deferred.resolve();
+        }
+      });
       return deferred.promise;
     };
-
-    return {
-      makeValid: makeValid,
-      makeInvalid: makeInvalid,
-      makeDefault: makeDefault,
-      errorMsg: getErrorMsg,
-      validate: validate,
-      key: 'ElementModifier'
-    };
-  }
-);
+  return {
+    makeValid: makeValid,
+    makeInvalid: makeInvalid,
+    makeDefault: makeDefault,
+    errorMsg: getErrorMsg,
+    validate: validate,
+    key: 'ElementModifier'
+  };
+});

@@ -5,24 +5,16 @@ angular.module('groupeat.services.predefined-addresses', [
   'ngResource'
 ])
 
-.factory('PredefinedAddresses', function($resource, $q, ENV) {
-
-  var resource = $resource(ENV.apiEndpoint+'/predefinedAddresses');
-
-  var
-  get = function() {
+.factory('PredefinedAddresses', function ($resource, $q, ENV) {
+  var resource = $resource(ENV.apiEndpoint + '/predefinedAddresses');
+  var get = function () {
     var defer = $q.defer();
-    resource.get().$promise
-    .then(function(response) {
+    resource.get().$promise.then(function (response) {
       defer.resolve(response.data);
-    })
-    .catch(function() {
+    }).catch(function () {
       defer.reject();
     });
     return defer.promise;
   };
-
-  return {
-    get: get
-  };
+  return { get: get };
 });

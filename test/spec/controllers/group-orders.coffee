@@ -270,16 +270,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       expect(scope.messageBackdrop.show).to.be.equal(false)
       MessageBackdrop.noBackdrop.should.have.been.called
 
-  describe 'GroupOrdersCtrl#getTimeDiff', ->
-
-    it 'should return time between a mock date and actual date', ->
-      endingAt = '2015-01-30 16:39:26'
-      timeReturned = scope.getTimeDiff(endingAt)
-      expect(timeReturned>=0).to.be.true
-      expect(timeReturned>3895158).to.be.true
-
-    it 'should return time in sec between two dates', ->
-
   describe 'GroupOrdersCtrl#onJoinOrderTouch', ->
 
     it 'should check if the customer account is activated', ->

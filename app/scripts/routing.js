@@ -1,54 +1,36 @@
 'use strict';
-
-angular.module('routing', [])
-
-.config(function($stateProvider, $urlRouterProvider) {
-
-  $stateProvider
-
-  .state('authentication', {
-    url:'/authentication',
+angular.module('routing', []).config(function ($stateProvider, $urlRouterProvider) {
+  $stateProvider.state('authentication', {
+    url: '/authentication',
     templateUrl: 'templates/authentication.html',
-    data: {
-      permissions: {
-        except: []
-      }
-    }
-  })
-
-  .state('app', {
+    data: { permissions: { except: [] } }
+  }).state('app', {
     url: '/',
     abstract: true,
-    templateUrl: '/templates/layouts/app.html',
+    templateUrl: 'templates/layouts/app.html',
     data: {
       permissions: {
         only: ['customer'],
         redirectTo: 'authentication'
       }
     }
-  })
-
-  .state('app.group-orders', {
+  }).state('app.group-orders', {
     url: '',
     views: {
-      'app' :{
+      'app': {
         templateUrl: 'templates/group-orders.html',
         controller: 'GroupOrdersCtrl'
       }
     }
-  })
-
-  .state('app.orders', {
+  }).state('app.orders', {
     url: '/orders',
     views: {
-      'app' :{
+      'app': {
         templateUrl: 'templates/orders.html',
         controller: 'OrdersCtrl'
       }
     }
-  })
-
-  .state('cart', {
+  }).state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',
     controller: 'CartCtrl',
@@ -58,9 +40,7 @@ angular.module('routing', [])
         redirectTo: 'authentication'
       }
     }
-  })
-
-  .state('restaurants', {
+  }).state('restaurants', {
     url: '/restaurants',
     templateUrl: 'templates/restaurants.html',
     controller: 'RestaurantsCtrl',
@@ -70,9 +50,7 @@ angular.module('routing', [])
         redirectTo: 'authentication'
       }
     }
-  })
-
-  .state('restaurant-menu', {
+  }).state('restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
     templateUrl: 'templates/restaurant-menu.html',
     controller: 'RestaurantMenuCtrl',
@@ -82,17 +60,14 @@ angular.module('routing', [])
         redirectTo: 'authentication'
       }
     }
-  })
-
-  .state('app.settings', {
+  }).state('app.settings', {
     url: '/settings',
     views: {
-      'app' :{
+      'app': {
         templateUrl: 'templates/settings.html',
         controller: 'SettingsCtrl'
       }
     }
   });
-
   $urlRouterProvider.otherwise('/');
 });

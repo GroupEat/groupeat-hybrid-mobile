@@ -15,13 +15,14 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 .controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory) {
 
-
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
-	$scope.products = [];
+  $scope.groups = [];
 	$scope.isNewOrder = {
 		value: null
 	};
+  $scope.foodRushTime = {};
+  $scope.foodRushTime.value = 35;
 
 	$scope.initCtrl = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
@@ -108,4 +109,20 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.getDiscountPrice = function() {
 		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
 	};
+
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      group.isShown = false;
+    } else {
+      group.isShown = true;
+    }
+    $timeout(function() {
+      $ionicScrollDelegate.resize();
+    }, 300);
+  };
+
+  $scope.isGroupShown = function(group) {
+    return group.isShown;
+  };
+
 });

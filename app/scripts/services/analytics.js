@@ -1,12 +1,7 @@
 'use strict';
-
-angular.module('groupeat.services.analytics', [])
-
-/*global analytics:true*/
-.factory('Analytics', function () {
-
+angular.module('groupeat.services.analytics', [])  /*global analytics:true*/.factory('Analytics', function () {
   var
-  /**
+    /**
   * @ngdoc function
   * @name Analytics#startTrackerWithId
   * @methodOf Analytics
@@ -15,18 +10,14 @@ angular.module('groupeat.services.analytics', [])
   * Starts tracking the application
   *
   */
-  startTrackerWithId = function(analyticsId) {
-    if (typeof analytics !== 'undefined')
-    {
-      analytics.startTrackerWithId(analyticsId);
-    }
-    else
-    {
-      console.log('Google Analytics Unavailable');
-    }
-  },
-
-  /**
+    startTrackerWithId = function (analyticsId) {
+      if (typeof analytics !== 'undefined') {
+        analytics.startTrackerWithId(analyticsId);
+      } else {
+        console.log('Google Analytics Unavailable');
+      }
+    },
+    /**
   * @ngdoc function
   * @name Analytics#trackEvent
   * @methodOf Analytics
@@ -36,22 +27,17 @@ angular.module('groupeat.services.analytics', [])
   * Label and Value are optional, Value is numeric
   *
   */
-  trackEvent = function(category, action, label, value) {
-    if (typeof analytics !== 'undefined')
-    {
-      analytics.trackEvent(category, action, label, value);
-    }
-  },
-
-  trackTimingSinceTime = function(category, initialTime, variable, label) {
-    if (typeof analytics !== 'undefined')
-    {
-      var d = new Date();
-      analytics.trackTiming(category, d.getTime()-initialTime, variable, label);
-    }
-  },
-
-  /**
+    trackEvent = function (category, action, label, value) {
+      if (typeof analytics !== 'undefined') {
+        analytics.trackEvent(category, action, label, value);
+      }
+    }, trackTimingSinceTime = function (category, initialTime, variable, label) {
+      if (typeof analytics !== 'undefined') {
+        var d = new Date();
+        analytics.trackTiming(category, d.getTime() - initialTime, variable, label);
+      }
+    },
+    /**
   * @ngdoc function
   * @name Analytics#trackView
   * @methodOf Analytics
@@ -60,18 +46,15 @@ angular.module('groupeat.services.analytics', [])
   * Tracks a view visited by the customer
   *
   */
-  trackView = function (viewName) {
-    if (typeof analytics !== 'undefined')
-    {
-      analytics.trackView(viewName);
-    }
-  };
-
+    trackView = function (viewName) {
+      if (typeof analytics !== 'undefined') {
+        analytics.trackView(viewName);
+      }
+    };
   return {
     startTrackerWithId: startTrackerWithId,
     trackEvent: trackEvent,
     trackTimingSinceTime: trackTimingSinceTime,
     trackView: trackView
   };
-}
-);
+});

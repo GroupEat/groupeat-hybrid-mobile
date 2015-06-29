@@ -1,0 +1,9 @@
+.list .item.item-accordion {
+  overflow: hidden;
+  max-height: 0px;
+  @include transition(max-height 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
+  &.is-active  {
+	display: block !important;
+	max-height: 100px;
+  }
+}

@@ -1,43 +1,69 @@
-<ion-view ng-init="initCtrl()" hide-back-button="true" cache-view="false">
+<ion-view ng-init="initCtrl()" hide-back-button="true" nav-bar-class="bar-transparent">
   <ion-nav-buttons side="primary" >
-    <button class="button button-icon icon ion-gear-a" ui-sref="app.settings"></button>
+    <button class="button button-icon icon ion-ios-gear" ui-sref="app.settings"></button>
   </ion-nav-buttons>
   <ion-nav-title>
-    {{ 'orders' | translate }}
+    <div class="title has-sub-title">
+      {{ 'group-orders' | translate }}
+      <small>{{groupOrders.length}} {{'orders-around' | translate}}</small>
+    </div>
   </ion-nav-title>
   <ion-nav-buttons side="secondary" >
     <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
   </ion-nav-buttons>
 
-  <ge-loading-backdrop ng-show="loadingBackdrop.show">
-  </ge-loading-backdrop>
-
-  <ion-content class="has-footer has-header" ng-hide="messageBackdrop.show || loadingBackdrop.show">
-
-    <button id="new-order-button" class="button button-assertive center" on-tap="onNewGroupOrder()">
-      {{ 'newOrder' | translate }} !
-    </button>
-
-    <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
-    </ion-refresher>
-
-    <ion-item ng-repeat="groupOrder in groupOrders" on-tap="onJoinOrderTouch(groupOrder)">
-      <p>{{ 'pizzeria' | translate }} : {{ groupOrder.restaurant.data.name }}</p>
-      <p>
-        {{ 'remainingCapacity' | translate }}
-        {{ groupOrder.remainingCapacity }}
-      </p>
-      <p>{{ groupOrder.discountRate }}%</p>
-      <timer countdown="getTimeDiff(groupOrder.endingAt)" max-time-unit="'minute'" interval="1000">
-        {{mminutes}}:{{sseconds}}
-      </timer>
-    </ion-item>
-
+  <ion-content has-bouncing="false" class="bg-blue no-header full-height">
+    <div style="height:44px"></div>
+    <empty-container data="groupOrders" icon="ion-map" exclamation="Oh non..." main-text="Il n'y a aucune commande autour de vous." action-tap="onNewGroupOrder()" action-text="Créer une commande"></empty-container>
+    <div class="orders" ng-class="{'single-order' : groupOrders.length == 1}">
+      <slick data="groupOrders" ng-if="groupOrders.length" init-onload="true" arrows="false" slides-to-show="1" slides-to-scroll="1" center-mode="{{groupOrders.length == 1 ? false : true}}" center-padding="20px" >
+        <div ng-repeat="groupOrder in groupOrders track by $index">
+          <div class="order-card" >
+            <div class="top" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
+              <h3>-{{groupOrder.discountRate}}<span>%</span></h3>
+              <div class="time-left">
+                <span>
+                  <timer end-time="groupOrder.endingAt" interval="1000"> {{mminutes}}</timer>mn
+                  </span> left
+              </div>
+            </div>
+            <div class="content">
+              <h1>{{groupOrder.restaurant.data.name}}</h1>
+              <div class="stars clearfix">
+                <i class="ion-ios-star" ng-repeat="i in setArrayFromInt(4) track by $index"></i>
+                <i class="ion-ios-star-outline" ng-repeat="i in setArrayFromInt(1) track by $index"></i>
+              </div>
+              <div class="capacity">
+                <h4 class="small-title">
+                  {{ 'remainingCapacity' | translate }} <b>{{groupOrder.remainingCapacity}}</b>
+                </h4>
+                <div class="clearfix">
+                  <ul>
+                    <li ng-repeat="i in setArrayFromInt(groupOrder.restaurant.data.deliveryCapacity - groupOrder.remainingCapacity) track by $index">
+                      <span class="gp-icon gp_pizza filled"></span>
+                    </li>
+                    <li ng-repeat="i in setArrayFromInt(groupOrder.remainingCapacity) track by $index">
+                      <span class="gp-icon gp_pizza"></span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <a href="#" on-tap="onJoinOrderTouch(groupOrder)" class="btn btn-bloc btn-green btn-lg">
+                <i class="ion-plus-round"></i> Passer commande
+              </a>
+            </div>
+          </div>
+        </div>
+      </slick>
+    </div>
   </ion-content>
 
-  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
-      <ge-message-backdrop>
-      </ge-message-backdrop>
-  </ion-content>
-
+  <div class="bar bar-footer bar-transparent create-order" on-tap="onNewGroupOrder()" ng-if="groupOrders.length > 0">
+    <div class="content">
+      <div class="small-title">
+        Rien ne vous intéresse ?
+      </div>
+      <h4>{{ 'newOrder' | translate }} !</h4>
+    </div>
+  </div>
 </ion-view>

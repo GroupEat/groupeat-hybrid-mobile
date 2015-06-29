@@ -1,0 +1,18 @@
+.create-order{
+	height: 100px !important;
+	text-align: center;
+	background-color: #FFF !important;
+	.content {
+		display: flex;
+		width: 100%;
+		line-height: 150%;
+		justify-content:center;
+		align-content:center;
+		flex-direction:column; 
+		h4 {
+			margin: 0;
+			padding: 0;
+			color: #FFF;
+		}
+	}
+}

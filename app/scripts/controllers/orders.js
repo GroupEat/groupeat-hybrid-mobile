@@ -10,17 +10,16 @@ angular.module('groupeat.controllers.orders', [
   'timer'
 ])
 
-.controller('OrdersCtrl', function(_, $q, $scope, $state, $stateParams, Credentials, LoadingBackdrop, MessageBackdrop, Network, Order) {
-
-  $scope.initCtrl = function() {
+.controller('OrdersCtrl', function (_, $q, $scope, $state, $stateParams, Credentials, LoadingBackdrop, MessageBackdrop, Network, Order) {
+  
+  $scope.initCtrl = function () {
     $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-get', 'with-bar-and-tabs');
-    $scope.onReload()
-    .finally(function() {
+    $scope.onReload().finally(function () {
       $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
-
-  $scope.onReload = function() {
+  
+  $scope.onReload = function () {
     var deferred = $q.defer();
     Network.hasConnectivity()
     .then(function() {
@@ -45,6 +44,7 @@ angular.module('groupeat.controllers.orders', [
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
+
     return deferred.promise;
   };
 

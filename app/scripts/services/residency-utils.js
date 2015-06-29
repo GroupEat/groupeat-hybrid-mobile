@@ -1,11 +1,7 @@
 'use strict';
-
-angular.module('groupeat.services.residency-utils', [])
-
-.factory('ResidencyUtils', [
-  function () {
-
-    var /**
+angular.module('groupeat.services.residency-utils', []).factory('ResidencyUtils', [function () {
+    var
+      /**
     * @ngdoc function
     * @name ResidencyUtils#_endsWith
     * @methodOf ResidencyUtils
@@ -16,15 +12,13 @@ angular.module('groupeat.services.residency-utils', [])
     * @param {String} str - The string to check
     * @param {String} suffix - The suffix to check
     */
-    _endsWith = function (str, suffix) {
-      if (typeof str === 'string' || str instanceof String)
-      {
-        return str.indexOf(suffix, str.length - suffix.length) !== -1;
-      }
-      return false;
-    },
-
-    /**
+      _endsWith = function (str, suffix) {
+        if (typeof str === 'string' || str instanceof String) {
+          return str.indexOf(suffix, str.length - suffix.length) !== -1;
+        }
+        return false;
+      },
+      /**
     * @ngdoc function
     * @name ResidencyUtils#getDefaultResidencyValueFromEmail
     * @methodOf ResidencyUtils
@@ -35,20 +29,13 @@ angular.module('groupeat.services.residency-utils', [])
     *
     * @param {String} email - The email of the user
     */
-    getDefaultResidencyValueFromEmail = function (email) {
-      if (_endsWith(email, 'polytechnique.edu'))
-      {
-        return 'polytechnique';
-      }
-      else if (_endsWith(email, 'institutoptique.fr'))
-      {
-        return 'supoptique';
-      }
-      return 'ENSTAParisTech';
-    };
-
-    return {
-      getDefaultResidencyValueFromEmail: getDefaultResidencyValueFromEmail
-    };
-  }
-]);
+      getDefaultResidencyValueFromEmail = function (email) {
+        if (_endsWith(email, 'polytechnique.edu')) {
+          return 'polytechnique';
+        } else if (_endsWith(email, 'institutoptique.fr')) {
+          return 'supoptique';
+        }
+        return 'ENSTAParisTech';
+      };
+    return { getDefaultResidencyValueFromEmail: getDefaultResidencyValueFromEmail };
+  }]);
