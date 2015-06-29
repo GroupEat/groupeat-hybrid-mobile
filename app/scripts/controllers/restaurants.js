@@ -65,7 +65,6 @@ angular.module('groupeat.controllers.restaurants', [
   };
 
   $scope.onRestaurantTouch = function(restaurant) {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkActivatedAccount()
     .then(function() {
       return Customer.checkMissingInformation();
@@ -77,11 +76,8 @@ angular.module('groupeat.controllers.restaurants', [
       return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
     })
     .then(function() {
-      Order.setCurrentOrder(null, null, null, restaurant.deliveryCapacity);
+      Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
       $state.go('restaurant-menu', {restaurantId: restaurant.id});
-    })
-    .finally(function() {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
 

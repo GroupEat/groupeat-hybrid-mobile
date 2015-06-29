@@ -29,7 +29,7 @@
 						</h5>
 					</div>
 					<div flex="30" class="md-tile-content">
-						{{ product.totalPrice | number : 2}}€
+						{{ (1 - currentDiscount/100) * product.totalPrice | number : 2}}€
 					</div>
 				</md-item-content>
 				<md-divider ng-if="!$last"></md-divider>
@@ -41,7 +41,7 @@
 				<h6 class="rm-sub-header-assertive-divider"></h6>
 				<md-item-content layout="row" flex>
 					<div class="center md-tile-content">
-						<b>{{ 'Total' | translate }} :&nbsp</b> <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>, {{ cart.getTotalPrice() | number : 2}}€.  <a ng-show="currentOrder.groupOrderId">&nbsp Au lieu de {{ cart.getTotalPrice()/((100-currentOrder.currentDiscount)/100) | number : 2}} € </a>
+						<b>{{ 'Total' | translate }} :&nbsp</b> <ng-pluralize count="cart.getTotalQuantity()" when="{'0': ' 0 Pizza', '1': ' 1 Pizza', 'other': '{{ cart.getTotalQuantity() }} Pizzas'}" ></ng-pluralize>, {{ getDiscountPrice() | number : 2}}€.  <a ng-hide="getDiscountPrice()===cart.getTotalPrice()">&nbsp Au lieu de {{ cart.getTotalPrice() | number : 2}} € </a>
 					</div>
 				</md-item-content>
 				<h6 class="rm-sub-header-assertive-divider"></h6>

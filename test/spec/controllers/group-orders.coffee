@@ -282,23 +282,11 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   describe 'GroupOrdersCtrl#onJoinOrderTouch', ->
 
-    it 'should initially create a loading backdrop', ->
-      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
-      scope.onJoinOrderTouch groupOrderMock
-      scope.$digest()
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.backdrop()
-
     it 'should check if the customer account is activated', ->
       sandbox.stub(Customer, 'checkActivatedAccount').returns $q.defer().promise
       scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
       Customer.checkActivatedAccount.should.have.been.called
-
-    it 'should remove the loading backdrop if the customer account is not activated', ->
-      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.reject()
-      scope.onJoinOrderTouch groupOrderMock
-      scope.$digest()
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
     it 'should check for missing information if the customer account is activated', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->
@@ -311,18 +299,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
 
       Customer.checkMissingInformation.should.have.been.called
-
-    it 'should remove the loading backdrop if the customer has not provided all information', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Customer, 'checkMissingInformation').returns $q.reject()
-
-      scope.onJoinOrderTouch groupOrderMock
-      scope.$digest()
-
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
     it 'should call Order.setCurrentOrder and change the state if the customer is activated and has provided all information', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->
@@ -340,7 +316,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       Order.setCurrentOrder.should.have.been.called
       $state.go.should.have.been.calledWithExactly('restaurant-menu', {restaurantId: groupOrderMock.restaurant.data.id})
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
   describe 'GroupOrdersCtrl#onNewGroupOrder', ->
 
