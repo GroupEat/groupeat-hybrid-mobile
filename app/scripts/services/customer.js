@@ -198,7 +198,7 @@ angular.module('groupeat.services.customer', [
             .cancel($translate('cancel'));
             $mdDialog.show(confirm)
             .then(function() {
-              $state.go('side-menu.settings');
+              $state.go('app.settings');
             });
           }
         }
