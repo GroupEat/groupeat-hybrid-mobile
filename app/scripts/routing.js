@@ -7,7 +7,7 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
   }).state('app', {
     url: '/',
     abstract: true,
-    templateUrl: '/templates/layouts/app.html',
+    templateUrl: 'templates/layouts/app.html',
     data: {
       permissions: {
         only: ['customer'],
