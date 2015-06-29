@@ -8,5 +8,6 @@ angular.module('groupeat.directives', [
   'groupeat.directives.touch',
   'groupeat.directives.order-card',
   'groupeat.directives.nav-bar-class',
-  'groupeat.directives.empty-container'
+  'groupeat.directives.empty-container',
+  'groupeat.directives.header-shrink'
 ]);

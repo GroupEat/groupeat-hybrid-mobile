@@ -53,27 +53,27 @@ module.exports = function (grunt) {
       },
       all: {
         files: [
-          {expand: true, cwd: '<%= yeoman.app %>/<%= yeoman.scripts %>', src: ['**/*.js'], dest: '<%= yeoman.app %>/<%= yeoman.scripts %>', ext: '.js'}
+        {expand: true, cwd: '<%= yeoman.app %>/<%= yeoman.scripts %>', src: ['**/*.js'], dest: '<%= yeoman.app %>/<%= yeoman.scripts %>', ext: '.js'}
         ]
       }
     },
 
     webfont: {
-        icons: {
-            src: '<%= yeoman.app %>/icons/*.svg',
-            dest: '<%= yeoman.app %>/fonts/Groupeat',
-            destCss: '<%= yeoman.app %>/styles/base/',
-            options: {
-                stylesheet: 'scss',
-                htmlDemo: false,
-                relativeFontPath: '../fonts',
-                templateOptions: {
-                  baseClass: 'gp-icon',
-                  classPrefix: 'gp_',
-                  mixinPrefix: 'gp-'
-                }
-            }
+      icons: {
+        src: '<%= yeoman.app %>/icons/*.svg',
+        dest: '<%= yeoman.app %>/fonts/Groupeat',
+        destCss: '<%= yeoman.app %>/styles/base/',
+        options: {
+          stylesheet: 'scss',
+          htmlDemo: false,
+          relativeFontPath: '../fonts',
+          templateOptions: {
+            baseClass: 'gp-icon',
+            classPrefix: 'gp_',
+            mixinPrefix: 'gp-'
+          }
         }
+      }
     },
 
     // Environment Variables for Angular App
@@ -124,7 +124,7 @@ module.exports = function (grunt) {
         tasks: ['newer:copy:app']
       },
       js: {
-        files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'],
+        files: ['<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js', '!Gruntfile.js'],
         tasks: ['newer:copy:app', 'newer:jshint:all']
       },
       coffee: {
@@ -177,8 +177,7 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish')
       },
       all: [
-        'Gruntfile.js',
-        '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'
+      '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js'
       ],
       test: {
         options: {
@@ -207,9 +206,9 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            '.tmp',
-            'www/*',
-            '!www/.git*'
+          '.tmp',
+          'www/*',
+          '!www/.git*'
           ]
         }]
       },
@@ -224,11 +223,11 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '.tmp/<%= yeoman.styles %>/',
-          src: '{,*/}*.css',
-          dest: '.tmp/<%= yeoman.styles %>/'
-        }]
-      }
-    },
+        src: '{,*/}*.css',
+        dest: '.tmp/<%= yeoman.styles %>/'
+      }]
+    }
+  },
 
     // Automatically inject Bower components into the app
     wiredep: {
@@ -237,10 +236,10 @@ module.exports = function (grunt) {
         ignorePath:  /\.\.\//
       },
       sass: {
-        src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-        ignorePath: /(\.\.\/){1,2}lib\//
-      }
-    },
+      src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+      ignorePath: /(\.\.\/){1,2}lib\//
+    }
+  },
 
 
     // Compiles Sass to CSS and generates necessary files if requested
@@ -334,11 +333,11 @@ module.exports = function (grunt) {
           cwd: '<%= yeoman.app %>',
           dest: 'www',
           src: [
-            '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
-            '*.html',
-            'templates/**/*.html',
-            'fonts/**/*',
-            'translations/*'
+          '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
+          '*.html',
+          'templates/**/*.html',
+          'fonts/**/*',
+          'translations/*'
           ]
         }, {
           expand: true,
@@ -351,63 +350,63 @@ module.exports = function (grunt) {
         expand: true,
         cwd: '<%= yeoman.app %>/<%= yeoman.styles %>',
         dest: '.tmp/<%= yeoman.styles %>/',
-        src: '{,*/}*.css'
-      },
-      fonts: {
-        expand: true,
-        cwd: 'app/lib/ionic/release/fonts/',
-        dest: '<%= yeoman.app %>/fonts/',
-        src: '*'
-      },
-      vendor: {
-        expand: true,
-        cwd: '<%= yeoman.app %>/vendor',
-        dest: '.tmp/<%= yeoman.styles %>/',
-        src: '{,*/}*.css'
-      },
-      app: {
-        expand: true,
-        cwd: '<%= yeoman.app %>',
-        dest: 'www/',
-        src: [
-          '**/*',
-          '!**/*.(scss,sass,css)',
-        ]
-      },
-      tmp: {
-        expand: true,
-        cwd: '.tmp',
-        dest: 'www/',
-        src: '**/*'
-      }
+      src: '{,*/}*.css'
     },
+    fonts: {
+      expand: true,
+      cwd: 'app/lib/ionic/release/fonts/',
+      dest: '<%= yeoman.app %>/fonts/',
+      src: '*'
+    },
+    vendor: {
+      expand: true,
+      cwd: '<%= yeoman.app %>/vendor',
+      dest: '.tmp/<%= yeoman.styles %>/',
+    src: '{,*/}*.css'
+  },
+  app: {
+    expand: true,
+    cwd: '<%= yeoman.app %>',
+    dest: 'www/',
+    src: [
+    '**/*',
+    '!**/*.(scss,sass,css)',
+    ]
+  },
+  tmp: {
+    expand: true,
+    cwd: '.tmp',
+    dest: 'www/',
+    src: '**/*'
+  }
+},
 
-    concurrent: {
-      ionic: {
-        tasks: [],
-        options: {
-          logConcurrentOutput: true
-        }
-      },
-      server: [
-        'compass:server',
-        'copy:styles',
-        'copy:vendor',
-        'copy:fonts'
-      ],
-      test: [
-        'compass',
-        'copy:styles',
-        'copy:vendor',
-        'copy:fonts'
-      ],
-      dist: [
-        'compass:dist',
-        'copy:styles',
-        'copy:vendor',
-        'copy:fonts'
-      ]
-    },
+concurrent: {
+  ionic: {
+    tasks: [],
+    options: {
+      logConcurrentOutput: true
+    }
+  },
+  server: [
+  'compass:server',
+  'copy:styles',
+  'copy:vendor',
+  'copy:fonts'
+  ],
+  test: [
+  'compass',
+  'copy:styles',
+  'copy:vendor',
+  'copy:fonts'
+  ],
+  dist: [
+  'compass:dist',
+  'copy:styles',
+  'copy:vendor',
+  'copy:fonts'
+  ]
+},
 
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
@@ -442,39 +441,39 @@ module.exports = function (grunt) {
         basePath: '',
         frameworks: ['mocha', 'chai', 'sinon-chai', 'chai-as-promised'],
         files: [
-          '<%= yeoman.app %>/lib/angular/angular.js',
-          '<%= yeoman.app %>/lib/angular-animate/angular-animate.js',
-          '<%= yeoman.app %>/lib/angular-sanitize/angular-sanitize.js',
-          '<%= yeoman.app %>/lib/angular-cookies/angular-cookies.js',
-          '<%= yeoman.app %>/lib/angular-ui-router/release/angular-ui-router.js',
-          '<%= yeoman.app %>/lib/angular-mocks/angular-mocks.js',
-          '<%= yeoman.app %>/lib/angular-resource/angular-resource.min.js',
-          '<%= yeoman.app %>/lib/angular-translate/angular-translate.js',
-          '<%= yeoman.app %>/lib/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
-          '<%= yeoman.app %>/lib/angular-translate-storage-local/angular-translate-storage-local.js',
-          '<%= yeoman.app %>/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-          '<%= yeoman.app %>/lib/angular-validation-match/dist/angular-input-match.min.js',
-          '<%= yeoman.app %>/lib/angular-timer/dist/angular-timer.js',
-          '<%= yeoman.app %>/lib/angular-material/angular-material.js',
-          '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.js',
-          '<%= yeoman.app %>/lib/ngGeolocation/ngGeolocation.min.js',
-          '<%= yeoman.app %>/lib/ngAutocomplete/src/ngAutocomplete.js',
-          '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
-          '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
-          '<%= yeoman.app %>/lib/lodash/lodash.min.js',
-          '<%= yeoman.app %>/lib/sprintf/dist/sprintf.min.js',
-          '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
-          '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
-          '<%= yeoman.app %>/lib/angular-material/angular-material.js',
-          '<%= yeoman.app %>/lib/angular-material-icons/angular-material-icons.js',
-          '<%= yeoman.app %>/lib/angular-messages/angular-messages.js',
-          '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
-          '<%= yeoman.app %>/lib/angular-permission/dist/angular-permission.js',
-          '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
-          '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
-          'app/templates/**/*.html',
-          'test/utils/**/*.js',
-          'test/spec/**/*.coffee'
+        '<%= yeoman.app %>/lib/angular/angular.js',
+        '<%= yeoman.app %>/lib/angular-animate/angular-animate.js',
+        '<%= yeoman.app %>/lib/angular-sanitize/angular-sanitize.js',
+        '<%= yeoman.app %>/lib/angular-cookies/angular-cookies.js',
+        '<%= yeoman.app %>/lib/angular-ui-router/release/angular-ui-router.js',
+        '<%= yeoman.app %>/lib/angular-mocks/angular-mocks.js',
+        '<%= yeoman.app %>/lib/angular-resource/angular-resource.min.js',
+        '<%= yeoman.app %>/lib/angular-translate/angular-translate.js',
+        '<%= yeoman.app %>/lib/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+        '<%= yeoman.app %>/lib/angular-translate-storage-local/angular-translate-storage-local.js',
+        '<%= yeoman.app %>/lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+        '<%= yeoman.app %>/lib/angular-validation-match/dist/angular-input-match.min.js',
+        '<%= yeoman.app %>/lib/angular-timer/dist/angular-timer.js',
+        '<%= yeoman.app %>/lib/angular-material/angular-material.js',
+        '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.js',
+        '<%= yeoman.app %>/lib/ngGeolocation/ngGeolocation.min.js',
+        '<%= yeoman.app %>/lib/ngAutocomplete/src/ngAutocomplete.js',
+        '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
+        '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
+        '<%= yeoman.app %>/lib/lodash/lodash.min.js',
+        '<%= yeoman.app %>/lib/sprintf/dist/sprintf.min.js',
+        '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
+        '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
+        '<%= yeoman.app %>/lib/angular-material/angular-material.js',
+        '<%= yeoman.app %>/lib/angular-material-icons/angular-material-icons.js',
+        '<%= yeoman.app %>/lib/angular-messages/angular-messages.js',
+        '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
+        '<%= yeoman.app %>/lib/angular-permission/dist/angular-permission.js',
+        '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
+        '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
+        'app/templates/**/*.html',
+        'test/utils/**/*.js',
+        'test/spec/**/*.coffee'
         ],
         autoWatch: false,
         reporters: ['dots', 'coverage'],
@@ -506,9 +505,9 @@ module.exports = function (grunt) {
         },
         coverageReporter: {
           reporters: [
-            { type: 'html', dir: 'coverage/html', subdir: '.' },
-            { type: 'lcov', dir: 'coverage/lcov', subdir: '.' },
-            { type: 'text-summary' }
+          { type: 'html', dir: 'coverage/html', subdir: '.' },
+          { type: 'lcov', dir: 'coverage/lcov', subdir: '.' },
+          { type: 'text-summary' }
           ]
         }
       },
@@ -627,7 +626,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     'karma:unit:start',
     'watch:karma'
-  ]);
+    ]);
 
   grunt.registerTask('serve', function () {
     var tasks = ['init'];
@@ -660,21 +659,21 @@ module.exports = function (grunt) {
     'ngconstant:' + env,
     'wiredep',
     'autoprefixer'
-  ]);
+    ]);
 
   grunt.registerTask('expand', [
     'concurrent:server',
     'newer:copy:app',
     'newer:copy:tmp'
-  ]);
+    ]);
 
   grunt.registerTask('fixAllJs', [
     'fixmyjs:all'
-  ]);
+    ]);
 
   grunt.registerTask('generateFont', [
     'webfont'
-  ]);
+    ]);
 
   grunt.registerTask('compress', [
     'useminPrepare',
@@ -686,7 +685,7 @@ module.exports = function (grunt) {
     'uglify',
     'usemin',
     'htmlmin'
-  ]);
+    ]);
 
   grunt.registerTask('coverage', ['karma:continuous', 'connect:coverage:keepalive']);
 
@@ -696,7 +695,7 @@ module.exports = function (grunt) {
     'karma:continuous',
     'init',
     'compress'
-  ]);
+    ]);
 
   grunt.registerTask('pull', ['gitpull:task','npm-install']);
 

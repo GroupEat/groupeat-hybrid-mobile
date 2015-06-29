@@ -17,7 +17,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
-	$scope.products = [];
+  $scope.groups = [];
 	$scope.isNewOrder = {
 		value: null
 	};
@@ -107,4 +107,20 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.getDiscountPrice = function() {
 		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
 	};
+
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      group.isShown = false;
+    } else {
+      group.isShown = true;
+    }
+    $timeout(function() {
+      $ionicScrollDelegate.resize();
+    }, 300);
+  };
+
+  $scope.isGroupShown = function(group) {
+    return group.isShown;
+  };
+
 });

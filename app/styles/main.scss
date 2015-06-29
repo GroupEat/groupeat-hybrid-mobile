@@ -28,15 +28,18 @@
 @import "components/empty-container";
 @import "components/order-card";
 @import "components/create-order-footer";
+@import "components/summup-order";
 
 
 /**
  * VENDORS
  */
 
+ @import "vendors/accordion";
 
 /**
  * PAGES
  */
 
  @import "pages/group-orders";
+ @import "pages/restaurant-menu";
