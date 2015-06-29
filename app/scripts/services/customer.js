@@ -36,7 +36,10 @@ angular.module('groupeat.services.customer', [
     .then(function(response) {
       defer.resolve(response.data);
     })
-    .catch(function() {
+    .catch(function(errorResponse) {
+      if (errorResponse.status === 404) {
+        $state.go('authentication');
+      }
       defer.reject();
     });
     return defer.promise;
