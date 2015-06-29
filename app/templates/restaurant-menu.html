@@ -8,11 +8,12 @@
   <ion-nav-title>
     <div class="title has-sub-title">
       Allo Pizza 91
-      <small>12 Pizzas restantes</small>
+      <small>{{currentOrder.remainingCapacity}} Pizzas restantes</small>
     </div>
   </ion-nav-title>
-  <ion-nav-buttons side="secondary" ng-if="currentOrder.endingAt">
-    <button class="button button-clear">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear button-timer" ng-if="currentOrder.endingAt">
+      <i class="ion-ios-timer"></i>
       <timer end-time="currentOrder.endingAt" interval="1000"> {{mminutes}}:{{sseconds}}</timer>
     </button>
   </ion-nav-buttons>
@@ -25,8 +26,9 @@
         <div class="content" id="discount-placeholder-content">
           <div class="discount" ng-show="currentOrder.currentDiscount">
             <h4>-{{ currentOrder.currentDiscount }}<small>%</small></h4>
+            <p class="small-title">Discount sur toutes les Pizzas</p>
           </div>
-          <div class="food-rush">
+          <div class="food-rush" ng-hide="currentOrder.currentDiscount">
             <h3 class="time-value">{{foodRushTime.value}}:00</h3>
             <h5>{{ 'howLongFoodRush' | translate }} <b>Food Rush</b> ?</h5>
             <div class="item range range-assertive">

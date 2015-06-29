@@ -12,7 +12,7 @@ $placeholder-height: 300px;
 		&:before {
 			content: "";
 			@extend %full-size-layer;
-			background-color: rgba($blue, .7);
+			background-color: rgba(#000, .7);
 			z-index: 3;
 		}
 		.content {
