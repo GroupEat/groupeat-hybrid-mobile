@@ -12,10 +12,11 @@ angular.module('groupeat.controllers.restaurant-menu', [
   'ionic',
   'ngMaterial',
   'pascalprecht.translate'
-]).controller('RestaurantMenuCtrl', function ($scope, $state, $stateParams, $filter, $mdDialog, Analytics, LoadingBackdrop, MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory) {
+]).controller('RestaurantMenuCtrl', function ($scope, $state, $stateParams, $filter, $mdDialog, Analytics, LoadingBackdrop, MessageBackdrop, Network, Product, Popup, Cart, $ionicNavBarDelegate, _, Order, $ionicHistory, $ionicScrollDelegate, $timeout) {
   var $translate = $filter('translate');
   Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
   $scope.isNewOrder = { value: null };
+  $scope.groups = [];
   $scope.initCart = function () {
     $scope.currentOrder = Order.getCurrentOrder();
     Cart.setDiscountRate($scope.currentOrder.currentDiscount);
@@ -86,8 +87,19 @@ angular.module('groupeat.controllers.restaurant-menu', [
       });
     }
   };
-  $scope.getTimeDiff = function (endingAt) {
-    return Order.getTimeDiff(endingAt);
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      group.isShown = false;
+    } else {
+      group.isShown = true;
+    }
+    $timeout(function() {
+      $ionicScrollDelegate.resize();
+    }, 300);
+    
+  };
+  $scope.isGroupShown = function(group) {
+    return group.isShown;
   };
   $scope.initCart();
   $scope.onRefreshRestaurantMenu();

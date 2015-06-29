@@ -6,7 +6,21 @@
 		color: #FFF;
 		.button {
 			color: lighten($blue, 15%);
+			&.button-back {
+				color: #FFF;
+				line-height: 40px !important;
+				&:before {
+					font-size: 35px !important;
+				}
+			}
 		}
+	}
+	&.bar-white {
+		background: #FFF;
+		border-collor: #FFF;
+	}
+	&.bar-no-padding {
+		padding: 0;
 	}
 	.button.button-icon {
 		&:before {
@@ -33,8 +47,31 @@
 }
 
 .full-height {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh);
   .scroll {
-    min-height: calc(100vh - 64px);
+    min-height: calc(100vh);
   }
+  &.has-footer-summup {
+  	bottom: 70px !important;
+	min-height: calc(100vh - 70px);
+	.scroll {
+	    min-height: calc(100vh - 70px);
+	  }
+  }
+}
+
+.row-no-padding {
+	padding: 0;
+	.col {
+		padding: 0;
+	}
+}
+
+.pull {
+	&-left {
+		float: left;
+	}
+	&-right {
+		float: right;
+	}
 }
