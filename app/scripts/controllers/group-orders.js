@@ -75,17 +75,13 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop();
     Customer.checkActivatedAccount()
     .then(function() {
       return Customer.checkMissingInformation();
     })
     .then(function() {
-      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
+      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity, groupOrder.restaurant.data.discountPolicy, groupOrder.totalRawPrice);
 	    $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
-    })
-    .finally(function() {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
     });
   };
 });

@@ -88,7 +88,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onRestaurantTouch 1
       scope.$digest()
 
-      Customer.checkMissingInformation.should.have.been.called
+      GroupOrder.get.should.have.been.called
 
     it 'should call Restaurant#checkGroupOrders when the group orders were fetched', ->
       sandbox.stub Customer, 'checkActivatedAccount', ->

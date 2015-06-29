@@ -17,8 +17,10 @@ angular.module('groupeat.services.order', [
 		'groupOrderId': null,
 		'endingAt': null,
 		'currentDiscount': null,
+		'groupOrderDiscount': null,
 		'remainingCapacity': null,
-		'discountPolicy': null
+		'discountPolicy': null,
+		'groupOrderTotalPrice': 0
 	},
 
 	requestBody = {
@@ -87,12 +89,13 @@ angular.module('groupeat.services.order', [
 	restaurant between which the total price of cart is. Then, with 
 	some maths, we can compute the discount for this total price. 
 	Formula :
-	y = A.x + y1 - A.x1
-	with A = (y1 - y2)/(x1 - x2), y the unknown discount, and x the current totalPrice
+	y = A.(x+Xgo) + y1 - A.x1
+	with A = (y1 - y2)/(x1 - x2), y the unknown discount,
+	Xgo the total price from the joined group order : Xgo = (Ygo - Bgo)/Ago
+	and x the current totalPrice
 	*/
 	computeDiscount = function (discount1, discount2, price1, price2, totalPrice) {
-		// if price1 = price2, that means we are no more in an interval, but greater than the biggest discount. Saturation is the solution
-		if(price1 === price2) {
+		if (price1 === price2) {
 			return discount2;
 		}
 		else {
@@ -106,6 +109,9 @@ angular.module('groupeat.services.order', [
 		we know the interval in which the total price must be...
 		*/
 		if (totalPrice !== 0) {
+			if (currentOrder.groupOrderId !== null) {
+				totalPrice = totalPrice + currentOrder.groupOrderTotalPrice;
+			}
 			var newDiscount, priceUp, priceDown;
 			var completeDiscountPolicy = currentOrder.discountPolicy;
 			completeDiscountPolicy['0'] = 0;
@@ -136,7 +142,12 @@ angular.module('groupeat.services.order', [
 			setCurrentDiscount(newDiscount);
 		}
 		else {
-			setCurrentDiscount(0);
+			if(currentOrder.groupOrderId === null) {
+				setCurrentDiscount(0);
+			}
+			else {
+				setCurrentDiscount(currentOrder.groupOrderDiscount);
+			}
 		}
 	},
 
@@ -167,12 +178,14 @@ angular.module('groupeat.services.order', [
 		};
 	},
 
-	setCurrentOrder = function(id, date, discount, capacity, discountPolicy) {
+	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice) {
 		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
+		currentOrder.groupOrderDiscount = discount;
 		currentOrder.currentDiscount = discount;
 		currentOrder.remainingCapacity = capacity;
 		currentOrder.discountPolicy = discountPolicy;
+		currentOrder.groupOrderTotalPrice = groupOrderTotalPrice/100;
 	},
 
 	save = function() {
