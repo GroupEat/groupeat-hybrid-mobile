@@ -6,9 +6,10 @@
 
 @import "compass";
 
-@import "base/_variables";
-@import "base/_fonts";
-@import "base/_typography";
+@import "base/variables";
+@import "base/fonts";
+@import "base/typography";
+@import "base/icons";
 
 /**
  * HELPERS
@@ -24,9 +25,10 @@
 @import "components/buttons";
 @import "components/backgrounds";
 @import "components/titles";
+@import "components/empty-container";
 @import "components/order-card";
 @import "components/create-order-footer";
-@import "components/empty-container";
+
 
 /**
  * VENDORS

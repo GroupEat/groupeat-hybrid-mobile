@@ -53,7 +53,10 @@
         <div layout="column" flex>
           <div layout="row" flex on-tap="toggleDetails(product)" ng-class="{active: areDetailsShown(product)}" >
             <div flex="90" class="md-tile-content">
-              <h4> {{ product.name }} </h4>
+              <h4> {{ product.name }} 
+                <span class="gp-icon gp_vegie"></span> 
+                <span class="gp-icon gp_pepper"></span>
+              </h4>
               <h5> {{ product.description }} </h5>
             </div>
             <div flex="10" ng-show="cart.hasAtLeastOneProduct(product)" class="icon-height">

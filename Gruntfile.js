@@ -22,6 +22,7 @@ module.exports = function (grunt) {
 
   //Auto Js-fixer based on linting
   grunt.loadNpmTasks('grunt-fixmyjs');
+  grunt.loadNpmTasks('grunt-webfont');
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
@@ -55,6 +56,24 @@ module.exports = function (grunt) {
           {expand: true, cwd: '<%= yeoman.app %>/<%= yeoman.scripts %>', src: ['**/*.js'], dest: '<%= yeoman.app %>/<%= yeoman.scripts %>', ext: '.js'}
         ]
       }
+    },
+
+    webfont: {
+        icons: {
+            src: '<%= yeoman.app %>/icons/*.svg',
+            dest: '<%= yeoman.app %>/fonts/Groupeat',
+            destCss: '<%= yeoman.app %>/styles/base/',
+            options: {
+                stylesheet: 'scss',
+                htmlDemo: false,
+                relativeFontPath: '../fonts',
+                templateOptions: {
+                  baseClass: 'gp-icon',
+                  classPrefix: 'gp_',
+                  mixinPrefix: 'gp-'
+                }
+            }
+        }
     },
 
     // Environment Variables for Angular App
@@ -651,6 +670,10 @@ module.exports = function (grunt) {
 
   grunt.registerTask('fixAllJs', [
     'fixmyjs:all'
+  ]);
+
+  grunt.registerTask('generateFont', [
+    'webfont'
   ]);
 
   grunt.registerTask('compress', [
