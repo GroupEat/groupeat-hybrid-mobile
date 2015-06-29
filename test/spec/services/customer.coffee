@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Address = Credentials = Customer = scope = $httpBackend = $mdDialog = $q = ENV = sandbox = BackendUtils = {}
+  Address = Credentials = Customer = scope = $httpBackend = $mdDialog = $q = $state = ENV = sandbox = BackendUtils = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -22,6 +22,7 @@ describe 'Service: Customer', ->
       sandbox = sinon.sandbox.create()
       $mdDialog = $injector.get('$mdDialog')
       sandbox.stub($mdDialog, 'show')
+      $state = $injector.get('$state')
 
   afterEach ->
     sandbox.restore()
@@ -47,6 +48,15 @@ describe 'Service: Customer', ->
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
       Customer.get(id).should.be.rejected
       $httpBackend.flush()
+
+    it 'should change the state to authentication if we get a 404 (customer not found)', ->
+      sandbox.stub($state, 'go')
+      id = 1
+      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      $httpBackend.expect('GET', regex).respond(404, 'Customer not found')
+      Customer.get(id).should.be.rejected
+      $httpBackend.flush()
+      $state.go.should.have.been.calledWithExactly('authentication')
 
   describe 'Customer#save', ->
 
