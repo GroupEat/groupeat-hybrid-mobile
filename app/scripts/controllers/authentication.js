@@ -166,10 +166,11 @@ angular.module('groupeat.controllers.authentication', [
   $scope.hasRegistered = function (skipped) {
     Analytics.trackEvent('Authentication', 'Registered', 'Skipped : ' + skipped);
     Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Register', 'Skipped : ' + skipped);
-    $state.go('app.group-orders') ;
+    $state.go('app.group-orders');
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
     return Popup.title($translate('welcome', {firstName: firstName}));
   };
+  
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
     $scope.updateFurtherRegisterButton();
   }, true);
