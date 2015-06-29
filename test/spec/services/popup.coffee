@@ -4,7 +4,7 @@ describe 'Service: Popup', ->
   beforeEach ->
     module 'groupeat.services.popup'
 
-  Popup = $mdDialog = scope = sandbox = body = dialogContainer = $timeout = {}
+  $ionicPopup = $q = sandbox = scope = Popup = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -12,95 +12,72 @@ describe 'Service: Popup', ->
       sandbox = sinon.sandbox.create()
       scope = $rootScope.$new()
       Popup = $injector.get('Popup')
-      $mdDialog = $injector.get('$mdDialog')
-      sandbox.spy($mdDialog, 'hide')
-      $timeout = $injector.get('$timeout')
-
-  cleanDialog = ->
-    body = angular.element(document.body)
-    dialogContainer = body[0].querySelector('.md-dialog-container')
-    dialogElement = angular.element(dialogContainer)
-    dialogElement.remove()
-    scope.$digest()
-
-  beforeEach ->
-    cleanDialog()
+      $ionicPopup = $injector.get('$ionicPopup')
+      $q = $injector.get('$q')
 
   afterEach ->
     sandbox.restore()
-    cleanDialog()
 
-  describe 'Popup#displayError', ->
+  describe 'Popup#alert', ->
 
-    it 'should open a dialog', ->
-      Popup.displayError('An error message', false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      expect(dialogContainer).to.be.not.null
+    it 'should open a $ionicPopup with the given title and template', ->
+      sandbox.stub($ionicPopup, 'alert')
+      title = 'Title'
+      template = '<strong>content</strong>'
+      Popup.alert(title, template)
+      scope.$digest()
+      $ionicPopup.alert.should.have.been.calledWithExactly
+        title: title
+        template: template
 
-    it 'the dialog should have whoops as title', ->
-      Popup.displayError('An error message', false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      title = angular.element(dialogContainer.querySelector('h2'))
-      title.text().should.equal('whoops')
+    it 'should be resolved when $ionicPopup.alert is resolved', ->
+      res = 'res'
+      sandbox.stub $ionicPopup, 'alert', () ->
+        deferred = $q.defer()
+        deferred.resolve(res)
+        deferred.promise
+      Popup.alert('Title', 'template').should.become res
+      scope.$digest()
 
-    it 'the dialog should contain the given errorMessage as its content', ->
+  describe 'Popup#confirm', ->
+
+    it 'should open a $ionicPopup confirm with the given title and template', ->
+      sandbox.stub($ionicPopup, 'confirm')
+      title = 'Title'
+      template = '<strong>content</strong>'
+      Popup.confirm(title, template)
+      scope.$digest()
+      $ionicPopup.confirm.should.have.been.calledWithExactly
+        title: title
+        template: template
+
+    it 'should be resolved when $ionicPopup.alert is resolved', ->
+      res = 'res'
+      sandbox.stub $ionicPopup, 'confirm', () ->
+        deferred = $q.defer()
+        deferred.resolve(res)
+        deferred.promise
+      Popup.confirm('Title', 'template').should.become res
+      scope.$digest()
+
+  describe 'Popup#error', ->
+
+    it 'should open a $ionicPopup with whoops as a title and the given error message', ->
+      sandbox.stub($ionicPopup, 'alert')
       errorMessage = 'An error message'
-      Popup.displayError(errorMessage, false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      content = angular.element(dialogContainer.querySelector('p'))
-      content.text().should.equal(errorMessage)
+      Popup.error(errorMessage)
+      scope.$digest()
+      $ionicPopup.alert.should.have.been.calledWithExactly
+        title: 'whoops'
+        template: errorMessage
 
-    it 'the dialog should have a single ok button', ->
-      Popup.displayError('An error message', false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      buttons = angular.element(dialogContainer.querySelector('button'))
-      buttons.length.should.equal(1)
-      buttons.eq(0).text().should.equal('ok')
+  describe 'Popup#title', ->
 
-    it 'the dialog should disappear when given a timeout after its period', ->
-      Popup.displayError('An error message', 1000)
-      scope.$apply()
-      $mdDialog.hide.should.not.have.been.called
-      $timeout.flush(100)
-      $mdDialog.hide.should.not.have.been.called
-      $timeout.flush(900)
-      $mdDialog.hide.should.have.been.called
-
-  describe 'Popup#displayTitleOnly', ->
-
-    it 'should open a dialog', ->
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      expect(dialogContainer).to.be.null
-      Popup.displayTitleOnly('Title', false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      expect(dialogContainer).to.be.not.null
-
-    it 'the dialog should contain the given title as its title', ->
-      expectedTitle = 'Title'
-      Popup.displayTitleOnly(expectedTitle, false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      title = angular.element(dialogContainer.querySelector('h2'))
-      title.text().should.equal(expectedTitle)
-
-    it 'the dialog should have a single ok button', ->
-      Popup.displayTitleOnly('Title', false)
-      scope.$apply()
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      buttons = angular.element(dialogContainer.querySelector('button'))
-      buttons.length.should.equal(1)
-      buttons.eq(0).text().should.equal('ok')
-
-    it 'the dialog should disappear when given a timeout after its period', ->
-      Popup.displayTitleOnly('Title', 1000)
-      scope.$apply()
-      $mdDialog.hide.should.not.have.been.called
-      $timeout.flush(100)
-      $mdDialog.hide.should.not.have.been.called
-      $timeout.flush(900)
-      $mdDialog.hide.should.have.been.called
+    it 'should open a $ionicPopup with the given title and no content', ->
+      sandbox.stub($ionicPopup, 'alert')
+      title = 'Title'
+      Popup.title(title)
+      scope.$digest()
+      $ionicPopup.alert.should.have.been.calledWithExactly
+        title: title
+        template: ''

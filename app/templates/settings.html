@@ -1,4 +1,4 @@
-<ion-view ng-controller="SettingsCtrl" title="{{ 'settings' | translate }}" >
+<ion-view ng-init="initCtrl()" title="{{ 'settings' | translate }}" >
 
   <ion-nav-buttons side="right">
     <button on-tap="onSave(loadingBackdrop.show)" class="button button-clear button-positive">{{ 'save' | translate }}</button>

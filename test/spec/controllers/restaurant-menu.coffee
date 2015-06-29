@@ -85,23 +85,20 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   afterEach ->
     sandbox.restore()
 
-  describe 'Constructor', ->
-
-    beforeEach ->
-      $httpBackend.flush()
+  describe 'RestaurantMenu#initCtrl', ->
 
     it 'should create an empty cart', ->
+      scope.initCtrl()
       expect(scope.cart).not.to.equal(null)
       scope.cart.should.have.property('getTotalPrice')
       scope.cart.should.have.property('getTotalQuantity')
       scope.cart.should.have.property('getProducts')
       expect(_.isEmpty(scope.cart.getProducts())).to.be.true
 
-
   describe 'State change', ->
 
     beforeEach ->
-      $httpBackend.flush()
+      scope.initCtrl()
 
     it 'should call Cart service function add product if totalQuantity is not equal to remaingCapacity ', ->
       callback = sandbox.stub(Cart, 'addProduct')
@@ -117,7 +114,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       callback.should.not.have.been.called
 
     it 'should called Popup service if totalQuantity is equal to remaingCapacity ', ->
-      callback = sandbox.stub(Popup, 'displayError')
+      callback = sandbox.stub Popup, 'error'
       scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
       scope.onAddProduct(productTest, productTest.formats[0])
       assert(callback.calledOnce)

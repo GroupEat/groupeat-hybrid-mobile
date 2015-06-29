@@ -19,7 +19,7 @@ angular.module('groupeat.services.geolocation', [
         defer.resolve(currentPosition);
       })
       .catch(function() {
-        defer.reject();
+        defer.reject('noGeolocation');
       });
     }
     return defer.promise;

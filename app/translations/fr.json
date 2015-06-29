@@ -53,7 +53,7 @@
   "toOrder": "Commander",
   "remainingCapacity": "Pizzas restantes :",
   "noGroupOrder": "Aucune commande en cours actuellement",
-  
+
   "editProfile": "Mes Infos",
   "profileSettings": "Profil",
   "pushSettings": "Notifications",
@@ -142,6 +142,7 @@
 
   "noNetworkTitle": "Pas de réseau !",
   "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
+  "genericFailureTitle": "Whoops",
   "genericFailureDetails": "Impossible de communiquer avec le serveur. Veuillez réessayer ultérieurement...",
   "noGroupOrdersTitle": "Aucune commande",
   "noGroupOrdersDetails": "Aucune commande groupée n'est actuellement en cours...",
@@ -149,6 +150,7 @@
   "noRestaurantsDetails": "Aucun restaurant n'est actuellement ouvert à votre proximité...",
   "reload": "Recharger",
   "newOrder": "Nouvelle Commande",
+
   "noGeolocationTitle": "Echec de localisation",
   "noGeolocationDetails": "Autorisez Groupeat à accéder à vos données de geolocalisation dans vos réglages téléphone pour profiter de nos offres !",
 
@@ -165,6 +167,7 @@
   "order": "Commande",
   "myOrders": "Mes Commandes",
   "noOrdersTitle": "Aucune commande",
-  "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat"
+  "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat",
 
+  "pullToRefresh": "Tirez pour rafraîchir"
 }
