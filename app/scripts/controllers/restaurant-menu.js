@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic',
 ])
 
-.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory) {
+.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory, $timeout, $ionicScrollDelegate) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 

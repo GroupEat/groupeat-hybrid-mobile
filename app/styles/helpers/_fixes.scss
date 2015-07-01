@@ -3,7 +3,7 @@
 	&.bar-transparent {
 		border-style: none;
 		background-image: none !important;
-		background-color: rgba(255,255,255,0) !important;
+		background-color: rgba(255,255,255,0);
 		.button {
 			color: lighten($blue, 15%);
 			&.button-back {
@@ -54,7 +54,7 @@
 		&.has-sub-title {
 			font-size: 15px;
 			line-height: 120%;
-			margin-top: 7px;
+			margin-top: 2px;
 			display: flex;
 			justify-content:center;
 			align-content:center;
