@@ -22,4 +22,4 @@ dependencies:
 test:
   post:
       - npm install -g codeclimate-test-reporter
-      - codeclimate < coverage/lcov/lcov.info
+      - codeclimate-test-reporter < coverage/lcov/lcov.info
