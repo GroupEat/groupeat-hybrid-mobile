@@ -4,13 +4,9 @@ angular.module('groupeat.services.device-assistant', [
   'ngResource',
   'groupeat.services.push-notification'
 ])
-<<<<<<< Updated upstream
-.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
-
-=======
 
 .factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
->>>>>>> Stashed changes
+  
   var
 
   resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'),
