@@ -4,7 +4,8 @@ angular.module('groupeat.services.device-assistant', [
   'groupeat.services.push-notification'
 ])
 
-.factory('DeviceAssistant', function ($rootScope, $q, $resource, ENV, Credentials, PushNotification, $ionicPlatform) {
+.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
+
   var resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'), device, platform, notificationToken, deferredRegistration;
 
   var
