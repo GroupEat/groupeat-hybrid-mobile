@@ -122,6 +122,8 @@ angular.module('groupeat.services.customer', [
   *
   */
     checkMissingInformation = function () {
+      var confirm;
+      var missingPropertiesString;
       var deferred = $q.defer();
       var customerId = Credentials.get().id;
       var mandatoryCustomerProperties = [
@@ -144,7 +146,7 @@ angular.module('groupeat.services.customer', [
           if (_.isEmpty(missingProperties)) {
             deferred.resolve();
           } else {
-            var missingPropertiesString = '';
+            missingPropertiesString = '';
             if (missingProperties.length === 1) {
               missingPropertiesString = $translate(missingProperties[0]);
             } else if (missingProperties.length === 2) {
@@ -162,7 +164,7 @@ angular.module('groupeat.services.customer', [
             if (!missingPropertiesString) {
               Popup.displayError($translate('genericFailureDetails'), 3000);
             } else {
-              var confirm = $mdDialog.confirm({ parent: angular.element(document.body) }).title($translate('missingPropertiesTitle')).content($translate('missingCustomerInformationMessage', { missingProperties: missingPropertiesString })).ok($translate('settings')).cancel($translate('cancel'));
+              confirm = $mdDialog.confirm({ parent: angular.element(document.body) }).title($translate('missingPropertiesTitle')).content($translate('missingCustomerInformationMessage', { missingProperties: missingPropertiesString })).ok($translate('settings')).cancel($translate('cancel'));
               $mdDialog.show(confirm).then(function () {
                 $state.go('side-menu.settings');
               });
@@ -177,7 +179,7 @@ angular.module('groupeat.services.customer', [
           }
           else
           {
-            var confirm = $mdDialog.confirm({
+            confirm = $mdDialog.confirm({
               parent: angular.element(document.body)
             })
             .title($translate('missingPropertiesTitle'))
