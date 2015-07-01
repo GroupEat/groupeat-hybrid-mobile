@@ -91,5 +91,9 @@ angular.module('groupeat.services.device-assistant', [
     });
     return deferredRegistration.promise;
   };
-  return { register: register };
+
+  return {
+    register: register
+  };
+
 });
