@@ -1,9 +1,28 @@
 'use strict';
+
 angular.module('groupeat.services.device-assistant', [
+  'ionic',
+  'constants',
   'ngResource',
+  'groupeat.services.lodash',
+  'groupeat.services.credentials',
   'groupeat.services.push-notification'
-]).factory('DeviceAssistant', function ($rootScope, $q, $resource, ENV, Credentials, PushNotification) {
-  var resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'), device, platform, notificationToken, deferredRegistration;
+])
+
+.factory('DeviceAssistant', function(_, $ionicPlatform, $q, $resource, $rootScope, Credentials, ENV, PushNotification) {
+
+  var
+
+  resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'),
+
+  device,
+
+  platform,
+
+  notificationToken,
+
+  deferredRegistration;
+
   var
   /**
   * @ngdoc function
@@ -14,25 +33,16 @@ angular.module('groupeat.services.device-assistant', [
   * Register the device to GroupEat's database
   */
   registerDevice = function () {
-    var deferred = $q.defer();
     var requestBody = {
       'UUID': device.uuid,
       'notificationToken': notificationToken,
       'platform': platform,
-      'version': device.version,
       'model': device.model,
-      'latitude': 48.7173,
-      // TODO: discuss the necessity of passing coordinates here and implement if needed
-      'longitude': 2.23935  // TODO: s.a.
     };
-    resource.save({ id: Credentials.get().id }, requestBody).$promise.then(function () {
-      deferred.resolve();
-    }).catch(function (err) {
-      window.alert('Saving failed : ' + JSON.stringify(err));
-      deferred.reject();
-    });
-    return deferred.promise;
+    return resource.save({ id: Credentials.get().id }, requestBody).$promise;
   };
+
+
   /**
   * @ngdoc function
   * @name DeviceAssistant#onDeviceReady
@@ -42,33 +52,39 @@ angular.module('groupeat.services.device-assistant', [
   * Callback method to the cordova 'deviceready' event
   * Sets the appropriate Notification handler according to the device's platform before processing the actual registration
   */
-  var onDeviceReady = function () {
-    device = window.device;
-    if (device) {
-      switch (device.platform) {
-      case 'Android':
-      case 'android':
-      case 'amazon-fireos':
-        platform = 'android';
-        break;
-      case 'iOS':
-      case 'ios':
-        platform = 'ios';
-        break;
-      default:
-        deferredRegistration.reject();
-        break;
+  var onDeviceReady = function() {
+    device = ionic.Platform.device();
+
+    if (device)
+    {
+      switch(device.platform) {
+        case 'Android':
+        case 'android':
+        case 'amazon-fireos':
+          platform = 'android';
+          break;
+        case 'iOS':
+        case 'ios':
+          platform = 'ios';
+          break;
+        default:
+          deferredRegistration.reject();
+          break;
       }
-      PushNotification.subscribe(platform).then(function (registrationToken) {
+      PushNotification.subscribe(platform)
+      .then(function (registrationToken) {
         notificationToken = registrationToken;
         return registerDevice();
-      }).then(function () {
+      })
+      .then(function () {
         deferredRegistration.resolve();
-      }).catch(function () {
+      })
+      .catch(function () {
         deferredRegistration.reject();
       });
     }
   };
+
   /**
   * @ngdoc function
   * @name DeviceAssistant#register
@@ -80,12 +96,18 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function () {
     deferredRegistration = $q.defer();
-    if (window.device && window.cordova) {
-      document.addEventListener('deviceready', onDeviceReady, false);
-    } else {
+    if (_.isEmpty(ionic.Platform.device())) {
       deferredRegistration.resolve();
+    } else {
+      $ionicPlatform.ready(function(){
+        onDeviceReady();
+      });
     }
     return deferredRegistration.promise;
   };
-  return { register: register };
+
+  return {
+    register: register
+  };
+
 });
