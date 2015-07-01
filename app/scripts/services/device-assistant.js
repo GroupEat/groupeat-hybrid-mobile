@@ -6,7 +6,7 @@ angular.module('groupeat.services.device-assistant', [
 ])
 
 
-.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, PushNotification) {
+.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, PushNotification, $ionicPlatform) {
 
   var
 
@@ -49,8 +49,7 @@ angular.module('groupeat.services.device-assistant', [
       deferred.resolve();
     })
     .catch(function(err) {
-      window.alert('Saving failed : ' + JSON.stringify(err));
-      deferred.reject();
+      deferred.reject(err);
     });
     return deferred.promise;
   };
@@ -65,7 +64,7 @@ angular.module('groupeat.services.device-assistant', [
   * Sets the appropriate Notification handler according to the device's platform before processing the actual registration
   */
   var onDeviceReady = function() {
-    device = window.device;
+    device = ionic.Platform.device();
 
     if (device)
     {
@@ -111,11 +110,9 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function() {
     deferredRegistration = $q.defer();
-    if (window.device && window.cordova) {
-      document.addEventListener('deviceready', onDeviceReady, false);
-    } else {
-      deferredRegistration.resolve();
-    }
+    $ionicPlatform.ready(function(){
+      onDeviceReady();
+    });
     return deferredRegistration.promise;
   };
 
