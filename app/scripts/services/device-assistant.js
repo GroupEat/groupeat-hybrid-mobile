@@ -2,8 +2,22 @@
 angular.module('groupeat.services.device-assistant', [
   'ngResource',
   'groupeat.services.push-notification'
-]).factory('DeviceAssistant', function ($rootScope, $q, $resource, ENV, Credentials, PushNotification) {
-  var resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'), device, platform, notificationToken, deferredRegistration;
+])
+
+.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
+
+  var
+
+  resource = $resource(ENV.apiEndpoint + '/customers/:id/devices'),
+
+  device,
+
+  platform,
+
+  notificationToken,
+
+  deferredRegistration;
+
   var
   /**
   * @ngdoc function
@@ -27,9 +41,9 @@ angular.module('groupeat.services.device-assistant', [
     };
     resource.save({ id: Credentials.get().id }, requestBody).$promise.then(function () {
       deferred.resolve();
-    }).catch(function (err) {
-      window.alert('Saving failed : ' + JSON.stringify(err));
-      deferred.reject();
+    })
+    .catch(function(err) {
+      deferred.reject(err);
     });
     return deferred.promise;
   };
@@ -42,22 +56,24 @@ angular.module('groupeat.services.device-assistant', [
   * Callback method to the cordova 'deviceready' event
   * Sets the appropriate Notification handler according to the device's platform before processing the actual registration
   */
-  var onDeviceReady = function () {
-    device = window.device;
-    if (device) {
-      switch (device.platform) {
-      case 'Android':
-      case 'android':
-      case 'amazon-fireos':
-        platform = 'android';
-        break;
-      case 'iOS':
-      case 'ios':
-        platform = 'ios';
-        break;
-      default:
-        deferredRegistration.reject();
-        break;
+  var onDeviceReady = function() {
+    device = ionic.Platform.device();
+
+    if (device)
+    {
+      switch(device.platform) {
+        case 'Android':
+        case 'android':
+        case 'amazon-fireos':
+          platform = 'android';
+          break;
+        case 'iOS':
+        case 'ios':
+          platform = 'ios';
+          break;
+        default:
+          deferredRegistration.reject();
+          break;
       }
       PushNotification.subscribe(platform).then(function (registrationToken) {
         notificationToken = registrationToken;
@@ -80,12 +96,14 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function () {
     deferredRegistration = $q.defer();
-    if (window.device && window.cordova) {
-      document.addEventListener('deviceready', onDeviceReady, false);
-    } else {
-      deferredRegistration.resolve();
-    }
+    $ionicPlatform.ready(function(){
+      onDeviceReady();
+    });
     return deferredRegistration.promise;
   };
-  return { register: register };
+
+  return {
+    register: register
+  };
+
 });
