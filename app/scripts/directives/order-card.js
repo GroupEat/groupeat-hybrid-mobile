@@ -5,7 +5,6 @@ angular.module('groupeat.directives.order-card', []).directive('orderCard', func
       templateUrl: 'templates/cards/order-card.html',
       scope: { order: '=' },
       link: function (scope) {
-        console.log(Customer);
         scope.setArrayFromInt = function (num) {
           return new Array(num);
         };
