@@ -8,7 +8,7 @@ angular.module('groupeat.services.push-notification', [
 ])
 
 .factory('PushNotification', function ($cordovaPush, $q, $rootScope, $ionicModal) {
-  
+
   var config = {
       'android': {
         'senderID': '993639413774'
@@ -113,7 +113,11 @@ angular.module('groupeat.services.push-notification', [
       handleRegisteredEvent(notification.regid);
       break;
     case 'message':
-      handleMessageEvent(notification.message);
+      if (notification.foreground){
+        window.alert('FOREGROUND NOTIFICATION : ' + JSON.stringify(notification));
+      } else {
+        handleMessageEvent(notification.message);
+      }
       break;
     case 'error':
       window.alert('GCM error = ' + notification.msg);
