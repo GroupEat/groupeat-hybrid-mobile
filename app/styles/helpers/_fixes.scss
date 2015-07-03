@@ -135,6 +135,12 @@ ion-content.full-height {
 .slider {
 	height: 100%;
 }
+.slider.full-height {
+	min-height: 100vh;
+	.slider-slides {
+		position: absolute;
+	}
+}
 
 .row-no-padding {
 	padding: 0;

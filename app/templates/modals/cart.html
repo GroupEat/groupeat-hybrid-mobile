@@ -41,10 +41,10 @@
 
 
 						<div class="item-sub" ng-class="{'is-active' : address.name == 'other'}">
-							<label 
-								class="item-accordion item item-radio" 
+							<label
+								class="item-accordion item item-radio"
 								ng-class="
-									{'checked': address.other == 'foyer', 
+									{'checked': address.other == 'foyer',
 									 'is-active' : address.name == 'other'}">
 								<input type="radio" value="foyer" ng-model="address.other" name="other">
 								<div class="item-content">
@@ -53,10 +53,10 @@
 								<i class="radio-icon ion-location"></i>
 					        </label>
 
-					        <label 
-					        	class="item-accordion item item-radio" 
+					        <label
+					        	class="item-accordion item item-radio"
 					        	ng-class="
-									{'checked': address.other == 'bobar', 
+									{'checked': address.other == 'bobar',
 									 'is-active' : address.name == 'other'}">
 								<input type="radio" value="bobar" ng-model="address.other" name="other">
 								<div class="item-content">
@@ -65,10 +65,10 @@
 								<i class="radio-icon ion-location"></i>
 					        </label>
 
-					        <label 
-					        	class="item-accordion item item-radio" 
+					        <label
+					        	class="item-accordion item item-radio"
 					        	ng-class="
-									{'checked': address.other == 'institut', 
+									{'checked': address.other == 'institut',
 									 'is-active' : address.name == 'other'}">
 								<input type="radio" value="institut" ng-model="address.other" name="other">
 								<div class="item-content">
@@ -88,6 +88,6 @@
 		</ion-slide>
 	</ion-slide-box>
 	<ion-footer-bar class="bar-white top-bordered-radius bar-button" on-tap="confirmButtonAction()">
-      <h1 class="title color-{{activeButton.color}}">{{activeButton.title}}</h1>
-    </ion-footer-bar>
+    <h1 class="title color-{{activeButton.color}}">{{activeButton.title}}</h1>
+  </ion-footer-bar>
 </ion-modal-view>

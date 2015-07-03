@@ -4,7 +4,7 @@ angular.module('groupeat.directives.receipt-card', []).directive('receiptCard', 
   return {
     restrict: 'EA',
     templateUrl: 'templates/cards/receipt-card.html',
-    scope: { 
+    scope: {
       orders: '=',
       restaurant: '=',
       discount: '='

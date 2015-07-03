@@ -11,7 +11,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.popup',
 	'groupeat.services.restaurant',
 	'ionic',
-])
+	])
 
 .controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
 
@@ -125,6 +125,45 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return group.isShown;
 	};
 
+<<<<<<< HEAD
+=======
+	$scope.confirmButtonsTitles = ['Valider ma commande !', 'Valider mon adresse !'];
+
+	$scope.activeButtonTitle = $scope.confirmButtonsTitles[0];
+
+	$scope.slideHasChanged = function(index) {
+		$scope.activeButtonTitle = $scope.confirmButtonsTitles[index];
+	};
+
+	/* This will have to be replaced by actual data, currently placeholder */
+	$scope.receipt = {
+		restaurantName: 'Allo Pizza 91',
+		date: '02/07/2015',
+		orders: [
+			{
+				count: 3,
+				name: 'Napolitaine',
+				format: 'Junior',
+				price: 24.00
+			},
+			{
+				count: 1,
+				name: 'Paysanne',
+				format: 'Mega',
+				price: 16.58
+			},
+			{
+				count: 2,
+				name: 'Classica',
+				format: 'Senior',
+				price: 20.02
+			}
+		],
+		subTotal: 70.60,
+		reduction: 43,
+		total: 40.24
+	};
+>>>>>>> Cart page — Done
 
 	$ionicModal.fromTemplateUrl('templates/modals/cart.html', {
 		scope: $scope,
@@ -138,6 +177,9 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.closeCart = function() {
 		$scope.modal.hide();
 	};
+<<<<<<< HEAD
 
+=======
+>>>>>>> Cart page — Done
 
 });
