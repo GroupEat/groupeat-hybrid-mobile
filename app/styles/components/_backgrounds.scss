@@ -8,4 +8,22 @@
 
 .bg-green {
 	background-color: $green;
+	&.high-opacity {
+		background-color: rgba($green,.96);
+	}
+}
+
+.bg-orange {
+	background-color: $orange;
+	&.high-opacity {
+		background-color: rgba($orange,.96);
+	}
+}
+
+.color-red {
+	color: $red;
+}
+
+.color-green {
+	color: $green !important;
 }

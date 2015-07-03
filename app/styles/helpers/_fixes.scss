@@ -63,11 +63,34 @@
 	&.bar-no-padding {
 		padding: 0;
 	}
+	&.bar-button {
+		text-transform: uppercase;
+		.title {
+			font-size: 12px;
+			line-height: 50px;
+			letter-spacing: 0.04em;
+		}
+	}
+	&.top-bordered-radius {
+		@include border-radius(4px 4px 0 0);
+	}
 	.button.button-icon {
 		&:before {
 			font-size: 22px !important;
 		}
 	}
+	.button {
+		&.button-back {
+			color: #FFF;
+			line-height: 40px !important;
+			&:before {
+				font-size: 35px !important;
+			}
+		}
+	}
+}
+
+.bar-header {
 	.title {
 		line-height: 50px;
 		height: 50px;
@@ -87,18 +110,9 @@
 			}
 		}
 	}
-	.button {
-		&.button-back {
-			color: #FFF;
-			line-height: 40px !important;
-			&:before {
-				font-size: 35px !important;
-			}
-		}
-	}
 }
 
-.full-height {
+ion-content.full-height {
   min-height: calc(100vh);
   .scroll {
     min-height: calc(100vh);
@@ -112,11 +126,22 @@
   }
 }
 
+.slider.full-height {
+	min-height: 100vh;
+	.slider-slides {
+		position: absolute;
+	}
+}
+
 .row-no-padding {
 	padding: 0;
 	.col {
 		padding: 0;
 	}
+}
+
+.col-no-padding {
+	padding: 0;
 }
 
 .no-header {

@@ -1,0 +1,84 @@
+.receipt {
+	width: 90%;
+	margin: 0 auto;
+	color: $blue;
+	position: relative;
+	.infos {
+		background-color: #FFF;
+		text-align: center;
+		padding: 15px;
+		padding-bottom: 10px;
+		h4 {
+			font-size: 20px;
+		}
+		p {
+			font-size: 11px;
+		}
+	}
+	.orders {
+		background-color: #FFF;
+		font-size: 11px;
+		padding: 0 15px;
+		.order {
+			.number-item {
+				vertical-align: middle;
+			}
+			.order-item {
+				text-transform: uppercase;
+				vertical-align: middle;
+			}
+			.price {
+				vertical-align: top;
+			}
+		}
+	}
+	.dashed-border {
+		padding: 10px 0;
+		position: relative;
+		background-color: #FFF;
+		&:after {
+			content: '';
+			@extend %center-content;
+			height: 1px;
+			width: calc(100% - 35px);
+			background-image: linear-gradient(to right, $blue 60%, rgba(255,255,255,0) 0%);
+			background-position: bottom;
+			background-size: 15px 1px;
+			background-repeat: repeat-x;
+		}
+	}
+	.totals {
+		background-color: #FFF;
+		padding: 0 15px;
+		font-size: 11px;
+		.total {
+			font-size: 14px;
+			.title {
+				text-transform: uppercase;
+			}
+		}
+	}
+	
+	.comment {
+		padding: 0 15px;
+		padding-bottom: 15px;
+		background-color: #FFF;
+		input {
+			font-size: 11px;
+			width: 100%;
+			text-align: center;
+		}
+	}
+
+	&:after {
+		content: "";
+		position: absolute;
+		height: 7px;
+		width: 100%;
+		bottom: -7px;
+		left: 0;
+		background-image: url(../images/border-scratched.png);
+		background-repeat: repeat-x;
+		background-size: contain;
+	}
+}

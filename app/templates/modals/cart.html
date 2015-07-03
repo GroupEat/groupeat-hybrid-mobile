@@ -1,0 +1,21 @@
+<ion-modal-view id="cart" class="bg-green high-opacity">
+	<ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" class="full-height">
+		<ion-slide>
+			<div class="content">
+				<div class="titles">
+					<h3>Miam!</h3>
+					<p>Votre commande a été enregistré !</p>
+				</div>
+				<receipt-card data="receipt"></receipt-card>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="content">
+				
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+	<ion-footer-bar class="bar-white top-bordered-radius bar-button">
+      <h1 class="title color-green">{{activeButtonTitle}}</h1>
+    </ion-footer-bar>
+</ion-modal-view>

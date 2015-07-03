@@ -1,0 +1,25 @@
+#cart {
+	background-color: rgba($green, .96);
+	.content {
+		.titles {
+			text-align: center;
+			width: 90%;
+			margin-left: 5%;
+			margin-bottom: 20px;
+			h3 {
+				font-size: 35px;
+				color: #FFF;
+				margin-bottom: 5px;
+			}
+			p {
+				font-size: 15px;
+				color: #FFF;
+			}
+		}
+		position: absolute;
+		top: calc(50% - 70px);
+		left: 50%;
+		@include transform(translate(-50%, calc(-50% + 35px)));
+		width: 90%;
+	}
+}
