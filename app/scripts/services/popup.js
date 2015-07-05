@@ -36,13 +36,16 @@ angular.module('groupeat.services.popup', [
     * @param {String} title - The content of the error popup
     * @param {String} content - The content of the error popup
     */
-    confirm = function (title, content) {
+    confirm = function (title, content, okText, cancelText) {
+      okText = okText || 'OK';
+      cancelText = cancelText || 'Cancel';
       return $ionicPopup.confirm({
         title: $translate(title),
-        template: $translate(content)
+        template: $translate(content),
+        cancelText: $translate(cancelText),
+        okText: $translate(okText)
       });
     },
-
 
     /**
     * @ngdoc function

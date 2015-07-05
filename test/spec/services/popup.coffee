@@ -50,6 +50,22 @@ describe 'Service: Popup', ->
       $ionicPopup.confirm.should.have.been.calledWithExactly
         title: title
         template: template
+        okText: 'OK'
+        cancelText: 'Cancel'
+
+    it 'should open a $ionicPopup confirm with the given okText and cancelText if provided', ->
+      sandbox.stub($ionicPopup, 'confirm')
+      title = 'Title'
+      template = '<strong>content</strong>'
+      okText = 'Okidoki'
+      cancelText = 'Really cancel'
+      Popup.confirm(title, template, okText, cancelText)
+      scope.$digest()
+      $ionicPopup.confirm.should.have.been.calledWithExactly
+        title: title
+        template: template
+        okText: okText
+        cancelText: cancelText
 
     it 'should be resolved when $ionicPopup.alert is resolved', ->
       res = 'res'
