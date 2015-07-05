@@ -1,0 +1,14 @@
+<div class="restaurant-card" ng-style="{'background-image' : 'url('+data.pictureUrl+')'}">
+	<div class="content">
+		<div class="max-discount discount-50">
+			<span>Jusqu'à</span>
+			<b>-50<small>%</small></b>
+		</div>
+		<h3>{{data.name}}</h3>
+		<p class="small-title">Pizzeria</p>
+		<div class="stars clearfix">
+			<i class="ion-ios-star" ng-repeat="i in setArrayFromInt(4) track by $index"></i>
+      		<i class="ion-ios-star-outline" ng-repeat="i in setArrayFromInt(1) track by $index"></i>
+		</div>
+	</div>
+</div>
