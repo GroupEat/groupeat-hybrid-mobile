@@ -16,7 +16,8 @@
 		<ion-refresher pulling-text="{{ 'Pull to refresh...' | translate }}" on-refresh="onReload()">
 		</ion-refresher>
 
-		<restaurant-card data="restaurant" ng-repeat="restaurant in restaurants"></restaurant-card>
+		<ge-restaurant-card data="restaurant" ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
+		</ge-restaurant-card>
 
 	</ion-content>
 </ion-view>
