@@ -1,5 +1,4 @@
-<ion-view ng-init="initCtrl()" hide-back-button="true">
-
+<ion-view ng-init="onReload()" hide-back-button="true">
 
 	<ion-nav-buttons side="primary">
 		<button class="button button-clear button-icon button-back ion-ios-arrow-thin-left" on-tap="onRestaurantsListLeave()"></button>
@@ -12,12 +11,10 @@
 	</ion-nav-title>
 
 	<ion-content class="bg-blue">
-
 		<ion-refresher pulling-text="{{ 'Pull to refresh...' | translate }}" on-refresh="onReload()">
 		</ion-refresher>
-
 		<ge-restaurant-card data="restaurant" ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
 		</ge-restaurant-card>
-
 	</ion-content>
+
 </ion-view>

@@ -5,7 +5,7 @@
 		</button>
 	</ion-nav-buttons>
 
-	<ion-content has-header="true" ng-hide="messageBackdrop.show || loadingBackdrop.show">
+	<ion-content has-header="true" ng-hide="messageBackdrop.show">
 		<md-list>
 			<md-list-item>
 				<md-item-content layout="row" flex>
@@ -88,11 +88,5 @@
 		<ge-message-backdrop>
 		</ge-message-backdrop>
 	</ion-content>
-
-	<ion-content has-header="true" scroll="false" ng-show="loadingBackdrop.show">
-		<ge-loading-backdrop ng-show="loadingBackdrop.show">
-		</ge-loading-backdrop>
-	</ion-content>
-
 
 </ion-view>
