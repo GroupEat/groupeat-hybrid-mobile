@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('groupeat.services', [
   'groupeat.services.address',
   'groupeat.services.analytics',
@@ -15,7 +16,6 @@ angular.module('groupeat.services', [
   'groupeat.services.group-order',
   'groupeat.services.http-provider-interceptor',
   'groupeat.services.lodash',
-  'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
