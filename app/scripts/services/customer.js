@@ -96,7 +96,7 @@ angular.module('groupeat.services.customer', [
       if (!customer.activated)
       {
         deferred.reject();
-        Popup.displayError($translate('nonActivatedAccountDetails'), 3000);
+        Popup.error('nonActivatedAccountDetails');
       }
       else
       {
