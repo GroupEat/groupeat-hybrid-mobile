@@ -164,6 +164,7 @@
 
   "missingPropertiesTitle": "Informations Manquantes !",
   "missingCustomerInformationMessage": "Il vous faut fournir votre {{missingProperties}} avant de pouvoir rejoindre une commande",
+  "nonActivatedAccountDetails": "Votre compte n'a pas encore été activé. Veuillez cliquer sur le lien qui vous a été envoyé par mail à l'inscription pour pouvoir passer commande.",
 
   "order": "Commande",
   "myOrders": "Mes Commandes",
