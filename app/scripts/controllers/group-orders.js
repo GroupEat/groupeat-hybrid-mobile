@@ -9,12 +9,11 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
-  'groupeat.services.loading-backdrop',
   'groupeat.controllers.side-menu',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, $q, Analytics, Customer, LoadingBackdrop, GroupOrder, MessageBackdrop, Network, Order, Geolocation, _) {
+.controller('GroupOrdersCtrl', function($scope, $state, $q, Analytics, Customer, GroupOrder, MessageBackdrop, Network, Order, Geolocation, _) {
 
   Analytics.trackView('Group Orders');
 
@@ -22,14 +21,6 @@ angular.module('groupeat.controllers.group-orders', [
 
   $scope.onNewGroupOrder = function() {
     $state.go('restaurants');
-  };
-  
-  $scope.initCtrl = function () {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop();
-    $scope.onReload()
-    .finally(function() {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-    });
   };
 
   $scope.onReload = function() {

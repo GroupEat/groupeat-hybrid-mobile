@@ -1,20 +1,12 @@
 'use strict';
 
 angular.module('groupeat.controllers.cart', [
-  'ngAutocomplete',
-  'pascalprecht.translate',
-  'groupeat.services.address',
-  'groupeat.services.analytics',
   'groupeat.services.cart',
-  'groupeat.services.credentials',
-  'groupeat.services.lodash',
-  'groupeat.services.loading-backdrop',
-  'groupeat.services.message-backdrop',
   'groupeat.services.order',
-  'groupeat.services.predefined-addresses'
+  'ionic'
 ])
 
-.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order) {
+.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, Cart, Order) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;

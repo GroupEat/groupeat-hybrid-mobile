@@ -4,16 +4,16 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.analytics',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
-	'groupeat.services.loading-backdrop',
 	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
 	'groupeat.services.order',
 	'groupeat.services.product',
 	'groupeat.services.popup',
+	'groupeat.services.restaurant',
 	'ionic',
-	])
+])
 
-.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory, $timeout, $ionicScrollDelegate, $ionicModal, Restaurant) {
+.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -29,11 +29,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
-		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
-		$scope.onReload()
-		.finally(function() {
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-		});
+		$scope.onReload();
 	};
 
 	$scope.onReload = function() {
