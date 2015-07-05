@@ -62,5 +62,22 @@ angular.module('groupeat.controllers.restaurants', [
     });
     return deferred.promise;
   };
-  
+
+  $scope.onRestaurantTouch = function(restaurant) {
+    Customer.checkActivatedAccount()
+    .then(function() {
+      return Customer.checkMissingInformation();
+    })
+    .then(function () {
+      return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
+    })
+    .then(function (groupOrders) {
+      return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
+    })
+    .then(function() {
+      Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
+      $state.go('restaurant-menu', {restaurantId: restaurant.id});
+    });
+  };
+
 });
