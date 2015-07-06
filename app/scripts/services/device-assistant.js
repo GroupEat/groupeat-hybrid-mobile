@@ -1,10 +1,7 @@
 'use strict';
 
 angular.module('groupeat.services.device-assistant', [
-<<<<<<< HEAD
   'ionic',
-=======
->>>>>>> Adding modules for unit testing
   'constants',
   'ngResource',
   'groupeat.services.lodash',
