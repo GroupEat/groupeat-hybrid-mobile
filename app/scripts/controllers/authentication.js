@@ -104,7 +104,7 @@ angular.module('groupeat.controllers.authentication', [
     });
   };
 
-  $scope.showResetPasswordDialog = function (ev) {
+  $scope.showResetPasswordDialog = function () {
     // Resetting the relevant scope elements each time such a popup is created
     $scope.userReset = {};
 
