@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = LoadingBackdrop = Restaurant = Geolocation = $q = {}
+  scope = $mdDialog = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -19,7 +19,6 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Restaurant = $injector.get('Restaurant')
       GroupOrder = $injector.get('GroupOrder')
       MessageBackdrop = $injector.get('MessageBackdrop')
-      LoadingBackdrop = $injector.get('LoadingBackdrop')
       Network = $injector.get('Network')
       _ = $injector.get('_')
       Geolocation = $injector.get('Geolocation')
@@ -30,7 +29,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
         })
       $httpBackend = $injector.get('$httpBackend')
 
@@ -142,28 +141,6 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
       Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, 0, 10, 'discountPolicy')
       $state.go.should.have.been.calledWithExactly('restaurant-menu', restaurantId: 1)
-
-  describe 'RestaurantsCtrl#initCtrl', ->
-
-    it 'should show a loading backdrop', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
-      scope.initCtrl()
-      LoadingBackdrop.backdrop.should.have.been.calledWithExactly()
-
-    it 'should call onReload', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
-      sandbox.stub(scope, 'onReload').returns $q.defer().promise
-      scope.initCtrl()
-      scope.onReload.should.have.been.called
-
-    it 'should remove the loading backdrop once the promise returned by onReload is rejected', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
-      sandbox.stub(LoadingBackdrop, 'noBackdrop')
-      sandbox.stub(scope, 'onReload').returns($q.reject())
-      scope.initCtrl()
-      LoadingBackdrop.noBackdrop.should.have.not.been.called
-      scope.$digest()
-      LoadingBackdrop.noBackdrop.should.have.been.called
 
   describe 'RestaurantsCtrl#onReload', ->
 

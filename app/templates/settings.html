@@ -1,13 +1,10 @@
 <ion-view ng-init="initCtrl()" title="{{ 'settings' | translate }}" >
 
   <ion-nav-buttons side="right">
-    <button on-tap="onSave(loadingBackdrop.show)" class="button button-clear button-positive">{{ 'save' | translate }}</button>
+    <button on-tap="onSave()" class="button button-clear button-positive">{{ 'save' | translate }}</button>
   </ion-nav-buttons>
 
-  <ge-loading-backdrop ng-show="loadingBackdrop.show">
-  </ge-loading-backdrop>
-
-  <ion-content class="has-header has-footer" ng-show="!messageBackdrop.show && !loadingBackdrop.show">
+  <ion-content class="has-header has-footer" ng-show="!messageBackdrop.show">
     <md-tabs md-selected="selectedIndex" md-dynamic-height="true" flex>
       <md-tab ng-repeat="tab in tabs"
       ng-disabled="tab.disabled">

@@ -71,7 +71,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       Popup = $injector.get('Popup')
       sandbox = sinon.sandbox.create()
       $httpBackend = $injector.get('$httpBackend')
-      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), $mdDialog: $injector.get('$mdDialog'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, Popup: Popup, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
+      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, Popup: Popup, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
       Order: $injector.get('Order'), $ionicHistory: $injector.get('$ionicHistory'), _: $injector.get('_')))
 
       ENV = $injector.get('ENV')

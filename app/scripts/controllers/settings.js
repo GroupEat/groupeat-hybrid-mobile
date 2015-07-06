@@ -9,14 +9,13 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.customer-settings',
   'groupeat.services.element-modifier',
   'groupeat.services.lodash',
-  'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.popup',
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, LoadingBackdrop, MessageBackdrop, Network, Popup) {
+.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup) {
 
 	Analytics.trackView('Restaurants');
 
@@ -47,12 +46,7 @@ angular.module('groupeat.controllers.settings', [
 		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
-
-		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
-		$scope.onReload()
-		.finally(function() {
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-		});
+		$scope.onReload();
 	};
 
 	$scope.onReload = function() {
@@ -82,9 +76,6 @@ angular.module('groupeat.controllers.settings', [
 		.catch(function(errorKey) {
 			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
 			deferred.reject();
-		})
-		.finally(function() {
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
 
 		return deferred.promise;
@@ -94,7 +85,6 @@ angular.module('groupeat.controllers.settings', [
 	Saving
 	*/
 	$scope.onSave = function() {
-		$scope.loadingBackdrop = LoadingBackdrop.backdrop();
 		var customerId = Credentials.get().id;
 		ElementModifier.validate($scope.form.customerEdit)
 		.then(function() {
@@ -134,9 +124,6 @@ angular.module('groupeat.controllers.settings', [
 		})
 		.catch(function(errorMessage) {
 			Popup.error(errorMessage);
-		})
-		.finally(function() {
-			$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 		});
 	};
 

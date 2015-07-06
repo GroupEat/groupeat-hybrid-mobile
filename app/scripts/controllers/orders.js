@@ -2,7 +2,6 @@
 
 angular.module('groupeat.controllers.orders', [
   'groupeat.services.credentials',
-  'groupeat.services.loading-backdrop',
   'groupeat.services.lodash',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
@@ -10,15 +9,8 @@ angular.module('groupeat.controllers.orders', [
   'timer'
 ])
 
-.controller('OrdersCtrl', function (_, $q, $scope, $state, $stateParams, Credentials, LoadingBackdrop, MessageBackdrop, Network, Order) {
-  
-  $scope.initCtrl = function () {
-    $scope.loadingBackdrop = LoadingBackdrop.backdrop('backdrop-get', 'with-bar-and-tabs');
-    $scope.onReload().finally(function () {
-      $scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-    });
-  };
-  
+.controller('OrdersCtrl', function (_, $q, $scope, $state, $stateParams, Credentials, MessageBackdrop, Network, Order) {
+
   $scope.onReload = function () {
     var deferred = $q.defer();
     Network.hasConnectivity()

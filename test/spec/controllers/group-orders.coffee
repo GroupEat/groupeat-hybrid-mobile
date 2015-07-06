@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = Geolocation = LoadingBackdrop = MessageBackdrop = Network = Order = Popup = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = Geolocation = MessageBackdrop = Network = Order = Popup = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -39,7 +39,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox = sinon.sandbox.create()
 
       Customer = $injector.get('Customer')
-      LoadingBackdrop = $injector.get('LoadingBackdrop')
       MessageBackdrop = $injector.get('MessageBackdrop')
       Order = $injector.get('Order')
       Popup = $injector.get('Popup')
@@ -59,7 +58,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, LoadingBackdrop: LoadingBackdrop, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
+        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
       })
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -84,30 +83,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
     it 'should refresh view', ->
       # TODO test if the method onRefreshGroupOrders is calling when GroupOrderCtrl
-
-  describe 'GroupOrders#initCtrl', ->
-
-    beforeEach ->
-      scope.$digest()
-      Network.hasConnectivity.restore()
-
-    it 'should show a loading backdrop', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
-      scope.initCtrl()
-      LoadingBackdrop.backdrop.should.have.been.calledWithExactly()
-
-    it 'should call onRealod', ->
-      sandbox.stub(LoadingBackdrop, 'backdrop')
-      sandbox.stub(scope, 'onReload').returns($q.defer().promise)
-      scope.initCtrl()
-      scope.onReload.should.have.been.called
-
-    it 'should remove the loading backdrop once the promise returned by onReload is rejected', ->
-      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
-      sandbox.stub(GroupOrder, 'get').returns($q.defer().promise)
-      scope.initCtrl()
-      scope.$digest()
-      scope.loadingBackdrop.should.deep.equal LoadingBackdrop.noBackdrop()
 
   describe "GroupOrders#onReload", ->
 

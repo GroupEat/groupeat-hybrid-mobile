@@ -9,13 +9,12 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.cart',
   'groupeat.services.credentials',
   'groupeat.services.lodash',
-  'groupeat.services.loading-backdrop',
   'groupeat.services.message-backdrop',
   'groupeat.services.order',
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($scope, $state, $ionicHistory, _, Analytics, Cart, Order, $q, LoadingBackdrop, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
+.controller('CartCtrl', function ($scope, $state, $ionicHistory, _, Analytics, Cart, Order, $q, Popup, $mdDialog, $filter, Address, Credentials, MessageBackdrop, PredefinedAddresses) {
   var $translate = $filter('translate');
   Analytics.trackView('Cart');
   $scope.currentOrder = Order.getCurrentOrder();
@@ -141,8 +140,8 @@ angular.module('groupeat.controllers.cart', [
         preserveScope: true,
         clickOutsideToClose: false,
         controller: 'CartCtrl'
-      }).then(function () {
-        $scope.loadingBackdrop = LoadingBackdrop.backdrop();
+      })
+      .then(function () {
         $scope.validateAddress($scope.addressTypeSelected.value).then(function () {
           if ($scope.addressTypeSelected.value === 'myAddress') {
             var requestBodyAddress = Address.getAddressFromResidencyInformation($scope.userAddress.residency);
@@ -173,21 +172,19 @@ angular.module('groupeat.controllers.cart', [
 					return Order.save();
 				})
 				.then(function() {
-					$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
 					Cart.reset();
 					Order.resetCurrentOrder();
 					$ionicHistory.clearCache();
 					$state.go('app.group-orders');
-					Popup.displayTitleOnly($translate('ordered'), 3000);
+					Popup.title('ordered');
 				})
 				.catch(function(errorMessage) {
-					$scope.loadingBackdrop = LoadingBackdrop.noBackdrop();
-					return Popup.displayError($translate(errorMessage), 5000);
+					return Popup.error(errorMessage);
 				});
 			});
 		})
 		.catch(function(errorMessage) {
-			return Popup.displayError(errorMessage, 4000);
+			return Popup.error(errorMessage);
 		});
 	};
 
