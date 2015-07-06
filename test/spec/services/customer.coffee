@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Address = Credentials = Customer = scope = $httpBackend = $mdDialog = $q = $state = ENV = sandbox = BackendUtils = {}
+  Address = Credentials = Customer = scope = $httpBackend = $q = $state = ENV = sandbox = BackendUtils = Popup = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -19,9 +19,8 @@ describe 'Service: Customer', ->
       ENV = $injector.get('ENV')
       $q = $injector.get('$q')
       BackendUtils = $injector.get('BackendUtils')
+      Popup = $injector.get('Popup')
       sandbox = sinon.sandbox.create()
-      $mdDialog = $injector.get('$mdDialog')
-      sandbox.stub($mdDialog, 'show')
       $state = $injector.get('$state')
 
   afterEach ->
@@ -105,13 +104,6 @@ describe 'Service: Customer', ->
 
   describe 'Customer#checkMissingInformation', ->
 
-    it 'should reject a promise when the Customer GET request fails', ->
-      sandbox.stub(Credentials, 'get').returns(id: 1)
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(400, 'Failure')
-      Customer.checkMissingInformation().should.be.rejected
-      $httpBackend.flush()
-
     it 'should resolve a promise when the Customer GET and Address GET requests succeed and no required information is missing', ->
       customerGetResponse =
         data:
@@ -131,6 +123,7 @@ describe 'Service: Customer', ->
       $httpBackend.flush()
 
     it 'should reject a promise with the string "address" when just the customer address is missing', ->
+      sandbox.stub(Popup, 'confirm')
       customerGetResponse =
         data:
           firstName: 'firstName'
@@ -146,8 +139,10 @@ describe 'Service: Customer', ->
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
       Customer.checkMissingInformation().should.be.rejectedWith('address')
       $httpBackend.flush()
+      Popup.confirm.should.have.been.calledWithExactly
 
     it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (> 2 missing)', ->
+      sandbox.stub(Popup, 'confirm')
       customerGetResponse =
         data: {}
       sandbox.stub(Credentials, 'get').returns(id: 1)
@@ -161,8 +156,10 @@ describe 'Service: Customer', ->
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
       Customer.checkMissingInformation().should.be.rejectedWith('firstName, lastName and phoneNumber')
       $httpBackend.flush()
+      Popup.confirm.should.have.been.calledWithExactly
 
     it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (2 missing)', ->
+      sandbox.stub(Popup, 'confirm')
       customerGetResponse =
         data:
           firstName: 'firstName'
@@ -177,3 +174,4 @@ describe 'Service: Customer', ->
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
       Customer.checkMissingInformation().should.be.rejectedWith('lastName and phoneNumber')
       $httpBackend.flush()
+      Popup.confirm.should.have.been.calledWithExactly
