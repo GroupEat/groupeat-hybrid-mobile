@@ -63,6 +63,34 @@ angular.module('groupeat.services.popup', [
 
     /**
     * @ngdoc function
+    * @name Popup#template
+    * @methodOf Popup
+    *
+    * @description
+    * Displays and return a popup including a custom template
+
+    * @param {String} title
+    * @param {String} templateUrl - The url of the template to show
+    * @param {Object} scope
+    * @param {Function} okAction - The function to call when pressing OK
+    */
+    template = function(title, templateUrl, scope, okAction) {
+      return $ionicPopup.alert({
+        title: $translate(title),
+        templateUrl: templateUrl,
+        scope: scope,
+        buttons: [
+          { text: $translate('Cancel') },
+          {
+            text: $translate('OK'),
+            onTap: okAction
+          }
+        ]
+      });
+    },
+
+    /**
+    * @ngdoc function
     * @name Popup#title
     * @methodOf Popup
     *
@@ -79,6 +107,7 @@ angular.module('groupeat.services.popup', [
       alert: alert,
       confirm: confirm,
       error: error,
+      template: template,
       title: title
     };
   }
