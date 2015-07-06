@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('groupeat.services.device-assistant', [
+<<<<<<< HEAD
   'ionic',
+=======
+>>>>>>> Adding modules for unit testing
   'constants',
   'ngResource',
   'groupeat.services.lodash',
@@ -9,11 +12,7 @@ angular.module('groupeat.services.device-assistant', [
   'groupeat.services.push-notification'
 ])
 
-<<<<<<< HEAD
 .factory('DeviceAssistant', function(_, $ionicPlatform, $q, $resource, $rootScope, Credentials, ENV, PushNotification) {
-=======
-.factory('DeviceAssistant', function($rootScope, $q, _, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
->>>>>>> Check if the device is empty so that the device registration is not done in dev env
 
   var
 
