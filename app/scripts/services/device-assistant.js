@@ -1,6 +1,9 @@
 'use strict';
 angular.module('groupeat.services.device-assistant', [
+  'constants',
   'ngResource',
+  'groupeat.services.lodash',
+  'groupeat.services.credentials',
   'groupeat.services.push-notification'
 ])
 
