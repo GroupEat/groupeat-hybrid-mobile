@@ -1,5 +1,6 @@
 'use strict';
 angular.module('groupeat.services.device-assistant', [
+  'ionic',
   'constants',
   'ngResource',
   'groupeat.services.lodash',
