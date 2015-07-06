@@ -143,8 +143,6 @@ angular.module('groupeat.services.push-notification', [
     case 'ios':
       handleAPNNotification(notification);
       break;
-    default:
-      break;
     }
   };
 
