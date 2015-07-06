@@ -9,6 +9,5 @@ angular.module('groupeat.controllers', [
   'groupeat.controllers.restaurant-menu',
   'groupeat.controllers.restaurants',
   'groupeat.controllers.settings',
-  'groupeat.controllers.side-menu',
   'groupeat.controllers.signup'
 ]);

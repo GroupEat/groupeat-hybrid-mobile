@@ -9,7 +9,6 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
-  'groupeat.controllers.side-menu',
   'timer'
 ])
 
