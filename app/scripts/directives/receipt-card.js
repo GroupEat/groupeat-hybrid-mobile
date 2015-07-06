@@ -4,11 +4,15 @@ angular.module('groupeat.directives.receipt-card', []).directive('receiptCard', 
   return {
     restrict: 'EA',
     templateUrl: 'templates/cards/receipt-card.html',
-    scope: { data: '=' },
+    scope: { 
+      orders: '=',
+      restaurant: '='
+    },
     link: function (scope) {
       scope.setArrayFromInt = function (num) {
         return new Array(num);
       };
+      scope.date = Date();
     }
   };
 });

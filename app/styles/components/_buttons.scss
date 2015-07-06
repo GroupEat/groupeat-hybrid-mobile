@@ -9,6 +9,8 @@
   text-align:center;
   text-decoration: none;
   font-weight: 700;
+  width: 100%;
+  border: none;
   @include border-radius(4px);
   &.btn-bloc {
   	display: block;

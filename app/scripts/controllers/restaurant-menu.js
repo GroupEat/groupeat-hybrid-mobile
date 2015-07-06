@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic',
 	])
 
-.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory, $timeout, $ionicScrollDelegate, $ionicModal, $ionicSlideBoxDelegate) {
+.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics, LoadingBackdrop,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory, $timeout, $ionicScrollDelegate, $ionicModal, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -40,6 +40,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		var deferred = $q.defer();
 		Network.hasConnectivity()
 		.then(function() {
+			return Restaurant.get($stateParams.restaurantId);
+		})
+		.then(function(restaurant) {
+			$scope.restaurant = restaurant;
 			return Product.get($stateParams.restaurantId);
 		})
 		.then(function(products) {
@@ -70,8 +74,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return $scope.detailedProduct === product;
 	};
 
-	$scope.onDeleteProduct = function(product, formatIndex) {
-		Cart.removeProduct(product, formatIndex);
+	$scope.onDeleteProduct = function(product, format) {
+		Cart.removeProduct(product, format);
 		Order.updateCurrentDiscount($scope.cart.getTotalPrice());
 	};
 
@@ -126,54 +130,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 
-	/* This will have to be replaced by actual data, currently placeholder */
-	$scope.receipt = {
-		restaurantName: 'Allo Pizza 91',
-		date: '02/07/2015',
-		orders: [
-			{
-				count: 3,
-				name: 'Napolitaine',
-				format: 'Junior',
-				price: 24.00
-			},
-			{
-				count: 1,
-				name: 'Paysanne',
-				format: 'Mega',
-				price: 16.58
-			},
-			{
-				count: 2,
-				name: 'Classica',
-				format: 'Senior',
-				price: 20.02
-			}
-		],
-		subTotal: 70.60,
-		reduction: 43,
-		total: 40.24
-	};
-
-	$scope.slideIndex = 0;
-
-	$scope.confirmButtons = [
-		{title: 'Valider ma commande !', color: 'green'},
-		{title: 'Valider mon adresse !', color: 'orange'}
-	];
-
-	$scope.address = {
-		name: 'preset',
-		other: 'foyer'
-	};
-
-	$scope.activeButton = $scope.confirmButtons[0];
-
-	$scope.slideHasChanged = function(index) {
-		$scope.slideIndex = index;
-		$scope.activeButton = $scope.confirmButtons[index];
-	};
-
 	$ionicModal.fromTemplateUrl('templates/modals/cart.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
@@ -187,12 +143,5 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		$scope.modal.hide();
 	};
 
-	$scope.confirmButtonAction = function() {
-		if($scope.slideIndex === 0) {
-			$ionicSlideBoxDelegate.slide(1);
-		} else {
-			//Confirm Order
-		}
-	};
 
 });

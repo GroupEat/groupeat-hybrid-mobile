@@ -6,14 +6,12 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
   var products = [];
   var getProducts = function () {
       return products;
-    }, getFormatQuantity = function (formatId) {
+    }, getProductQuantity = function (productToGet, format) {
       var quantityToReturn = 0;
       _.forEach(products, function (product) {
-        _.forEach(product.formats, function (format) {
-          if (format.id === formatId) {
-            quantityToReturn = _.has(format, 'quantity') ? format.quantity : 0;
+          if (productToGet.name === product.name && format.name === product.format) {
+            quantityToReturn = product.quantity;
           }
-        });
       });
       return quantityToReturn;
     }, getTotalPrice = function () {
@@ -30,57 +28,35 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
       totalQuantity = value;
     }, setDiscountRate = function (value) {
       discountRate = value;
-    }, refresh = function () {
-      // Create index variable to store index of product to be potentially removed from cart
-      var indexOfProductToBeDeleted = [
-        false,
-        0
-      ];
-      // Update cart
-      totalPrice = 0;
+    },refresh = function() {
       totalQuantity = 0;
+      totalPrice = 0;
       _.forEach(products, function (product) {
-        product.totalQuantity = 0;
-        product.totalPrice = 0;
-        _.forEach(product.formats, function (productFormats) {
-          product.totalPrice += productFormats.price * productFormats.quantity;
-          product.totalQuantity += productFormats.quantity;
-        });
-        totalPrice += product.totalPrice;
-        totalQuantity += product.totalQuantity;
-        if (product.totalQuantity === 0) {
-          indexOfProductToBeDeleted = [
-            true,
-            _.indexOf(products, product)
-          ];
-        }
+        totalQuantity += product.quantity;
+        totalPrice += product.price;
       });
-      // Remove potentially a product if total quantity has been seen as 0
-      if (indexOfProductToBeDeleted[0]) {
-        products.splice(indexOfProductToBeDeleted[1], 1);
-      }
-    }, removeProduct = function (productToDelete, formatIndex) {
+    },removeProduct = function (productToDelete, format) {
       // Find product in products and decrement its quantity
-      _.forEach(products, function (product) {
-        if (product.id === productToDelete.id) {
-          _.forEach(product.formats, function (productFormat) {
-            if (productFormat.id === formatIndex && productFormat.quantity > 0) {
-              productFormat.quantity -= 1;
-            } else {
-            }
-          });
-        } else {
-        }
-      });
-      refresh();
-    }, hasAtLeastOneProduct = function (productToTest) {
+      if (hasAtLeastOneProduct(productToDelete, format)) {
+        _.forEach(products, function (product) {
+          if (product.name === productToDelete.name && product.format === format.name) {
+              product.quantity -= 1;
+              product.price = product.quantity * format.price;
+              if(product.price === 0) {
+                products.splice(_.indexOf(products, product), 1);
+              }
+          } 
+        });
+        refresh();
+      }
+    }, hasAtLeastOneProduct = function (productToTest, format) {
       /*
 			if product.id is in products, that means there is at least
 			one product (senior, junior,.... whatever) added by user
 			 */
       var isInProducts = false;
       _.forEach(products, function (product) {
-        if (product.id === productToTest.id) {
+        if (product.name === productToTest.name && product.format === format.name) {
           isInProducts = true;
         }
       });
@@ -90,43 +66,24 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
 			Test if productToAdd exists already in products
 			We do that directly thanks to the method 'hasAtLeastOneProduct'
 			*/
-      if (hasAtLeastOneProduct(productToAdd)) {
+      if (hasAtLeastOneProduct(productToAdd, format)) {
         // If productToAdd already exists in products, just increment its quantity
         _.forEach(products, function (product) {
-          if (product.id === productToAdd.id) {
-            _.forEach(product.formats, function (productFormats) {
-              if (productFormats.id === format.id) {
-                productFormats.quantity += 1;
-              } else {
-              }
-            });
+          if (product.name === productToAdd.name && product.format === format.name) {
+              product.quantity += 1;
+              product.price = product.quantity * format.price;
           }
         });
       } else {
-        // Else, create new product to add in products
-        // First the formats array
-        var formatToAddInProduct = [];
-        for (var i = 0; i < _.size(productToAdd.formats.data); i++) {
-          formatToAddInProduct[i] = {
-            'id': productToAdd.formats.data[i].id,
-            'name': productToAdd.formats.data[i].name,
-            'price': productToAdd.formats.data[i].price * ((100 - discountRate) / 100),
-            'quantity': 0
-          };
-          if (formatToAddInProduct[i].id === format.id) {
-            // set quantity of productToAdd at 1 (in right format)
-            formatToAddInProduct[i].quantity = 1;
-          }
-        }
         // Then the product to add
         var productToAddInProducts = {
           'id': productToAdd.id,
           'name': productToAdd.name,
-          'totalQuantity': 1,
-          'totalPrice': format.price,
-          'formats': formatToAddInProduct
+          'format': format.name,
+          'quantity': 1,
+          'price': format.price,
         };
-        products.splice(1, 0, productToAddInProducts);
+        products.push(productToAddInProducts);
       }
       refresh();
     }, reset = function () {
@@ -137,7 +94,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
     };
   return {
     getProducts: getProducts,
-    getFormatQuantity: getFormatQuantity,
+    getProductQuantity: getProductQuantity,
     getDiscountRate: getDiscountRate,
     getTotalQuantity: getTotalQuantity,
     getTotalPrice: getTotalPrice,
@@ -148,7 +105,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
     setTotalPrice: setTotalPrice,
     addProduct: addProduct,
     removeProduct: removeProduct,
-    refresh: refresh,
-    reset: reset
+    reset: reset,
+    refresh: refresh
   };
 });

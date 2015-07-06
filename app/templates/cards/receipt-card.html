@@ -1,26 +1,26 @@
 <div class="receipt">
 
 	<div class="infos">
-		<h4>{{data.restaurantName}}</h4>
-		<p>{{data.date}}</p>
+		<h4>{{restaurant.name}}</h4>
+		<p>{{date}}</p>
 	</div>
 
 	<div class="orders">
-		<div class="order" ng-repeat="order in data.orders">
-			<div class="row">
+		<div class="order" ng-repeat="order in orders">
+			<div class="row" ng-repeat="format in order.formats">
 				<div class="col-10">
 					<b class="number-item">
-						{{order.count}}
+						{{fomat.quantity}}
 					</b>
 				</div>
 				<div class="col-67">
 					<span class="order-item">
-						{{order.name}} {{order.format}}
+						{{order.name}} {{format.name}}
 					</span>
 				</div>
 				<div class="col col-no-padding text-right">
 					<span class="price">
-						{{order.price}}
+						{{order.totalPrice}}
 					</span>
 				</div>
 			</div>
