@@ -1,10 +1,14 @@
 'use strict';
 angular.module('groupeat.services.device-assistant', [
+  'ionic',
+  'constants',
   'ngResource',
+  'groupeat.services.lodash',
+  'groupeat.services.credentials',
   'groupeat.services.push-notification'
 ])
 
-.factory('DeviceAssistant', function($rootScope, $q, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
+.factory('DeviceAssistant', function($rootScope, $q, _, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
 
   var
 
@@ -96,9 +100,13 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function () {
     deferredRegistration = $q.defer();
-    $ionicPlatform.ready(function(){
-      onDeviceReady();
-    });
+    if (_isEmpty(ionic.Platform.device())){
+      deferredRegistration.resolve();
+    } else {
+      $ionicPlatform.ready(function(){
+        onDeviceReady();
+      });
+    }
     return deferredRegistration.promise;
   };
 
