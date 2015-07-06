@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $mdDialog = $state = Customer = GroupOrder = Geolocation = MessageBackdrop = Network = Order = Popup = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $state = Customer = GroupOrder = Geolocation = MessageBackdrop = Network = Order = Popup = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -43,7 +43,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       Order = $injector.get('Order')
       Popup = $injector.get('Popup')
       Geolocation = $injector.get('Geolocation')
-      $mdDialog = $injector.get('$mdDialog')
       GroupOrder = $injector.get('GroupOrder')
       Network = $injector.get('Network')
 
@@ -58,7 +57,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
+        $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation ,GroupOrder: GroupOrder, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: $injector.get('_')
       })
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
