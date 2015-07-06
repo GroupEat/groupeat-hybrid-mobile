@@ -3,7 +3,6 @@
 angular.module('groupeat.controllers.authentication', [
   'ionic',
   'jcs-autoValidate',
-  'ngMaterial',
   'pascalprecht.translate',
   'groupeat.services.address',
   'groupeat.services.authentication',
@@ -18,14 +17,17 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function ($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _) {
-  
+.controller('AuthenticationCtrl', function ($scope, $state, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _) {
+
   var $translate = $filter('translate');
   Analytics.trackView('Authentication');
+
   /**
   Scope Initializations
   **/
+
   /* Showing DOM Elements */
+
   // Buttons
   $scope.showLoginAndRegisterButtons = true;
   $scope.showLoginEnergizedBackButton = false;
@@ -36,15 +38,21 @@ angular.module('groupeat.controllers.authentication', [
   $scope.showLoginForm = false;
   $scope.showRegisterForm = false;
   $scope.showFurtherRegisterForm = false;
+
   /* Models */
+
   $scope.userLogin = {};
   $scope.userReset = {};
   $scope.userRegister = {};
   $scope.userId = undefined;
+
   /* Residencies options */
+
   $scope.residencies = Address.getResidencies();
   $scope.validationError = undefined;
+
   /* Analytics Timing */
+
   var d = new Date();
   $scope.initialTime = d.getTime();
 
@@ -99,29 +107,19 @@ angular.module('groupeat.controllers.authentication', [
   $scope.showResetPasswordDialog = function (ev) {
     // Resetting the relevant scope elements each time such a popup is created
     $scope.userReset = {};
-    $mdDialog.show({
-      targetEvent: ev,
-      parent: angular.element(document.body),
-      templateUrl: 'templates/popups/reset-password.html',
-      controller: 'AuthenticationCtrl',
-      disableParentScroll: false
-    });
-  };
 
-  $scope.closeResetPasswordDialog = function (form, cancel) {
-    return cancel ? $mdDialog.hide() : ElementModifier.validate(form).then(function () {
-      Authentication.resetPassword($scope.userReset.email).then(function () {
-        $mdDialog.hide();
-      }).catch(function (errorKey) {
-        form.email.$setValidity(errorKey, false);
-      });
-    });
-  };
+    var onTap = function(e) {
+      if (!$scope.userReset.email) {
+        e.preventDefault();
+      } else {
+        Authentication.resetPassword($scope.userReset.email)
+        .finally(function() {
+          return true;
+        });
+      }
+    };
 
-  $scope.resetNotFoundValidity = function (form) {
-    if (form.email.$error.notFound) {
-      form.email.$setValidity('notFound', true);
-    }
+    Popup.template('resetPassword', 'templates/popups/reset-password.html', $scope, onTap);
   };
   /*
   -------------------    End Login   -------------------------
@@ -131,16 +129,19 @@ angular.module('groupeat.controllers.authentication', [
   -------------------    Registering  (Mandatory) -------------------------
   */
   $scope.submitRegisterForm = function (form) {
-    return ElementModifier.validate(form).then(function () {
+    return ElementModifier.validate(form)
+    .then(function () {
       // TODO : Fetch proper locale
       var requestBody = _.merge($scope.userRegister, { 'locale': 'fr' });
       return Customer.save(requestBody);
-    }).then(function (response) {
+    })
+    .then(function (response) {
       var responseData = response.data;
       $scope.userId = responseData.id;
       Credentials.set(responseData.id, responseData.token);
       return DeviceAssistant.register();
-    }).then(function (response) {
+    })
+    .then(function (response) {
       $scope.userRegister.residency = ResidencyUtils.getDefaultResidencyValueFromEmail($scope.userRegister.email);
       $scope.showLoginAndRegisterButtons = false;
       $scope.showLoginForm = false;
@@ -170,7 +171,7 @@ angular.module('groupeat.controllers.authentication', [
     var firstName = $scope.userRegister.firstName ? $scope.userRegister.firstName : '';
     return Popup.title($translate('welcome', {firstName: firstName}));
   };
-  
+
   $scope.$watch('[userRegister.firstName, userRegister.lastName, userRegister.phoneNumber, userRegister.residency]', function () {
     $scope.updateFurtherRegisterButton();
   }, true);
