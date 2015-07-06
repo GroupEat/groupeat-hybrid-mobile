@@ -47,7 +47,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
                 product.quantity -= 1;
                 product.price = product.quantity * format.price;
               }
-          } 
+          }
         });
         if(productToDeleteIndex) {
           products.splice(productToDeleteIndex, 1);

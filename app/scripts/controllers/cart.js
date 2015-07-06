@@ -3,10 +3,10 @@
 angular.module('groupeat.controllers.cart', [
   'ionic',
   'groupeat.services.cart',
-  'groupeat.services.order',
+  'groupeat.services.order'
 ])
 
-.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order) {
+.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, Cart, Order) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
