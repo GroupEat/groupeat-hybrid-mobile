@@ -98,9 +98,6 @@ angular.module('groupeat.services.push-notification', [
       break;
     case 'message':
       break;
-    case 'error':
-      deferredRegistration.reject(notification.msg);
-      break;
     default:
       deferredRegistration.reject(notification.msg);
       break;
