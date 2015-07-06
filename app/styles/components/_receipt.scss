@@ -51,11 +51,11 @@
 		background-color: #FFF;
 		padding: 0 15px;
 		font-size: 11px;
+		.title {
+			text-transform: uppercase;
+		}
 		.total {
 			font-size: 14px;
-			.title {
-				text-transform: uppercase;
-			}
 		}
 	}
 	
