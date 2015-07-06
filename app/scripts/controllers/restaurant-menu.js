@@ -164,8 +164,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.address = {
 		name: 'preset',
-		new: 'ensta',
-		common: 'foyer'
+		other: 'foyer'
 	};
 
 	$scope.activeButton = $scope.confirmButtons[0];
