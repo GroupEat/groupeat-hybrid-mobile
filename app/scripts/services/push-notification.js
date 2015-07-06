@@ -118,10 +118,7 @@ angular.module('groupeat.services.push-notification', [
   */
   handleAPNNotification = function (notification) {
     if (notification.badge) {
-      $cordovaPush.setBadgeNumber(notification.badge)
-      .then(function () {
-      },function () {
-      });
+      $cordovaPush.setBadgeNumber(notification.badge);
     }
   };
 
