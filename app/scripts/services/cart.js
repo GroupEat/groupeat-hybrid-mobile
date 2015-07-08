@@ -37,16 +37,21 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
       });
     },removeProduct = function (productToDelete, format) {
       // Find product in products and decrement its quantity
+      var productToDeleteIndex;
       if (hasAtLeastOneProduct(productToDelete, format)) {
         _.forEach(products, function (product) {
           if (product.name === productToDelete.name && product.format === format.name) {
-              product.quantity -= 1;
-              product.price = product.quantity * format.price;
               if(product.price === 0) {
-                products.splice(_.indexOf(products, product), 1);
+                productToDeleteIndex = _.indexOf(products, product);
+              } else {
+                product.quantity -= 1;
+                product.price = product.quantity * format.price;
               }
           } 
         });
+        if(productToDeleteIndex) {
+          products.splice(productToDeleteIndex, 1);
+        }
         refresh();
       }
     }, hasAtLeastOneProduct = function (productToTest, format) {
