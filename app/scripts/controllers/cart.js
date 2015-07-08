@@ -22,34 +22,6 @@ angular.module('groupeat.controllers.cart', [
     $scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
   });
 
-  $scope.receipt = {
-    restaurantName: 'Allo Pizza 91',
-    date: '02/07/2015',
-    orders: [
-      {
-        count: 3,
-        name: 'Napolitaine',
-        format: 'Junior',
-        price: 24.00
-      },
-      {
-        count: 1,
-        name: 'Paysanne',
-        format: 'Mega',
-        price: 16.58
-      },
-      {
-        count: 2,
-        name: 'Classica',
-        format: 'Senior',
-        price: 20.02
-      }
-    ],
-    subTotal: 70.60,
-    reduction: 43,
-    total: 40.24
-  };
-
   $scope.slideIndex = 0;
 
   $scope.confirmButtons = [

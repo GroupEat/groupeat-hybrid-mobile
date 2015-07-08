@@ -2,25 +2,25 @@
 
 	<div class="infos">
 		<h4>{{restaurant.name}}</h4>
-		<p>{{date}}</p>
+		<p>{{date | date:'MM/dd/yyyy'}}</p>
 	</div>
 
 	<div class="orders">
-		<div class="order" ng-repeat="order in orders">
-			<div class="row" ng-repeat="format in order.formats">
+		<div class="order" ng-repeat="order in orders.getProducts()">
+			<div class="row">
 				<div class="col-10">
 					<b class="number-item">
-						{{fomat.quantity}}
+						{{order.quantity}}
 					</b>
 				</div>
 				<div class="col-67">
 					<span class="order-item">
-						{{order.name}} {{format.name}}
+						{{order.name}} {{order.format}}
 					</span>
 				</div>
 				<div class="col col-no-padding text-right">
 					<span class="price">
-						{{order.totalPrice}}
+						{{order.price}}
 					</span>
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 					</span>
 				</div>
 				<div class="col-50 text-right">
-					{{data.subTotal}}
+					{{orders.getTotalPrice()}}
 				</div>
 			</div>
 		</div>
@@ -51,8 +51,8 @@
 				</div>
 				<div class="col-50">
 					<div class="discounted text-right">
-						<b class="color-red">-{{data.reduction}}%</b>
-						<b class="color-green">{{data.total}}</b>
+						<b class="color-red">-{{discount | number:0}}%</b>
+						<b class="color-green">{{realPrice | number:2}}</b>
 					</div>
 				</div>
 			</div>

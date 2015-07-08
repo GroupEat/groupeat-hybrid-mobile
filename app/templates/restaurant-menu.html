@@ -25,7 +25,7 @@
       <div class="background" ng-style="{'background-image' : 'url('+ restaurant.pictureUrl +')'}">
         <div class="content" id="discount-placeholder-content">
           <div class="discount" ng-show="currentOrder.currentDiscount">
-            <h4>-{{ currentOrder.currentDiscount }}<small>%</small></h4>
+            <h4>-{{ currentOrder.currentDiscount | number: 0}}<small>%</small></h4>
             <p class="small-title">Discount sur toutes les Pizzas</p>
           </div>
           <div class="food-rush" ng-hide="currentOrder.currentDiscount">
