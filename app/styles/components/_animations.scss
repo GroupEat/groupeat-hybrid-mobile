@@ -25,6 +25,45 @@
 	}
 }
 
+
+@include keyframes(smoke) {
+	0%, 15% {
+		@include transform(translate3d(0, 150%, 0));
+	}
+	100% {
+		@include transform(translate3d(0, -150%, 0));
+	}
+}
+
+@include keyframes(smoke2) {
+	0%, 10% {
+		@include transform(translate3d(0, 150%, 0));
+	}
+	100% {
+		@include transform(translate3d(0, -150%, 0));
+	}
+}
+
+@include keyframes(smoke3) {
+	0% {
+		@include transform(translate3d(0, 150%, 0));
+	}
+	100% {
+		@include transform(translate3d(0, -150%, 0));
+	}
+}
+
+@include keyframes(smoke4) {
+	0%, 30% {
+		@include transform(translate3d(0, 150%, 0));
+	}
+	100% {
+		@include transform(translate3d(0, -150%, 0));
+	}
+}
+
+
+
 @include keyframes(movingScooter) {
 	0% {
 		@include transform(scale(.6) translate3d(-40%, 40px, 0));
