@@ -1,24 +1,67 @@
 <ion-view hide-nav-bar="true" ng-controller="AuthenticationCtrl">
 
-	<!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
-	<div class="padding-vertical">
-		<img src="images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
+	<ion-slide-box id="intro-slides" on-slide-changed="slideHasChanged($index)" show-pager="true" class="full-height">
+		<ion-slide>
+			<div class="titles">
+				<h3>Crée une commande GroupEat</h3>
+				<p>Selectionne un restaurant, ce que tu souhaites manger, et regarde le prix de ton panier baisser chaque fois que quelqu’un rejoint la commande</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="titles">
+				<h3>Rejoins une commande GroupEat</h3>
+				<p>Rejoins une commande GroupEat autour de toi et économise directement sur ton achat.<br /> C’est ça l’esprit GroupEat</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="titles">
+				<h3>Food Rush</h3>
+				<p>Plutôt économe ou pressé ? définis combien de temps tu souhaites attendre avant d’être livré : Plus tu attends, plus tu économise !</p>
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+
+	<div id="intro-animations">
+		<div class="canvas" ng-class="{'is-slide2' : slideIndex === 1, 'is-slide3' : slideIndex === 2}">
+			<div class="pizzeria">
+			</div>
+			<div class="clock"></div>
+			<div class="scooter">
+				<div class="flag"></div>
+				<ul class="pizzas">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<ul class="speed">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
 	</div>
+
+	<!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
+<!-- 	<div class="padding-vertical">
+		<img src="images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
+	</div> -->
 	<!--	-	-	- END LOGO FOR ALL VIEWS -	-	-	-->
 
 
 	<!--	-	-	- MENU VIEW -	-	-	-->
-	<div ng-show="showLoginAndRegisterButtons">
+	<!-- <div ng-show="showLoginAndRegisterButtons">
 		<button on-tap="onLoginButtonTouch()" class="button button-full button-energized button-upper-bottom text-button-first-page">{{ 'login' | translate | uppercase }}
 		</button>
 
 		<button on-tap="onRegisterButtonTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 		</button>
-	</div>
+	</div> -->
 	<!--	-	-	- END MENU VIEW -	-	-	-->
 
 	<!--	-	-	- LOGIN VIEW -	-	-	-->
-	<form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
+	<!-- <form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm);" ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<div class="loginViewButtons">
 				<md-button type="button" class="md-primary loginViewsButtons" on-tap="showResetPasswordDialog($event)">
@@ -53,14 +96,14 @@
 
 	<button ng-show="showLoginEnergizedBackButton" on-tap="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
 		{{ 'back' | translate }}
-	</button>
+	</button> -->
 
 	<!--	-	-	- END LOGIN VIEW -	-	-	-->
 
 
 	<!--	-	-	- REGISTER VIEW -	-	-	-->
 
-	<form name="registerForm" ng-show="showRegisterForm"  ng-submit-force="true" novalidate>
+	<!-- <form name="registerForm" ng-show="showRegisterForm"  ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<h6 class="login-text-first-page"> {{ 'enterYourCampusEmail' | translate }}</h6>
 			<md-input-container flex>
@@ -92,13 +135,13 @@
 	<button ng-show="showLoginAssertiveBackButton" on-tap="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
 		{{ 'back' | translate }}
 	</button>
-
+ -->
 	<!--	-	-	- END REGISTER VIEW -	-	-	-->
 
 
 	<!--	-	-	- SECOND FORM VIEW -	-	-	-->
 
-	<form name="furtherRegisterForm" ng-show="showFurtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)" ng-submit-force="true" novalidate>
+	<!-- <form name="furtherRegisterForm" ng-show="showFurtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)" ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<h6 class="login-text-first-page"> {{ 'addMoreInformationOrSkip' | translate }}</h6>
 			<md-input-container class="no-validation-messages" flex>
@@ -143,6 +186,6 @@
 			<button type="submit" class="button button-full button-energized button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
 			</button>
 		</div>
-	</form>
+	</form> -->
 	<!--	-	-	- END SECOND FORM VIEW -	-	-	-->
 </ion-view>

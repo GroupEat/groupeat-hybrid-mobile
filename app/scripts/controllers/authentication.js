@@ -26,6 +26,8 @@ angular.module('groupeat.controllers.authentication', [
   Scope Initializations
   **/
   /* Showing DOM Elements */
+  // Slider 
+  $scope.slideIndex = 0;
   // Buttons
   $scope.showLoginAndRegisterButtons = true;
   $scope.showLoginEnergizedBackButton = false;
@@ -74,6 +76,18 @@ angular.module('groupeat.controllers.authentication', [
   };
   /*
   -------------------    End Initial   -------------------------
+  */
+
+  /*
+  ---------------------- Slider --------------------------
+  */
+
+  $scope.slideHasChanged = function(index) {
+    $scope.slideIndex = index;
+  };
+
+  /*
+  ---------------------- End Slider --------------------------
   */
 
   /*
