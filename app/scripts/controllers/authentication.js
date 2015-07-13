@@ -106,7 +106,6 @@ angular.module('groupeat.controllers.authentication', [
     $scope.slideTo($stateParams.slideIndex);
   }, 100);
 
-
   /*
   ---------------------- End Slider --------------------------
   */

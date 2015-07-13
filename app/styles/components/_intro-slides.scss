@@ -194,7 +194,6 @@
 						&:after {
 							@include animation(speed2 1s cubic-bezier(0.25, 0.8, 0.25, 1) infinite);
 						}
-
 					}
 					&:nth-child(3) {
 						margin-left: 60%;
