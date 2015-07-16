@@ -214,7 +214,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
 
       expect(scope.messageBackdrop.show).to.be.equal(true)
-      expect(scope.messageBackdrop.title).to.be.equal('noGroupOrdersTitle')
+      expect(scope.messageBackdrop.title).to.be.equal('noGroupOrders')
       expect(scope.messageBackdrop.details).to.be.equal('noGroupOrdersDetails')
       expect(scope.messageBackdrop.iconClasses).to.be.equal('ion-ios-cart-outline')
       expect(scope.messageBackdrop.button.text).to.be.equal('newOrder')
