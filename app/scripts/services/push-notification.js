@@ -97,7 +97,7 @@ angular.module('groupeat.services.push-notification', [
       handleRegisteredEvent(notification.regid);
       break;
     case 'message':
-      if (notification.foreground == '0') {
+      if (notification.foreground === '0') {
         $state.go('app.group-orders');      // Switch to group orders view if the app is in the background
       }
       break;
@@ -117,7 +117,7 @@ angular.module('groupeat.services.push-notification', [
   * iOS
   */
   handleAPNNotification = function (notification) {
-    if (notification.foreground == '0') {
+    if (notification.foreground === '0') {
       $state.go('app.group-orders');        // Switch to group orders view if the app is in the background
     }
   };
