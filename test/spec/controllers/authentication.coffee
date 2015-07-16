@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -36,8 +36,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend = $injector.get('$httpBackend')
       $timeout = $injector.get('$timeout')
-      $mdDialog = $injector.get('$mdDialog')
-      sandbox.spy($mdDialog, 'hide')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -47,7 +45,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $compile = $injector.get('$compile')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -256,136 +254,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Credentials.set.should.have.been.called
       # The state should change
       $state.go.should.have.been.called
-      #Popup.error should not be called
       Popup.error.should.have.not.been.called
-
-  describe 'Forgot password', ->
-
-    beforeEach ->
-      $compile(angular.element(
-        '<form name="resetPasswordForm" ng-submit="submitRegisterForm(registerForm)">'+
-        '<input ng-model="userReset.email" name="email" type="email" required ge-campus-email>'+
-        '</form>'
-        ))(scope)
-      scope.$digest()
-
-    it 'resetNotFoundValidity should not add the notFound error when it is initially not present', ->
-      form = scope.resetPasswordForm
-      scope.resetNotFoundValidity(form)
-      form.email.$error.should.not.have.property('notFound')
-
-    it 'resetNotFoundValidity should remove the notFound error when it is initially present', ->
-      form = scope.resetPasswordForm
-      form.email.$setValidity('notFound', false)
-      form.email.$error.notFound.should.be.true
-      scope.resetNotFoundValidity(form)
-      form.email.$error.should.not.have.property('notFound')
-
-    it 'showResetPasswordDialog should show a dialog when called', ->
-      ev = {}
-      scope.showResetPasswordDialog(ev)
-      scope.$digest()
-      body = angular.element(document.body)
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      expect(dialogContainer).to.be.not.null
-      dialogElement = angular.element(dialogContainer)
-      dialogElement.remove()
-
-    it 'showResetPasswordDialog dialog should have a resetPassword title', ->
-      ev = {}
-      scope.showResetPasswordDialog(ev)
-      scope.$digest()
-      body = angular.element(document.body)
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      title = angular.element(dialogContainer).find('h2')
-      title.text().should.contain('resetPassword')
-
-    it 'showResetPasswordDialog dialog should have two buttons', ->
-      ev = {}
-      scope.showResetPasswordDialog(ev)
-      scope.$digest()
-      body = angular.element(document.body)
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      buttons = angular.element(dialogContainer).find('button')
-      buttons.length.should.equal(2)
-      buttons.eq(0).text().should.contain('cancel')
-      buttons.eq(1).text().should.contain('ok')
-
-    it 'showResetPasswordDialog dialog should have one email input element', ->
-      ev = {}
-      scope.showResetPasswordDialog(ev)
-      scope.$digest()
-      body = angular.element(document.body)
-      dialogContainer = body[0].querySelector('.md-dialog-container')
-      input = angular.element(dialogContainer).find('input')
-      input.length.should.equal(1)
-      input.attr('name').should.equal('email')
-
-    it 'closeResetPasswordDialog should close the mdDialog when its second argument is true', ->
-      $mdDialog.hide.should.not.have.been.called
-      scope.closeResetPasswordDialog(scope.resetPasswordForm, true)
-      $mdDialog.hide.should.have.been.called
-
-    it 'closeResetPasswordDialog should not close the mdDialog when its second argument is false and the form invalid', ->
-      form = scope.resetPasswordForm
-      $mdDialog.hide.should.not.have.been.called
-
-      scope.closeResetPasswordDialog(form, false)
-      $mdDialog.hide.should.not.have.been.called
-
-      form.email.$setViewValue('notanemail')
-      $timeout.flush()
-      scope.closeResetPasswordDialog(form, false)
-      $mdDialog.hide.should.not.have.been.called
-
-      form.email.$setViewValue('notacampusemail@gmail.com')
-      $timeout.flush()
-      scope.closeResetPasswordDialog(form, false)
-      $mdDialog.hide.should.not.have.been.called
-
-    it 'closeResetPasswordDialog should set an error field for the input when the server responds with an error', ->
-      form = scope.resetPasswordForm
-      $mdDialog.hide.should.not.have.been.called
-
-      sandbox.stub(ElementModifier, 'validate', (form) ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      errorKey = 'notFound'
-      sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKey)
-      sandbox.spy(Authentication, 'resetPassword')
-
-      $httpBackend.expectDELETE(ENV.apiEndpoint+'/auth/password').respond(404, 'Error')
-
-      scope.closeResetPasswordDialog(form, false)
-      form.email.$error.should.not.have.property.errorKey
-      scope.$digest()
-      $httpBackend.flush()
-
-      Authentication.resetPassword.should.have.been.called
-      $mdDialog.hide.should.not.have.been.called
-      form.email.$error[errorKey].should.be.true
-
-    it 'closeResetPasswordDialog should close the dialog when the server responds properly', ->
-      form = scope.resetPasswordForm
-      $mdDialog.hide.should.not.have.been.called
-
-      sandbox.stub(ElementModifier, 'validate', (form) ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.spy(Authentication, 'resetPassword')
-
-      $httpBackend.expectDELETE(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
-
-      scope.closeResetPasswordDialog(form, false)
-      scope.$digest()
-      $httpBackend.flush()
-
-      Authentication.resetPassword.should.have.been.called
-      $mdDialog.hide.should.have.been.called
 
   describe 'Registering (First Step)', ->
 
