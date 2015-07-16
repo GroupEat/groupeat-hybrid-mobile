@@ -13,11 +13,12 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
+  'groupeat.services.network',
   'groupeat.services.popup',
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Address, Analytics, Authentication, Credentials, Customer, DeviceAssistant, ElementModifier, Popup, ResidencyUtils) {
+.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Address, Analytics, Authentication, Credentials, Customer, DeviceAssistant, ElementModifier, Network, Popup, ResidencyUtils) {
 
   var $translate = $filter('translate');
   Analytics.trackView('Authentication');
@@ -115,7 +116,11 @@ angular.module('groupeat.controllers.authentication', [
   */
   $scope.submitLoginForm = function (form) {
     Analytics.trackEvent('Authentication', 'Tries to Login');
-    ElementModifier.validate(form).then(function () {
+    ElementModifier.validate(form)
+    .then(function () {
+      return Network.hasConnectivity();
+    })
+    .then(function() {
       return Authentication.getToken($scope.userLogin);
     })
     .then(function (response) {
@@ -126,8 +131,8 @@ angular.module('groupeat.controllers.authentication', [
       $state.go('app.group-orders');
       return response;
     })
-    .catch(function(errorResponse) {
-      return Popup.error(errorResponse);
+    .catch(function(errorMessage) {
+      return Popup.error(errorMessage);
     });
   };
 
@@ -157,6 +162,9 @@ angular.module('groupeat.controllers.authentication', [
   */
   $scope.submitRegisterForm = function (form) {
     return ElementModifier.validate(form)
+    .then(function() {
+      return Network.hasConnectivity();
+    })
     .then(function () {
       // TODO : Fetch proper locale
       var requestBody = _.merge($scope.userRegister, { 'locale': 'fr' });
@@ -180,8 +188,8 @@ angular.module('groupeat.controllers.authentication', [
       $scope.showSkipFurtherRegisterButton = true;
       return response;
     })
-    .catch(function(errorResponse) {
-      Popup.error(errorResponse);
+    .catch(function(errorMessage) {
+      Popup.error(errorMessage);
     });
   };
   /*
@@ -216,6 +224,9 @@ angular.module('groupeat.controllers.authentication', [
   $scope.submitFurtherRegisterForm = function (form) {
     Analytics.trackEvent('Authentication', 'Tries to Register');
     ElementModifier.validate(form)
+    .then(function() {
+      return Network.hasConnectivity();
+    })
     .then(function () {
       var customerParams = _.pick($scope.userRegister, [
         'firstName',
