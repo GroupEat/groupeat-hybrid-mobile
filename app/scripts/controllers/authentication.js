@@ -117,7 +117,8 @@ angular.module('groupeat.controllers.authentication', [
     Analytics.trackEvent('Authentication', 'Tries to Login');
     ElementModifier.validate(form).then(function () {
       return Authentication.getToken($scope.userLogin);
-    }).then(function (response) {
+    })
+    .then(function (response) {
       var responseData = response.data;
       Credentials.set(responseData.id, responseData.token);
       Analytics.trackEvent('Authentication', 'Logs In');
@@ -214,17 +215,20 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.submitFurtherRegisterForm = function (form) {
     Analytics.trackEvent('Authentication', 'Tries to Register');
-    ElementModifier.validate(form).then(function () {
+    ElementModifier.validate(form)
+    .then(function () {
       var customerParams = _.pick($scope.userRegister, [
         'firstName',
         'lastName',
         'phoneNumber'
       ]);
       return Customer.update({ id: $scope.userId }, customerParams);
-    }).then(function () {
+    })
+    .then(function () {
       var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.userRegister.residency), { details: $scope.userRegister.addressSuplement });
       return Address.update({ id: $scope.userId }, addressParams);
-    }).then(function () {
+    })
+    .then(function () {
       $scope.hasRegistered(false);
     })
     .catch(function(errorMessage) {
