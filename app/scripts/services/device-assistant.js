@@ -51,6 +51,8 @@ angular.module('groupeat.services.device-assistant', [
     });
     return deferred.promise;
   };
+
+
   /**
   * @ngdoc function
   * @name DeviceAssistant#onDeviceReady
@@ -89,6 +91,8 @@ angular.module('groupeat.services.device-assistant', [
       });
     }
   };
+
+  
   /**
   * @ngdoc function
   * @name DeviceAssistant#register

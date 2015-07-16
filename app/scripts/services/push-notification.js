@@ -7,9 +7,11 @@ angular.module('groupeat.services.push-notification', [
   'ngCordova'
 ])
 
-.factory('PushNotification', function ($cordovaPush, $q, $rootScope, $ionicModal) {
+.factory('PushNotification', function ($cordovaPush, $q, $rootScope) {
 
-  var config = {
+  var
+
+  config = {
       'android': {
         'senderID': '993639413774'
       },
@@ -76,28 +78,10 @@ angular.module('groupeat.services.push-notification', [
     } else {
       deferredRegistration.reject();
     }
-  },
-
-  /**
-  * @ngdoc function
-  * @name PushNotification#handleMessageEvent
-  * @methodOf PushNotification
-  *
-  * @description
-  * Handles 'message' event
-  * Private method
-  * @param message: content of the received notification
-  */
-  handleMessageEvent = function (message) {
-    $rootScope.notificationMessage = message;
-    window.alert(message);
-    $ionicModal.fromTemplateUrl('templates/modals/notification.html', { animation: 'slide-in-up' }).then(function (modal) {
-      $rootScope.modal = modal;
-      $rootScope.modal.show();
-    });
   };
 
 
+  var
   /**
   * @ngdoc function
   * @name PushNotification#handleGCMNotification
@@ -107,24 +91,15 @@ angular.module('groupeat.services.push-notification', [
   * Handles notifications sent by the GCM service
   * Android
   */
-  var handleGCMNotification = function (notification) {
+  handleGCMNotification = function (notification) {
     switch (notification.event) {
     case 'registered':
       handleRegisteredEvent(notification.regid);
       break;
     case 'message':
-      if (notification.foreground){
-        window.alert('FOREGROUND NOTIFICATION : ' + JSON.stringify(notification));
-      } else {
-        handleMessageEvent(notification.message);
-      }
-      break;
-    case 'error':
-      window.alert('GCM error = ' + notification.msg);
-      deferredRegistration.reject(notification.msg);
       break;
     default:
-      window.alert('An unknown GCM event has occurred');
+      deferredRegistration.reject(notification.msg);
       break;
     }
   },
@@ -139,21 +114,9 @@ angular.module('groupeat.services.push-notification', [
   * iOS
   */
   handleAPNNotification = function (notification) {
-    if (notification.alert) {
-      window.alert(notification.alert);
-    }
-    if (notification.sound) {
-      window.alert('Sound : ' + JSON.stringify(notification.sound));
-    }
     if (notification.badge) {
-      window.alert('Badge : ' + JSON.stringify(notification.badge));
-      $cordovaPush.setBadgeNumber(notification.badge).then(function (result) {
-        window.alert('Bagde set : ' + JSON.stringify(result));
-      }, function (err) {
-        window.alert('Bagde failed : ' + JSON.stringify(err));
-      });
+      $cordovaPush.setBadgeNumber(notification.badge);
     }
-    handleMessageEvent(notification.message);
   };
 
 
@@ -174,13 +137,12 @@ angular.module('groupeat.services.push-notification', [
     case 'ios':
       handleAPNNotification(notification);
       break;
-    default:
-      window.alert('Platform not handled');
-      break;
     }
   };
 
 
-  return { subscribe: subscribe };
+  return {
+    subscribe: subscribe
+  };
 
 });
