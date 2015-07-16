@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = $mdDialog = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -36,8 +36,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend = $injector.get('$httpBackend')
       $timeout = $injector.get('$timeout')
-      $mdDialog = $injector.get('$mdDialog')
-      sandbox.spy($mdDialog, 'hide')
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -47,7 +45,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $compile = $injector.get('$compile')
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $mdDialog: $mdDialog, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, ResidencyUtils: $injector.get('ResidencyUtils'), _: $injector.get('_')
       })
 
       # Hack to validate elements

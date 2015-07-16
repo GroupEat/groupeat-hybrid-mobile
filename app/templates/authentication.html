@@ -89,7 +89,6 @@
 
 
 	<!--	-	-	- SECOND FORM VIEW -	-	-	-->
-
 	<form name="furtherRegisterForm" ng-show="showFurtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)" ng-submit-force="true" novalidate>
 		<div class="list list-inset register-form">
 			<h6 class="login-text-first-page"> {{ 'addMoreInformationOrSkip' | translate }}</h6>
@@ -116,7 +115,7 @@
 		      <option np-repeat="res in residencies">{{ res | translate }}</option>
 		    </select>
 		  </label>
-			<label class="item item-input item-select">
+			<label class="item item-input item-stacked-label">
 				<span class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</span>
 				<input ng-model="userRegister.addressSupplement" name="addressSupplement" type="text">
 			</label>
