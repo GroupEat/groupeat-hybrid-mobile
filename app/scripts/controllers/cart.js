@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('groupeat.controllers.cart', [
+  'ionic',
   'groupeat.services.cart',
   'groupeat.services.order',
-  'ionic'
 ])
 
-.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, Cart, Order) {
+.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
