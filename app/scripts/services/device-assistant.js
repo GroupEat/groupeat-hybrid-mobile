@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('groupeat.services.device-assistant', [
   'ionic',
   'constants',
@@ -81,18 +82,20 @@ angular.module('groupeat.services.device-assistant', [
           deferredRegistration.reject();
           break;
       }
-      PushNotification.subscribe(platform).then(function (registrationToken) {
+      PushNotification.subscribe(platform)
+      .then(function (registrationToken) {
         notificationToken = registrationToken;
         return registerDevice();
-      }).then(function () {
+      })
+      .then(function () {
         deferredRegistration.resolve();
-      }).catch(function () {
+      })
+      .catch(function () {
         deferredRegistration.reject();
       });
     }
   };
 
-  
   /**
   * @ngdoc function
   * @name DeviceAssistant#register
@@ -104,7 +107,7 @@ angular.module('groupeat.services.device-assistant', [
   */
   var register = function () {
     deferredRegistration = $q.defer();
-    if (_isEmpty(ionic.Platform.device())){
+    if (_.isEmpty(ionic.Platform.device())) {
       deferredRegistration.resolve();
     } else {
       $ionicPlatform.ready(function(){
