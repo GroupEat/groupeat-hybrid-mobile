@@ -141,34 +141,34 @@
   "invalidErrorKey": "Le {{fieldName}} est invalide",
   "invalidAddressErrorKey": "L'adresse entrée n'est pas correctement reconnue. Merci d'entrer le champ à nouveau",
 
-  "noNetworkTitle": "Pas de réseau !",
+  "noNetwork": "Pas de réseau !",
   "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
-  "genericFailureTitle": "Whoops",
+  "genericFailure": "Whoops",
   "genericFailureDetails": "Impossible de communiquer avec le serveur. Veuillez réessayer ultérieurement...",
-  "noGroupOrdersTitle": "Aucune commande",
+  "noGroupOrders": "Aucune commande",
   "noGroupOrdersDetails": "Aucune commande groupée n'est actuellement en cours...",
-  "noRestaurantsTitle": "Aucun restaurant",
+  "noRestaurants": "Aucun restaurant",
   "noRestaurantsDetails": "Aucun restaurant n'est actuellement ouvert à votre proximité...",
   "reload": "Recharger",
   "newOrder": "Nouvelle Commande",
 
-  "noGeolocationTitle": "Echec de localisation",
+  "noGeolocation": "Echec de localisation",
   "noGeolocationDetails": "Autorisez Groupeat à accéder à vos données de geolocalisation dans vos réglages téléphone pour profiter de nos offres !",
 
-  "emptyMenuTitle": "Aucun Produit",
+  "emptyMenu": "Aucun Produit",
   "emptyMenuDetails": "Ce restaurant ne propose aucun produit de cette catégorie",
-  "emptyCartTitle": "Panier Vide",
+  "emptyCart": "Panier Vide",
   "emptyCartDetails": "Ajoutez dès maintenant des produits à votre panier !",
 
   "foodrush": "FoodRush !",
 
-  "missingPropertiesTitle": "Informations Manquantes !",
+  "missingProperties": "Informations Manquantes !",
   "missingCustomerInformationMessage": "Il vous faut fournir votre {{missingProperties}} avant de pouvoir rejoindre une commande",
   "nonActivatedAccountDetails": "Votre compte n'a pas encore été activé. Veuillez cliquer sur le lien qui vous a été envoyé par mail à l'inscription pour pouvoir passer commande.",
 
   "order": "Commande",
   "myOrders": "Mes Commandes",
-  "noOrdersTitle": "Aucune commande",
+  "noOrders": "Aucune commande",
   "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat",
 
   "pullToRefresh": "Tirez pour rafraîchir"
