@@ -23,7 +23,7 @@ angular.module('groupeat.services.message-backdrop', [])
 
       return {
         show: true,
-        title: errorKey+'Title',
+        title: errorKey,
         details: errorKey+'Details',
         iconClasses: iconClasses,
         button: {

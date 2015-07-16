@@ -172,7 +172,7 @@ angular.module('groupeat.services.customer', [
         }
         deferred.reject(missingPropertiesString);
         var missingCustomerInformationMessage = $translate('missingCustomerInformationMessage', { missingProperties: missingPropertiesString });
-        Popup.confirm('missingPropertiesTitle', missingCustomerInformationMessage, 'settings')
+        Popup.confirm('missingProperties', missingCustomerInformationMessage, 'settings')
         .then(function(res) {
           if (res) {
             $state.go('app.settings');

@@ -65,7 +65,7 @@ angular.module('groupeat.controllers.cart', [
 		{
 			$scope.messageBackdrop = {
 				show: true,
-				title: 'emptyCartTitle',
+				title: 'emptyCart',
 				details: 'emptyCartDetails',
 				iconClasses: 'ion-ios-cart',
 			};
@@ -89,7 +89,7 @@ angular.module('groupeat.controllers.cart', [
     if (_.isEmpty(Cart.getProducts())) {
       $scope.messageBackdrop = {
         show: true,
-        title: 'emptyCartTitle',
+        title: 'emptyCart',
         details: 'emptyCartDetails',
         iconClasses: 'ion-ios-cart'
       };
