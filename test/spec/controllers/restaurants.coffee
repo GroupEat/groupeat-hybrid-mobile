@@ -234,7 +234,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onReload().should.be.fulfilled
       scope.$digest()
       scope.messageBackdrop.show.should.be.true
-      scope.messageBackdrop.title.should.equal('noRestaurantsTitle')
+      scope.messageBackdrop.title.should.equal('noRestaurants')
       scope.messageBackdrop.details.should.equal('noRestaurantsDetails')
       scope.messageBackdrop.iconClasses.should.equal('ion-android-restaurant')
       scope.messageBackdrop.button.text.should.equal('reload')

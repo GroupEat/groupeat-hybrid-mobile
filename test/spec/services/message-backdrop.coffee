@@ -24,7 +24,7 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with title and details properties set to keys indicating lack of network', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noNetwork')
-      messageBackdrop.title.should.equal('noNetworkTitle')
+      messageBackdrop.title.should.equal('noNetwork')
       messageBackdrop.details.should.equal('noNetworkDetails')
 
     it 'should return an object with a wifi icon class', ->
@@ -40,7 +40,7 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with title and details properties set to keys indicating lack of geolocation', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noGeolocation')
-      messageBackdrop.title.should.equal('noGeolocationTitle')
+      messageBackdrop.title.should.equal('noGeolocation')
       messageBackdrop.details.should.equal('noGeolocationDetails')
 
     it 'should return an object with a location icon class', ->
@@ -59,7 +59,7 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with title and details properties set to keys indicating a generic failure', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
-      messageBackdrop.title.should.equal('genericFailureTitle')
+      messageBackdrop.title.should.equal('genericFailure')
       messageBackdrop.details.should.equal('genericFailureDetails')
 
     it 'should return an object with an alert icon class', ->
