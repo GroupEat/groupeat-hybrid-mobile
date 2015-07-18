@@ -51,7 +51,7 @@ describe 'Service: Popup', ->
         title: title
         template: template
         okText: 'OK'
-        cancelText: 'Cancel'
+        cancelText: 'cancel'
 
     it 'should open a $ionicPopup confirm with the given okText and cancelText if provided', ->
       sandbox.stub($ionicPopup, 'confirm')
