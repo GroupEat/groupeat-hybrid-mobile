@@ -79,7 +79,7 @@
 			display: flex;
 			justify-content:center;
 			align-content:center;
-			flex-direction:column; 
+			flex-direction:column;
 			small {
 				display: block;
 				font-size: 11px;
@@ -110,6 +110,10 @@
 	    min-height: calc(100vh - 70px);
 	  }
   }
+}
+
+.slider {
+	height: 100%;
 }
 
 .row-no-padding {

@@ -15,7 +15,7 @@ angular.module('groupeat.controllers.settings', [
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup) {
+.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup, $ionicSlideBoxDelegate) {
 
 	Analytics.trackView('Restaurants');
 
@@ -30,10 +30,12 @@ angular.module('groupeat.controllers.settings', [
 	*/
   $scope.tabs = [
     {
+      id: 0,
       title: 'editProfile',
       url: 'templates/settings/settings-profile.html'
     },
     {
+      id: 1,
       title: 'pushSettings',
       url: 'templates/settings/settings-notifications.html'
     }
@@ -80,6 +82,13 @@ angular.module('groupeat.controllers.settings', [
 
 		return deferred.promise;
 	};
+
+  /*
+  Switching tab
+  */
+  $scope.slideTo = function(slideId) {
+    $ionicSlideBoxDelegate.slide(slideId);
+  };
 
 	/*
 	Saving

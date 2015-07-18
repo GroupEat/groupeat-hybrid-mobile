@@ -1,55 +1,35 @@
 <form name="form.customerEdit" ng-submit-force="true" novalidate>
+
 	<div class="item item-divider">
-		<ng-md-icon icon="home"></ng-md-icon>
 		{{ 'deliveryAddress' | translate }}
 	</div>
 	<label class="item item-input item-select">
-		<div class="input-label">
-			<md-icon></md-icon>
-		</div>
 		<select ng-model="customer.residency" ng-options="residency | translate for residency in residencies">
 			<option value="" selected disabled>{{ 'residency' | translate }}</option>
 		</select>
 	</label>
-	<md-input-container md-no-float ng-show="customer.residency">
-		<md-icon></md-icon>
-		<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
-	</md-input-container>
+	<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
+
 	<div class="item item-divider">
-		<ng-md-icon icon="person"></ng-md-icon>
 		{{ 'otherDeliveryInformation' | translate }}
 	</div>
-	<md-input-container md-no-float>
-		<md-icon></md-icon>
-		<input ng-model="customer.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
-	</md-input-container>
-	<md-input-container md-no-float>
-		<md-icon></md-icon>
-		<input ng-model="customer.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
-	</md-input-container>
-	<md-input-container md-no-float>
-		<md-icon></md-icon>
-		<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}" ge-phone-format>
-		<div ng-messages="furtherRegisterForm.phoneNumber.$error">
-			<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
-		</div>
-	</md-input-container>
+	<input ng-model="customer.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
+	<input ng-model="customer.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
+	<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}" ge-phone-format>
+	<div ng-messages="furtherRegisterForm.phoneNumber.$error">
+		<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
+	</div>
+
 	<div class="item item-divider">
-		<ng-md-icon icon="lock"></ng-md-icon>
 		{{ 'editPassword' | translate }}
 	</div>
-	<md-input-container md-no-float>
-		<md-icon></md-icon>
-		<input ng-model="customer.oldPassword" name="oldPassword" type="password" placeholder="{{ 'oldPassword' | translate }}" ng-minlength="6">
-		<div ng-messages="customerEditForm.oldPassword.$error">
-			<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
-		</div>
-	</md-input-container>
-	<md-input-container md-no-float>
-		<md-icon></md-icon>
-		<input ng-model="customer.newPassword" name="newPassword" type="password" placeholder="{{ 'newPassword' | translate }}" ng-minlength="6">
-		<div ng-messages="customerEditForm.newPassword.$error">
-			<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
-		</div>
-	</md-input-container>
+	<input ng-model="customer.oldPassword" name="oldPassword" type="password" placeholder="{{ 'oldPassword' | translate }}" ng-minlength="6">
+	<div ng-messages="customerEditForm.oldPassword.$error">
+		<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
+	</div>
+	<input ng-model="customer.newPassword" name="newPassword" type="password" placeholder="{{ 'newPassword' | translate }}" ng-minlength="6">
+	<div ng-messages="customerEditForm.newPassword.$error">
+		<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
+	</div>
+
 </form>
