@@ -9,7 +9,7 @@
 			font-family: "Helvetica Neue", "Helvetica", Arial !important;
 		}
 		p {
-			color: darken($font-grey, 10%);
+			color: $font-grey;
 			font-size: 13px;
 		}
 	}
@@ -349,6 +349,10 @@
 				width: 100%;
 				background-color: $purple;
 			}
+		}
+		&.is-hidden {
+			opacity: 0;
+			@include transition(all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1));
 		}
 	}
 }

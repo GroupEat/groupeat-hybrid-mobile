@@ -19,10 +19,30 @@
 				<p>Plutôt économe ou pressé ? Définis combien de temps tu souhaites attendre avant d’être livré : plus tu attends, plus tu économises !</p>
 			</div>
 		</ion-slide>
+		<ion-slide id="auth">
+			<div class="content">
+				<div class="logo">
+					<img src="images/logo-groupeat.png" alt="">
+					<h4 class="baseline">Le prix du groupe, à la maison !</h4>
+				</div>
+				<div class="group-input group-two">
+					<div class="input">
+						<input type="text" placeholder="Adresse Email" ng-model="email">
+					</div>
+					<div class="input">
+						<input type="password" placeholder="Mot de Passe" ng-model="password">
+					</div>
+				</div>
+				<div class="btn btn-bloc btn-lg btn-green mg-top-20">
+					Créer mon compte !
+				</div>
+				<p class="mute-link mg-top-20">Je posséde déjà un compte. <a href="">Me connecter !</a></p>
+			</div>
+		</ion-slide>
 	</ion-slide-box>
 
 	<div id="intro-animations">
-		<div class="canvas" ng-class="{'is-slide2' : slideIndex === 1, 'is-slide3' : slideIndex === 2}">
+		<div class="canvas" ng-class="{'is-slide2' : slideIndex === 1, 'is-slide3' : slideIndex === 2 || slideIndex === 3, 'is-hidden' : slideIndex === 3}">
 			<div class="pizzeria">
 				<ul class="smoke">
 					<li></li>
