@@ -644,23 +644,42 @@ concurrent: {
   });
   grunt.registerTask('run', function() {
     grunt.config('concurrent.ionic.tasks', ['ionic:run:' + this.args.join(), 'watch']);
-    return grunt.task.run(['init', 'concurrent:ionic']);
+    return grunt.task.run(['init', 'ionic:resources', 'concurrent:ionic']);
   });
 
   grunt.registerTask('build', function() {
-    var tasks = ['init'];
-    var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
+    return grunt.task.run(['init', 'ionic:resources', 'ionic:build:' + this.args.join()]);
+  });
+
+  var env = grunt.option('env') ? grunt.option('env') : 'development';
+  if (env && !_.includes(['development', 'staging', 'production'], env)) {
+    console.error('Env ' + env + ' does not exist, using development');
+    env = 'development';
+  }
+  var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
+
+  grunt.registerTask('init', function() {
+    var tasks = [
+      'clean',
+      'ngconstant:' + env,
+      'wiredep',
+      'autoprefixer'
+    ];
     tasks.push(preparationTask);
     tasks.push('ionic:build:' + this.args.join());
     return grunt.task.run(tasks);
   });
 
-  var env = grunt.option('env') || 'development';
-  grunt.registerTask('init', [
-    'clean',
-    'ngconstant:' + env,
-    'wiredep',
-    'autoprefixer'
+  grunt.registerTask('compress', [
+    'useminPrepare',
+    'concurrent:dist',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cssmin',
+    'uglify',
+    'usemin',
+    'htmlmin'
     ]);
 
   grunt.registerTask('expand', [
@@ -677,18 +696,6 @@ concurrent: {
     'webfont'
     ]);
 
-  grunt.registerTask('compress', [
-    'useminPrepare',
-    'concurrent:dist',
-    'concat',
-    'ngAnnotate',
-    'copy:dist',
-    'cssmin',
-    'uglify',
-    'usemin',
-    'htmlmin'
-    ]);
-
   grunt.registerTask('coverage', ['karma:continuous', 'connect:coverage:keepalive']);
 
   grunt.registerTask('default', [
@@ -698,8 +705,6 @@ concurrent: {
     'init',
     'compress'
     ]);
-
-  grunt.registerTask('pull', ['gitpull:task','npm-install']);
 
   grunt.registerTask('upload', function() {
     return grunt.task.run(['init', 'compress', 'ionic:upload' + this.args.join()]);
