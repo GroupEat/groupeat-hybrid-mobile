@@ -38,11 +38,7 @@ angular.module('groupeat.services.device-assistant', [
       'UUID': device.uuid,
       'notificationToken': notificationToken,
       'platform': platform,
-      'version': device.version,
       'model': device.model,
-      'latitude': 48.7173,
-      // TODO: discuss the necessity of passing coordinates here and implement if needed
-      'longitude': 2.23935  // TODO: s.a.
     };
     resource.save({ id: Credentials.get().id }, requestBody).$promise.then(function () {
       deferred.resolve();
