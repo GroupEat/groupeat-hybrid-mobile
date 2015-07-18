@@ -38,7 +38,7 @@ angular.module('groupeat.services.popup', [
     */
     confirm = function (title, content, okText, cancelText) {
       okText = okText || 'OK';
-      cancelText = cancelText || 'Cancel';
+      cancelText = cancelText || 'cancel';
       return $ionicPopup.confirm({
         title: $translate(title),
         template: $translate(content),
