@@ -1,6 +1,5 @@
 <form name="form.customerEdit" ng-submit-force="true" novalidate>
 
-
 	<div class="item item-divider">
 		{{ 'deliveryAddress' | translate }}
 	</div>
@@ -11,7 +10,6 @@
 	</label>
 	<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
 
-
 	<div class="item item-divider">
 		{{ 'otherDeliveryInformation' | translate }}
 	</div>
@@ -21,7 +19,6 @@
 	<div ng-messages="furtherRegisterForm.phoneNumber.$error">
 		<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
 	</div>
-
 
 	<div class="item item-divider">
 		{{ 'editPassword' | translate }}
@@ -35,5 +32,4 @@
 		<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 	</div>
 
-	
 </form>
