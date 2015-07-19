@@ -86,12 +86,13 @@ angular.module('groupeat.controllers.authentication', [
   $scope.slideHasChanged = function(index) {
     $scope.slideIndex = index;
   };
+  
   $scope.slideTo = function(index) {
     $ionicSlideBoxDelegate.slide(index);
     $scope.slideIndex = index;
   };
+
   /* Setting the right slideIndex to avoid having to swipe when redirected to auth */
-  
   $timeout(function() {
     $scope.slideTo($stateParams.slideIndex);
   }, 100);
