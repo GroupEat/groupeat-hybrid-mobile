@@ -18,7 +18,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function ($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function ($scope, $state, $mdDialog, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, ResidencyUtils, _, $ionicSlideBoxDelegate, $stateParams) {
   
   var $translate = $filter('translate');
   Analytics.trackView('Authentication');
@@ -85,6 +85,16 @@ angular.module('groupeat.controllers.authentication', [
   $scope.slideHasChanged = function(index) {
     $scope.slideIndex = index;
   };
+  $scope.slideTo = function(index) {
+    $ionicSlideBoxDelegate.slide(index);
+    $scope.slideIndex = index;
+  };
+  /* Setting the right slideIndex to avoid having to swipe when redirected to auth */
+  
+  $timeout(function() {
+    $scope.slideTo($stateParams.slideIndex);
+  }, 100);
+  
 
   /*
   ---------------------- End Slider --------------------------
