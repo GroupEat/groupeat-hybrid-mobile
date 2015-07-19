@@ -196,3 +196,21 @@
 		}
 	}
 }
+
+
+.later {
+	position: absolute;
+	bottom: 100px;
+	left: 10%;
+	width: 80%;
+	a {
+		color: darken($border-light, 10%);
+		font-size: 14px;
+	}
+	text-align: center;
+	@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .3s);
+	&.is-hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+}

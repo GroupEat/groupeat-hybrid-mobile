@@ -38,7 +38,7 @@
 		<ion-slide>
 			<div class="content">
 				<div class="titles">
-					<h3>Allo ?</h3>
+					<h3>Allo {{firstName}} ?</h3>
 					<p>Le livreur pourra te contacter à ce numéro.</p>
 				</div>
 				<form ng-submit="slideTo(2)">
@@ -137,6 +137,10 @@
 			<span ng-class="{'active' : slideIndex > 1}"></span>
 			<div class="progress-track"></div>
 		</div>
+	</div>
+
+	<div class="later" ng-class="{'is-hidden' : slideIndex > 0}">
+		<a ui-sref="app.group-orders">Compléter mes informations <b>plus tard.</b></a>
 	</div>
 
 </ion-view>
