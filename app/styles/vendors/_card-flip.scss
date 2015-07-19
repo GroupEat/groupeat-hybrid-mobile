@@ -1,0 +1,33 @@
+.flip-container {
+	height: 70px;
+	perspective: 1000;
+	.flip {
+		@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
+		transform-style: preserve-3d;
+		position: relative;
+		transform-origin: 100% 35px;
+	}
+	.front, .back {
+		backface-visibility: hidden;
+		position: absolute;
+		width: 100%;
+		top: 0;
+		left: 0;
+	}
+	.front {
+		z-index: 2;
+		@include transform(rotateX(0deg));
+	}
+
+	.back {
+		@include transform(rotateX(180deg));
+	}
+	&.is-flipped {
+		.flip {
+			@include transform(rotateX(-180deg));
+		}
+	}
+}
+
+
+

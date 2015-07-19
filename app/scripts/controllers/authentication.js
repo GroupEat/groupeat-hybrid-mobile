@@ -35,6 +35,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.showSkipFurtherRegisterButton = false;
   $scope.showSubmitFurtherRegisterButton = false;
   // Forms
+  $scope.isAuthSignup = true;
   $scope.showLoginForm = false;
   $scope.showRegisterForm = false;
   $scope.showFurtherRegisterForm = false;
