@@ -15,7 +15,15 @@ else
 {
   var spawn = require('child_process').spawn;
 }
+
 module.exports = function (grunt) {
+
+  var envArg = grunt.option('env') ? grunt.option('env') : 'development';
+  if (envArg && !_.includes(['development', 'staging', 'production'], envArg)) {
+    console.error('Env ' + envArg + ' does not exist, using development');
+    envArg = 'development';
+  }
+  var preparationTask = envArg === 'production' ? 'compress' : 'expand';
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
@@ -137,7 +145,7 @@ module.exports = function (grunt) {
       },
       gruntfile: {
         files: ['Gruntfile.js'],
-        tasks: ['ngconstant:development', 'newer:copy:app']
+        tasks: ['ngconstant:'+envArg, 'newer:copy:app']
       },
       translations: {
         files: ['<%= yeoman.app %>/translations/*.json'],
@@ -634,34 +642,24 @@ concurrent: {
     ]);
 
   grunt.registerTask('serve', function () {
-    var tasks = ['init'];
-    var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
-    tasks.push(preparationTask);
-    tasks.push('concurrent:ionic');
     grunt.config('concurrent.ionic.tasks', ['ionic:serve', 'watch']);
-    grunt.task.run(tasks);
+    grunt.task.run(['init', 'concurrent:ionic']);
   });
   grunt.registerTask('emulate', function() {
     grunt.config('concurrent.ionic.tasks', ['ionic:emulate:' + this.args.join(), 'watch']);
-    return grunt.task.run(['init', 'concurrent:ionic']);
+    return grunt.task.run(['build', 'concurrent:ionic']);
   });
   grunt.registerTask('run', function() {
     grunt.config('concurrent.ionic.tasks', ['ionic:run:' + this.args.join(), 'watch']);
-    return grunt.task.run(['init', 'ionic:resources', 'concurrent:ionic']);
+    return grunt.task.run(['build', 'concurrent:ionic']);
   });
 
   grunt.registerTask('build', function() {
     return grunt.task.run(['init', 'ionic:resources', 'ionic:build:' + this.args.join()]);
   });
 
-  var env = grunt.option('env') ? grunt.option('env') : 'development';
-  if (env && !_.includes(['development', 'staging', 'production'], env)) {
-    console.error('Env ' + env + ' does not exist, using development');
-    env = 'development';
-  }
-  var preparationTask = grunt.option('compress') ? 'compress' : 'expand';
-
-  grunt.registerTask('init', function() {
+  grunt.registerTask('init', function(env) {
+    var env = env || envArg;
     var tasks = [
       'clean',
       'ngconstant:' + env,
@@ -669,7 +667,6 @@ concurrent: {
       'autoprefixer'
     ];
     tasks.push(preparationTask);
-    tasks.push('ionic:build:' + this.args.join());
     return grunt.task.run(tasks);
   });
 
@@ -710,6 +707,6 @@ concurrent: {
     ]);
 
   grunt.registerTask('upload', function() {
-    return grunt.task.run(['init', 'compress', 'ionic:upload' + this.args.join()]);
+    return grunt.task.run(['init:staging', 'ionic:upload' + this.args.join()]);
   });
 };
