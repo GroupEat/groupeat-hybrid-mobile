@@ -1,5 +1,5 @@
 <ion-view hide-nav-bar="true">
-	
+
 	<ion-slide-box show-pager="false" disable-scroll="true" id="auth" class="full-height">
 		<ion-slide>
 			<div class="content">
@@ -18,7 +18,7 @@
 									<div class="input">
 										<input type="text" placeholder="Nom" ng-model="lastName">
 									</div>
-								</div>	
+								</div>
 							</div>
 						</div>
 					</div>
@@ -104,7 +104,7 @@
 									<div class="input">
 										<input type="text" placeholder="Complément d'adresse (optionnel)" ng-model="addressInfo">
 									</div>
-								</div>	
+								</div>
 							</div>
 						</div>
 					</div>
@@ -140,7 +140,7 @@
 	</div>
 
 	<div class="later" ng-class="{'is-hidden' : slideIndex > 0}">
-		<a ui-sref="authentication({slideIndex : 3})">Compléter mes informations <b>plus tard.</b></a>
+		<a ui-sref="app.group-orders">Compléter mes informations <b>plus tard.</b></a>
 	</div>
 
 </ion-view>

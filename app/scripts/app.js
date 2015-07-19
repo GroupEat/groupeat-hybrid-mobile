@@ -22,7 +22,6 @@ angular.module('groupeat', [
   'groupeat.services.error-message-resolver',
   'slick',
   'ui.mask'
-  'slick'
 ])
 
 .run([
