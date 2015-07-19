@@ -6,8 +6,9 @@ For all the following commands used to run the application, the following flags 
 
 | Flag/Option          | Values                                 | Default   |
 | -------------------- |:--------------------------------------:| ---------:|
-| `--compress`         | N/A                                    | false     |
-| `--env`              | `development`, `staging`, `production` | `staging` |
+| `--env`              | `development`, `staging`, `production` | `development` |
+
+Assets will be minified only when picking the `production` environment.
 
 ## Browser
 
@@ -23,9 +24,9 @@ You need to add the platform by running
 
 If you wish to run the application on an actual device, you need to have installed the `DeveloperProfile.developerprofile` file present in the team's Google Drive.
 
-The following npm package is also needed to run it on the device without using XCode
+The following npm packages are also needed to run it and emulate it on the device without using XCode
 
-    npm install -g ios-deploy
+    npm install -g ios-deploy ios-sim
 
 ### Emulation
 
