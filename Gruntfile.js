@@ -619,10 +619,13 @@ concurrent: {
   });
 
   // Wrap ionic-cli commands
-  grunt.registerTask('ionic', function() {
+  grunt.registerTask('ionic', function(command) {
     var done = this.async();
     var script = path.resolve('./node_modules/ionic/bin/', 'ionic');
     var flags = process.argv.splice(3);
+    if (command === 'run') {
+      flags.push('--device');
+    }
     var child = spawn(script, this.args.concat(flags), { stdio: 'inherit' });
     child.on('close', function (code) {
       code = code ? false : true;
