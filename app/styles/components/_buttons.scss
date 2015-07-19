@@ -21,6 +21,10 @@
     background: $green;
     color: #FFF;
   }
+  &.btn-grey {
+    background: $bg-light;
+    color: $font-grey;
+  }
   &.btn-lg {
   	line-height: 50px;
   	letter-spacing: 0.4px;
@@ -34,7 +38,14 @@
   &.btn-square {
     @include border-radius(0);
   }
+  &.btn-icon {
+    font-size: 20px;
+  }
 } 
+
+.btn[disabled] {
+  opacity: .5;
+}
 
 
 .mute-link {

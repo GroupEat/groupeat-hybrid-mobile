@@ -24,7 +24,8 @@ angular.module('groupeat', [
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
-  'slick'
+  'slick',
+  'ui.mask'
 ]).run([
   'validator',
   'ElementModifier',

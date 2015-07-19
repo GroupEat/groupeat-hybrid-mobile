@@ -1,0 +1,142 @@
+<ion-view hide-nav-bar="true">
+	
+	<ion-slide-box show-pager="false" disable-scroll="true" id="auth" class="full-height">
+		<ion-slide>
+			<div class="content">
+				<div class="titles">
+					<h3>À propos de toi !</h3>
+					<p>Ces informations serviront à t’identifier auprès du livreur.</p>
+				</div>
+				<form ng-submit="slideTo(1)">
+					<div class="form">
+						<div class="row">
+							<div class="col">
+								<div class="group-input group-two">
+									<div class="input">
+										<input type="text" placeholder="Prenom" ng-model="firstName">
+									</div>
+									<div class="input">
+										<input type="password" placeholder="Nom" ng-model="lastName">
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+					<div class="btn-group">
+						<div class="row">
+							<div class="col">
+								<button type="submit" on-tap="slideTo(1)" ng-disabled="!firstName || !lastName" class="btn btn-bloc btn-lg btn-green">
+									Etape suivante <i class="ion-ios-arrow-thin-right"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ion-slide>
+
+		<ion-slide>
+			<div class="content">
+				<div class="titles">
+					<h3>Allo ?</h3>
+					<p>Le livreur pourra te contacter à ce numéro.</p>
+				</div>
+				<form ng-submit="slideTo(2)">
+					<div class="form">
+						<div class="row">
+							<div class="col-25 col">
+								<div class="input input-bordered input-fixed">
+									+33
+								</div>
+							</div>
+							<div class="col">
+								<div class="input input-bordered input-tel">
+									<input ui-mask="99-99-99-99-99" type="tel" ng-model="phoneNumber" placeholder="xx-xx-xx-xx-xx">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<p class="info-comment">
+									* Jamais de spams, jamais de pubs.
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="btn-group">
+						<div class="row">
+							<div class="col col-25">
+								<button type='button' on-tap="slideTo(0)" class="btn btn-bloc btn-lg btn-icon btn-grey">
+									<i class="ion-ios-arrow-thin-left"></i>
+								</button>
+							</div>
+							<div class="col">
+								<button type="submit" ng-disabled="!phoneNumber" on-tap="slideTo(2)" class="btn btn-bloc btn-lg btn-green">
+									Etape suivante <i class="ion-ios-arrow-thin-right"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ion-slide>
+
+
+
+		<ion-slide>
+			<div class="content">
+				<div class="titles">
+					<h3>Je vous la met où ?</h3>
+					<p>L'adresse ou le livreur déposera tes commandes.</p>
+				</div>
+				<form ng-submit="confirmSignup()">
+					<div class="form">
+						<div class="row">
+							<div class="col">
+								<div class="group-input group-two">
+									<div class="input input-select">
+										<select ng-model="address">
+											<option value="0">ENSTA ParisTech</option>
+											<option value="1">SupOptique</option>
+											<option value="2">Polytechnique</option>
+										</select>
+									</div>
+									<div class="input">
+										<input type="text" placeholder="Complément d'adresse (optionnel)" ng-model="addressInfo">
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+					<div class="btn-group">
+						<div class="row">
+							<div class="col col-25">
+								<button type='button' on-tap="slideTo(1)" class="btn btn-bloc btn-lg btn-icon btn-grey">
+									<i class="ion-ios-arrow-thin-left"></i>
+								</button>
+							</div>
+							<div class="col">
+								<a on-tap="confirmSignup()" class="btn btn-bloc btn-lg btn-green">
+									Confirmer <i class="ion-check"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+
+	<div class="progress" ng-class="{'is-slide-2' : slideIndex === 1, 'is-slide-3' : slideIndex === 2}">
+		<div class="groupin">
+			<img src="images/groupin.png" alt="">
+		</div>
+		<div class="progress-bar">
+			<span class="active"></span>
+			<span ng-class="{'active' : slideIndex > 0}"></span>
+			<span ng-class="{'active' : slideIndex > 1}"></span>
+			<div class="progress-track"></div>
+		</div>
+	</div>
+
+</ion-view>
