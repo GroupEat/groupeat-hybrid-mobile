@@ -33,7 +33,7 @@
     "chai": "^2.3.0",
     "coffee-script": "^1.8.0",
     "coffeelint": "^1.8.1",
-    "cordova": "~3.5.0-0.2.6",
+    "cordova": "~5.1.1",
     "glob": "~4.0.5",
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.4.0",
