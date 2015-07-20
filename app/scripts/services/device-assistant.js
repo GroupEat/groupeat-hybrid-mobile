@@ -33,7 +33,6 @@ angular.module('groupeat.services.device-assistant', [
   * Register the device to GroupEat's database
   */
   registerDevice = function () {
-    var deferred = $q.defer();
     var requestBody = {
       'UUID': device.uuid,
       'notificationToken': notificationToken,
