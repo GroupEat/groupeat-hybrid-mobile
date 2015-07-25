@@ -18,7 +18,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
   },
 
   responseError = function(response) {
-    if (response.status === 401) {
+    if (response.status === 401 && response.data.data.errorKey === 'userMustAuthenticate') {
       $injector.get('$state').go('authentication');
     }
     return response;
