@@ -1,4 +1,4 @@
-describe 'Service: Cart', ->
+describe.skip 'Service: Cart', ->
 
   # Load the controller's module
   beforeEach ->
