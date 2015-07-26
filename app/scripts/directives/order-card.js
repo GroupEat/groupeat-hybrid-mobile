@@ -13,7 +13,7 @@ angular.module('groupeat.directives.order-card', []).directive('orderCard', func
             return Customer.checkMissingInformation();
           }).then(function () {
             Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
-            $state.go('restaurant-menu', { restaurantId: groupOrder.restaurant.data.id });
+            $state.go('app.restaurant-menu', { restaurantId: groupOrder.restaurant.data.id });
           });
         };
       }

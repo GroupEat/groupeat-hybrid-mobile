@@ -7,7 +7,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
       slideIndex: 0
     },
     data: { permissions: { except: [] } }
-  }).state('app', {
+  })
+  .state('app', {
     url: '/',
     abstract: true,
     templateUrl: 'templates/layouts/app.html',
@@ -31,7 +32,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         controller: 'GroupOrdersCtrl'
       }
     }
-  }).state('app.orders', {
+  })
+  .state('app.orders', {
     url: '/orders',
     views: {
       'app': {
@@ -39,7 +41,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         controller: 'OrdersCtrl'
       }
     }
-  }).state('cart', {
+  })
+  .state('cart', {
     url: '/cart',
     templateUrl: 'templates/cart.html',
     controller: 'CartCtrl',
@@ -49,24 +52,21 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         redirectTo: 'authentication'
       }
     }
-  }).state('restaurants', {
+  })
+  .state('app.restaurants', {
     url: '/restaurants',
-    templateUrl: 'templates/restaurants.html',
-    controller: 'RestaurantsCtrl',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
+    views: {
+      'app': {
+        templateUrl: 'templates/restaurants.html',
+        controller: 'RestaurantsCtrl'
       }
     }
-  }).state('restaurant-menu', {
+  }).state('app.restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
-    templateUrl: 'templates/restaurant-menu.html',
-    controller: 'RestaurantMenuCtrl',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
+    views: {
+      'app': {
+        templateUrl: 'templates/restaurant-menu.html',
+        controller: 'RestaurantMenuCtrl'
       }
     }
   }).state('app.settings', {
