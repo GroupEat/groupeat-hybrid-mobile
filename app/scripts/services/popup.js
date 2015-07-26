@@ -35,6 +35,8 @@ angular.module('groupeat.services.popup', [
     * Displays and return a confirm popup with a custom title and content
     * @param {String} title - The content of the error popup
     * @param {String} content - The content of the error popup
+    * @param {String} okText - The text on the OK button ( default OK )
+    * @param {String} cancelText - The text on the cancel button (default cancel)
     */
     confirm = function (title, content, okText, cancelText) {
       okText = okText || 'OK';
