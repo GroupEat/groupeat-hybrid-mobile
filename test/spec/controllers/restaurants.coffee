@@ -194,10 +194,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get').returns($q.reject())
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns($q.reject())
       scope.onReload().should.be.rejected
       scope.$digest()
-      Restaurant.get.should.have.been.calledWithExactly(1, 1)
+      Restaurant.getFromCoordinates.should.have.been.calledWithExactly(1, 1)
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
       scope.messageBackdrop.should.deep.equal(messageBackdrop)
 
@@ -211,7 +211,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get').returns($q.reject())
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns($q.reject())
       scope.onReload()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
@@ -226,7 +226,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve([])
         return deferred.promise
@@ -250,7 +250,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(['restaurant'])
         return deferred.promise
@@ -270,7 +270,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         return deferred.promise
       )
       restaurants = ['firstRestaurant', 'secondRestaurant']
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(restaurants)
         return deferred.promise
@@ -289,7 +289,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(['restaurant'])
         return deferred.promise
