@@ -171,5 +171,8 @@
   "noOrders": "Aucune commande",
   "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat",
 
-  "pullToRefresh": "Tirez pour rafraîchir"
+  "pullToRefresh": "Tirez pour rafraîchir",
+
+  "restaurantHasGroupOrder": "Attention",
+  "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?"
 }
