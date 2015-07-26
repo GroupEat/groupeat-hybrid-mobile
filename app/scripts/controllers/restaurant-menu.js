@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic',
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
+.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -26,6 +26,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 
 	$scope.initCtrl = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
+		$scope.detailedProduct = null;
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
@@ -52,7 +53,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			deferred.resolve();
 		})
 		.catch(function(errorKey) {
-			$scope.messageBackdrop = MessageBackdrop.backdropFrom(errorKey);
+			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
 			deferred.reject();
 		})
 		.finally(function() {
