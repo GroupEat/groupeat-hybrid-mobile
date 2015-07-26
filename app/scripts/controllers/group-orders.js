@@ -6,24 +6,18 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.geolocation',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
-  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function($scope, $state, $q, Analytics, Customer, GroupOrder, MessageBackdrop, Network, Order, Geolocation, _) {
+.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, Customer, Geolocation, GroupOrder, Network, Order) {
 
   Analytics.trackView('Group Orders');
 
   $scope.groupOrders = [];
 
-  $scope.onNewGroupOrder = function() {
-    $state.go('restaurants');
-  };
-
   $scope.onReload = function() {
-    var deferred = $q.defer();
     Network.hasConnectivity()
     .then(function() {
       return Geolocation.getGeolocation();
@@ -33,30 +27,21 @@ angular.module('groupeat.controllers.group-orders', [
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
     })
     .then(function(groupOrders) {
-      $scope.groupOrders = groupOrders;
-
-      if (_.isEmpty($scope.groupOrders)) {
-        $scope.messageBackdrop = MessageBackdrop.backdrop(
-          'noGroupOrders',
-          'ion-ios-cart-outline',
-          'newOrder',
-          'onNewGroupOrder()'
-        );
+      if (_.isEmpty(groupOrders)) {
+        return $q.reject('noGroupOrders');
+      } else {
+        $scope.groupOrders = groupOrders;
       }
-      else {
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-      }
-      deferred.resolve();
+    })
+    .then(function() {
+      $rootScope.$broadcast('hideMessageBackdrop');
     })
     .catch(function(errorKey) {
-      $scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
-      deferred.reject();
+      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
-
-    return deferred.promise;
   };
 
 
@@ -67,7 +52,7 @@ angular.module('groupeat.controllers.group-orders', [
     })
     .then(function() {
       Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity, groupOrder.restaurant.data.discountPolicy, groupOrder.totalRawPrice);
-	    $state.go('restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+	    $state.go('app.restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
     });
   };
 
@@ -75,5 +60,8 @@ angular.module('groupeat.controllers.group-orders', [
     return new Array(num);
   };
 
+  $scope.$on('$ionicView.afterEnter', function() {
+    $scope.onReload();
+  });
 
 });

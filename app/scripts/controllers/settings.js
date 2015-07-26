@@ -9,13 +9,12 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.customer-settings',
   'groupeat.services.element-modifier',
   'groupeat.services.lodash',
-  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.popup',
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function ($filter, $q, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, MessageBackdrop, Network, Popup, $ionicSlideBoxDelegate) {
+.controller('SettingsCtrl', function ($filter, $q, $rootScope, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup, $ionicSlideBoxDelegate) {
 
 	Analytics.trackView('Restaurants');
 
@@ -41,24 +40,13 @@ angular.module('groupeat.controllers.settings', [
     }
   ];
 
-  /*
-	Loading
-	*/
-	$scope.initCtrl = function() {
-		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
-		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
-		$scope.residencies = Address.getResidencies();
-		$scope.onReload();
-	};
-
 	$scope.onReload = function() {
-		var deferred = $q.defer();
 		var customerId = Credentials.get().id;
 
-		Network.hasConnectivity()
-		.then(function() {
-			return Customer.get(customerId);
-		})
+    Network.hasConnectivity()
+    .then(function() {
+      return Customer.get(customerId);
+    })
 		.then(function(customer) {
 			$scope.customer = customer;
 			return Address.get(customerId);
@@ -72,15 +60,16 @@ angular.module('groupeat.controllers.settings', [
 			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
 				return (option.value === customerSettings.noNotificationAfter);
 			});
-			$scope.messageBackdrop = MessageBackdrop.noBackdrop();
-			deferred.resolve();
 		})
-		.catch(function(errorKey) {
-			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
-			deferred.reject();
-		});
-
-		return deferred.promise;
+    .then(function() {
+      $rootScope.$broadcast('hideMessageBackdrop');
+    })
+    .catch(function(errorKey) {
+      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
+    })
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });
 	};
 
   /*
@@ -95,7 +84,11 @@ angular.module('groupeat.controllers.settings', [
 	*/
 	$scope.onSave = function() {
 		var customerId = Credentials.get().id;
-		ElementModifier.validate($scope.form.customerEdit)
+
+    Network.hasConnectivity()
+    .then(function() {
+      return ElementModifier.validate($scope.form.customerEdit);
+    })
 		.then(function() {
 			var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
 			return Customer.update({id : customerId}, customerParams);
@@ -135,5 +128,12 @@ angular.module('groupeat.controllers.settings', [
 			Popup.error(errorMessage);
 		});
 	};
+
+  $scope.$on('$ionicView.afterEnter', function() {
+    $scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
+		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
+		$scope.residencies = Address.getResidencies();
+    $scope.onReload();
+  });
 
 });
