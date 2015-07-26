@@ -7,11 +7,12 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  sandbox = ctrl = scope = $compile = $httpBackend = $filter = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = MessageBackdrop = Network = CustomerSettings = Popup = {}
+  rootScope = sandbox = ctrl = scope = $compile = $httpBackend = $filter = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
+      rootScope = $rootScope
       scope = $rootScope.$new()
       $compile = $injector.get('$compile')
       $filter = $injector.get('$filter')
@@ -31,12 +32,11 @@ describe 'Ctrl: SettingsCtrl', ->
       validator.registerDomModifier(ElementModifier.key, ElementModifier)
       validator.setDefaultElementModifier(ElementModifier.key)
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
-      MessageBackdrop = $injector.get('MessageBackdrop')
       Network = $injector.get('Network')
       CustomerSettings = $injector.get('CustomerSettings')
       Popup = $injector.get('Popup')
       ENV = $injector.get('ENV')
-      ctrl = $controller('SettingsCtrl', ($filter: $filter, $scope:scope, $state: $state, _: _, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, ElementModifier: ElementModifier, MessageBackdrop: MessageBackdrop, Network: Network, CustomerSettings: CustomerSettings, Popup: Popup))
+      ctrl = $controller('SettingsCtrl', ($filter: $filter, $scope:scope, $state: $state, _: _, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, ElementModifier: ElementModifier, Network: Network, CustomerSettings: CustomerSettings, Popup: Popup))
       $httpBackend = $injector.get('$httpBackend')
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(200, 'Success')
@@ -67,55 +67,48 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.tabs.should.be.instanceof(Array)
       scope.tabs.should.have.length(2)
 
-  describe 'SettingsCtrl#initCtrl', ->
-
     it 'should load the non empty array of daysWithoutNotifyingOptions', ->
       sandbox.spy(CustomerSettings, 'getDaysWithoutNotifying')
-      scope.initCtrl()
+      scope.$broadcast '$ionicView.afterEnter'
       CustomerSettings.getDaysWithoutNotifying.should.have.been.called
       scope.daysWithoutNotifyingOptions.should.be.not.empty
 
     it 'should load the non empty array of noNotificationAfterHours', ->
       sandbox.spy(CustomerSettings, 'getNoNotificationAfterHours')
-      scope.initCtrl()
+      scope.$broadcast '$ionicView.afterEnter'
       CustomerSettings.getNoNotificationAfterHours.should.have.been.called
       scope.noNotificationAfterOptions.should.be.not.empty
 
     it 'should load the non empty array of residencies', ->
       sandbox.spy(Address, 'getResidencies')
-      scope.initCtrl()
+      scope.$broadcast '$ionicView.afterEnter'
       Address.getResidencies.should.have.been.called
       scope.residencies.should.be.not.empty
 
   describe 'SettingsCtrl#onReload', ->
 
-    it 'should show a no network message backdrop if no network is available', ->
-      messageBackdrop = MessageBackdrop.backdropFromErrorKey 'noNetwork'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.reject 'noNetwork'
+    it 'should broadcast the displaying of a no network message backdrop if no network is available', ->
+      errorKey = 'noNetwork'
+      sandbox.spy rootScope, '$broadcast'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
       scope.onReload()
       scope.$digest()
-      scope.messageBackdrop.should.deep.equal messageBackdrop
+      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
 
     it 'should call Customer#get if connectivity is available', ->
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
       Customer.get.should.have.been.calledWithExactly(1)
 
-    it 'should show a generic failure message backdrop if getting the customer fails', ->
-      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Customer, 'get').returns($q.reject())
+    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer fails', ->
+      sandbox.spy rootScope, '$broadcast'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      scope.messageBackdrop.should.deep.equal messageBackdrop
+      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
 
     it 'should load the customer in the scope if getting the customer succeeds', ->
       customer = 'customer'
@@ -146,8 +139,8 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       Address.get.should.have.been.called
 
-    it 'should show a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
-      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
+    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
+      sandbox.spy rootScope, '$broadcast'
       sandbox.stub Network, 'hasConnectivity', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -159,7 +152,7 @@ describe 'Ctrl: SettingsCtrl', ->
       sandbox.stub(Address, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      scope.messageBackdrop.should.deep.equal messageBackdrop
+      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
 
     it 'should add residency and details information to the customer in scope if getting the customer address succeeds', ->
       customer = {}
@@ -186,8 +179,8 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.customer.details.should.equal(details)
       scope.customer.residency.should.equal(residency)
 
-    it 'should show a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
-      messageBackdrop = MessageBackdrop.backdropFromErrorKey()
+    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
+      sandbox.spy rootScope, '$broadcast'
       sandbox.stub Network, 'hasConnectivity', ->
         deferred = $q.defer()
         deferred.resolve()
@@ -205,36 +198,7 @@ describe 'Ctrl: SettingsCtrl', ->
       sandbox.stub(CustomerSettings, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      scope.messageBackdrop.should.deep.equal messageBackdrop
-
-    it 'should not show any message backdrop if getting the customer, address and settings succeed', ->
-      messageBackdrop = MessageBackdrop.noBackdrop()
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      customerSettings =
-        noNotificationAfter: '22:00:00'
-      sandbox.stub(CustomerSettings, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve(customerSettings)
-        return deferred.promise
-      )
-      sandbox.spy(MessageBackdrop, 'noBackdrop')
-      scope.onReload()
-      scope.$digest()
-      MessageBackdrop.noBackdrop.should.have.been.called
-      scope.messageBackdrop.should.deep.equal(messageBackdrop)
+      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
 
   describe 'SettingsCtrl#onSave', ->
 
@@ -276,6 +240,7 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should display an error popup if client side validation fails', ->
       errorMessage = 'errorMessage'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns($q.reject(errorMessage))
       sandbox.stub(Popup, 'error')
       scope.onSave()
@@ -283,11 +248,8 @@ describe 'Ctrl: SettingsCtrl', ->
       Popup.error.should.have.been.calledWithExactly(errorMessage)
 
     it 'should call Customer#update if client side validation succeeds', ->
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'update').returns($q.defer().promise)
       scope.onSave()
       scope.$digest()
@@ -295,11 +257,8 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should display an error popup if client side validation succeeds but Customer#update fails', ->
       errorMessage = 'errorMessage'
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       scope.customerSettings =
         noNotificationAfter:
           value: '22:00:00'
@@ -310,16 +269,9 @@ describe 'Ctrl: SettingsCtrl', ->
       Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call Address#update if client side validation and Customer#update succeed', ->
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.defer().promise)
@@ -332,16 +284,9 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should display an error popup if client side validation and Customer#update succeed but Address#update fails', ->
       errorMessage = 'errorMessage'
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.reject(errorMessage))
@@ -354,21 +299,10 @@ describe 'Ctrl: SettingsCtrl', ->
       Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call Authentication#updatePassword if client side validation, Customer#update and Address#update succeed', ->
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
       sandbox.stub(Authentication, 'updatePassword').returns($q.defer().promise)
       scope.onSave()
       scope.$digest()
@@ -376,21 +310,10 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should display an error popup if client side validation, Customer#update, Address#update succeed but Authentication#updatePassword fails', ->
       errorMessage = 'errorMessage'
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
       sandbox.stub(Authentication, 'updatePassword').returns($q.reject(errorMessage))
       sandbox.stub(Popup, 'error')
       scope.onSave()
@@ -398,26 +321,11 @@ describe 'Ctrl: SettingsCtrl', ->
       Popup.error.should.have.been.calledWithExactly errorMessage
 
     it 'should call CustomerSettings#update if client side validation, Customer#update, Address#update and Authentication#updatePassword succeed', ->
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Authentication, 'updatePassword', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
+      sandbox.stub(Authentication, 'updatePassword').returns $q.when({})
       sandbox.stub(CustomerSettings, 'update').returns($q.defer().promise)
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
@@ -429,36 +337,17 @@ describe 'Ctrl: SettingsCtrl', ->
       CustomerSettings.update.should.have.been.called
 
     it 'should display a confirmation popup if all previous steps succeeded', ->
-      sandbox.stub(ElementModifier, 'validate', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Customer, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Authentication, 'updatePassword', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
+      sandbox.stub(Authentication, 'updatePassword').returns $q.when({})
       customerSettings =
         noNotificationAfter: '22:00:00'
-      sandbox.stub(CustomerSettings, 'update', ->
-        deferred = $q.defer()
-        deferred.resolve(customerSettings)
-        return deferred.promise
-      )
+      sandbox.stub(CustomerSettings, 'update').returns $q.when(customerSettings)
       sandbox.stub Popup, 'title'
       address = 'address'
-      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns address
       scope.customerSettings =
         noNotificationAfter:
           value: '22:00:00'

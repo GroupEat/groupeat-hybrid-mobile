@@ -12,6 +12,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
+
       sandbox = sinon.sandbox.create()
 
       scope = $rootScope.$new()
@@ -34,15 +35,14 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   afterEach ->
     sandbox.restore()
 
-  describe 'RestaurantMenu#initCtrl', ->
+  describe 'RestaurantMenu#onReload', ->
 
     it 'should create an empty cart', ->
-      sandbox.stub scope, 'onReload'
-      scope.initCtrl()
-      expect(scope.cart).not.to.equal null
-      scope.cart.should.have.property 'getTotalPrice'
-      scope.cart.should.have.property 'getTotalQuantity'
-      scope.cart.should.have.property 'getProducts'
+      scope.onReload()
+      expect(scope.cart).not.to.equal(null)
+      scope.cart.should.have.property('getTotalPrice')
+      scope.cart.should.have.property('getTotalQuantity')
+      scope.cart.should.have.property('getProducts')
       expect(_.isEmpty(scope.cart.getProducts())).to.be.true
 
     it 'should call onReload', ->
@@ -69,7 +69,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#onAddProduct', ->
 
     beforeEach ->
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
 
     it 'should call Popup.error with tooManyProducts if there are too many products in the Cart', ->
       sandbox.stub Popup, 'error'
