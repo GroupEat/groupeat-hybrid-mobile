@@ -4,7 +4,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
   'groupeat.services.credentials'
 ])
 
-.factory('HttpProviderInterceptor', function ($injector, Credentials) {
+.factory('HttpProviderInterceptor', function ($injector, $q, Credentials) {
 
   var request = function (config) {
     if (config.url.indexOf('ionic.io') === -1) {
@@ -21,7 +21,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
     if (response.status === 401 && response.data.data.errorKey === 'userMustAuthenticate') {
       $injector.get('$state').go('authentication');
     }
-    return response;
+    return $q.reject(response);
   };
 
   return {
