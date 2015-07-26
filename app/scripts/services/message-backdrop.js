@@ -13,23 +13,21 @@ angular.module('groupeat.services.message-backdrop', [])
     * Returns a message backdrop object
     *
     * @param {String} errorKey
-    * @param {String} iconClasses
-    * @param {String} buttonTitle
-    * @param {String} buttonAction
+    * @param {String} icon
+    * @param {String} buttonText
+    * @param {String} buttonSref
     */
-    backdrop = function(errorKey, iconClasses, buttonTitle, buttonAction) {
-      buttonTitle = buttonTitle || 'reload';
-      buttonAction = buttonAction || 'onReload()';
+    backdrop = function(errorKey, icon, buttonText, buttonSref) {
+      buttonText = buttonText || 'reload';
+      buttonSref = buttonSref || '';
 
       return {
-        show: true,
+        status: 'displayed',
         title: errorKey,
         details: errorKey+'Details',
-        iconClasses: iconClasses,
-        button: {
-          text: buttonTitle,
-          action: buttonAction
-        }
+        icon: icon,
+        buttonText: buttonText,
+        buttonSref: buttonSref
       };
     },
 
@@ -49,6 +47,14 @@ angular.module('groupeat.services.message-backdrop', [])
           return noNetwork();
         case 'noGeolocation':
           return noGeolocation();
+        case 'noGroupOrders':
+          return noGroupOrders();
+        case 'noRestaurants':
+          return noRestaurants();
+        case 'noOrders':
+          return noOrders();
+        case 'emptyMenu':
+          return emptyMenu();
         default:
           return genericFailure();
       }
@@ -56,24 +62,10 @@ angular.module('groupeat.services.message-backdrop', [])
 
     /**
     * @ngdoc function
-    * @name MessageBackdrop#noBackdrop
-    * @methodOf MessageBackdrop
-    *
-    * @return Returns a message backdrop which will not be displayed
-    *
-    */
-    noBackdrop = function() {
-      return {
-        show: false
-      };
-    },
-
-    /**
-    * @ngdoc function
     * @name MessageBackdrop#noNetwork
     * @methodOf MessageBackdrop
     *
-    * @return Returns a message backdrop for lack of network connectivity
+    * @return Returns a message backdrop object for lack of network connectivity
     *
     */
     noNetwork = function() {
@@ -85,7 +77,7 @@ angular.module('groupeat.services.message-backdrop', [])
     * @name MessageBackdrop#noGeolocation
     * @methodOf MessageBackdrop
     *
-    * @return Returns a message backdrop for lack of geolocation
+    * @return Returns a message backdrop object for lack of geolocation
     *
     */
     noGeolocation = function() {
@@ -97,17 +89,63 @@ angular.module('groupeat.services.message-backdrop', [])
     * @name MessageBackdrop#genericFailure
     * @methodOf MessageBackdrop
     *
-    * @return Returns a message backdrop displaying a generic failure
+    * @return Returns a message backdrop object displaying a generic failure
     *
     */
     genericFailure = function() {
       return backdrop('genericFailure', 'ion-alert-circled');
+    },
+
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#noGroupOrders
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop object for lack of group orders
+    *
+    */
+    noGroupOrders = function() {
+      return backdrop('noGroupOrders', 'ion-ios-cart-outline', 'newOrder', 'app.restaurants');
+    },
+
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#noRestaurants
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop object for lack of restaurants
+    *
+    */
+    noRestaurants = function() {
+      return backdrop('noRestaurants', 'ion-android-restaurant');
+    },
+
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#noOrders
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop object for lack of orders
+    *
+    */
+    noOrders = function() {
+      return backdrop('noOrders', 'ion-thumbsdown');
+    },
+
+    /**
+    * @ngdoc function
+    * @name MessageBackdrop#emptyMenu
+    * @methodOf MessageBackdrop
+    *
+    * @return Returns a message backdrop object for an empty menu
+    *
+    */
+    emptyMenu = function() {
+      return backdrop('emptyMenu', 'ion-android-pizza');
     };
 
     return {
-      backdrop: backdrop,
-      backdropFromErrorKey: backdropFromErrorKey,
-      noBackdrop: noBackdrop,
+      backdropFromErrorKey: backdropFromErrorKey
     };
 
   }
