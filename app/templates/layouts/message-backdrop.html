@@ -1,0 +1,19 @@
+<div class="message-backdrop" ng-if="isDisplayed() || isLoading()">
+	<div class="content">
+		<div ng-show="isDisplayed()">
+			<div class="large-icon">
+				<i class="{{icon}}"></i>
+			</div>
+			<div class="message">
+				<h3>{{ title | translate }}</h3>
+				<p class="small-title">{{ details | translate }}</p>
+			</div>
+			<a on-tap="buttonAction()" class="btn btn-bloc btn-lg btn-green">
+				{{ buttonText | translate }}
+			</a>
+		</div>
+		<div class="loader" ng-show="isLoading()">
+			<ion-spinner icon="ripple"></ion-spinner>
+		</div>
+	</div>
+</div>
