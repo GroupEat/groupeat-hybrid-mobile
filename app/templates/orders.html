@@ -1,6 +1,6 @@
-<ion-view ng-init="onReload()" view-title="{{ 'myOrders' | translate }}" >
+<ion-view view-title="{{ 'myOrders' | translate }}" >
 
-	<ion-content has-header="true" ng-show="!messageBackdrop.show">
+	<ion-content class="bg-blue no-header full-height">
 
     <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
     </ion-refresher>
@@ -31,11 +31,6 @@
 
     </md-list>
 
-  </ion-content>
-
-  <ion-content class="has-footer has-header" scroll="false" ng-show="messageBackdrop.show">
-    <ge-message-backdrop>
-    </ge-message-backdrop>
   </ion-content>
 
 </ion-view>
