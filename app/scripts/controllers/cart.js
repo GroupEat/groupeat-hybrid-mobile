@@ -10,22 +10,22 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order, Address, Credentials, $state, PredefinedAddresses) {
+.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
     $scope.comment = {value : ''};
     $scope.currentDiscount = Order.getCurrentDiscount();
     $scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
-    PredefinedAddresses.get().then(function(predifinedAddresses) {
-      $scope.predifinedAddresses  = predifinedAddresses; 
+    PredefinedAddresses.get()
+    .then(function(predifinedAddresses) {
+      $scope.predifinedAddresses  = predifinedAddresses;
     });
-    Address.get(Credentials.get().id).then(function(address) {
+    Address.get(Credentials.get().id)
+    .then(function(address) {
       $scope.presetAddress = address;
     });
   });
-
-
 
   $scope.slideIndex = 0;
 
@@ -68,7 +68,8 @@ angular.module('groupeat.controllers.cart', [
           requestProducts[product.id] = product.quantity;
       });
       Order.setProductFormats(requestProducts);
-      Order.save().then(function() {
+      Order.save()
+      .then(function() {
         $state.go('app.group-orders');
       });
     }
