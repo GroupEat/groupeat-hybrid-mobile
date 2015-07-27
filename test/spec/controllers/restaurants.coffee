@@ -179,17 +179,17 @@ describe 'Ctrl: RestaurantsCtrl', ->
     it 'should show a generic network failure message backdrop if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
-      sandbox.stub(Restaurant, 'get').returns $q.reject()
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.reject()
       sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
-      Restaurant.get.should.have.been.calledWithExactly(1, 1)
+      Restaurant.getFromCoordinates.should.have.been.calledWithExactly(1, 1)
       rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
 
     it 'should eventually broadcast scroll.refreshComplete if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
-      sandbox.stub(Restaurant, 'get').returns($q.reject())
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns($q.reject())
       scope.onReload()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
@@ -197,7 +197,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     it 'should show a message backdrop when no restaurants are returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
-      sandbox.stub(Restaurant, 'get').returns $q.when([])
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when([])
       sandbox.spy rootScope, '$broadcast'
 
       scope.onReload()
@@ -207,7 +207,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     it 'should broadcast the hiding of the message backdrop if at least one restaurant is returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
-      sandbox.stub(Restaurant, 'get').returns $q.when(['restaurant'])
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when(['restaurant'])
       sandbox.spy rootScope, '$broadcast'
 
       scope.onReload()

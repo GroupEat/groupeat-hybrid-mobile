@@ -66,11 +66,6 @@ angular.module('groupeat', [
 
   var stateLoad = function() {
     $rootScope.$broadcast('displayLoadingBackdrop');
-
-    Network.hasConnectivity()
-    .catch(function() {
-      $rootScope.$broadcast('displayMessageBackdrop', 'noNetwork');
-    });
   };
 
   $rootScope.$on('$stateChangeSuccess', stateLoad);

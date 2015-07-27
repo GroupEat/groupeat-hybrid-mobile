@@ -5,7 +5,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     module 'groupeat.controllers.cart'
     module 'templates'
 
-  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = scope = $stateParams = Cart = MessageBackdrop = Network = Order = Popup = Product = Restaurant = {}
+  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = rootScope = scope = $stateParams = Cart = Network = Order = Popup = Product = Restaurant = {}
 
   mockProduct = {}
   mockFormat = {}
@@ -15,6 +15,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
       sandbox = sinon.sandbox.create()
 
+      rootScope = $rootScope
       scope = $rootScope.$new()
       $ionicHistory = $injector.get '$ionicHistory'
       $ionicModal = $injector.get '$ionicModal'
@@ -23,14 +24,13 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       $q = $injector.get '$q'
       $stateParams = $injector.get '$stateParams'
       Cart = $injector.get 'Cart'
-      MessageBackdrop = $injector.get 'MessageBackdrop'
       Network = $injector.get 'Network'
       Order = $injector.get 'Order'
       Popup = $injector.get 'Popup'
       Product = $injector.get 'Product'
       Restaurant = $injector.get 'Restaurant'
 
-      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
+      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
 
   afterEach ->
     sandbox.restore()
@@ -45,26 +45,19 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope.cart.should.have.property('getProducts')
       expect(_.isEmpty(scope.cart.getProducts())).to.be.true
 
-    it 'should call onReload', ->
-      sandbox.stub scope, 'onReload'
-      scope.initCtrl()
-      scope.onReload.should.have.been.called
-
-  describe 'RestaurantMenu#onReload', ->
-
     it 'should call Network.hasConnectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
       Network.hasConnectivity.should.have.been.called
 
-    it 'should return a MessageBackdrop with the error key from hasConnectivity when the promise is rejected', ->
+    it 'should broadcast the displaying of a no network message backrop', ->
       errorKey = 'noNetwork'
-      messageBackdrop = MessageBackdrop.backdropFromErrorKey errorKey
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
+      sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
-      scope.messageBackdrop.should.deep.equal messageBackdrop
+      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
 
   describe 'RestaurantMenu#onAddProduct', ->
 
@@ -94,7 +87,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#onDeleteProduct', ->
 
     beforeEach ->
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
 
     it 'should call Cart.removeProduct', ->
       sandbox.stub Cart, 'removeProduct'
@@ -110,7 +104,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#toggleDetails', ->
 
     beforeEach ->
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
 
     it 'should set detailedProduct to null if scope.areDetailsShown is true', ->
       sandbox.stub(scope, 'areDetailsShown').returns true
@@ -125,7 +120,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#areDetailsShown', ->
 
     beforeEach ->
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
 
     it 'should return true if scope.detailedProduct equals the product given in parameter', ->
       scope.detailedProduct = mockProduct
@@ -138,8 +134,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#onLeaveRestaurant with an empty cart', ->
 
     beforeEach ->
-      sandbox.stub scope, 'onReload'
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
       scope.cart.setProducts []
 
     it 'should call reset the Cart, the current order and call $ionicHistory.goBack if the Popup.confirm is resoved with a true value', ->
@@ -153,8 +149,8 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#onLeaveRestaurant with a non-empty cart', ->
 
     beforeEach ->
-      sandbox.stub scope, 'onReload'
-      scope.initCtrl()
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject()
+      scope.onReload()
       scope.cart.setProducts ['first', 'second']
 
     it 'should call Popup.confirm', ->
