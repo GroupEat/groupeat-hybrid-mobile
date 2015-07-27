@@ -8,7 +8,8 @@ angular.module('groupeat.directives.receipt-card', []).directive('receiptCard', 
       orders: '=',
       restaurant: '=',
       discount: '=',
-      hideComment: '=?'
+      hideComment: '=?',
+      comment: '='
     },
     link: function (scope) {
       scope.setArrayFromInt = function (num) {

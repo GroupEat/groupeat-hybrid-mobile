@@ -24,13 +24,15 @@ angular.module('groupeat.services.order', [
 	},
 
 	requestBody = {
-		'groupOrderId': null,
+		'id': null,
 		'foodRushDurationInMinutes': null,
 		'productFormats': {},
-		'street': null,
-		'details': null,
-		'latitude': null,
-		'longitude': null,
+		'deliveryAddress': {
+	        'street': null,
+	        'details': null,
+	        'latitude': null,
+	        'longitude': null
+	    },
 		'comment': null
 	},
 
@@ -59,16 +61,16 @@ angular.module('groupeat.services.order', [
 		requestBody.productFormats = value;
 	},
 	setStreet = function(value) {
-		requestBody.street = value;
+		requestBody.deliveryAddress.street = value;
 	},
 	setDetails = function(value) {
-		requestBody.details = value;
+		requestBody.deliveryAddress.details = value;
 	},
 	setLatitude = function(value) {
-		requestBody.latitude = value;
+		requestBody.deliveryAddress.latitude = value;
 	},
 	setLongitude = function(value) {
-		requestBody.longitude = value;
+		requestBody.deliveryAddress.longitude = value;
 	},
 
 	setComment = function(value) {
@@ -166,13 +168,15 @@ angular.module('groupeat.services.order', [
 			'remainingCapacity': null
 		};
 		requestBody = {
-			'groupOrderId': null,
+			'id': null,
 			'foodRushDurationInMinutes': null,
 			'productFormats': {},
-			'street': null,
-			'details': null,
-			'latitude': null,
-			'longitude': null,
+			'deliveryAddress': {
+		        'street': null,
+		        'details': null,
+		        'latitude': null,
+		        'longitude': null
+		    },
 			'comment': null
 		};
 	},

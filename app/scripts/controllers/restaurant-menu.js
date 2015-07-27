@@ -126,6 +126,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		$scope.modal = modal;
 	});
 	$scope.openCart = function() {
+		Order.setFoodRushTime($scope.foodRushTime.value);
 		$scope.modal.show();
 	};
 	$scope.closeCart = function() {

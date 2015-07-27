@@ -82,7 +82,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
       } else {
         // Then the product to add
         var productToAddInProducts = {
-          'id': productToAdd.id,
+          'id': format.id,
           'name': productToAdd.name,
           'format': format.name,
           'quantity': 1,
