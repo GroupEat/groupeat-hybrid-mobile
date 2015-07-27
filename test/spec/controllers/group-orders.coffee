@@ -109,8 +109,16 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       scope.onReload()
       scope.$digest()
-      scope.groupOrders.should.deep.equal emptyGroupOrdersMock
       rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', 'noGroupOrders'
+
+    it 'should get in the scope the groupOrders if there are more than one of them', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(positionMock)
+      sandbox.stub(GroupOrder, 'get').returns $q.when(groupOrdersMock)
+
+      scope.onReload()
+      scope.$digest()
+      scope.groupOrders.should.deep.equal groupOrdersMock
 
     it 'should broadcast the hiding of the message backdrop if it loaded some group orders', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -120,7 +128,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       scope.onReload()
       scope.$digest()
-      scope.groupOrders.should.deep.equal groupOrdersMock
       rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
 
   describe 'GroupOrdersCtrl#onJoinOrderTouch', ->

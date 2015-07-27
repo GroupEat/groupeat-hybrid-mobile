@@ -1,6 +1,7 @@
 'use strict';
 angular.module('routing', []).config(function ($stateProvider, $urlRouterProvider) {
-  $stateProvider.state('authentication', {
+  $stateProvider
+  .state('authentication', {
     url: '/authentication',
     templateUrl: 'templates/authentication.html',
     params: {
@@ -18,7 +19,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         redirectTo: 'authentication'
       }
     }
-  }).state('signup', {
+  })
+  .state('signup', {
     url: '/signup',
     templateUrl: 'templates/signup.html',
     controller: 'SignupCtrl',
@@ -61,7 +63,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         controller: 'RestaurantsCtrl'
       }
     }
-  }).state('app.restaurant-menu', {
+  })
+  .state('app.restaurant-menu', {
     url: '/restaurant/:restaurantId/menu',
     views: {
       'app': {
@@ -69,7 +72,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         controller: 'RestaurantMenuCtrl'
       }
     }
-  }).state('app.settings', {
+  })
+  .state('app.settings', {
     url: '/settings',
     views: {
       'app': {

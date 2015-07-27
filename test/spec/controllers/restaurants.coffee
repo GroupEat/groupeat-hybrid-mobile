@@ -176,7 +176,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
-    it 'should show a generic network failure message backdrop if the server cannot get the list of restaurants', ->
+    it 'should broadcast the displaying of a generic network failure message backdrop if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.reject()
@@ -194,7 +194,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
-    it 'should show a message backdrop when no restaurants are returned by the server', ->
+    it 'should broadcast the displaying of a message backdrop when no restaurants are returned by the server', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when([])
