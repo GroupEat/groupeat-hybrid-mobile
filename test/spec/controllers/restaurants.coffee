@@ -29,7 +29,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
         $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
-        })
+      })
       $httpBackend = $injector.get('$httpBackend')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')

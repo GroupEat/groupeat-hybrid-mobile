@@ -6,9 +6,7 @@ angular.module('groupeat.services.restaurant', [
   'groupeat.services.popup'
 ])
 
-.factory('Restaurant', function (_, $filter, Popup, $resource, $q, ENV) {
-
-  var $translate = $filter('translate');
+.factory('Restaurant', function (_, Popup, $resource, $q, ENV) {
 
   var resource = $resource(ENV.apiEndpoint + '/restaurants/:id');
   var listResource = $resource(ENV.apiEndpoint + '/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
@@ -74,7 +72,11 @@ angular.module('groupeat.services.restaurant', [
     if (_.some(groupOrders, 'restaurant.data.id', restaurantId)) {
       Popup.confirm('restaurantHasGroupOrder', 'restaurantHasGroupOrderMessage', 'join')
       .then(function(res) {
-        res ? deferred.resolve() : deferred.reject();
+        if (res) {
+          deferred.resolve();
+        } else {
+          deferred.reject();
+        }
       });
     } else {
       deferred.resolve();
