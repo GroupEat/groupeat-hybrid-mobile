@@ -5,11 +5,11 @@
   </ion-nav-buttons>
 
   <div class="bar bar-subheader">
-    <ion-slide ng-repeat="tab in tabs">
-      <button on-tap="slideTo({{ tab.id }})">
+    <div class="row">
+      <button ng-repeat="tab in tabs" class="col" on-tap="slideTo({{ tab.id }})">
         {{ tab.title | translate }}
       </button>
-    </ion-slide>
+    </div>
   </div>
 
   <ion-slide-box disable-scroll="true" show-pager="false">
