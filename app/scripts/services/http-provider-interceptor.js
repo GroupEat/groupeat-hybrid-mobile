@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat.services.http-provider-interceptor', [
+  'groupeat.services.lodash',
   'groupeat.services.credentials'
 ])
 
