@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $mdDialog = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = Restaurant = Geolocation = $q = {}
+  scope = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = MessageBackdrop = Network = Order = Popup = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -22,15 +22,14 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Network = $injector.get('Network')
       _ = $injector.get('_')
       Geolocation = $injector.get('Geolocation')
-      $mdDialog = $injector.get('$mdDialog')
       Popup = $injector.get('Popup')
       Order = $injector.get('Order')
       ENV = $injector.get('ENV')
 
       sandbox.stub(Network, 'hasConnectivity').returns(false)
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
-        $mdDialog: $mdDialog, $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
-        })
+        $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, MessageBackdrop: MessageBackdrop, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation
+      })
       $httpBackend = $injector.get('$httpBackend')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -194,10 +193,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get').returns($q.reject())
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns($q.reject())
       scope.onReload().should.be.rejected
       scope.$digest()
-      Restaurant.get.should.have.been.calledWithExactly(1, 1)
+      Restaurant.getFromCoordinates.should.have.been.calledWithExactly(1, 1)
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
       scope.messageBackdrop.should.deep.equal(messageBackdrop)
 
@@ -211,7 +210,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get').returns($q.reject())
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns($q.reject())
       scope.onReload()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
@@ -226,7 +225,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve([])
         return deferred.promise
@@ -250,7 +249,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(['restaurant'])
         return deferred.promise
@@ -270,7 +269,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         return deferred.promise
       )
       restaurants = ['firstRestaurant', 'secondRestaurant']
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(restaurants)
         return deferred.promise
@@ -289,7 +288,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred.resolve(currentPosition)
         return deferred.promise
       )
-      sandbox.stub(Restaurant, 'get', ->
+      sandbox.stub(Restaurant, 'getFromCoordinates', ->
         deferred = $q.defer()
         deferred.resolve(['restaurant'])
         return deferred.promise

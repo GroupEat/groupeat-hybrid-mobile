@@ -3,6 +3,9 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
   $stateProvider.state('authentication', {
     url: '/authentication',
     templateUrl: 'templates/authentication.html',
+    params: {
+      slideIndex: 0
+    },
     data: { permissions: { except: [] } }
   }).state('app', {
     url: '/',
@@ -14,7 +17,13 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         redirectTo: 'authentication'
       }
     }
-  }).state('app.group-orders', {
+  }).state('signup', {
+    url: '/signup',
+    templateUrl: 'templates/signup.html',
+    controller: 'SignupCtrl',
+    data: { permissions: { except: [] } }
+  })
+  .state('app.group-orders', {
     url: '',
     views: {
       'app': {

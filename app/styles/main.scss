@@ -10,6 +10,7 @@
 @import "base/fonts";
 @import "base/typography";
 @import "base/icons";
+@import "components/animations";
 
 /**
  * HELPERS
@@ -21,22 +22,23 @@
 /**
  * COMPONENTS
  */
-
-@import "components/buttons";
 @import "components/backgrounds";
-@import "components/titles";
-@import "components/empty-container";
-@import "components/order-card";
+@import "components/buttons";
 @import "components/create-order-footer";
-@import "components/summup-order";
+@import "components/empty-container";
+@import "components/intro-slides";
+@import "components/order-card";
+@import "components/receipt";
 @import "components/restaurant-card";
-
+@import "components/summup-order";
+@import "components/titles";
 
 /**
  * VENDORS
  */
 
  @import "vendors/accordion";
+ @import "vendors/card-flip";
 
 /**
  * PAGES
@@ -44,3 +46,5 @@
 
  @import "pages/group-orders";
  @import "pages/restaurant-menu";
+ @import "pages/cart";
+ @import "pages/authentication";

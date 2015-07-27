@@ -9,7 +9,7 @@ angular.module('groupeat.services.device-assistant', [
   'groupeat.services.push-notification'
 ])
 
-.factory('DeviceAssistant', function($rootScope, $q, _, $resource, ENV, Credentials, $ionicPlatform, PushNotification) {
+.factory('DeviceAssistant', function(_, $ionicPlatform, $q, $resource, $rootScope, Credentials, ENV, PushNotification) {
 
   var
 

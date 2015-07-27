@@ -9,22 +9,24 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.order',
 	'groupeat.services.product',
 	'groupeat.services.popup',
+	'groupeat.services.restaurant',
 	'ionic',
-])
+	])
 
-.controller('RestaurantMenuCtrl', function($q, $scope, $state, $stateParams, Analytics,  MessageBackdrop, Network, Product, Popup, Cart, _, Order, $ionicHistory, $timeout, $ionicScrollDelegate) {
+.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
-  $scope.groups = [];
+	$scope.groups = [];
 	$scope.isNewOrder = {
 		value: null
 	};
-  $scope.foodRushTime = {};
-  $scope.foodRushTime.value = 35;
+	$scope.foodRushTime = {};
+	$scope.foodRushTime.value = 35;
 
 	$scope.initCtrl = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
+		$scope.detailedProduct = null;
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
@@ -35,6 +37,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		var deferred = $q.defer();
 		Network.hasConnectivity()
 		.then(function() {
+			return Restaurant.get($stateParams.restaurantId);
+		})
+		.then(function(restaurant) {
+			$scope.restaurant = restaurant;
 			return Product.get($stateParams.restaurantId);
 		})
 		.then(function(products) {
@@ -47,7 +53,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			deferred.resolve();
 		})
 		.catch(function(errorKey) {
-			$scope.messageBackdrop = MessageBackdrop.backdropFrom(errorKey);
+			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
 			deferred.reject();
 		})
 		.finally(function() {
@@ -65,8 +71,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return $scope.detailedProduct === product;
 	};
 
-	$scope.onDeleteProduct = function(product, formatIndex) {
-		Cart.removeProduct(product, formatIndex);
+	$scope.onDeleteProduct = function(product, format) {
+		Cart.removeProduct(product, format);
 		Order.updateCurrentDiscount($scope.cart.getTotalPrice());
 	};
 
@@ -105,19 +111,32 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
 	};
 
-  $scope.toggleGroup = function(group) {
-    if ($scope.isGroupShown(group)) {
-      group.isShown = false;
-    } else {
-      group.isShown = true;
-    }
-    $timeout(function() {
-      $ionicScrollDelegate.resize();
-    }, 300);
-  };
+	$scope.toggleGroup = function(group) {
+		if ($scope.isGroupShown(group)) {
+			group.isShown = false;
+		} else {
+			group.isShown = true;
+		}
+		$timeout(function() {
+			$ionicScrollDelegate.resize();
+		}, 300);
+	};
 
-  $scope.isGroupShown = function(group) {
-    return group.isShown;
-  };
+	$scope.isGroupShown = function(group) {
+		return group.isShown;
+	};
+
+	$ionicModal.fromTemplateUrl('templates/modals/cart.html', {
+		scope: $scope,
+		animation: 'slide-in-up'
+	}).then(function(modal) {
+		$scope.modal = modal;
+	});
+	$scope.openCart = function() {
+		$scope.modal.show();
+	};
+	$scope.closeCart = function() {
+		$scope.modal.hide();
+	};
 
 });

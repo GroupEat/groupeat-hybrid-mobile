@@ -18,7 +18,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.residency-utils'
 ])
 
-.controller('AuthenticationCtrl', function ($scope, $state, $timeout, $q, $filter, Address, Analytics, Authentication, Credentials, Customer, ElementModifier, Popup, DeviceAssistant, Network, ResidencyUtils, _) {
+.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Address, Analytics, Authentication, Credentials, Customer, DeviceAssistant, ElementModifier, Network, Popup, ResidencyUtils) {
 
   var $translate = $filter('translate');
   Analytics.trackView('Authentication');
@@ -29,6 +29,8 @@ angular.module('groupeat.controllers.authentication', [
 
   /* Showing DOM Elements */
 
+  // Slider
+  $scope.slideIndex = 0;
   // Buttons
   $scope.showLoginAndRegisterButtons = true;
   $scope.showLoginEnergizedBackButton = false;
@@ -36,6 +38,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.showSkipFurtherRegisterButton = false;
   $scope.showSubmitFurtherRegisterButton = false;
   // Forms
+  $scope.isAuthSignup = true;
   $scope.showLoginForm = false;
   $scope.showRegisterForm = false;
   $scope.showFurtherRegisterForm = false;
@@ -83,6 +86,39 @@ angular.module('groupeat.controllers.authentication', [
   };
   /*
   -------------------    End Initial   -------------------------
+  */
+
+  /*
+  ---------------------- Slider --------------------------
+  */
+
+  $scope.slideHasChanged = function(index) {
+    $scope.slideIndex = index;
+  };
+
+  $scope.slideTo = function(index) {
+    $ionicSlideBoxDelegate.slide(index);
+    $scope.slideIndex = index;
+  };
+
+  /* Setting the right slideIndex to avoid having to swipe when redirected to auth */
+  $timeout(function() {
+    $scope.slideTo($stateParams.slideIndex);
+  }, 100);
+
+
+  $scope.slideTo = function(index) {
+    $ionicSlideBoxDelegate.slide(index);
+    $scope.slideIndex = index;
+  };
+
+  /* Setting the right slideIndex to avoid having to swipe when redirected to auth */
+  $timeout(function() {
+    $scope.slideTo($stateParams.slideIndex);
+  }, 100);
+
+  /*
+  ---------------------- End Slider --------------------------
   */
 
   /*

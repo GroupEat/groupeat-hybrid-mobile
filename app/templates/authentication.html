@@ -1,133 +1,95 @@
 <ion-view hide-nav-bar="true" ng-controller="AuthenticationCtrl">
 
-	<!--	-	-	- LOGO FOR ALL VIEWS -	-	-	-->
-	<div class="padding-vertical">
-		<img src="images/logo-groupeat.svg" alt="logo" id="logo-first-page" >
+	<ion-slide-box id="intro-slides" on-slide-changed="slideHasChanged($index)" show-pager="true" class="full-height">
+		<ion-slide>
+			<div class="titles">
+				<h3>Crée une commande</h3>
+				<p>Sélectionne un restaurant, ce que tu souhaites manger, et regarde le prix de ton panier baisser chaque fois que quelqu’un rejoint la commande.</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="titles">
+				<h3>Rejoins une commande</h3>
+				<p>Rejoins une commande GroupEat autour de toi et économise directement sur ton achat.<br /> C’est ça l’esprit GroupEat !</p>
+			</div>
+		</ion-slide>
+		<ion-slide>
+			<div class="titles">
+				<h3>Règle le Food Rush</h3>
+				<p>Plutôt économe ou pressé ? Définis combien de temps tu souhaites attendre avant d’être livré : plus tu attends, plus tu économises !</p>
+			</div>
+		</ion-slide>
+		<ion-slide id="auth">
+			<div class="content">
+				<div class="logo">
+					<img src="images/logo-groupeat.png" alt="">
+					<h4 class="baseline">Le prix du groupe, à la maison !</h4>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div class="group-input group-two">
+							<div class="input">
+								<input type="text" placeholder="Adresse Email" ng-model="email">
+							</div>
+							<div class="input">
+								<input type="password" placeholder="Mot de Passe" ng-model="password">
+							</div>
+						</div>
+						<div class="flip-container" ng-class="{'is-flipped' : !isAuthSignup}">
+							<div class="flip">
+								<div class="front">
+									<a ui-sref="signup" class="btn btn-bloc btn-lg btn-green mg-top-20">
+										Créer mon compte !
+									</a>
+								</div>
+								<div class="back">
+									<a ui-sref="app.group-orders" class="btn btn-bloc btn-lg btn-red mg-top-20">
+										Me connecter !
+									</a>
+								</div>
+							</div>
+						</div>
+						<p class="mute-link mg-top-20" on-tap="isAuthSignup = !isAuthSignup">
+							<span ng-show="isAuthSignup === true">
+								Je posséde déjà un compte.
+								<b class="color-red">Me connecter !</b>
+							</span>
+							<span ng-show="isAuthSignup === false">
+								Je ne posséde pas de compte.
+								<b class="color-green">M'inscrire !</b>
+							</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+
+	<div id="intro-animations">
+		<div class="canvas" ng-class="{'is-slide2' : slideIndex === 1, 'is-slide3' : slideIndex === 2 || slideIndex === 3, 'is-hidden' : slideIndex === 3}">
+			<div class="pizzeria">
+				<ul class="smoke">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+			<div class="clock"></div>
+			<div class="scooter">
+				<div class="flag"></div>
+				<ul class="pizzas">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<ul class="speed">
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
 	</div>
-	<!--	-	-	- END LOGO FOR ALL VIEWS -	-	-	-->
-
-
-	<!--	-	-	- MENU VIEW -	-	-	-->
-	<div ng-show="showLoginAndRegisterButtons">
-		<button on-tap="onLoginButtonTouch()" class="button button-full button-energized button-upper-bottom text-button-first-page">{{ 'login' | translate | uppercase }}
-		</button>
-
-		<button on-tap="onRegisterButtonTouch()" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
-		</button>
-	</div>
-	<!--	-	-	- END MENU VIEW -	-	-	-->
-
-	<!--	-	-	- LOGIN VIEW -	-	-	-->
-	<form name="loginForm" ng-show="showLoginForm" ng-submit="submitLoginForm(loginForm)" ng-submit-force="true" novalidate>
-		<div class="list list-inset register-form">
-			<div class="loginViewButtons">
-				<button type="button" class="button button-full button-assertive" on-tap="showResetPasswordDialog($event)">
-					{{ 'forgotPassword' | translate }}
-				</button>
-			</div>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-email-outline"> {{ 'email' | translate }}</span>
-				<input ng-model="userLogin.email" name="email" type="email" required ge-campus-email>
-			</label>
-			<div ng-show="(loginForm.email.$touched && loginForm.email.$dirty) || loginForm.$submitted" ng-messages="loginForm.email.$error">
-				<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-				<div ng-message="email">{{ 'emailShortErrorKey' | translate }}</div>
-				<div ng-message="geCampusEmail">{{ 'geCampusEmailShortErrorKey' | translate }}</div>
-			</div>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-locked-outline"> {{ 'password' | translate }}</span>
-				<input ng-model="userLogin.password" ng-model-options="{ updateOn: 'default blur' }" name="password" type="password" required ng-minlength="6">
-			</label>
-			<div ng-show="(loginForm.password.$touched && loginForm.password.$dirty) || loginForm.$submitted" ng-messages="loginForm.password.$error">
-				<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-				<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
-			</div>
-		</div>
-		<button type="input" class="button button-bottom button-full button-energized text-button-first-page">{{ 'login' | translate | uppercase }}
-		</button>
-	</form>
-
-	<button ng-show="showLoginEnergizedBackButton" on-tap="onBackToMainViewButtonTouch()" class="button button-clear button-energized ion-chevron-left login-view-back-button">
-		{{ 'back' | translate }}
-	</button>
-
-	<!--	-	-	- END LOGIN VIEW -	-	-	-->
-
-
-	<!--	-	-	- REGISTER VIEW -	-	-	-->
-
-	<form name="registerForm" ng-show="showRegisterForm"  ng-submit-force="true" novalidate>
-		<div class="list list-inset register-form">
-			<h6 class="login-text-first-page"> {{ 'enterYourCampusEmail' | translate }}</h6>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-email-outline"> {{ 'email' | translate }}</span>
-				<input ng-model="userRegister.email" name="email" type="email" required ge-campus-email>
-			</label>
-			<div ng-show="(registerForm.email.$touched && registerForm.email.$dirty) || registerForm.$submitted" ng-messages="registerForm.email.$error">
-				<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-				<div ng-message="email">{{ 'emailShortErrorKey' | translate }}</div>
-				<div ng-message="geCampusEmail">{{ 'geCampusEmailShortErrorKey' | translate }}</div>
-			</div>
-			<label class="item item-input item-stacked-label">
-				<input ng-model="userRegister.password" ng-model-options="{ updateOn: 'default blur' }" name="password" type="password" required ng-minlength="6">
-				<span class="icon ion-ios7-locked-outline"> {{ 'password' | translate }}</span>
-			</label>
-			<div ng-show="(registerForm.password.$touched && registerForm.password.$dirty) || registerForm.$submitted" ng-messages="registerForm.password.$error">
-				<div ng-message="required">{{ 'requiredShortErrorKey' | translate }}</div>
-				<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
-			</div>
-		</div>
-		<button on-tap="submitRegisterForm(registerForm)" type="submit" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
-		</button>
-	</form>
-
-	<button ng-show="showLoginAssertiveBackButton" on-tap="onBackToMainViewButtonTouch()" class="button button-clear button-assertive ion-chevron-left login-view-back-button">
-		{{ 'back' | translate }}
-	</button>
-
-	<!--	-	-	- END REGISTER VIEW -	-	-	-->
-
-
-	<!--	-	-	- SECOND FORM VIEW -	-	-	-->
-	<form name="furtherRegisterForm" ng-show="showFurtherRegisterForm" ng-submit="submitFurtherRegisterForm(furtherRegisterForm)" ng-submit-force="true" novalidate>
-		<div class="list list-inset register-form">
-			<h6 class="login-text-first-page"> {{ 'addMoreInformationOrSkip' | translate }}</h6>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-person-outline"> {{ 'firstName' | translate }}</span>
-				<input ng-model="userRegister.firstName" name="firstName" type="text">
-			</label>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-person-outline"> {{ 'lastName' | translate }}</span>
-				<input ng-model="userRegister.lastName" name="lastName" type="text">
-			</label>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-telephone-outline"> {{ 'phoneNumber' | translate }}</span>
-				<input ng-model="userRegister.phoneNumber" name="phoneNumber" type="tel" ge-phone-format>
-			</label>
-			<div ng-show="(furtherRegisterForm.phoneNumber.$touched && furtherRegisterForm.phoneNumber.$dirty) || furtherRegisterForm.$submitted" ng-messages="furtherRegisterForm.phoneNumber.$error">
-				<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
-			</div>
-			<label class="item item-input item-select">
-		    <div class="input-label">
-					<span class="icon ion-ios7-location-outline placeholder-icon"> </span>{{ userRegister.residency | translate }}
-		    </div>
-		    <select>
-		      <option np-repeat="res in residencies">{{ res | translate }}</option>
-		    </select>
-		  </label>
-			<label class="item item-input item-stacked-label">
-				<span class="icon ion-ios7-home-outline"> {{ 'addressSupplement' | translate }}</span>
-				<input ng-model="userRegister.addressSupplement" name="addressSupplement" type="text">
-			</label>
-		</div>
-		<div ng-show="showSkipFurtherRegisterButton">
-			<button type="button" on-tap="hasRegistered(true)" class="button button-full button-assertive button-bottom text-button-first-page">{{ 'skip' | translate | uppercase }}
-			</button>
-		</div>
-		<div ng-show="showSubmitFurtherRegisterButton">
-			<button type="submit" class="button button-full button-energized button-bottom text-button-first-page">{{ 'register' | translate | uppercase }}
-			</button>
-		</div>
-	</form>
-	<!--	-	-	- END SECOND FORM VIEW -	-	-	-->
 </ion-view>

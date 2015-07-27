@@ -22,7 +22,7 @@
   <ion-content header-shrink="#discount-placeholder" class="no-header has-footer-summup full-height bg-blue">
 
     <div id="discount-placeholder">
-      <div class="background" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
+      <div class="background" ng-style="{'background-image' : 'url('+ restaurant.pictureUrl +')'}">
         <div class="content" id="discount-placeholder-content">
           <div class="discount" ng-show="currentOrder.currentDiscount">
             <h4>-{{ currentOrder.currentDiscount | number : 0 }}<small>%</small></h4>
@@ -85,10 +85,10 @@
               <div class="col-50">
                 <div class="add-to-cart">
                   <div class="clearfix">
-                    <a class="action-btn" ng-class="{'is-active' : cart.getFormatQuantity(format.id) > 0}" on-tap="onDeleteProduct(product, format.id)">
+                    <a class="action-btn" ng-class="{'is-active' : cart.getProductQuantity(product, format) > 0}" on-tap="onDeleteProduct(product, format)">
                       <i class="ion-ios-minus-empty"></i>
                     </a>
-                    <a class="total">{{ cart.getFormatQuantity(format.id) }}</a>
+                    <a class="total">{{ cart.getProductQuantity(product, format) }}</a>
                     <a class="action-btn is-active" on-tap="onAddProduct(product, format)">
                       <i class="ion-ios-plus-empty"></i>
                     </a>
@@ -118,9 +118,9 @@
         </div>
       </div>
       <div class="col">
-        <a ui-sref="cart" class="btn btn-bloc btn-green btn-xlg btn-square">
+        <button on-tap="openCart()" class="btn btn-bloc btn-green btn-xlg btn-square" ng-disabled="cart.getTotalQuantity() == 0">
           Commander
-        </a>
+        </button>
       </div>
     </div>
   </div>

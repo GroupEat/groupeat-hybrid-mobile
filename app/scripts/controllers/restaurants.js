@@ -30,7 +30,7 @@ angular.module('groupeat.controllers.restaurants', [
     })
     .then(function(currentPosition) {
       $scope.userCurrentPosition = currentPosition;
-      return Restaurant.get(currentPosition.coords.latitude, currentPosition.coords.longitude);
+      return Restaurant.getFromCoordinates(currentPosition.coords.latitude, currentPosition.coords.longitude);
     })
     .then(function(restaurants) {
       $scope.restaurants = restaurants;

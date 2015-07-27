@@ -9,5 +9,6 @@ angular.module('groupeat.directives', [
   'groupeat.directives.nav-bar-class',
   'groupeat.directives.empty-container',
   'groupeat.directives.header-shrink',
+  'groupeat.directives.receipt-card',
   'groupeat.directives.restaurant-card'
 ]);

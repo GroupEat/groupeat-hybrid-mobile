@@ -16,10 +16,11 @@ describe 'Service: Restaurant', ->
       ENV = $injector.get('ENV')
       sandbox = sinon.sandbox.create()
 
-  describe 'Restaurant#get', ->
+  describe 'Restaurant#getFromCoordinates', ->
 
     it 'should have an get method', ->
-      Restaurant.should.have.property('get')
+      Restaurant.should.have.property 'getFromCoordinates'
+
     it 'should return a fulfilled promise when the request returns a 200 status', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
       restaurants = []
@@ -27,11 +28,11 @@ describe 'Service: Restaurant', ->
         data:
           restaurants
       $httpBackend.expect('GET', regex).respond(response)
-      Restaurant.get(1, 1).should.become(restaurants)
+      Restaurant.getFromCoordinates(1, 1).should.become(restaurants)
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
-      Restaurant.get(1, 1).should.be.rejected
+      Restaurant.getFromCoordinates(1, 1).should.be.rejected
       $httpBackend.flush()

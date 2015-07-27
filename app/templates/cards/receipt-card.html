@@ -1,0 +1,68 @@
+<div class="receipt">
+
+	<div class="infos">
+		<h4>{{restaurant.name}}</h4>
+		<p>{{date | date:'MM/dd/yyyy'}}</p>
+	</div>
+
+	<div class="orders">
+		<div class="order" ng-repeat="order in orders.getProducts()">
+			<div class="row">
+				<div class="col-10">
+					<b class="number-item">
+						{{order.quantity}}
+					</b>
+				</div>
+				<div class="col-67">
+					<span class="order-item">
+						{{order.name}} {{order.format}}
+					</span>
+				</div>
+				<div class="col col-no-padding text-right">
+					<span class="price">
+						{{order.price}}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="dashed-border"></div>
+
+	<div class="totals">
+		<div class="subtotal">
+			<div class="row">
+				<div class="col-50">
+					<span class="title">
+						Sous-total
+					</span>
+				</div>
+				<div class="col-50 text-right">
+					{{orders.getTotalPrice()}}
+				</div>
+			</div>
+		</div>
+		<div class="total">
+			<div class="row">
+				<div class="col-50">
+					<span class="title">
+						<b>total</b>
+					</span>
+				</div>
+				<div class="col-50">
+					<div class="discounted text-right">
+						<b class="color-red">-{{discount | number:0}}%</b>
+						<b class="color-green">{{realPrice | number:2}}</b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="dashed-border"></div>
+
+	<div class="comment">
+		<input type="text" placeholder="Ajouter un commentaire à votre commande">
+	</div>
+
+</div>

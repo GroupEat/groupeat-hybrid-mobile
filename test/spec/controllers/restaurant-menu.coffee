@@ -2,85 +2,34 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
   beforeEach ->
     module 'groupeat.controllers.restaurant-menu'
+    module 'groupeat.controllers.cart'
     module 'templates'
 
-  ctrl = $httpBackend = scope = $state = $q = sandbox = Cart = Popup = {}
+  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = scope = $stateParams = Cart = MessageBackdrop = Network = Order = Popup = Product = Restaurant = {}
 
-  cartTest =
-    cartTotalPrice: 88
-    cartTotalQuantity: 4
-    productsItems: [{
-      id: 1
-      name: 'test'
-      totalQuantity: 4
-      totalPrice: 89
-      formats: [{
-        id: 10
-        size: 'Junior'
-        price: 8
-        quantity: 1
-        },{
-        id: 11
-        size: 'test'
-        price: 8
-        quantity: 3
-        }
-      ]
-      },{
-      id: 83
-      name: 'test'
-      totalQuantity: 0
-      totalPrice: 0
-      formats: [{
-        id: 120
-        size: 'other'
-        price: 8
-        quantity: 1
-        },{
-        id: 121
-        size: 'test 8'
-        price: 8
-        quantity: 2
-      }]
-    }]
-
-  productTest =
-    name: 'test'
-    id: 1
-    description: 'for test'
-    formats: [{
-      id: 10
-      size: 'Junior'
-      price: 8
-      },{
-      id: 11
-      size: 'test'
-      price: 10
-      },{
-      id: 12
-      size: 'test1'
-      price: 12
-    }]
-
+  mockProduct = {}
+  mockFormat = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
-      scope = $rootScope.$new()
-      $state = $injector.get('$state')
-      Cart = $injector.get('Cart')
-      Popup = $injector.get('Popup')
       sandbox = sinon.sandbox.create()
-      $httpBackend = $injector.get('$httpBackend')
-      ctrl = $controller('RestaurantMenuCtrl', ($scope: scope, $state: $state, $stateParams: $injector.get('$stateParams'), $filter: $injector.get('$filter'), MessageBackdrop: $injector.get('MessageBackdrop'), Network: $injector.get('Network'), Product: $injector.get('Product'), Cart: Cart, Popup: Popup, $ionicNavBarDelegate: $injector.get('$ionicNavBarDelegate'),
-      Order: $injector.get('Order'), $ionicHistory: $injector.get('$ionicHistory'), _: $injector.get('_')))
 
-      ENV = $injector.get('ENV')
-      mockData = [{key:"test"},{key:"test2"}]
-      url = 'data/pizzas/pizzas_restaurant_.json'
-      $httpBackend.expectGET(ENV.apiEndpoint+'/restaurants/products?include=formats').respond(401)
-      $httpBackend.whenGET(url).respond(mockData)
-      $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      sandbox = sinon.sandbox.create()
+      scope = $rootScope.$new()
+      $ionicHistory = $injector.get '$ionicHistory'
+      $ionicModal = $injector.get '$ionicModal'
+      $ionicScrollDelegate = $injector.get '$ionicScrollDelegate'
+      $ionicSlideBoxDelegate = $injector.get '$ionicSlideBoxDelegate'
+      $q = $injector.get '$q'
+      $stateParams = $injector.get '$stateParams'
+      Cart = $injector.get 'Cart'
+      MessageBackdrop = $injector.get 'MessageBackdrop'
+      Network = $injector.get 'Network'
+      Order = $injector.get 'Order'
+      Popup = $injector.get 'Popup'
+      Product = $injector.get 'Product'
+      Restaurant = $injector.get 'Restaurant'
+
+      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, MessageBackdrop: MessageBackdrop, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
 
   afterEach ->
     sandbox.restore()
@@ -88,66 +37,155 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
   describe 'RestaurantMenu#initCtrl', ->
 
     it 'should create an empty cart', ->
+      sandbox.stub scope, 'onReload'
       scope.initCtrl()
-      expect(scope.cart).not.to.equal(null)
-      scope.cart.should.have.property('getTotalPrice')
-      scope.cart.should.have.property('getTotalQuantity')
-      scope.cart.should.have.property('getProducts')
+      expect(scope.cart).not.to.equal null
+      scope.cart.should.have.property 'getTotalPrice'
+      scope.cart.should.have.property 'getTotalQuantity'
+      scope.cart.should.have.property 'getProducts'
       expect(_.isEmpty(scope.cart.getProducts())).to.be.true
 
-  describe 'State change', ->
+    it 'should call onReload', ->
+      sandbox.stub scope, 'onReload'
+      scope.initCtrl()
+      scope.onReload.should.have.been.called
+
+  describe 'RestaurantMenu#onReload', ->
+
+    it 'should call Network.hasConnectivity', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.defer().promise
+      scope.onReload()
+      scope.$digest()
+      Network.hasConnectivity.should.have.been.called
+
+    it 'should return a MessageBackdrop with the error key from hasConnectivity when the promise is rejected', ->
+      errorKey = 'noNetwork'
+      messageBackdrop = MessageBackdrop.backdropFromErrorKey errorKey
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
+      scope.onReload()
+      scope.$digest()
+      scope.messageBackdrop.should.deep.equal messageBackdrop
+
+  describe 'RestaurantMenu#onAddProduct', ->
 
     beforeEach ->
       scope.initCtrl()
 
-    it 'should call Cart service function add product if totalQuantity is not equal to remaingCapacity ', ->
-      callback = sandbox.stub(Cart, 'addProduct')
+    it 'should call Popup.error with tooManyProducts if there are too many products in the Cart', ->
+      sandbox.stub Popup, 'error'
+      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
+      scope.onAddProduct(mockProduct, mockFormat)
+      Popup.error.should.have.been.calledWithExactly 'tooManyProducts'
+
+    it 'should call Cart.addProduct if there are enough products in the Cart', ->
+      sandbox.stub Cart, 'addProduct'
       scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity() + 1
-      scope.onAddProduct(productTest, productTest.formats[0])
-      assert(callback.calledOnce)
-      assert(callback.calledWithExactly(productTest, productTest.formats[0]))
+      scope.onAddProduct mockProduct, mockFormat
+      Cart.addProduct.should.have.been.calledWithExactly mockProduct, mockFormat
 
-    it 'should not call Cart service function add product if totalQuantity is equal to remaingCapacity ', ->
-      callback = sandbox.stub(Cart, 'addProduct')
-      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
-      scope.onAddProduct(productTest, productTest.formats[0])
-      callback.should.not.have.been.called
+    it 'should call Order.updateCurrentDiscount if there are enough products in the Cart', ->
+      sandbox.stub Order, 'updateCurrentDiscount'
+      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity() + 1
+      scope.onAddProduct mockProduct, mockFormat
+      totalPrice = scope.cart.getTotalPrice()
+      Order.updateCurrentDiscount.should.have.been.calledWithExactly totalPrice
 
-    it 'should called Popup service if totalQuantity is equal to remaingCapacity ', ->
-      callback = sandbox.stub Popup, 'error'
-      scope.currentOrder.remainingCapacity = scope.cart.getTotalQuantity()
-      scope.onAddProduct(productTest, productTest.formats[0])
-      assert(callback.calledOnce)
+  describe 'RestaurantMenu#onDeleteProduct', ->
 
-    it 'should call Cart service function remove product', ->
-      callback = sandbox.stub(Cart, 'removeProduct')
-      scope.onDeleteProduct(productTest, 10)
-      assert(callback.calledOnce)
-      assert(callback.calledWithExactly(productTest, 10))
+    beforeEach ->
+      scope.initCtrl()
 
-    it 'should toggle product if asking', ->
-      scope.toggleDetails(productTest)
-      scope.$apply()
-      expect(scope.detailedProduct).to.equal(productTest)
+    it 'should call Cart.removeProduct', ->
+      sandbox.stub Cart, 'removeProduct'
+      scope.onDeleteProduct mockProduct, mockFormat
+      Cart.removeProduct.should.have.been.calledWithExactly mockProduct, mockFormat
 
-    it 'should not toggle product if not asking', ->
-      scope.detailedProduct = productTest
-      scope.toggleDetails(productTest)
-      scope.$apply()
-      expect(scope.detailedProduct).to.equal(null)
+    it 'should call Cart.removeProduct', ->
+      sandbox.stub Order, 'updateCurrentDiscount'
+      scope.onDeleteProduct mockProduct, mockFormat
+      totalPrice = scope.cart.getTotalPrice()
+      Order.updateCurrentDiscount.should.have.been.calledWithExactly totalPrice
 
-    it 'should right product be shown', ->
-      scope.detailedProduct = productTest
-      expect(scope.areDetailsShown(productTest)).to.be.true
-      scope.detailedProduct = null
-      expect(scope.areDetailsShown(productTest)).to.be.false
+  describe 'RestaurantMenu#toggleDetails', ->
 
-    it 'should leave restaurant menu cell without poping if cart is empty', ->
+    beforeEach ->
+      scope.initCtrl()
+
+    it 'should set detailedProduct to null if scope.areDetailsShown is true', ->
+      sandbox.stub(scope, 'areDetailsShown').returns true
+      scope.toggleDetails mockProduct
+      expect(scope.detailedProduct).to.be.null
+
+    it 'should assign the given product in parameters if scope.areDetailsShown is false', ->
+      sandbox.stub(scope, 'areDetailsShown').returns false
+      scope.toggleDetails mockProduct
+      scope.detailedProduct.should.deep.equal mockProduct
+
+  describe 'RestaurantMenu#areDetailsShown', ->
+
+    beforeEach ->
+      scope.initCtrl()
+
+    it 'should return true if scope.detailedProduct equals the product given in parameter', ->
+      scope.detailedProduct = mockProduct
+      scope.areDetailsShown(mockProduct).should.be.true
+
+    it 'should return false if scope.detailedProduct does not equal the product given in parameter', ->
+      scope.detailedProduct = {}
+      scope.areDetailsShown(mockProduct).should.be.false
+
+  describe 'RestaurantMenu#onLeaveRestaurant with an empty cart', ->
+
+    beforeEach ->
+      sandbox.stub scope, 'onReload'
+      scope.initCtrl()
+      scope.cart.setProducts []
+
+    it 'should call reset the Cart, the current order and call $ionicHistory.goBack if the Popup.confirm is resoved with a true value', ->
+      sandbox.stub Order, 'resetCurrentOrder'
+      sandbox.stub $ionicHistory, 'goBack'
       scope.onLeaveRestaurant()
-      expect($state.current.name).to.not.equal('restaurant-menu')
+      scope.$digest()
+      Order.resetCurrentOrder.should.have.been.called
+      $ionicHistory.goBack.should.have.been.called
 
-    it 'should alert user when leaving restaurant menu cell if cart is not empty', ->
+  describe 'RestaurantMenu#onLeaveRestaurant with a non-empty cart', ->
 
-    it 'should reset cart if user confirms leaving restaurant menu cell if cart is not empty', ->
+    beforeEach ->
+      sandbox.stub scope, 'onReload'
+      scope.initCtrl()
+      scope.cart.setProducts ['first', 'second']
 
-    it 'should not reset cart if user cancels its will to leave restaurant menu if cart is not empty', ->
+    it 'should call Popup.confirm', ->
+      sandbox.stub(Popup, 'confirm').returns $q.defer().promise
+      scope.onLeaveRestaurant()
+      scope.$digest()
+      Popup.confirm.should.have.been.calledWithExactly 'leaveOrder', 'cartWillBeDestroyed'
+
+    it 'should call reset the Cart, the current order and call $ionicHistory.goBack if the Popup.confirm is resoved with a true value', ->
+      sandbox.stub Cart, 'reset'
+      sandbox.stub Order, 'resetCurrentOrder'
+      sandbox.stub $ionicHistory, 'goBack'
+      sandbox.stub Popup, 'confirm', ->
+        deferred = $q.defer()
+        deferred.resolve true
+        deferred.promise
+      scope.onLeaveRestaurant()
+      scope.$digest()
+      Cart.reset.should.have.been.called
+      Order.resetCurrentOrder.should.have.been.called
+      $ionicHistory.goBack.should.have.been.called
+
+    it 'should not call any of these if the Popup.confirm is resoved with a false value', ->
+      sandbox.stub Cart, 'reset'
+      sandbox.stub Order, 'resetCurrentOrder'
+      sandbox.stub $ionicHistory, 'goBack'
+      sandbox.stub Popup, 'confirm', ->
+        deferred = $q.defer()
+        deferred.resolve false
+        deferred.promise
+      scope.onLeaveRestaurant()
+      scope.$digest()
+      Cart.reset.should.not.have.been.called
+      Order.resetCurrentOrder.should.not.have.been.called
+      $ionicHistory.goBack.should.not.have.been.called

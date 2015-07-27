@@ -8,7 +8,10 @@
   display: inline-block;
   text-align:center;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 500;
+  width: 100%;
+  border: none;
+  text-transform: uppercase;
   @include border-radius(4px);
   &.btn-bloc {
   	display: block;
@@ -18,17 +21,38 @@
     background: $green;
     color: #FFF;
   }
+  &.btn-red {
+    background: $red;
+    color: #FFF;
+  }
+  &.btn-grey {
+    background: $bg-light;
+    color: $font-grey;
+  }
   &.btn-lg {
   	line-height: 50px;
   	letter-spacing: 0.4px;
-    font-size: 16px;
+    font-size: 12px;
   }
   &.btn-xlg {
     line-height: 71px;
     letter-spacing: 0.4px;
-    font-size: 16px;
+    font-size: 14px;
   }
   &.btn-square {
     @include border-radius(0);
   }
-} 
+  &.btn-icon {
+    font-size: 20px;
+  }
+}
+
+.btn[disabled] {
+  opacity: .5;
+}
+
+.mute-link {
+  color: $font-grey;
+  text-align: center;
+  font-size: 12px;
+}

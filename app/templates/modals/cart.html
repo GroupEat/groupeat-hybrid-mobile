@@ -1,0 +1,93 @@
+<ion-modal-view id="cart" ng-controller="CartCtrl">
+	<ion-header-bar class='bar-transparent'>
+		<button on-tap="closeCart()" class="button button-icon icon ion-ios-close-empty button-back"></button>
+	</ion-header-bar>
+	<ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" class="full-height">
+		<ion-slide class="bg-green">
+			<div class="cart-content">
+				<div class="titles">
+					<h3>Miam!</h3>
+					<p>Votre commande a été enregistré !</p>
+				</div>
+				<receipt-card orders="cart" restaurant="restaurant" discount="currentDiscount"></receipt-card>
+			</div>
+		</ion-slide>
+		<ion-slide class="bg-orange">
+			<div class="cart-content">
+				<div class="titles">
+					<i class="ion-map"></i>
+					<h3>Adresse?</h3>
+					<p>Où souhaitez vous être livré ?</p>
+				</div>
+
+				<div class="shipping-address">
+					<ion-list>
+						<label class="item item-radio" ng-class="{'checked' : address.name == 'preset'}">
+							<input type="radio" value="preset" ng-model="address.name" name="address">
+							<div class="item-content">
+								Mon Adresse
+							</div>
+							<i class="radio-icon ion-checkmark"></i>
+						</label>
+
+
+						<label class="item item-radio" ng-class="{'checked' : address.name == 'other'}">
+							<input type="radio" value="other" ng-model="address.name" name="address">
+							<div class="item-content">
+								Autres Adresses
+							</div>
+							<i class="radio-icon ion-checkmark"></i>
+						</label>
+
+
+						<div class="item-sub" ng-class="{'is-active' : address.name == 'other'}">
+							<label
+								class="item-accordion item item-radio"
+								ng-class="
+									{'checked': address.other == 'foyer',
+									 'is-active' : address.name == 'other'}">
+								<input type="radio" value="foyer" ng-model="address.other" name="other">
+								<div class="item-content">
+									Foyer de l'ENSTA ParisTech
+								</div>
+								<i class="radio-icon ion-location"></i>
+					        </label>
+
+					        <label
+					        	class="item-accordion item item-radio"
+					        	ng-class="
+									{'checked': address.other == 'bobar',
+									 'is-active' : address.name == 'other'}">
+								<input type="radio" value="bobar" ng-model="address.other" name="other">
+								<div class="item-content">
+									BôBar
+								</div>
+								<i class="radio-icon ion-location"></i>
+					        </label>
+
+					        <label
+					        	class="item-accordion item item-radio"
+					        	ng-class="
+									{'checked': address.other == 'institut',
+									 'is-active' : address.name == 'other'}">
+								<input type="radio" value="institut" ng-model="address.other" name="other">
+								<div class="item-content">
+									Institut d'Optique
+								</div>
+								<i class="radio-icon ion-location"></i>
+					        </label>
+						</div>
+
+					</ion-list>
+				</div>
+
+				<div class="display-address">
+					<p>Vous serez livré à : <b>ENSTA ParisTech</b></p>
+				</div>
+			</div>
+		</ion-slide>
+	</ion-slide-box>
+	<ion-footer-bar class="bar-white top-bordered-radius bar-button" on-tap="confirmButtonAction()">
+      <h1 class="title color-{{activeButton.color}}">{{activeButton.title}}</h1>
+    </ion-footer-bar>
+</ion-modal-view>
