@@ -5,7 +5,7 @@
 		</button>
 	</ion-nav-buttons>
 
-	<ion-content has-header="true" ng-hide="messageBackdrop.show">
+	<ion-content has-header="true">
 		<md-list>
 			<md-list-item>
 				<md-item-content layout="row" flex>
@@ -82,11 +82,6 @@
 				<a class="cart-button-text"> {{ 'confirmOrder' | translate }}</a>
 			</md-button>
 		</div>
-	</ion-content>
-
-	<ion-content has-header="true" scroll="false" ng-show="messageBackdrop.show">
-		<ge-message-backdrop>
-		</ge-message-backdrop>
 	</ion-content>
 
 </ion-view>

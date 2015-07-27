@@ -3,13 +3,12 @@
 angular.module('groupeat.controllers.orders', [
   'groupeat.services.credentials',
   'groupeat.services.lodash',
-  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
   'timer'
 ])
 
-.controller('OrdersCtrl', function (_, $q, $scope, $state, $stateParams, Credentials, MessageBackdrop, Network, Order) {
+.controller('OrdersCtrl', function (_, $q, $rootScope, $scope, $state, $stateParams, Credentials, Network, Order) {
 
   $scope.onReload = function () {
     var deferred = $q.defer();
@@ -18,19 +17,18 @@ angular.module('groupeat.controllers.orders', [
       return Order.queryForCustomer(Credentials.get().id);
     })
     .then(function(orders) {
-      $scope.orders = orders;
-      if (_.isEmpty($scope.orders))
-      {
-        $scope.messageBackdrop = MessageBackdrop.backdrop('noOrders', 'ion-thumbsdown', 'reload', 'onReload()');
+      if (_.isEmpty($scope.orders)) {
+        return $q.reject('noOrders');
+      } else {
+        $scope.orders = orders;
       }
-      else
-      {
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-      }
+    })
+    .then(function() {
+      $rootScope.$broadcast('hideMessageBackdrop');
       deferred.resolve();
     })
     .catch(function(errorKey) {
-      $scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
+      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
       deferred.reject();
     })
     .finally(function() {
@@ -43,5 +41,9 @@ angular.module('groupeat.controllers.orders', [
   $scope.getTimeDiff = function (endingAt) {
     return Order.getTimeDiff(endingAt);
   };
+
+  $scope.$on('$ionicView.afterEnter', function() {
+    $scope.onReload();
+  });
 
 });

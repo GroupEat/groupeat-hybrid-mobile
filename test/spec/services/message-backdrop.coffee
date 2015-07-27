@@ -15,11 +15,6 @@ describe 'Service: MessageBackdrop', ->
   afterEach ->
     sandbox.restore()
 
-  describe 'MessageBackdrop#noBackdrop', ->
-
-    it 'should return an object with a show property set to false', ->
-      MessageBackdrop.noBackdrop().show.should.be.false
-
   describe "MessageBackdrop#backdropFromErrorKey('noNetwork')", ->
 
     it 'should return an object with title and details properties set to keys indicating lack of network', ->
@@ -29,12 +24,12 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with a wifi icon class', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noNetwork')
-      messageBackdrop.iconClasses.should.equal('ion-wifi')
+      messageBackdrop.icon.should.equal('ion-wifi')
 
     it 'should return an object with a button property having a default text and action', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noNetwork')
-      messageBackdrop.button.text.should.equal('reload')
-      messageBackdrop.button.action.should.equal('onReload()')
+      messageBackdrop.buttonText.should.equal('reload')
+      messageBackdrop.buttonSref.should.be.empty
 
   describe "MessageBackdrop#backdropFromErrorKey('noGeolocation')", ->
 
@@ -45,17 +40,17 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with a location icon class', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noGeolocation')
-      messageBackdrop.iconClasses.should.equal('ion-location')
+      messageBackdrop.icon.should.equal('ion-location')
 
     it 'should return an object with a button property having a default text and action', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey('noGeolocation')
-      messageBackdrop.button.text.should.equal('reload')
-      messageBackdrop.button.action.should.equal('onReload()')
+      messageBackdrop.buttonText.should.equal('reload')
+      messageBackdrop.buttonSref.should.be.empty
 
   describe 'MessageBackdrop#backdropFromErrorKey', ->
 
-    it 'should return an object with a show property set to true', ->
-      MessageBackdrop.backdropFromErrorKey().show.should.be.true
+    it 'should return an object with a status property set to \'displayed\'', ->
+      MessageBackdrop.backdropFromErrorKey().status.should.equal 'displayed'
 
     it 'should return an object with title and details properties set to keys indicating a generic failure', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
@@ -64,9 +59,9 @@ describe 'Service: MessageBackdrop', ->
 
     it 'should return an object with an alert icon class', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
-      messageBackdrop.iconClasses.should.equal('ion-alert-circled')
+      messageBackdrop.icon.should.equal('ion-alert-circled')
 
     it 'should return an object with a button property having a default text and action', ->
       messageBackdrop = MessageBackdrop.backdropFromErrorKey()
-      messageBackdrop.button.text.should.equal('reload')
-      messageBackdrop.button.action.should.equal('onReload()')
+      messageBackdrop.buttonText.should.equal('reload')
+      messageBackdrop.buttonSref.should.be.empty

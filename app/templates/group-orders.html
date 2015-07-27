@@ -1,4 +1,4 @@
-<ion-view ng-init="onReload()" hide-back-button="true">
+<ion-view hide-back-button="true">
   <ion-nav-buttons side="primary" >
     <button class="button button-icon icon ion-ios-gear" ui-sref="app.settings"></button>
   </ion-nav-buttons>
@@ -14,7 +14,6 @@
 
   <ion-content has-bouncing="false" class="bg-blue no-header full-height">
     <div style="height:44px"></div>
-    <empty-container data="groupOrders" icon="ion-map" exclamation="Oh non..." main-text="Il n'y a aucune commande autour de vous." action-tap="onNewGroupOrder()" action-text="Créer une commande"></empty-container>
     <div class="orders" ng-class="{'single-order' : groupOrders.length == 1}">
       <slick data="groupOrders" ng-if="groupOrders.length" init-onload="true" arrows="false" slides-to-show="1" slides-to-scroll="1" center-mode="{{groupOrders.length == 1 ? false : true}}" center-padding="20px" >
         <div ng-repeat="groupOrder in groupOrders track by $index">

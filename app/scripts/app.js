@@ -20,6 +20,7 @@ angular.module('groupeat', [
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
+  'groupeat.services.message-backdrop',
   'slick',
   'ui.mask'
 ])
@@ -35,10 +36,12 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function ($ionicPlatform, $ionicAnalytics, $translate, $rootScope, $state, Analytics, Credentials, Permission) {
+.run(function ($ionicPlatform, $ionicAnalytics, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
+
   Permission.defineRole('customer', function () {
     return Credentials.get();
   });
+
   if (typeof navigator.globalization !== 'undefined') {
     navigator.globalization.getPreferredLanguage(function (language) {
       $translate.use(language.value.split('-')[0]).then(function (data) {
@@ -48,6 +51,25 @@ angular.module('groupeat', [
       });
     }, null);
   }
+
+  $rootScope.messageBackdrop = {};
+
+  $rootScope.$on('displayMessageBackdrop', function(event, errorKey) {
+    $rootScope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
+  });
+  $rootScope.$on('displayLoadingBackdrop', function() {
+    $rootScope.messageBackdrop.status = 'loading';
+  });
+  $rootScope.$on('hideMessageBackdrop', function() {
+    $rootScope.messageBackdrop.status = 'hidden';
+  });
+
+  var stateLoad = function() {
+    $rootScope.$broadcast('displayLoadingBackdrop');
+  };
+
+  $rootScope.$on('$stateChangeSuccess', stateLoad);
+
   $ionicPlatform.ready(function () {
 
     $ionicAnalytics.register();

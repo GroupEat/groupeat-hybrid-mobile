@@ -4,7 +4,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.analytics',
 	'groupeat.services.cart',
 	'groupeat.services.lodash',
-	'groupeat.services.message-backdrop',
 	'groupeat.services.network',
 	'groupeat.services.order',
 	'groupeat.services.product',
@@ -13,7 +12,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic',
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $scope, $stateParams, $timeout, Analytics, Cart, MessageBackdrop, Network, Order, Popup, Product, Restaurant) {
+.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $rootScope, $scope, $stateParams, $timeout, Analytics, Cart, Network, Order, Popup, Product, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -24,17 +23,13 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.foodRushTime = {};
 	$scope.foodRushTime.value = 35;
 
-	$scope.initCtrl = function() {
+	$scope.onReload = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
 		$scope.detailedProduct = null;
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
-		$scope.onReload();
-	};
 
-	$scope.onReload = function() {
-		var deferred = $q.defer();
 		Network.hasConnectivity()
 		.then(function() {
 			return Restaurant.get($stateParams.restaurantId);
@@ -44,23 +39,21 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			return Product.get($stateParams.restaurantId);
 		})
 		.then(function(products) {
-			$scope.products = products;
 			if (_.isEmpty(products)) {
-				$scope.messageBackdrop = MessageBackdrop.backdrop('emptyMenu', 'ion-android-pizza');
+				return $q.reject('emptyMenu');
 			} else {
-				$scope.messageBackdrop = MessageBackdrop.noBackdrop();
+				$scope.products = products;
 			}
-			deferred.resolve();
 		})
-		.catch(function(errorKey) {
-			$scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
-			deferred.reject();
-		})
+		.then(function() {
+      $rootScope.$broadcast('hideMessageBackdrop');
+    })
+    .catch(function(errorKey) {
+      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
+    })
 		.finally(function() {
 			$scope.$broadcast('scroll.refreshComplete');
 		});
-
-		return deferred.promise;
 	};
 
 	$scope.toggleDetails = function(product) {
@@ -138,5 +131,9 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.closeCart = function() {
 		$scope.modal.hide();
 	};
+
+	$scope.$on('$ionicView.afterEnter', function() {
+		$scope.onReload();
+	});
 
 });

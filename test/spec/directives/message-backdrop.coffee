@@ -4,57 +4,27 @@ describe 'Directive: geMessageBackdrop', ->
     module 'groupeat.directives.message-backdrop'
     module 'templates'
 
-  $compile = $rootScope = sandbox = $timeout = {}
+  element = $compile = $scope = isolateScope = sandbox = {}
 
   beforeEach ->
-    inject (_$compile_, _$rootScope_, $injector) ->
+    inject ($compile, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
-      $compile = _$compile_
-      $rootScope = _$rootScope_
-      $timeout = $injector.get('$timeout')
+      $scope = $rootScope.$new()
+      $injector.get('$httpBackend').whenGET(/^translations\/.*/).respond('{}')
+      element = $compile('<ge-message-backdrop></ge-message-backdrop>')($scope)
+      $scope.$digest()
 
   afterEach ->
     sandbox.restore()
 
-  it 'should inject a div with the white-backdrop class', ->
-    element = $compile("<ge-message-backdrop></ge-message-backdrop>")($rootScope)
-    $rootScope.$digest()
-    element.html().should.contain('<div class="white-backdrop visible active">')
+  beforeEach ->
+    isolateScope = element.isolateScope()
 
-  it 'the injected html should contain all text elements in scope.messageBackdrop', ->
-    element = $compile("<ge-message-backdrop></ge-message-backdrop>")($rootScope)
-    title = 'title'
-    details = 'details'
-    buttonText = 'buttonText'
-    $rootScope.messageBackdrop =
-      title: title
-      details: details
-      button:
-        text: buttonText
-    $rootScope.$digest()
-    element.find('h1').html().should.contain(title)
-    element.find('p').html().should.contain(details)
-    element.find('button').html().should.contain(buttonText)
+  it 'the scope should have a isDisplayed method', ->
+    isolateScope.should.have.property 'isDisplayed'
 
-  it 'the icon in the message backdrop should have classes mentioned in scope.messageBackdrop', ->
-    element = $compile("<ge-message-backdrop></ge-message-backdrop>")($rootScope)
-    iconClasses = 'iconClasses'
-    $rootScope.messageBackdrop =
-      iconClasses: iconClasses
-    $rootScope.$digest()
-    element.find('i').hasClass(iconClasses).should.be.true
+  it 'the scope should have a isLoading method', ->
+    isolateScope.should.have.property 'isLoading'
 
-  it 'the scope should have a call method', ->
-    element = $compile("<ge-message-backdrop></ge-message-backdrop>")($rootScope)
-    $rootScope.$digest()
-    element.scope().should.have.property('call')
-
-  it 'the scope call method should call the method provided as argument', ->
-    element = $compile("<ge-message-backdrop></ge-message-backdrop>")($rootScope)
-    $rootScope.$digest()
-    scope = element.scope()
-    sandbox.spy(scope, '$apply')
-    methodName = 'methodName'
-    scope.call(methodName)
-    $timeout.flush()
-    scope.$apply.should.have.been.calledWithExactly(methodName)
+  it 'the scope should have a buttonAction method', ->
+    isolateScope.should.have.property 'buttonAction'

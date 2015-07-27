@@ -6,24 +6,18 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.geolocation',
   'groupeat.services.lodash',
   'groupeat.services.group-order',
-  'groupeat.services.message-backdrop',
   'groupeat.services.network',
   'groupeat.services.order',
   'groupeat.services.restaurant',
 ])
 
-.controller('RestaurantsCtrl', function($filter, $q, $scope, $state, Analytics, GroupOrder, Customer, MessageBackdrop, Network, Order, Restaurant, _, Geolocation) {
+.controller('RestaurantsCtrl', function(_, $q, $rootScope, $scope, $state, Analytics, Geolocation, GroupOrder, Customer, Network, Order, Restaurant) {
 
   Analytics.trackView('Restaurants');
 
   $scope.restaurants = [];
 
-  $scope.onRestaurantsListLeave = function () {
-    $state.go('app.group-orders');
-  };
-
   $scope.onReload = function() {
-    var deferred = $q.defer();
     Network.hasConnectivity()
     .then(function() {
       return Geolocation.getGeolocation();
@@ -33,25 +27,21 @@ angular.module('groupeat.controllers.restaurants', [
       return Restaurant.getFromCoordinates(currentPosition.coords.latitude, currentPosition.coords.longitude);
     })
     .then(function(restaurants) {
-      $scope.restaurants = restaurants;
-      if (_.isEmpty(restaurants))
-      {
-        $scope.messageBackdrop = MessageBackdrop.backdrop('noRestaurants','ion-android-restaurant');
+      if (_.isEmpty(restaurants)) {
+        return $q.reject('noRestaurants');
+      } else {
+        $scope.restaurants = restaurants;
       }
-      else
-      {
-        $scope.messageBackdrop = MessageBackdrop.noBackdrop();
-      }
-      deferred.resolve();
+    })
+    .then(function() {
+      $rootScope.$broadcast('hideMessageBackdrop');
     })
     .catch(function(errorKey) {
-      $scope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
-      deferred.reject();
+      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
     })
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
-    return deferred.promise;
   };
 
   $scope.onRestaurantTouch = function(restaurant) {
@@ -67,8 +57,12 @@ angular.module('groupeat.controllers.restaurants', [
     })
     .then(function() {
       Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
-      $state.go('restaurant-menu', {restaurantId: restaurant.id});
+      $state.go('app.restaurant-menu', {restaurantId: restaurant.id});
     });
   };
+
+  $scope.$on('$ionicView.afterEnter', function() {
+    $scope.onReload();
+  });
 
 });
