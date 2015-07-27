@@ -41,38 +41,14 @@
 
 
 						<div class="item-sub" ng-class="{'is-active' : address.name == 'other'}">
-							<label
+							<label ng-repeat="predifinedAddress in predifinedAddresses track by $index"
 								class="item-accordion item item-radio"
 								ng-class="
-									{'checked': address.other == 'foyer',
+									{'checked': address.other == $index,
 									 'is-active' : address.name == 'other'}">
-								<input type="radio" value="foyer" ng-model="address.other" name="other">
+								<input type="radio" value="{{$index}}" ng-model="address.other" name="other">
 								<div class="item-content">
-									Foyer de l'ENSTA ParisTech
-								</div>
-								<i class="radio-icon ion-location"></i>
-					        </label>
-
-					        <label
-					        	class="item-accordion item item-radio"
-					        	ng-class="
-									{'checked': address.other == 'bobar',
-									 'is-active' : address.name == 'other'}">
-								<input type="radio" value="bobar" ng-model="address.other" name="other">
-								<div class="item-content">
-									BôBar
-								</div>
-								<i class="radio-icon ion-location"></i>
-					        </label>
-
-					        <label
-					        	class="item-accordion item item-radio"
-					        	ng-class="
-									{'checked': address.other == 'institut',
-									 'is-active' : address.name == 'other'}">
-								<input type="radio" value="institut" ng-model="address.other" name="other">
-								<div class="item-content">
-									Institut d'Optique
+									{{predifinedAddress.details}}
 								</div>
 								<i class="radio-icon ion-location"></i>
 					        </label>
@@ -82,7 +58,14 @@
 				</div>
 
 				<div class="display-address">
-					<p>Vous serez livré à : <b>ENSTA ParisTech</b></p>
+					<p>Vous serez livré à : 
+						<b ng-if="address.name === 'preset'">
+							{{presetAddress.residency}} <small>{{presetAddress.details}}</small>
+						</b>
+						<b ng-if="address.name !== 'preset'">
+							{{predifinedAddresses[address.other].details}}
+						</b>
+					</p>
 				</div>
 			</div>
 		</ion-slide>

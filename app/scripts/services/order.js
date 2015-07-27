@@ -182,7 +182,7 @@ angular.module('groupeat.services.order', [
 	},
 
 	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice) {
-		currentOrder.groupOrderId = id;
+		requestBody.id = id;
 		currentOrder.endingAt = date;
 		currentOrder.groupOrderDiscount = discount;
 		currentOrder.currentDiscount = discount;

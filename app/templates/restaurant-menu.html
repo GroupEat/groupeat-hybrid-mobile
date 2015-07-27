@@ -24,11 +24,11 @@
     <div id="discount-placeholder">
       <div class="background" ng-style="{'background-image' : 'url('+ restaurant.pictureUrl +')'}">
         <div class="content" id="discount-placeholder-content">
-          <div class="discount" ng-show="currentOrder.currentDiscount">
+          <div class="discount" ng-show="isNewOrder.value">
             <h4>-{{ currentOrder.currentDiscount | number : 0 }}<small>%</small></h4>
             <p class="small-title">Discount sur toutes les Pizzas</p>
           </div>
-          <div class="food-rush" ng-hide="currentOrder.currentDiscount">
+          <div class="food-rush" ng-hide="isNewOrder.value">
             <h3 class="time-value">{{foodRushTime.value}}:00</h3>
             <h5>{{ 'howLongFoodRush' | translate }} <b>Food Rush</b> ?</h5>
             <div class="item range range-assertive">

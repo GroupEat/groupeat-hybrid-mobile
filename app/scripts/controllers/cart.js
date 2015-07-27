@@ -10,13 +10,19 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order, Address, Credentials, $state) {
+.controller('CartCtrl', function ($scope, $ionicSlideBoxDelegate, Cart, Order, Address, Credentials, $state, PredefinedAddresses) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
     $scope.comment = {value : ''};
     $scope.currentDiscount = Order.getCurrentDiscount();
     $scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
+    PredefinedAddresses.get().then(function(predifinedAddresses) {
+      $scope.predifinedAddresses  = predifinedAddresses; 
+    });
+    Address.get(Credentials.get().id).then(function(address) {
+      $scope.presetAddress = address;
+    });
   });
 
 
@@ -30,7 +36,7 @@ angular.module('groupeat.controllers.cart', [
 
   $scope.address = {
     name: 'preset',
-    other: 'foyer'
+    other: 0
   };
 
   $scope.activeButton = $scope.confirmButtons[0];
@@ -45,26 +51,26 @@ angular.module('groupeat.controllers.cart', [
       $ionicSlideBoxDelegate.slide(1);
     } else {
       if($scope.address.name === 'preset') {
-        Address.get(Credentials.get().id).then(function(address) {
-          var requestDetails = Address.getAddressFromResidencyInformation(address.residency);
-          Order.setStreet(requestDetails.street);
-          Order.setLatitude(requestDetails.latitude);
-          Order.setLongitude(requestDetails.longitude);
-          Order.setDetails(address.details);
-          Order.setComment($scope.comment.value);
-          var requestProducts = {};
-          angular.forEach(Cart.getProducts(), function(product) {
-              requestProducts[product.id] = product.quantity;
-          });
-          Order.setProductFormats(requestProducts);
-          Order.save().then(function() {
-            $state.go('app.group-orders');
-          });
-        });
-
+        var requestDetails = Address.getAddressFromResidencyInformation($scope.presetAddress.residency);
+        Order.setStreet(requestDetails.street);
+        Order.setLatitude(requestDetails.latitude);
+        Order.setLongitude(requestDetails.longitude);
+        Order.setDetails($scope.presetAddress.details);
       } else {
-
+        Order.setStreet($scope.predifinedAddresses[$scope.address.other].street);
+        Order.setLatitude($scope.predifinedAddresses[$scope.address.other].latitude);
+        Order.setLongitude($scope.predifinedAddresses[$scope.address.other].longitude);
+        Order.setDetails($scope.predifinedAddresses[$scope.address.other].details);
       }
+      Order.setComment($scope.comment.value);
+      var requestProducts = {};
+      angular.forEach(Cart.getProducts(), function(product) {
+          requestProducts[product.id] = product.quantity;
+      });
+      Order.setProductFormats(requestProducts);
+      Order.save().then(function() {
+        $state.go('app.group-orders');
+      });
     }
   };
 
