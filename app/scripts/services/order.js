@@ -193,7 +193,6 @@ angular.module('groupeat.services.order', [
 	save = function() {
 		var defer = $q.defer();
 		var resource;
-		console.log(requestBody);
 		if (requestBody.id === null) {
 			resource = $resource(ENV.apiEndpoint+'/orders');
 		}
