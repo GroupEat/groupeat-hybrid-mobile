@@ -71,7 +71,9 @@ angular.module('groupeat.controllers.cart', [
       Order.save()
       .then(function() {
         $state.go('app.group-orders');
+        $scope.modal.hide();
       });
+      // TODO : CATCH ERRORS FROM SAVE ORDER WITH POPUP
     }
   };
 
