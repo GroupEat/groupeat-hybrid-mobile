@@ -27,6 +27,7 @@ angular.module('groupeat.controllers.settings', [
   /*
 	Settings list
 	*/
+	$scope.slideIndex = 0;
   $scope.tabs = [
     {
       id: 0,
@@ -77,6 +78,7 @@ angular.module('groupeat.controllers.settings', [
   */
   $scope.slideTo = function(slideId) {
     $ionicSlideBoxDelegate.slide(slideId);
+    $scope.slideIndex = slideId;
   };
 
 	/*

@@ -1,20 +1,18 @@
-<ion-view ng-init="initCtrl()" title="{{ 'settings' | translate }}" >
+<ion-view ng-init="initCtrl()" id="settings" title="{{ 'settings' | translate }}" >
 
   <ion-nav-buttons side="right">
     <button on-tap="onSave()" class="button button-clear button-positive">{{ 'save' | translate }}</button>
   </ion-nav-buttons>
 
-  <div class="bar bar-subheader">
-    <div class="row">
-      <button ng-repeat="tab in tabs" class="col" on-tap="slideTo({{ tab.id }})">
+  <div class="bar bar-subheader bar-tab" ng-class="{'second-selected' : slideIndex == 1}">
+      <button ng-repeat="tab in tabs" ng-class="{'active' : slideIndex == tab.id}" on-tap="slideTo({{ tab.id }})">
         {{ tab.title | translate }}
       </button>
-    </div>
   </div>
 
   <ion-slide-box disable-scroll="true" show-pager="false">
     <ion-slide ng-repeat="tab in tabs">
-      <ion-content class="full-height">
+      <ion-content class="full-height has-sub-header">
         <ng-include src="tab.url"/>
       </ion-content>
     </ion-slide>
