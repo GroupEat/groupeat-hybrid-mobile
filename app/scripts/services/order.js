@@ -182,6 +182,7 @@ angular.module('groupeat.services.order', [
 
 	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice) {
 		requestBody.id = id;
+		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
 		currentOrder.groupOrderDiscount = discount;
 		currentOrder.currentDiscount = discount;
@@ -193,7 +194,7 @@ angular.module('groupeat.services.order', [
 	save = function() {
 		var defer = $q.defer();
 		var resource;
-		if (requestBody.id === null) {
+		if (currentOrder.groupOrderId === null) {
 			resource = $resource(ENV.apiEndpoint+'/orders');
 		}
 		else {
