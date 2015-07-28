@@ -4,7 +4,10 @@
 		{{ 'deliveryAddress' | translate }}
 	</div>
 	<label class="item item-input item-select">
-		<select ng-model="customer.residency" ng-options="residency | translate for residency in residencies">
+        <div class="input-label">
+          {{ 'residency' | translate }} :
+        </div>
+        <select ng-model="customer.residency" ng-options="residency | translate for residency in residencies">
 			<option value="" selected disabled>{{ 'residency' | translate }}</option>
 		</select>
 	</label>
