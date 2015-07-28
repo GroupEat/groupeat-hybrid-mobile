@@ -1,35 +1,49 @@
 'use strict';
+
 angular.module('groupeat.services.authentication', [
   'constants',
   'groupeat.services.backend-utils',
   'ngResource'
-]).factory('Authentication', function ($filter, $q, $resource, BackendUtils, ENV) {
-  var tokenResource = $resource(ENV.apiEndpoint + '/auth/token', null, { 'getToken': { method: 'PUT' } }), passwordResource = $resource(ENV.apiEndpoint + '/auth/password', null, {
-      'update': { method: 'PUT' },
-      'reset': { method: 'DELETE' }
-    });
+])
+
+.factory('Authentication', function ($filter, $q, $resource, BackendUtils, ENV) {
+
+  var authentificationResource = $resource(ENV.apiEndpoint + '/auth/token', null, {
+    'authentify': { method: 'PUT' }
+  }),
+
+  passwordResource = $resource(ENV.apiEndpoint + '/auth/password', null, {
+    'update': { method: 'PUT' },
+    'reset': { method: 'DELETE' }
+  });
+
   var $translate = $filter('translate');
+
   var
-    /**
+  /**
   * @ngdoc function
-  * @name Authentication#getToken
+  * @name Authentication#authentify
   * @methodOf Authentication
   *
   * @description
   * Returns a promise for fetching the user token from the backend
   *
-  * @param {} credentials - A javascript object containing at least the email and password of the user
+  * @param {Object} credentials - A javascript object containing at least the email and password of the user
+  * @return {String} a javascript object containing the user token, id and activation status
   */
-    getToken = function (credentials) {
-      var deferred = $q.defer();
-      tokenResource.getToken(null, credentials).$promise.then(function (response) {
-        deferred.resolve(response);
-      }).catch(function (errorResponse) {
-        deferred.reject(BackendUtils.errorMsgFromBackend(errorResponse));
-      });
-      return deferred.promise;
-    },
-    /**
+  authentify = function (credentials) {
+    var deferred = $q.defer();
+    authentificationResource.authentify(null, credentials).$promise
+    .then(function(response) {
+      deferred.resolve(response.data);
+    })
+    .catch(function(errorResponse) {
+      deferred.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+    });
+    return deferred.promise;
+  },
+
+  /**
   * @ngdoc function
   * @name Authentication#resetPassword
   * @methodOf Authentication
@@ -41,16 +55,19 @@ angular.module('groupeat.services.authentication', [
   *
   * @param {String} email - The email of the customer
   */
-    resetPassword = function (email) {
-      var deferred = $q.defer();
-      passwordResource.reset(null, { email: email }).$promise.then(function () {
-        deferred.resolve();
-      }).catch(function (errorResponse) {
-        deferred.reject(BackendUtils.errorKeyFromBackend(errorResponse));
-      });
-      return deferred.promise;
-    },
-    /**
+  resetPassword = function (email) {
+    var deferred = $q.defer();
+    passwordResource.reset(null, { email: email }).$promise
+    .then(function () {
+      deferred.resolve();
+    })
+    .catch(function (errorResponse) {
+      deferred.reject(BackendUtils.errorKeyFromBackend(errorResponse));
+    });
+    return deferred.promise;
+  },
+
+  /**
   * @ngdoc function
   * @name Authentication#updatePassword
   * @methodOf Authentication
@@ -66,25 +83,28 @@ angular.module('groupeat.services.authentication', [
   *
   * @param {Object} authenticationParams - Authentication params (possibly with oldPassword, newPassword and email properties)
   */
-    updatePassword = function (authenticationParams) {
-      var deferred = $q.defer();
-      if (!authenticationParams.oldPassword && !authenticationParams.newPassword) {
+  updatePassword = function (authenticationParams) {
+    var deferred = $q.defer();
+    if (!authenticationParams.oldPassword && !authenticationParams.newPassword) {
+      deferred.resolve();
+    } else if (authenticationParams.oldPassword && !authenticationParams.newPassword) {
+      deferred.reject($translate('newPasswordNotProvided'));
+    } else if (authenticationParams.newPassword && !authenticationParams.oldPassword) {
+      deferred.reject($translate('oldPasswordNotProvided'));
+    } else {
+      passwordResource.update(null, authenticationParams).$promise
+      .then(function () {
         deferred.resolve();
-      } else if (authenticationParams.oldPassword && !authenticationParams.newPassword) {
-        deferred.reject($translate('newPasswordNotProvided'));
-      } else if (authenticationParams.newPassword && !authenticationParams.oldPassword) {
-        deferred.reject($translate('oldPasswordNotProvided'));
-      } else {
-        passwordResource.update(null, authenticationParams).$promise.then(function () {
-          deferred.resolve();
-        }).catch(function (errorResponse) {
-          deferred.reject(BackendUtils.errorMsgFromBackend(errorResponse));
-        });
-      }
-      return deferred.promise;
-    };
+      })
+      .catch(function (errorResponse) {
+        deferred.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+      });
+    }
+    return deferred.promise;
+  };
+
   return {
-    getToken: getToken,
+    authentify: authentify,
     resetPassword: resetPassword,
     updatePassword: updatePassword
   };

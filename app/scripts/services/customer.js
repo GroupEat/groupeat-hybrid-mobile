@@ -57,9 +57,11 @@ angular.module('groupeat.services.customer', [
   */
   save = function (requestBody) {
     var defer = $q.defer();
-    resource.save(null, requestBody).$promise.then(function (response) {
-      defer.resolve(response);
-    }).catch(function (errorResponse) {
+    resource.save(null, requestBody).$promise
+    .then(function (response) {
+      defer.resolve(response.data);
+    })
+    .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;
