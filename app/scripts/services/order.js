@@ -8,8 +8,7 @@ angular.module('groupeat.services.order', [
 
 .service('Order', function(ENV, $q, $resource, BackendUtils, _) {
 
-	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
-	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
+	var fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
 	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant');
 
 	var
@@ -193,7 +192,15 @@ angular.module('groupeat.services.order', [
 
 	save = function() {
 		var defer = $q.defer();
-		resource.save(null, requestBody).$promise
+		var resource;
+		console.log(requestBody);
+		if (requestBody.id === null) {
+			resource = $resource(ENV.apiEndpoint+'/orders');
+		}
+		else {
+			resource = $resource(ENV.apiEndpoint+'/groupOrders/' + requestBody.id + '/orders');
+		}
+		resource.save(requestBody).$promise
 		.then(function(response) {
 			defer.resolve(response);
 		})
@@ -218,6 +225,7 @@ angular.module('groupeat.services.order', [
 
 	get = function(orderId) {
 		var defer = $q.defer();
+		var resource = $resource(ENV.apiEndpoint+'/orders/:id');
 		resource.get({id: orderId}).$promise
 		.then(function(response) {
 			defer.resolve(response.data);
