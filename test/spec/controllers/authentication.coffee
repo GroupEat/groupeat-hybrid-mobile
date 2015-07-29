@@ -129,7 +129,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it 'the validateForm promise should be resolved if both fields are valid', ->
       # Needed because submitting will trigger the HTTP request
-      sandbox.stub(Authentication, 'authentify').returns $q.defer().promise
+      sandbox.stub(Authentication, 'authenticate').returns $q.defer().promise
       form = submitFormWithViewValues('campusemail@ensta.fr', 'longer')
       ElementModifier.validate(form).should.be.fulfilled
       $timeout.flush()
@@ -149,7 +149,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup.error.should.have.been.called
 
     it 'if there is no client side validation error but an error from the server, an error dialog should be displayed', ->
-      sandbox.stub(Authentication, 'authentify').returns $q.reject()
+      sandbox.stub(Authentication, 'authenticate').returns $q.reject()
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
@@ -163,7 +163,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Popup.error.should.have.been.called
 
     it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
-      sandbox.stub(Authentication, 'authentify').returns $q.when({})
+      sandbox.stub(Authentication, 'authenticate').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
@@ -210,7 +210,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Customer.save.should.have.not.been.called
 
     it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
-      sandbox.stub(Customer, 'save').returns $q.reject()
+      content = 'content'
+      sandbox.stub(Customer, 'save').returns $q.reject(content)
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub Popup, 'error'
 
@@ -218,7 +219,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitRegisterForm scope.form
       scope.$digest()
 
-      Popup.error.should.have.been.called
+      Popup.error.should.have.been.calledWithExactly content
       Customer.save.should.been.called
 
     it "if there is no client side validation error, no server side error, DeviceAssistant.register should be called and an error dialog should be displayed", ->

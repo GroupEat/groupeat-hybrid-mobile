@@ -55,7 +55,7 @@ angular.module('groupeat.controllers.authentication', [
       return ElementModifier.validate(form);
     })
     .then(function() {
-      return Authentication.authentify($scope.user);
+      return Authentication.authenticate($scope.user);
     })
     .then(function (credentials) {
       Credentials.set(credentials.id, credentials.token);

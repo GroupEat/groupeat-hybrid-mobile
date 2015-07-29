@@ -8,8 +8,8 @@ angular.module('groupeat.services.authentication', [
 
 .factory('Authentication', function ($filter, $q, $resource, BackendUtils, ENV) {
 
-  var authentificationResource = $resource(ENV.apiEndpoint + '/auth/token', null, {
-    'authentify': { method: 'PUT' }
+  var authenticationResource = $resource(ENV.apiEndpoint + '/auth/token', null, {
+    'authenticate': { method: 'PUT' }
   }),
 
   passwordResource = $resource(ENV.apiEndpoint + '/auth/password', null, {
@@ -22,7 +22,7 @@ angular.module('groupeat.services.authentication', [
   var
   /**
   * @ngdoc function
-  * @name Authentication#authentify
+  * @name Authentication#authenticate
   * @methodOf Authentication
   *
   * @description
@@ -31,9 +31,9 @@ angular.module('groupeat.services.authentication', [
   * @param {Object} credentials - A javascript object containing at least the email and password of the user
   * @return {String} a javascript object containing the user token, id and activation status
   */
-  authentify = function (credentials) {
+  authenticate = function (credentials) {
     var deferred = $q.defer();
-    authentificationResource.authentify(null, credentials).$promise
+    authenticationResource.authenticate(null, credentials).$promise
     .then(function(response) {
       deferred.resolve(response.data);
     })
@@ -104,7 +104,7 @@ angular.module('groupeat.services.authentication', [
   };
 
   return {
-    authentify: authentify,
+    authenticate: authenticate,
     resetPassword: resetPassword,
     updatePassword: updatePassword
   };
