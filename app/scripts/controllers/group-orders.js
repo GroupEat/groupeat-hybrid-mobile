@@ -8,11 +8,10 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.order',
-  'groupeat.services.popup',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, Customer, Geolocation, GroupOrder, Network, Order, Popup) {
+.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, Customer, Geolocation, GroupOrder, Network, Order) {
 
   Analytics.trackView('Group Orders');
 
@@ -44,9 +43,6 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.$broadcast('scroll.refreshComplete');
     });
   };
-
-  Popup.confirm('Oups...','Votre compte à besoin d\'être confirmé avant de pouvoir passer une commande.');
-
 
   $scope.onJoinOrderTouch = function(groupOrder) {
     Customer.checkActivatedAccount()
