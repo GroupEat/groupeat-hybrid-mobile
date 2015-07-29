@@ -44,7 +44,6 @@ angular.module('groupeat.controllers.group-orders', [
     });
   };
 
-
   $scope.onJoinOrderTouch = function(groupOrder) {
     Customer.checkActivatedAccount()
     .then(function() {
