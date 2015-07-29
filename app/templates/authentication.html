@@ -1,4 +1,4 @@
-<ion-view hide-nav-bar="true" ng-controller="AuthenticationCtrl">
+<ion-view hide-nav-bar="true">
 
 	<ion-slide-box id="intro-slides" on-slide-changed="slideHasChanged($index)" show-pager="true" class="full-height">
 		<ion-slide>
@@ -23,39 +23,41 @@
 			<div class="content">
 				<div class="logo">
 					<img src="images/logo-groupeat.png" alt="">
-					<h4 class="baseline">Le prix du groupe, à la maison !</h4>
+					<h4 class="baseline">Le prix du groupe, à la maison ! {{ registering }}</h4>
 				</div>
 				<div class="row">
 					<div class="col">
-						<div class="group-input group-two">
-							<div class="input">
-								<input type="text" placeholder="Adresse Email" ng-model="email">
-							</div>
-							<div class="input">
-								<input type="password" placeholder="Mot de Passe" ng-model="password">
-							</div>
-						</div>
-						<div class="flip-container" ng-class="{'is-flipped' : !isAuthSignup}">
-							<div class="flip">
-								<div class="front">
-									<a ui-sref="signup" class="btn btn-bloc btn-lg btn-green mg-top-20">
-										Créer mon compte !
-									</a>
+						<form name="form" ng-submit="submitForm(form, registering);" ng-submit-force="true" novalidate>
+							<div class="group-input group-two">
+								<div class="input">
+									<input name="email" type="email" placeholder="Adresse Email" ng-model="user.email" required ge-campus-email>
 								</div>
-								<div class="back">
-									<a ui-sref="app.group-orders" class="btn btn-bloc btn-lg btn-red mg-top-20">
-										Me connecter !
-									</a>
+								<div class="input">
+									<input name="password" type="password" placeholder="Mot de Passe" ng-model="user.password" required ng-minlength="6">
 								</div>
 							</div>
-						</div>
-						<p class="mute-link mg-top-20" on-tap="isAuthSignup = !isAuthSignup">
-							<span ng-show="isAuthSignup === true">
-								Je posséde déjà un compte.
+							<div class="flip-container" ng-class="{'is-flipped' : !registering}">
+								<div class="flip">
+									<div class="front">
+										<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20">
+											Créer mon compte !
+										</button>
+									</div>
+									<div class="back">
+										<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20">
+											Me connecter !
+										</button>
+									</div>
+								</div>
+							</div>
+						</form>
+						<p class="mute-link mg-top-20" on-tap="registering = !registering">
+							<span ng-show="registering">
+								Je possède déjà un compte.
 								<b class="color-red">Me connecter !</b>
 							</span>
-							<span ng-show="isAuthSignup === false">
-								Je ne posséde pas de compte.
+							<span ng-show="!registering">
+								Je ne possède pas de compte.
 								<b class="color-green">M'inscrire !</b>
 							</span>
 						</p>

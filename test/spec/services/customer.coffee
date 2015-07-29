@@ -64,7 +64,10 @@ describe 'Service: Customer', ->
 
     it 'should return a fulfilled promise with the user id and the token when the server responds normally', ->
       requestBody = {}
-      response = {id: 1, token: 'token'}
+      response =
+        data:
+          id: 1
+          token: 'token'
       $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(response)
       customer = Customer.save(requestBody)
       customer.should.eventually.have.property('id').and.equal(1)

@@ -30,16 +30,18 @@ describe 'Service: Authentication', ->
   afterEach ->
     sandbox.restore()
 
-  describe 'Authentication#getToken', ->
+  describe 'Authentication#authenticate', ->
 
-    it 'should have a getToken property', ->
-      Authentication.should.have.property('getToken')
+    it 'should have a authenticate property', ->
+      Authentication.should.have.property('authenticate')
 
     it 'should return a fulfilled promise with the response including the token when the server responds properly', ->
       credentials = 'credentials'
-      response = {token: 'token'}
+      response =
+        data:
+          token: 'token'
       $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(response)
-      Authentication.getToken(credentials).should.eventually.have.property('token')
+      Authentication.authenticate(credentials).should.eventually.have.property('token')
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
@@ -47,7 +49,7 @@ describe 'Service: Authentication', ->
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       credentials = 'credentials'
       $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
-      Authentication.getToken(credentials).should.be.rejectedWith(errorMsgFromBackend)
+      Authentication.authenticate(credentials).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
 
   describe 'Authentication#resetPassword', ->

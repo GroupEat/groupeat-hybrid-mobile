@@ -28,7 +28,7 @@
     "angular-mocks": "1.3.13",
     "angular-scenario": "1.3.13",
     "ionic-service-core": "~0.1.7",
-    "ionic-service-analytics": "~0.2.0"
+    "ionic-service-analytics": "0.2.1"
   },
   "resolutions": {
     "angular": "1.3.13"
