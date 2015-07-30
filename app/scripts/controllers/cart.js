@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.cart', [
+  'ionic',
   'pascalprecht.translate',
   'groupeat.services.address',
   'groupeat.services.analytics',
@@ -19,7 +20,7 @@ angular.module('groupeat.controllers.cart', [
     $scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
     PredefinedAddresses.get()
     .then(function(predifinedAddresses) {
-      $scope.predifinedAddresses  = predifinedAddresses;
+      $scope.predifinedAddresses = predifinedAddresses;
     });
     Address.get(Credentials.get().id)
     .then(function(address) {
@@ -70,6 +71,8 @@ angular.module('groupeat.controllers.cart', [
       Order.setProductFormats(requestProducts);
       Order.save()
       .then(function() {
+        Order.resetCurrentOrder();
+        Cart.reset();
         $state.go('app.group-orders');
         $scope.modal.hide();
       });

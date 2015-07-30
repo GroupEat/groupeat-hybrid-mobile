@@ -27,11 +27,11 @@ angular.module('groupeat.services.order', [
 		'foodRushDurationInMinutes': null,
 		'productFormats': {},
 		'deliveryAddress': {
-	        'street': null,
-	        'details': null,
-	        'latitude': null,
-	        'longitude': null
-	    },
+			'street': null,
+			'details': null,
+			'latitude': null,
+			'longitude': null
+		},
 		'comment': null
 	},
 
@@ -171,11 +171,11 @@ angular.module('groupeat.services.order', [
 			'foodRushDurationInMinutes': null,
 			'productFormats': {},
 			'deliveryAddress': {
-		        'street': null,
-		        'details': null,
-		        'latitude': null,
-		        'longitude': null
-		    },
+				'street': null,
+				'details': null,
+				'latitude': null,
+				'longitude': null
+			},
 			'comment': null
 		};
 	},
@@ -237,16 +237,16 @@ angular.module('groupeat.services.order', [
 	},
 
 	queryForGroupOrder = function(customerId, groupOrderId) {
-    var defer = $q.defer();
-    fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
-    .then(function(response) {
-      defer.resolve(response.data);
-    })
-    .catch(function() {
-      defer.reject();
-    });
-    return defer.promise;
-  },
+	var defer = $q.defer();
+	fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
+	.then(function(response) {
+		defer.resolve(response.data);
+	})
+	.catch(function() {
+		defer.reject();
+	});
+	return defer.promise;
+	},
 
 	queryForCustomer = function(customerId) {
 		var defer = $q.defer();
@@ -254,7 +254,7 @@ angular.module('groupeat.services.order', [
 		.then(function(response) {
 			var orders = [], oldOrders = [];
 			_.forEach(response.data, function(rawOrder) {
-        var order = {'discountedPrice': rawOrder.discountedPrice/100};
+		var order = {'discountedPrice': rawOrder.discountedPrice/100};
 				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
 				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
 				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
@@ -267,8 +267,8 @@ angular.module('groupeat.services.order', [
 				{
 					orders.push(order);
 				}
-      });
-      defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
+			});
+		defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
 		})
 		.catch(function() {
 			defer.reject();
