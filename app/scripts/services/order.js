@@ -41,7 +41,7 @@ angular.module('groupeat.services.order', [
 
 	isNewOrder = function() {
 		var response ;
-		if (currentOrder.groupOrderId === null) {
+		if (!currentOrder.groupOrderId) {
 			response = true;
 		}
 		else {
