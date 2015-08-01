@@ -87,8 +87,8 @@ angular.module('groupeat.services.order', [
 	/*
 	The next function compute the discount with the discount policy
 	Being linear piecewise, we just need the two values given by the
-	restaurant between which the total price of cart is. Then, with 
-	some maths, we can compute the discount for this total price. 
+	restaurant between which the total price of cart is. Then, with
+	some maths, we can compute the discount for this total price.
 	Formula :
 	y = A.(x+Xgo) + y1 - A.x1
 	with A = (y1 - y2)/(x1 - x2), y the unknown discount,
@@ -106,7 +106,7 @@ angular.module('groupeat.services.order', [
 
 	updateCurrentDiscount = function (totalPrice) {
 		/*
-		Algorithm has to be improved : function of last current discount, 
+		Algorithm has to be improved : function of last current discount,
 		we know the interval in which the total price must be...
 		*/
 		if (totalPrice !== 0) {
@@ -142,7 +142,7 @@ angular.module('groupeat.services.order', [
 			setCurrentDiscount(newDiscount);
 		}
 		else {
-			if(currentOrder.groupOrderId === null) {
+			if(!currentOrder.groupOrderId) {
 				setCurrentDiscount(0);
 			}
 			else {
