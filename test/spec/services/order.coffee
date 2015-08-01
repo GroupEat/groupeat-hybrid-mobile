@@ -26,13 +26,10 @@ describe 'Service: Order', ->
     it '#getRequestBody : should return request body', ->
       testObject = Order.getRequestBody()
       expect(testObject).not.to.equal(null)
-      testObject.should.have.property('groupOrderId')
+      testObject.should.have.property('id')
       testObject.should.have.property('foodRushDurationInMinutes')
       testObject.should.have.property('productFormats')
-      testObject.should.have.property('street')
-      testObject.should.have.property('details')
-      testObject.should.have.property('latitude')
-      testObject.should.have.property('longitude')
+      testObject.should.have.property('deliveryAddress')
       testObject.should.have.property('comment')
       expect(Order).not.to.equal(null)
 
@@ -63,10 +60,10 @@ describe 'Service: Order', ->
       expect(testRequestBody.groupOrderId).to.equal('123')
       expect(testRequestBody.foodRushDurationInMinutes).to.equal(40)
       expect(testRequestBody.productFormats.key).to.equal('value')
-      expect(testRequestBody.street).to.equal('5 rue michelet')
-      expect(testRequestBody.details).to.equal('2eme etage cote cour')
-      expect(testRequestBody.latitude).to.equal(48)
-      expect(testRequestBody.longitude).to.equal(2)
+      expect(testRequestBody.deliveryAddress.street).to.equal('5 rue michelet')
+      expect(testRequestBody.deliveryAddress.details).to.equal('2eme etage cote cour')
+      expect(testRequestBody.deliveryAddress.latitude).to.equal(48)
+      expect(testRequestBody.deliveryAddress.longitude).to.equal(2)
       expect(testRequestBody.comment).to.equal('pas inintéressant')
 
     it '#currentOrder : should set currentOrder', ->

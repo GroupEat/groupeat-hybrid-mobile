@@ -8,8 +8,7 @@ angular.module('groupeat.services.order', [
 
 .service('Order', function(ENV, $q, $resource, BackendUtils, _) {
 
-	var resource = $resource(ENV.apiEndpoint+'/orders/:id'),
-	fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
+	var fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
 	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant');
 
 	var
@@ -24,13 +23,15 @@ angular.module('groupeat.services.order', [
 	},
 
 	requestBody = {
-		'groupOrderId': null,
+		'id': null,
 		'foodRushDurationInMinutes': null,
 		'productFormats': {},
-		'street': null,
-		'details': null,
-		'latitude': null,
-		'longitude': null,
+		'deliveryAddress': {
+			'street': null,
+			'details': null,
+			'latitude': null,
+			'longitude': null
+		},
 		'comment': null
 	},
 
@@ -40,7 +41,7 @@ angular.module('groupeat.services.order', [
 
 	isNewOrder = function() {
 		var response ;
-		if (currentOrder.groupOrderId === null) {
+		if (!currentOrder.groupOrderId) {
 			response = true;
 		}
 		else {
@@ -59,16 +60,16 @@ angular.module('groupeat.services.order', [
 		requestBody.productFormats = value;
 	},
 	setStreet = function(value) {
-		requestBody.street = value;
+		requestBody.deliveryAddress.street = value;
 	},
 	setDetails = function(value) {
-		requestBody.details = value;
+		requestBody.deliveryAddress.details = value;
 	},
 	setLatitude = function(value) {
-		requestBody.latitude = value;
+		requestBody.deliveryAddress.latitude = value;
 	},
 	setLongitude = function(value) {
-		requestBody.longitude = value;
+		requestBody.deliveryAddress.longitude = value;
 	},
 
 	setComment = function(value) {
@@ -86,8 +87,8 @@ angular.module('groupeat.services.order', [
 	/*
 	The next function compute the discount with the discount policy
 	Being linear piecewise, we just need the two values given by the
-	restaurant between which the total price of cart is. Then, with 
-	some maths, we can compute the discount for this total price. 
+	restaurant between which the total price of cart is. Then, with
+	some maths, we can compute the discount for this total price.
 	Formula :
 	y = A.(x+Xgo) + y1 - A.x1
 	with A = (y1 - y2)/(x1 - x2), y the unknown discount,
@@ -105,7 +106,7 @@ angular.module('groupeat.services.order', [
 
 	updateCurrentDiscount = function (totalPrice) {
 		/*
-		Algorithm has to be improved : function of last current discount, 
+		Algorithm has to be improved : function of last current discount,
 		we know the interval in which the total price must be...
 		*/
 		if (totalPrice !== 0) {
@@ -141,7 +142,7 @@ angular.module('groupeat.services.order', [
 			setCurrentDiscount(newDiscount);
 		}
 		else {
-			if(currentOrder.groupOrderId === null) {
+			if(!currentOrder.groupOrderId) {
 				setCurrentDiscount(0);
 			}
 			else {
@@ -166,18 +167,21 @@ angular.module('groupeat.services.order', [
 			'remainingCapacity': null
 		};
 		requestBody = {
-			'groupOrderId': null,
+			'id': null,
 			'foodRushDurationInMinutes': null,
 			'productFormats': {},
-			'street': null,
-			'details': null,
-			'latitude': null,
-			'longitude': null,
+			'deliveryAddress': {
+				'street': null,
+				'details': null,
+				'latitude': null,
+				'longitude': null
+			},
 			'comment': null
 		};
 	},
 
 	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice) {
+		requestBody.id = id;
 		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
 		currentOrder.groupOrderDiscount = discount;
@@ -189,7 +193,14 @@ angular.module('groupeat.services.order', [
 
 	save = function() {
 		var defer = $q.defer();
-		resource.save(null, requestBody).$promise
+		var resource;
+		if (currentOrder.groupOrderId === null) {
+			resource = $resource(ENV.apiEndpoint+'/orders');
+		}
+		else {
+			resource = $resource(ENV.apiEndpoint+'/groupOrders/' + requestBody.id + '/orders');
+		}
+		resource.save(requestBody).$promise
 		.then(function(response) {
 			defer.resolve(response);
 		})
@@ -214,6 +225,7 @@ angular.module('groupeat.services.order', [
 
 	get = function(orderId) {
 		var defer = $q.defer();
+		var resource = $resource(ENV.apiEndpoint+'/orders/:id');
 		resource.get({id: orderId}).$promise
 		.then(function(response) {
 			defer.resolve(response.data);
@@ -225,16 +237,16 @@ angular.module('groupeat.services.order', [
 	},
 
 	queryForGroupOrder = function(customerId, groupOrderId) {
-    var defer = $q.defer();
-    fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
-    .then(function(response) {
-      defer.resolve(response.data);
-    })
-    .catch(function() {
-      defer.reject();
-    });
-    return defer.promise;
-  },
+	var defer = $q.defer();
+	fromGroupOrderResource.get({customerId: customerId, groupOrderId: groupOrderId}).$promise
+	.then(function(response) {
+		defer.resolve(response.data);
+	})
+	.catch(function() {
+		defer.reject();
+	});
+	return defer.promise;
+	},
 
 	queryForCustomer = function(customerId) {
 		var defer = $q.defer();
@@ -242,7 +254,7 @@ angular.module('groupeat.services.order', [
 		.then(function(response) {
 			var orders = [], oldOrders = [];
 			_.forEach(response.data, function(rawOrder) {
-        var order = {'discountedPrice': rawOrder.discountedPrice/100};
+		var order = {'discountedPrice': rawOrder.discountedPrice/100};
 				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
 				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
 				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
@@ -255,8 +267,8 @@ angular.module('groupeat.services.order', [
 				{
 					orders.push(order);
 				}
-      });
-      defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
+			});
+		defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
 		})
 		.catch(function() {
 			defer.reject();

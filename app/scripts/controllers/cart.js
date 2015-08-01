@@ -2,16 +2,30 @@
 
 angular.module('groupeat.controllers.cart', [
   'ionic',
+  'pascalprecht.translate',
+  'groupeat.services.address',
+  'groupeat.services.analytics',
   'groupeat.services.cart',
-  'groupeat.services.order'
+  'groupeat.services.credentials',
+  'groupeat.services.order',
+  'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, Cart, Order) {
+.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
+    $scope.comment = {value : ''};
     $scope.currentDiscount = Order.getCurrentDiscount();
     $scope.foodRushTime.value = Order.getFoodRushTime() || 0 ;
+    PredefinedAddresses.get()
+    .then(function(predifinedAddresses) {
+      $scope.predifinedAddresses = predifinedAddresses;
+    });
+    Address.get(Credentials.get().id)
+    .then(function(address) {
+      $scope.presetAddress = address;
+    });
   });
 
   $scope.slideIndex = 0;
@@ -23,7 +37,7 @@ angular.module('groupeat.controllers.cart', [
 
   $scope.address = {
     name: 'preset',
-    other: 'foyer'
+    other: 0
   };
 
   $scope.activeButton = $scope.confirmButtons[0];
@@ -37,7 +51,32 @@ angular.module('groupeat.controllers.cart', [
     if($scope.slideIndex === 0) {
       $ionicSlideBoxDelegate.slide(1);
     } else {
-      //Confirm Order
+      if($scope.address.name === 'preset') {
+        var requestDetails = Address.getAddressFromResidencyInformation($scope.presetAddress.residency);
+        Order.setStreet(requestDetails.street);
+        Order.setLatitude(requestDetails.latitude);
+        Order.setLongitude(requestDetails.longitude);
+        Order.setDetails($scope.presetAddress.details);
+      } else {
+        Order.setStreet($scope.predifinedAddresses[$scope.address.other].street);
+        Order.setLatitude($scope.predifinedAddresses[$scope.address.other].latitude);
+        Order.setLongitude($scope.predifinedAddresses[$scope.address.other].longitude);
+        Order.setDetails($scope.predifinedAddresses[$scope.address.other].details);
+      }
+      Order.setComment($scope.comment.value);
+      var requestProducts = {};
+      angular.forEach(Cart.getProducts(), function(product) {
+          requestProducts[product.id] = product.quantity;
+      });
+      Order.setProductFormats(requestProducts);
+      Order.save()
+      .then(function() {
+        Order.resetCurrentOrder();
+        Cart.reset();
+        $state.go('app.group-orders');
+        $scope.modal.hide();
+      });
+      // TODO : CATCH ERRORS FROM SAVE ORDER WITH POPUP
     }
   };
 
