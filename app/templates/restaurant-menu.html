@@ -112,7 +112,7 @@
               <ng-pluralize count="cart.getTotalQuantity()" when="{'0': 'Pizza', '1': 'Pizza', 'other': 'Pizzas'}" ></ng-pluralize>
             </div>
             <div class="pull-right">
-              <b>{{ cart.getTotalPrice() | number : 2}}</b>€
+              <strike ng-show="(currentOrder.currentDiscount || currentOrder.groupOrderDiscount) && cart.getTotalPrice()" class="color-red">{{ cart.getTotalPrice() | number : 2 }}€</strike> <b>{{ cart.getTotalPrice()*(100 - currentOrder.currentDiscount)/100 | number : 2}}</b>€
             </div>
           </div>
         </div>
