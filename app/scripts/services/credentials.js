@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('groupeat.services.credentials',
-  ['LocalStorageModule']
-)
+angular.module('groupeat.services.credentials', [
+  'LocalStorageModule',
+  'ui.router'
+])
 
-.factory('Credentials', function (localStorageService, $state) {
+.factory('Credentials', function ($state, localStorageService) {
 
   var
   /**
@@ -49,6 +50,7 @@ angular.module('groupeat.services.credentials',
   get = function () {
     if (!localStorageService.get('id') || !localStorageService.get('token')) {
       $state.go('authentication');
+      return undefined;
     }
     return {
       id: localStorageService.get('id'),

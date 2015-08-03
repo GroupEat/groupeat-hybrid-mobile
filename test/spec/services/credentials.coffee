@@ -5,7 +5,7 @@ describe 'Service: Credentials', ->
     module 'groupeat.services.credentials'
     module 'templates'
 
-  $httpBackend = Credentials = scope = sandbox = localStorageService = mockLocalStorage = {}
+  $httpBackend = Credentials = scope = sandbox = localStorageService = $state = mockLocalStorage = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -15,6 +15,7 @@ describe 'Service: Credentials', ->
       $httpBackend = $injector.get('$httpBackend')
       Credentials = $injector.get('Credentials')
       localStorageService = $injector.get('localStorageService')
+      $state = $injector.get('$state')
       sandbox.stub(localStorageService, 'get', (key) ->
         return mockLocalStorage[key]
       )
@@ -24,12 +25,15 @@ describe 'Service: Credentials', ->
       sandbox.stub(localStorageService, 'remove', (key) ->
         delete mockLocalStorage[key]
       )
+      sandbox.stub($state, 'go')
 
   afterEach ->
     sandbox.restore()
     mockLocalStorage = {}
 
   it 'should initially return undefined when getting the customer credentials', ->
+    Credentials.get()
+    $state.go.should.have.been.called.with.calledWithExactly('authentication')
     expect(Credentials.get()).to.be.undefined
 
   it 'should return credentials when they were previously set', ->

@@ -1,6 +1,6 @@
 describe 'Service: HttpProviderInterceptor', ->
 
-  HttpProviderInterceptor = Credentials = scope = sandbox = $http = $httpBackend = ENV = {}
+  HttpProviderInterceptor = Credentials = scope = sandbox = $state = $http = $httpBackend = ENV = {}
 
   # Load the controller's module
   beforeEach ->
@@ -20,6 +20,8 @@ describe 'Service: HttpProviderInterceptor', ->
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       ENV = $injector.get('ENV')
       $http = $injector.get('$http')
+      $state = $injector.get('$state')
+      sandbox.stub($state, 'go')
 
   afterEach ->
     sandbox.restore()
