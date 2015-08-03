@@ -72,8 +72,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.onAddProduct = function(product, format) {
 		if ($scope.cart.getTotalQuantity() >= $scope.currentOrder.remainingCapacity) {
 			Popup.error('tooManyProducts');
-		}
-		else {
+		} else {
 			Cart.addProduct(product, format);
 			Order.updateCurrentDiscount($scope.cart.getTotalPrice());
 		}
@@ -105,11 +104,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.toggleGroup = function(group) {
-		if ($scope.isGroupShown(group)) {
-			group.isShown = false;
-		} else {
-			group.isShown = true;
-		}
+		group.isShown = !$scope.isGroupShown(group);
 		$timeout(function() {
 			$ionicScrollDelegate.resize();
 		}, 300);
@@ -122,23 +117,39 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$ionicModal.fromTemplateUrl('templates/modals/cart.html', {
 		scope: $scope,
 		animation: 'slide-in-up'
-	}).then(function(modal) {
+	})
+	.then(function(modal) {
 		$scope.modal = modal;
 	});
+
 	$scope.openCart = function() {
 		Order.setFoodRushTime($scope.foodRushTime.value);
 		$scope.modal.show();
 	};
+
 	$scope.closeCart = function() {
 		$scope.modal.hide();
+	};
+
+	$scope.isDiscountToShow = function () {
+		return ($scope.currentOrder.currentDiscount || $scope.currentOrder.groupOrderDiscount) && $scope.cart.getTotalPrice();
+	};
+
+	$scope.callbackTimer = function() {
+		Popup.alert('foodRushIsOver', 'tooLateToOrder')
+		.then(function() {
+			Cart.reset();
+			Order.resetCurrentOrder();
+			if($scope.modal.isShown())
+			{
+				$scope.closeCart();
+			}
+			$ionicHistory.goBack();
+		});
 	};
 
 	$scope.$on('$ionicView.afterEnter', function() {
 		$scope.onReload();
 	});
-
-	$scope.isDiscountToShow = function () {
-		return ($scope.currentOrder.currentDiscount || $scope.currentOrder.groupOrderDiscount) && $scope.cart.getTotalPrice();
-	};
 
 });
