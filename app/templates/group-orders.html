@@ -17,7 +17,7 @@
     <div class="orders" ng-class="{'single-order' : groupOrders.length == 1}">
       <slick data="groupOrders" ng-if="groupOrders.length" init-onload="true" arrows="false" slides-to-show="1" slides-to-scroll="1" center-mode="{{groupOrders.length == 1 ? false : true}}" center-padding="20px" >
         <div ng-repeat="groupOrder in groupOrders track by $index">
-          <div class="order-card" >
+          <div class="order-card" on-tap="onJoinOrderTouch(groupOrder)" >
             <div class="top" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
               <h3>-{{groupOrder.discountRate}}<span>%</span></h3>
               <div class="time-left">
@@ -62,7 +62,7 @@
       <div class="small-title">
         Rien ne vous intéresse ?
       </div>
-      <h4>{{ 'newOrder' | translate }} !</h4>
+      <h4 ui-sref="app.restaurants">{{ 'newOrder' | translate }} !</h4>
     </div>
   </div>
 </ion-view>
