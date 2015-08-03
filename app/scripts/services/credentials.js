@@ -46,10 +46,16 @@ angular.module('groupeat.services.credentials', [
   * @description
   * Fetches the current customer credentials
   *
+  * @param {Boolean} redirect - Should the function redirect to the authentication state if the credentials information are not defined
+  *                             Default value is true
+  *
   */
-  get = function () {
+  get = function (redirect) {
+    redirect = redirect !== false;
     if (!localStorageService.get('id') || !localStorageService.get('token')) {
-      $state.go('authentication');
+      if (redirect) {
+        $state.go('authentication');
+      }
       return undefined;
     }
     return {
