@@ -20,7 +20,7 @@
 				</div>
 				<div class="col col-no-padding text-right">
 					<span class="price">
-						{{order.price}}
+						{{order.price | number : 2 }}
 					</span>
 				</div>
 			</div>
@@ -38,7 +38,7 @@
 					</span>
 				</div>
 				<div class="col-50 text-right">
-					{{orders.getTotalPrice()}}
+					{{orders.getTotalPrice() | number : 2 }}
 				</div>
 			</div>
 		</div>
@@ -51,8 +51,8 @@
 				</div>
 				<div class="col-50">
 					<div class="discounted text-right">
-						<b class="color-red">-{{discount | number:0}}%</b>
-						<b class="color-green">{{realPrice | number:2}}</b>
+						<b class="color-red">-{{discount | number : 0 }}%</b>
+						<b class="color-green">{{realPrice | number : 2 }}</b>
 					</div>
 				</div>
 			</div>

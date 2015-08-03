@@ -71,10 +71,10 @@
                     <div class="pull-right">
                       <div class="format-price">
                         <span ng-if="!currentOrder.currentDiscount">
-                          <b>{{ format.price }}</b> €
+                          <b>{{ format.price | number : 2 }}</b> €
                         </span>
                         <span ng-if="currentOrder.currentDiscount">
-                          <strike>{{ format.price }}€</strike> <b>{{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}}</b> €
+                          <strike>{{ format.price | number : 2 }}€</strike> <b>{{ format.price*(100-currentOrder.currentDiscount)/100 | number : 2}}</b> €
                         </span>
                       </div>
                     </div>
