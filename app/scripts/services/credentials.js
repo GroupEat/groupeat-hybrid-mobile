@@ -1,7 +1,13 @@
 'use strict';
-angular.module('groupeat.services.credentials', ['LocalStorageModule']).factory('Credentials', function (localStorageService) {
+
+angular.module('groupeat.services.credentials',
+  ['LocalStorageModule']
+)
+
+.factory('Credentials', function (localStorageService, $state) {
+
   var
-    /**
+  /**
   * @ngdoc function
   * @name Credentials#setCredentials
   * @methodOf Credentials
@@ -12,11 +18,12 @@ angular.module('groupeat.services.credentials', ['LocalStorageModule']).factory(
   * @param {String} id - The customer id
   * @param {String} token - The customer user token
   */
-    set = function (id, token) {
-      localStorageService.set('id', id);
-      localStorageService.set('token', token);
-    },
-    /**
+  set = function (id, token) {
+    localStorageService.set('id', id);
+    localStorageService.set('token', token);
+  },
+
+  /**
   * @ngdoc function
   * @name Credentials#reset
   * @methodOf Credentials
@@ -25,11 +32,12 @@ angular.module('groupeat.services.credentials', ['LocalStorageModule']).factory(
   * Resets the customer credentials and removes the authorization HTTP header
   *
   */
-    reset = function () {
-      localStorageService.remove('id');
-      localStorageService.remove('token');
-    },
-    /**
+  reset = function () {
+    localStorageService.remove('id');
+    localStorageService.remove('token');
+  },
+
+  /**
   * @ngdoc function
   * @name Credentials#get
   * @methodOf Credentials
@@ -38,18 +46,20 @@ angular.module('groupeat.services.credentials', ['LocalStorageModule']).factory(
   * Fetches the current customer credentials
   *
   */
-    get = function () {
-      if (!localStorageService.get('id') || !localStorageService.get('token')) {
-        return undefined;
-      }
-      return {
-        id: localStorageService.get('id'),
-        token: localStorageService.get('token')
-      };
+  get = function () {
+    if (!localStorageService.get('id') || !localStorageService.get('token')) {
+      $state.go('authentication');
+    }
+    return {
+      id: localStorageService.get('id'),
+      token: localStorageService.get('token')
     };
+  };
+
   return {
     set: set,
     reset: reset,
     get: get
   };
+
 });
