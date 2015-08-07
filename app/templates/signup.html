@@ -13,10 +13,10 @@
 							<div class="col">
 								<div class="group-input group-two">
 									<div class="input">
-										<input type="text" placeholder="Prenom" ng-model="firstName">
+										<input type="text" placeholder="Prénom" ng-model="user.firstName">
 									</div>
 									<div class="input">
-										<input type="text" placeholder="Nom" ng-model="lastName">
+										<input type="text" placeholder="Nom" ng-model="user.lastName">
 									</div>
 								</div>
 							</div>
@@ -25,7 +25,7 @@
 					<div class="btn-group">
 						<div class="row">
 							<div class="col">
-								<button type="submit" on-tap="slideTo(1)" ng-disabled="!firstName || !lastName" class="btn btn-bloc btn-lg btn-green">
+								<button type="submit" on-tap="slideTo(1)" ng-disabled="!user.firstName || !user.lastName" class="btn btn-bloc btn-lg btn-green">
 									Etape suivante <i class="ion-ios-arrow-thin-right"></i>
 								</button>
 							</div>
@@ -51,7 +51,7 @@
 							</div>
 							<div class="col">
 								<div class="input input-bordered input-tel">
-									<input ui-mask="99-99-99-99-99" type="tel" ng-model="phoneNumber" placeholder="xx-xx-xx-xx-xx">
+									<input ui-mask="9-99-99-99-99" type="tel" ng-model="user.phoneNumber" placeholder="x-xx-xx-xx-xx">
 								</div>
 							</div>
 						</div>
@@ -71,8 +71,8 @@
 								</button>
 							</div>
 							<div class="col">
-								<button type="submit" ng-disabled="!phoneNumber" on-tap="slideTo(2)" class="btn btn-bloc btn-lg btn-green">
-									Etape suivante <i class="ion-ios-arrow-thin-right"></i>
+								<button type="submit" ng-disabled="!user.phoneNumber" on-tap="slideTo(2)" class="btn btn-bloc btn-lg btn-green">
+									Étape suivante <i class="ion-ios-arrow-thin-right"></i>
 								</button>
 							</div>
 						</div>
@@ -95,14 +95,14 @@
 							<div class="col">
 								<div class="group-input group-two">
 									<div class="input input-select">
-										<select ng-model="address">
-											<option value="0">ENSTA ParisTech</option>
-											<option value="1">SupOptique</option>
-											<option value="2">Polytechnique</option>
+										<select ng-model="user.residency">
+											<option value="ENSTAParisTech">{{ 'ENSTAParisTech' | translate }}</option>
+											<option value="supoptique">{{ 'supoptique' | translate }}</option>
+											<option value="polytechnique">{{ 'polytechnique' | translate }}</option>
 										</select>
 									</div>
 									<div class="input">
-										<input type="text" placeholder="Complément d'adresse (optionnel)" ng-model="addressInfo">
+										<input type="text" placeholder="Complément d'adresse (optionnel)" ng-model="user.addressSupplement">
 									</div>
 								</div>
 							</div>
@@ -116,7 +116,7 @@
 								</button>
 							</div>
 							<div class="col">
-								<a on-tap="confirmSignup()" class="btn btn-bloc btn-lg btn-green">
+								<a on-tap="confirmSignup()" ng-disabled="!user.residency" class="btn btn-bloc btn-lg btn-green">
 									Confirmer <i class="ion-checkmark"></i>
 								</a>
 							</div>
