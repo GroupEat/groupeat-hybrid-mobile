@@ -31,13 +31,13 @@ describe 'Service: Address', ->
           latitude: 1
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenPUT(regex).respond(response)
-      Address.update({id: 1}, null).should.be.fulfilled
+      Address.update('1', null).should.be.fulfilled
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenPUT(regex).respond(404 , 'Error')
-      Address.update({id: 1}, null).should.be.rejectedWith('invalidAddressErrorKey')
+      Address.update('1', null).should.be.rejectedWith('invalidAddressErrorKey')
       $httpBackend.flush()
 
     it 'should have a get method', ->

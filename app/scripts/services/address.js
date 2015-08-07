@@ -8,18 +8,33 @@ angular.module('groupeat.services.address', [
 ])
 
 .factory('Address', function ($filter, $resource, $q, BackendUtils, ENV) {
-  
+
   var $translate = $filter('translate');
   var resource = $resource(ENV.apiEndpoint + '/customers/:id/address', null, { 'update': { method: 'PUT' } });
-  
-  var update = function (parameters, requestBody) {
+
+  /**
+  * @ngdoc function
+  * @name Address#update
+  * @methodOf Address
+  *
+  * @description
+  * Patches a customer address and returns a promise
+  * if rejected, an error message in proper locale will be rejected
+  * https://groupeat.fr/docs
+  *
+  * @param {String} customerId the id of the customer to update
+  * @param {Object} requestBody the fields to update for the customer
+  */
+  var update = function (customerId, requestBody) {
     var deferred = $q.defer();
-    resource.update(parameters, requestBody).$promise.then(function (response) {
+    resource.update({id: customerId}, requestBody).$promise
+    .then(function (response) {
       deferred.resolve({
         'residency': getResidencyInformationFromAddress(response.data),
         'details': response.data.details
       });
-    }).catch(function () {
+    })
+    .catch(function () {
       deferred.reject($translate('invalidAddressErrorKey'));
     });
     return deferred.promise;
