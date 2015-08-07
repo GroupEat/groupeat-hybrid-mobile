@@ -6,7 +6,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
+
+  formMock = 'form'
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -14,33 +16,33 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       sandbox = sinon.sandbox.create()
 
-      validator = $injector.get('validator')
-      BackendUtils = $injector.get('BackendUtils')
-      ElementModifier = $injector.get('ElementModifier')
-      ErrorMessageResolver = $injector.get('ErrorMessageResolver')
-      validator.registerDomModifier(ElementModifier.key, ElementModifier)
-      validator.setDefaultElementModifier(ElementModifier.key)
-      validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
+      validator = $injector.get 'validator'
+      BackendUtils = $injector.get 'BackendUtils'
+      ElementModifier = $injector.get 'ElementModifier'
+      ErrorMessageResolver = $injector.get 'ErrorMessageResolver'
+      validator.registerDomModifier ElementModifier.key, ElementModifier
+      validator.setDefaultElementModifier ElementModifier.key
+      validator.setErrorMessageResolver ErrorMessageResolver.resolve
 
-      Authentication = $injector.get('Authentication')
-      Credentials = $injector.get('Credentials')
-      Customer = $injector.get('Customer')
-      Address = $injector.get('Address')
-      Popup = $injector.get('Popup')
-      DeviceAssistant = $injector.get('DeviceAssistant')
+      Address = $injector.get 'Address'
+      Authentication = $injector.get 'Authentication'
+      Credentials = $injector.get 'Credentials'
+      Customer = $injector.get 'Customer'
+      DeviceAssistant = $injector.get 'DeviceAssistant'
+      Network = $injector.get 'Network'
+      Popup = $injector.get 'Popup'
 
-      $httpBackend = $injector.get('$httpBackend')
-      $timeout = $injector.get('$timeout')
+      $httpBackend = $injector.get '$httpBackend'
+      $timeout = $injector.get '$timeout'
       scope = $rootScope.$new()
 
-      $state = $injector.get('$state')
-      sandbox.stub($state, 'go')
+      $state = $injector.get '$state'
 
-      $q = $injector.get('$q')
+      $q = $injector.get '$q'
 
-      $compile = $injector.get('$compile')
+      $compile = $injector.get '$compile'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -51,21 +53,38 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
-  cleanDialog = ->
-    body = angular.element(document.body)
-    dialogContainer = body[0].querySelector('.md-dialog-container')
-    dialogElement = angular.element(dialogContainer)
-    dialogElement.remove()
-    scope.$digest()
-
   afterEach ->
-    cleanDialog()
     sandbox.restore()
 
   describe "Constructor", ->
 
     it 'should initialize as empty objects the different user forms', ->
       scope.user.should.be.empty
+
+  describe 'Authentication#slideHasChanged', ->
+
+    it 'should set the value of scope.slideIndex to the given parameter', ->
+      index = 42
+      scope.slideHasChanged index
+      scope.slideIndex.should.equal index
+
+  describe 'Authentication#submitForm', ->
+
+    it 'should call scope.submitRegisterForm with the given form if the registering parameter is true', ->
+      sandbox.stub scope, 'submitLoginForm'
+      sandbox.stub scope, 'submitRegisterForm'
+      form = 'form'
+      scope.submitForm form, true
+      scope.submitLoginForm.should.not.have.been.called
+      scope.submitRegisterForm.should.have.been.calledWithExactly form
+
+    it 'should call scope.submitLoginForm with the given form otherwise', ->
+      sandbox.stub scope, 'submitLoginForm'
+      sandbox.stub scope, 'submitRegisterForm'
+      form = 'form'
+      scope.submitForm form, false
+      scope.submitLoginForm.should.have.been.calledWithExactly form
+      scope.submitRegisterForm.should.not.have.been.called
 
   describe 'Logging in', ->
 
@@ -137,6 +156,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(ElementModifier, 'validate').returns $q.reject('errorMessage')
       sandbox.stub Popup, 'error'
       sandbox.stub Credentials, 'set'
+      sandbox.stub $state, 'go'
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
@@ -151,6 +171,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
+      sandbox.stub $state, 'go'
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.form)
@@ -165,6 +186,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
+      sandbox.stub $state, 'go'
 
       window.browserTrigger(formElement, 'submit')
       scope.submitLoginForm(scope.loginForm)
@@ -174,63 +196,105 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $state.go.should.have.been.called
       Popup.error.should.have.not.been.called
 
-  describe 'Registering (First Step)', ->
-
-    submitFormWithViewValues = (email, password) ->
-      form = scope.form
-      form.email.$setViewValue(email) if email?
-      form.password.$setViewValue(password) if password?
-      form.passwordConfirm.$setViewValue(passwordConfirm) if passwordConfirm?
-      scope.$apply()
-      window.browserTrigger(formElement, 'submit')
-      return form
+  describe 'Authentication#submitRegisterForm', ->
 
     beforeEach ->
-      formElement = angular.element(
-        '<form name="form" ng-submit="submitForm(form, true)">'+
-        '<input ng-model="user.email" name="email" type="email" ge-campus-email required ge-campus-email-err-type="campusEmail">'+
-        '<input ng-model="user.password" name="password" type="password" required ng-minlength="6">'+
-        '</form>'
-      )
-      $compile(formElement)(scope)
+      scope.user =
+        email: 'medmout@ensta.fr'
+
+    it "should call Network.hasConnectivity", ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.defer().promise
+
+      scope.submitRegisterForm formMock
       scope.$digest()
 
-    it "if there is a validation error, an error dialog should be displayed and Customer.save should not be called", ->
-      sandbox.stub(ElementModifier, 'validate').returns $q.reject()
+      Network.hasConnectivity.should.have.been.called
+
+    it "if Network.hasConnectivity is rejected, Popup.error should be called with the given errorMessage", ->
+      errorMessage = 'noNetwork'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorMessage)
       sandbox.stub Popup, 'error'
-      sandbox.stub Customer, 'save'
 
-      window.browserTrigger(formElement, 'submit')
-      scope.submitRegisterForm scope.form
+      scope.submitRegisterForm formMock
       scope.$digest()
 
-      Popup.error.should.have.been.called
-      Customer.save.should.have.not.been.called
+      Popup.error.should.have.been.calledWithExactly errorMessage
 
-    it "if there is no client side validation error but a server side error, Customer.save should be called and an error dialog should be displayed", ->
-      content = 'content'
-      sandbox.stub(Customer, 'save').returns $q.reject(content)
+    it "if Network.hasConnectivity is resolved, it should call ElementModifier.validate with the given form", ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.defer().promise
+
+      scope.submitRegisterForm formMock
+      scope.$digest()
+
+      ElementModifier.validate.should.have.been.calledWithExactly formMock
+
+    it "if ElementModifier.validate rejects an error message, Popup.error should be called with it", ->
+      errorMessage = 'Invalid email'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.reject(errorMessage)
+      sandbox.stub Popup, 'error'
+
+      scope.submitRegisterForm formMock
+      scope.$digest()
+
+      Popup.error.should.have.been.calledWithExactly errorMessage
+
+    it "if ElementModifier.validate is resolved, Customer.save should be called with the user params and the french locale", ->
+      expectedRequestBody =
+        email: 'medmout@ensta.fr'
+        locale: 'fr'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub Popup, 'error'
+      sandbox.stub(Customer, 'save').returns $q.defer().promise
 
-      window.browserTrigger(formElement, 'submit')
-      scope.submitRegisterForm scope.form
+      scope.submitRegisterForm formMock
       scope.$digest()
 
-      Popup.error.should.have.been.calledWithExactly content
-      Customer.save.should.been.called
+      Customer.save.should.have.been.calledWithExactly expectedRequestBody
 
-    it "if there is no client side validation error, no server side error, DeviceAssistant.register should be called and an error dialog should be displayed", ->
+    it "if Customer.save is resolved, Credentials.set should be called with the given credentials", ->
+      expectedId = '1'
+      expectedToken = 'token'
+      sandbox.stub(Customer, 'save').returns $q.when
+        id: expectedId
+        token: expectedToken
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
+      sandbox.stub Credentials, 'set'
+
+      scope.submitRegisterForm formMock
+      scope.$digest()
+
+      Credentials.set.should.have.been.calledWithExactly expectedId, expectedToken
+
+    it "if Customer.save is resolved, DeviceAssistant.register should be called", ->
+      errorMessage = 'errorMessage'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
       sandbox.stub(Customer, 'save').returns $q.when({})
-      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub(DeviceAssistant, 'register').returns($q.reject(new Error('errorMessage')))
+
       sandbox.stub Popup, 'error'
       sandbox.stub Credentials, 'set'
 
-      window.browserTrigger(formElement, 'submit')
-      scope.submitRegisterForm scope.form
+      scope.submitRegisterForm formMock
       scope.$digest()
 
-      Popup.error.should.have.been.called
-      Credentials.set.should.have.been.called
       DeviceAssistant.register.should.have.been.called
+
+    it "if DeviceAssistant.register is resolved, $state.go should be called  to reach signup", ->
+      errorMessage = 'errorMessage'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'save').returns $q.when({})
+      sandbox.stub(DeviceAssistant, 'register').returns $q.when({})
+
+      sandbox.stub $state, 'go'
+      sandbox.stub Credentials, 'set'
+
+      scope.submitRegisterForm formMock
+      scope.$digest()
+
+      $state.go.should.have.been.calledWithExactly('signup')
