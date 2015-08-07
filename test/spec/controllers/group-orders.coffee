@@ -167,3 +167,22 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       Order.setCurrentOrder.should.have.been.called
       $state.go.should.have.been.calledWithExactly 'app.restaurant-menu',
         restaurantId: groupOrderMock.restaurant.data.id
+
+  describe 'GroupOrdersCtrl#setArrayFromInt', ->
+
+    it 'should return an Array filled whose length is the given parameter', ->
+      input = 6
+      scope.setArrayFromInt(input).length.should.equal input
+
+    it 'should include only undefined values', ->
+      input = 2
+      output = scope.setArrayFromInt input
+      expect(output[0]).to.be.undefined
+      expect(output[1]).to.be.undefined
+
+  describe 'GroupOrdersCtrl $on $ionicView.afterEnter', ->
+
+    it 'should call onReload when receiving the event', ->
+      sandbox.stub scope, 'onReload'
+      scope.$broadcast '$ionicView.afterEnter'
+      scope.onReload.should.have.been.called
