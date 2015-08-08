@@ -5,12 +5,12 @@ angular.module('groupeat.services.http-provider-interceptor', [
   'groupeat.services.credentials'
 ])
 
-.factory('HttpProviderInterceptor', function ($injector, $q, _, Credentials) {
+.factory('HttpProviderInterceptor', function ($injector, $q, _) {
 
   var request = function (config) {
     if (config.url.indexOf('ionic.io') === -1) {
       config.headers.Accept = 'application/vnd.groupeat.v1+json';
-      var credentials = Credentials.get();
+      var credentials = $injector.get('Credentials').get(false);
       if (credentials && credentials.token) {
         config.headers.Authorization = 'bearer ' + credentials.token;
       }
