@@ -7,39 +7,38 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  rootScope = sandbox = ctrl = scope = $compile = $httpBackend = $filter = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
+  rootScope = sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
       rootScope = $rootScope
       scope = $rootScope.$new()
-      $compile = $injector.get('$compile')
-      $filter = $injector.get('$filter')
-      $q = $injector.get('$q')
-      $state = $injector.get('$state')
-      $timeout = $injector.get('$timeout')
-      _ = $injector.get('_')
-      Address = $injector.get('Address')
-      Authentication = $injector.get('Authentication')
-      Credentials = $injector.get('Credentials')
+      $compile = $injector.get '$compile'
+      $ionicSlideBoxDelegate = $injector.get '$ionicSlideBoxDelegate'
+      $q = $injector.get '$q'
+      $state = $injector.get '$state'
+      $timeout = $injector.get '$timeout'
+      _ = $injector.get '_'
+      Address = $injector.get 'Address'
+      Analytics = $injector.get 'Analytics'
+      Authentication = $injector.get 'Authentication'
+      Credentials = $injector.get 'Credentials'
       sandbox.stub(Credentials, 'get').returns
         id: 1
-      Customer = $injector.get('Customer')
-      validator = $injector.get('validator')
-      ElementModifier = $injector.get('ElementModifier')
-      ErrorMessageResolver = $injector.get('ErrorMessageResolver')
+      Customer = $injector.get 'Customer'
+      validator = $injector.get 'validator'
+      ElementModifier = $injector.get 'ElementModifier'
+      ErrorMessageResolver = $injector.get 'ErrorMessageResolver'
       validator.registerDomModifier(ElementModifier.key, ElementModifier)
       validator.setDefaultElementModifier(ElementModifier.key)
       validator.setErrorMessageResolver(ErrorMessageResolver.resolve)
-      Network = $injector.get('Network')
-      CustomerSettings = $injector.get('CustomerSettings')
-      Popup = $injector.get('Popup')
-      ENV = $injector.get('ENV')
-      ctrl = $controller('SettingsCtrl', ($filter: $filter, $scope:scope, $state: $state, _: _, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, ElementModifier: ElementModifier, Network: Network, CustomerSettings: CustomerSettings, Popup: Popup))
-      $httpBackend = $injector.get('$httpBackend')
+      Network = $injector.get 'Network'
+      CustomerSettings = $injector.get 'CustomerSettings'
+      Popup = $injector.get 'Popup'
+      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(200, 'Success')
+      $injector.get('$httpBackend').expect('GET', regex).respond(200, 'Success')
 
       # Hack to validate elements
       # Angular auto validate does not validate mock html elements
@@ -67,25 +66,19 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.tabs.should.be.instanceof(Array)
       scope.tabs.should.have.length(2)
 
-    it 'should load the non empty array of daysWithoutNotifyingOptions', ->
-      sandbox.spy(CustomerSettings, 'getDaysWithoutNotifying')
-      scope.$broadcast '$ionicView.afterEnter'
-      CustomerSettings.getDaysWithoutNotifying.should.have.been.called
-      scope.daysWithoutNotifyingOptions.should.be.not.empty
-
-    it 'should load the non empty array of noNotificationAfterHours', ->
-      sandbox.spy(CustomerSettings, 'getNoNotificationAfterHours')
-      scope.$broadcast '$ionicView.afterEnter'
-      CustomerSettings.getNoNotificationAfterHours.should.have.been.called
-      scope.noNotificationAfterOptions.should.be.not.empty
-
-    it 'should load the non empty array of residencies', ->
-      sandbox.spy(Address, 'getResidencies')
-      scope.$broadcast '$ionicView.afterEnter'
-      Address.getResidencies.should.have.been.called
-      scope.residencies.should.be.not.empty
-
   describe 'SettingsCtrl#onReload', ->
+
+    beforeEach ->
+      scope.noNotificationAfterOptions = [
+        {
+          value: '21:00:00',
+          label: '21h00'
+        },
+        {
+          value: '22:00:00',
+          label: '22h00'
+        }
+      ]
 
     it 'should broadcast the displaying of a no network message backdrop if no network is available', ->
       errorKey = 'noNetwork'
@@ -112,43 +105,25 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should load the customer in the scope if getting the customer succeeds', ->
       customer = 'customer'
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve(customer)
-        return deferred.promise
-      sandbox.stub(Address, 'get').returns($q.defer().promise)
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when(customer)
+      sandbox.stub(Address, 'get').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
-      scope.customer.should.equal(customer)
+      scope.customer.should.equal customer
 
     it 'should call Address#get if getting the customer succeeds', ->
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      sandbox.stub(Address, 'get').returns($q.defer().promise)
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
       Address.get.should.have.been.called
 
     it 'should broadcast the displaying of a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
       sandbox.spy rootScope, '$broadcast'
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
@@ -161,18 +136,9 @@ describe 'Ctrl: SettingsCtrl', ->
       address =
         details: details
         residency: residency
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve(customer)
-        return deferred.promise
-      sandbox.stub Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve(address)
-        return deferred.promise
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.when(address)
       sandbox.stub(CustomerSettings, 'get').returns $q.defer().promise
       scope.onReload()
       scope.$digest()
@@ -181,24 +147,53 @@ describe 'Ctrl: SettingsCtrl', ->
 
     it 'should broadcast the displaying of a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
       sandbox.spy rootScope, '$broadcast'
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Customer, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
-      sandbox.stub(Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.when({})
       sandbox.stub(CustomerSettings, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
       rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+
+    it 'should build the scope.customerSettings object with the received customerSettings if CustomerSettings.get is resolved', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.when({})
+      sandbox.stub(CustomerSettings, 'get').returns $q.when
+        notificationsEnabled: true
+        daysWithoutNotifying: 4
+        noNotificationAfter: "22:00:00"
+      scope.onReload()
+      scope.$digest()
+      scope.customerSettings.should.deep.equal
+        notificationsEnabled: true
+        daysWithoutNotifying: 4
+        noNotificationAfter:
+          value: '22:00:00'
+          label: '22h00'
+
+    it 'should broadcast the hiding of the message backdrop if CustomerSettings.get is resolved', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.when({})
+      sandbox.stub(CustomerSettings, 'get').returns $q.when({})
+      sandbox.spy rootScope, '$broadcast'
+      scope.onReload()
+      scope.$digest()
+      rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
+
+  describe 'SettingsCtrl#slideTo', ->
+
+    it 'should call $ionicSlideBoxDelegate.slide with the given slideId parameter', ->
+      slideId = 2
+      sandbox.spy $ionicSlideBoxDelegate, 'slide'
+      scope.slideTo slideId
+      $ionicSlideBoxDelegate.slide.should.have.been.calledWithExactly slideId
+
+    it 'should set the scope slideIndex to the given slideId parameter', ->
+      slideId = 2
+      scope.slideTo slideId
+      scope.slideIndex.should.equal slideId
 
   describe 'SettingsCtrl#onSave', ->
 
@@ -221,6 +216,22 @@ describe 'Ctrl: SettingsCtrl', ->
         )
       $compile(formElement)(scope)
       scope.$digest()
+      scope.noNotificationAfterOptions = [
+        {
+          value: '21:00:00',
+          label: '21h00'
+        },
+        {
+          value: '22:00:00',
+          label: '22h00'
+        }
+      ]
+      scope.customerSettings =
+        notificationsEnabled: true
+        daysWithoutNotifying: 4
+        noNotificationAfter:
+          value: '22:00:00'
+          label: '22h00'
 
     it 'the form should be initially invalid and pristine', ->
       form = scope.form.customerEdit
@@ -336,21 +347,53 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       CustomerSettings.update.should.have.been.called
 
+    it 'should build the scope.customerSettings object with the received customerSettings if CustomerSettings.update is resolved', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
+      sandbox.stub(Authentication, 'updatePassword').returns $q.when({})
+      sandbox.stub(CustomerSettings, 'update').returns $q.when
+        notificationsEnabled: false
+        daysWithoutNotifying: 3
+        noNotificationAfter: "21:00:00"
+      scope.onSave()
+      scope.$digest()
+      scope.customerSettings.should.deep.equal
+        notificationsEnabled: false
+        daysWithoutNotifying: 3
+        noNotificationAfter:
+          value: '21:00:00'
+          label: '21h00'
+
     it 'should display a confirmation popup if all previous steps succeeded', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'update').returns $q.when({})
       sandbox.stub(Address, 'update').returns $q.when({})
       sandbox.stub(Authentication, 'updatePassword').returns $q.when({})
-      customerSettings =
-        noNotificationAfter: '22:00:00'
-      sandbox.stub(CustomerSettings, 'update').returns $q.when(customerSettings)
+      sandbox.stub(CustomerSettings, 'update').returns $q.when({})
       sandbox.stub Popup, 'title'
-      address = 'address'
-      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns address
-      scope.customerSettings =
-        noNotificationAfter:
-          value: '22:00:00'
       scope.onSave()
       scope.$digest()
       Popup.title.should.have.been.calledWithExactly 'customerEdited'
+
+  describe 'SettingsCtrl on $ionicView.afterEnter', ->
+
+    it 'should load the non empty array of daysWithoutNotifyingOptions', ->
+      sandbox.spy(CustomerSettings, 'getDaysWithoutNotifying')
+      scope.$broadcast '$ionicView.afterEnter'
+      CustomerSettings.getDaysWithoutNotifying.should.have.been.called
+      scope.daysWithoutNotifyingOptions.should.be.not.empty
+
+    it 'should load the non empty array of noNotificationAfterHours', ->
+      sandbox.spy(CustomerSettings, 'getNoNotificationAfterHours')
+      scope.$broadcast '$ionicView.afterEnter'
+      CustomerSettings.getNoNotificationAfterHours.should.have.been.called
+      scope.noNotificationAfterOptions.should.be.not.empty
+
+    it 'should load the non empty array of residencies', ->
+      sandbox.spy(Address, 'getResidencies')
+      scope.$broadcast '$ionicView.afterEnter'
+      Address.getResidencies.should.have.been.called
+      scope.residencies.should.be.not.empty

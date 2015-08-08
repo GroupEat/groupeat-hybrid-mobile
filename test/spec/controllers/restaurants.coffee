@@ -243,3 +243,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.onReload()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
+
+  describe 'RestaurantsCtrl $on $ionicView.afterEnter', ->
+
+    it 'should call onReload when receiving the event', ->
+      sandbox.stub scope, 'onReload'
+      scope.$broadcast '$ionicView.afterEnter'
+      scope.onReload.should.have.been.called
