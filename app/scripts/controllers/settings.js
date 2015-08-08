@@ -11,10 +11,11 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.popup',
+  'ionic',
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function ($filter, $q, $rootScope, $scope, $state, _, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup, $ionicSlideBoxDelegate) {
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup) {
 
 	Analytics.trackView('Restaurants');
 
@@ -101,7 +102,7 @@ angular.module('groupeat.controllers.settings', [
 			if (!addressParams)
 			{
 				// If no residency was provided, not requesting the Address update
-				return $q.defer().resolve();
+				return $q.when({});
 			}
 			addressParams = _.merge(addressParams, {details: $scope.customer.details});
 			return Address.update({id: customerId}, addressParams);
