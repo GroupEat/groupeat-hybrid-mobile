@@ -28,10 +28,6 @@ module.exports = function (grunt) {
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
-  //Auto Js-fixer based on linting
-  grunt.loadNpmTasks('grunt-fixmyjs');
-  grunt.loadNpmTasks('grunt-webfont');
-
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
