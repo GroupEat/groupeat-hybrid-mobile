@@ -16,7 +16,7 @@ dependencies:
         - npm install -g bower grunt-cli
         - rvm install ruby-1.9.3-p551
         - gem install compass
-        - bower install
+        - npm install
         - grunt init
 
 test:
