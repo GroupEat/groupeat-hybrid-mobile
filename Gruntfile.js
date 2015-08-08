@@ -137,7 +137,7 @@ module.exports = function (grunt) {
       },
       compass: {
         files: ['<%= yeoman.app %>/<%= yeoman.styles %>/**/*.{scss,sass}'],
-        tasks: ['compass:server', 'autoprefixer', 'newer:copy:tmp']
+        tasks: ['compass:server', 'postcss', 'newer:copy:tmp']
       },
       gruntfile: {
         files: ['Gruntfile.js'],
@@ -219,19 +219,22 @@ module.exports = function (grunt) {
       server: '.tmp'
     },
 
-    autoprefixer: {
+    postcss: {
       options: {
-        browsers: ['last 1 version']
+        processors: [
+          require('pixrem')(),
+          require('autoprefixer-core')({browsers: 'last 2 versions'})
+        ]
       },
       dist: {
         files: [{
           expand: true,
           cwd: '.tmp/<%= yeoman.styles %>/',
-        src: '{,*/}*.css',
-        dest: '.tmp/<%= yeoman.styles %>/'
-      }]
-    }
-  },
+          src: '{,*/}*.css',
+          dest: '.tmp/<%= yeoman.styles %>/'
+        }]
+      }
+    },
 
     // Automatically inject Bower components into the app
     wiredep: {
@@ -331,112 +334,70 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: 'www',
-          src: [
-          '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
-          '*.html',
-          'templates/**/*.html',
-          'fonts/**/*',
-          'translations/*'
-          ]
-        }, {
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: 'www',
+            src: [
+              '<%= yeoman.images %>/**/*.{png,jpg,jpeg,gif,webp,svg}',
+              '*.html',
+              'templates/**/*.html',
+              'fonts/**/*',
+              'translations/*'
+            ]
+          },
+          {
           expand: true,
           cwd: '.tmp/<%= yeoman.images %>',
           dest: 'www/<%= yeoman.images %>',
           src: ['generated/*']
-        }]
+          }
+        ]
       },
       styles: {
         expand: true,
         cwd: '<%= yeoman.app %>/<%= yeoman.styles %>',
         dest: '.tmp/<%= yeoman.styles %>/',
-      src: '{,*/}*.css'
+        src: '{,*/}*.css'
+      },
+      fonts: {
+        expand: true,
+        cwd: 'app/lib/ionic/release/fonts/',
+        dest: '<%= yeoman.app %>/fonts/',
+        src: '*'
+      },
+      app: {
+        expand: true,
+        cwd: '<%= yeoman.app %>',
+        dest: 'www/',
+        src: [
+          '**/*',
+          '!lib/**/*.{scss,sass}',
+          '!styles/**/*.{scss,sass,css}',
+        ]
+      },
+      tmp: {
+        expand: true,
+        cwd: '.tmp',
+        dest: 'www/',
+        src: '**/*'
+      }
     },
-    fonts: {
-      expand: true,
-      cwd: 'app/lib/ionic/release/fonts/',
-      dest: '<%= yeoman.app %>/fonts/',
-      src: '*'
+
+    concurrent: {
+      ionic: {
+        tasks: [],
+        options: {
+          logConcurrentOutput: true
+        }
+      },
+      copy: [
+        'copy:styles',
+        'copy:fonts'
+      ]
     },
-    vendor: {
-      expand: true,
-      cwd: '<%= yeoman.app %>/vendor',
-      dest: '.tmp/<%= yeoman.styles %>/',
-    src: '{,*/}*.css'
-  },
-  app: {
-    expand: true,
-    cwd: '<%= yeoman.app %>',
-    dest: 'www/',
-    src: [
-    '**/*',
-    '!**/*.(scss,sass,css)',
-    ]
-  },
-  tmp: {
-    expand: true,
-    cwd: '.tmp',
-    dest: 'www/',
-    src: '**/*'
-  }
-},
-
-concurrent: {
-  ionic: {
-    tasks: [],
-    options: {
-      logConcurrentOutput: true
-    }
-  },
-  server: [
-  'compass:server',
-  'copy:styles',
-  'copy:vendor',
-  'copy:fonts'
-  ],
-  test: [
-  'compass',
-  'copy:styles',
-  'copy:vendor',
-  'copy:fonts'
-  ],
-  dist: [
-  'compass:dist',
-  'copy:styles',
-  'copy:vendor',
-  'copy:fonts'
-  ]
-},
-
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       'www/<%= yeoman.styles %>/main.css': [
-    //         '.tmp/<%= yeoman.styles %>/**/*.css',
-    //         '<%= yeoman.app %>/<%= yeoman.styles %>/**/*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       'www/<%= yeoman.scripts %>/scripts.js': [
-    //         'www/<%= yeoman.scripts %>/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
 
     // Test settings
     // These will override any config options in karma.conf.js if you create it.
@@ -631,8 +592,9 @@ concurrent: {
 
   grunt.registerTask('test', [
     'clean',
-    'concurrent:test',
-    'autoprefixer',
+    'compass',
+    'postcss',
+    'concurrent:copy',
     'karma:unit:start',
     'watch:karma'
     ]);
@@ -660,15 +622,16 @@ concurrent: {
       'clean',
       'ngconstant:' + env,
       'wiredep',
-      'autoprefixer'
+      preparationTask
     ];
-    tasks.push(preparationTask);
     return grunt.task.run(tasks);
   });
 
   grunt.registerTask('compress', [
     'useminPrepare',
-    'concurrent:dist',
+    'compass:dist',
+    'postcss',
+    'concurrent:copy',
     'concat',
     'ngAnnotate',
     'copy:dist',
@@ -679,7 +642,9 @@ concurrent: {
     ]);
 
   grunt.registerTask('expand', [
-    'concurrent:server',
+    'compass:server',
+    'postcss',
+    'concurrent:copy',
     'newer:copy:app',
     'newer:copy:tmp'
     ]);
