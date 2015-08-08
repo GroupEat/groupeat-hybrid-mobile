@@ -77,14 +77,16 @@ angular.module('groupeat.services.customer', [
   * if rejected, an error message in proper locale will be rejected
   * https://groupeat.fr/docs
   *
-  * @param {Object} parameters an object containing an 'id' field of the customer to update
+  * @param {String} customerId the id of the customer to update
   * @param {Object} requestBody the fields to update for the customer
   */
-  update = function (parameters, requestBody) {
+  update = function (customerId, requestBody) {
     var defer = $q.defer();
-    resource.update(parameters, requestBody).$promise.then(function (response) {
+    resource.update({id: customerId}, requestBody).$promise
+    .then(function (response) {
       defer.resolve(response.data);
-    }).catch(function (errorResponse) {
+    })
+    .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
     return defer.promise;

@@ -88,21 +88,19 @@ describe 'Service: Customer', ->
       Customer.should.have.property('update')
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      parameters = {id: 1}
       requestBody = {}
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(200, 'Success')
-      Customer.update(parameters, requestBody)
+      Customer.update("1", requestBody)
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
-      parameters = {id: 1}
       requestBody = {}
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(400, 'Failure')
-      Customer.update(parameters, requestBody).should.be.rejectedWith(errorMsgFromBackend)
+      Customer.update("1", requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
 
   describe 'Customer#checkMissingInformation', ->
