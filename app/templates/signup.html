@@ -44,11 +44,6 @@
 				<form ng-submit="slideTo(2)">
 					<div class="form">
 						<div class="row">
-							<div class="col-25 col">
-								<div class="input input-bordered input-fixed">
-									+33
-								</div>
-							</div>
 							<div class="col">
 								<div class="input input-bordered input-tel">
 									<input ui-mask="99-99-99-99-99" type="tel" ng-model="phoneNumber" placeholder="xx-xx-xx-xx-xx">
@@ -87,7 +82,7 @@
 			<div class="content">
 				<div class="titles">
 					<h3>Je vous la met où ?</h3>
-					<p>L'adresse ou le livreur déposera tes commandes.</p>
+					<p>L'adresse où le livreur déposera ta commande.</p>
 				</div>
 				<form ng-submit="confirmSignup()">
 					<div class="form">
@@ -102,7 +97,7 @@
 										</select>
 									</div>
 									<div class="input">
-										<input type="text" placeholder="Complément d'adresse (optionnel)" ng-model="addressInfo">
+										<input type="text" placeholder="Complément d'adresse" ng-model="addressInfo">
 									</div>
 								</div>
 							</div>
