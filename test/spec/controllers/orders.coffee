@@ -1,4 +1,4 @@
-describe 'Ctrl: SignupCtrl', ->
+describe 'Ctrl: OrdersCtrl', ->
 
   beforeEach ->
     module 'groupeat.controllers.orders'
@@ -21,7 +21,7 @@ describe 'Ctrl: SignupCtrl', ->
       Network = $injector.get 'Network'
       Order = $injector.get 'Order'
 
-      SignupCtrl = $controller('OrdersCtrl', {
+      OrdersCtrl = $controller('OrdersCtrl', {
         _: $injector.get('_'), $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, $stateParams: $stateParams, Credentials: Credentials, Network: Network, Order: Order
       })
       $injector.get('$httpBackend').whenGET(/^translations\/.*/).respond '{}'
