@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = ENV = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Popup =  {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -48,8 +48,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       # as it considers they are not visible (offset properties are 0)
       elementUtils = $injector.get('jcs-elementUtils')
       sandbox.stub(elementUtils, 'isElementVisible').returns(true)
-
-      ENV = $injector.get('ENV')
 
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
