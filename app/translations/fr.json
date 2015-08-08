@@ -103,6 +103,8 @@
   "minimumOrderPriceNotReachedErrorKey": "Vous n'avez pas atteint le prix minimum pour commander dans ce restaurant.",
   "restaurantDeliveryCapacityExceededErrorKey": "Aïe aïe aïe ! Votre commande dépasse le nombre maximale de produits pour ce restaurant... Essayez d'en enlever quelques-uns, ou essayez un autre restaurant !",
   "deliveryDistanceTooLongErrorKey": "Il semble que vous soyez trop loin pour rejoindre cette commande... Vous pouvez essayer un autre restaurant ! Excusez-nous du problème.",
+  "foodRushIsOver": "Le FoodRush est terminé...",
+  "tooLateToOrder": "Trop tard pour rejoindre cette commande groupée, retente ta chance !",
 
   "leaveOrder": "Etes vous sur de vouloir quitter cette commande ?",
   "cartWillBeDestroyed": "Si vous quittez cette commande, votre panier sera supprimé.",

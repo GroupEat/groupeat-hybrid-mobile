@@ -14,7 +14,7 @@
   <ion-nav-buttons side="secondary">
     <button class="button button-clear button-timer" ng-if="currentOrder.endingAt">
       <i class="ion-ios-timer"></i>
-      <timer end-time="currentOrder.endingAt" interval="1000"> {{mminutes}}:{{sseconds}}</timer>
+      <timer end-time="currentOrder.endingAt" interval="1000" finish-callback="callbackTimer()"> {{mminutes}}:{{sseconds}}</timer>
     </button>
   </ion-nav-buttons>
 
