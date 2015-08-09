@@ -19,7 +19,8 @@ angular.module('groupeat.services.http-provider-interceptor', [
   },
 
   responseError = function(response) {
-    if (response.status === 401 && _.has(response, 'data.data.errorKey') && response.data.data.errorKey === 'userMustAuthenticate') {
+    var keysRequiringRedirection = ['userMustAuthenticate', 'invalidAuthenticationTokenSignature'];
+    if (response.status === 401 && _.has(response, 'data.data.errorKey') && _.includes(keysRequiringRedirection, response.data.data.errorKey)) {
       $injector.get('$state').go('authentication');
     }
     return $q.reject(response);
