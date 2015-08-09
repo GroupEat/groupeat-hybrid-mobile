@@ -8,7 +8,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
 .factory('HttpProviderInterceptor', function ($injector, $q, _) {
 
   var request = function (config) {
-    if (config.url.indexOf('ionic.io') === -1) {
+    if (config.url.indexOf('groupeat') !== -1) {
       config.headers.Accept = 'application/vnd.groupeat.v1+json';
       var credentials = $injector.get('Credentials').get(false);
       if (credentials && credentials.token) {
@@ -19,7 +19,8 @@ angular.module('groupeat.services.http-provider-interceptor', [
   },
 
   responseError = function(response) {
-    if (response.status === 401 && _.has(response, 'data.data.errorKey') && response.data.data.errorKey === 'userMustAuthenticate') {
+    var keysRequiringRedirection = ['userMustAuthenticate', 'invalidAuthenticationTokenSignature'];
+    if (response.status === 401 && _.has(response, 'data.data.errorKey') && _.includes(keysRequiringRedirection, response.data.data.errorKey)) {
       $injector.get('$state').go('authentication');
     }
     return $q.reject(response);
