@@ -94,7 +94,7 @@ angular.module('groupeat.controllers.settings', [
     })
 		.then(function() {
 			var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
-			return Customer.update({id : customerId}, customerParams);
+			return Customer.update(customerId, customerParams);
 		})
 		.then(function(customer) {
 			$scope.customer = _.merge($scope.customer, customer);
@@ -105,7 +105,7 @@ angular.module('groupeat.controllers.settings', [
 				return $q.when({});
 			}
 			addressParams = _.merge(addressParams, {details: $scope.customer.details});
-			return Address.update({id: customerId}, addressParams);
+			return Address.update(customerId, addressParams);
 		})
 		.then(function(address) {
 			$scope.customer = _.merge($scope.customer, address);
