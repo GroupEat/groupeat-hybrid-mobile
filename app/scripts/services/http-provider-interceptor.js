@@ -8,7 +8,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
 .factory('HttpProviderInterceptor', function ($injector, $q, _) {
 
   var request = function (config) {
-    if (config.url.indexOf('ionic.io') === -1) {
+    if (config.url.indexOf('groupeat') !== -1) {
       config.headers.Accept = 'application/vnd.groupeat.v1+json';
       var credentials = $injector.get('Credentials').get(false);
       if (credentials && credentials.token) {

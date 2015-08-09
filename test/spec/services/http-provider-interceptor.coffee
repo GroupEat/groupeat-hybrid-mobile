@@ -58,12 +58,12 @@ describe 'Service: HttpProviderInterceptor', ->
 
   describe 'HttpProviderInterceptor#request', ->
 
-    it 'should return an untouched config if the url goes to ionic.io', ->
+    it 'should return an untouched config if the url does not go to a groupeat server', ->
       config =
         url: 'http://ionic.io/example'
       HttpProviderInterceptor.request(config).should.equal config
 
-    it 'should add a headers.Accept key with the proper value if the url does not go to ionic.io', ->
+    it 'should add a headers.Accept key with the proper value if the url is one of a groupeat server', ->
       config =
         url: 'http://groupeat.fr/example'
         headers: {}
@@ -73,7 +73,7 @@ describe 'Service: HttpProviderInterceptor', ->
           Accept: 'application/vnd.groupeat.v1+json'
       HttpProviderInterceptor.request(config).should.deep.equal expectedConfig
 
-    it 'should add a headers.Accept key with the proper value if the url does not go to ionic.io', ->
+    it 'should add a headers.Accept key with the proper value if the url is one of a groupeat server', ->
       config =
         url: 'http://groupeat.fr/example'
         headers: {}
