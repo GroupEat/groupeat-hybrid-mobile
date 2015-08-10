@@ -94,7 +94,7 @@ describe 'Ctrl: SignupCtrl', ->
       expectedCustomerParams =
         firstName: 'Walter'
         lastName: 'White'
-        phoneNumber: '0666666666'
+        phoneNumber: '33666666666'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Credentials, 'get').returns
         id: expectedCustomerId
