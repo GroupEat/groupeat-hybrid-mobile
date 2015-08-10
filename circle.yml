@@ -23,3 +23,9 @@ test:
   post:
       - npm install -g codeclimate-test-reporter
       - codeclimate-test-reporter < coverage/lcov/lcov.info
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - grunt upload --email=$IONIC_UPLOAD_EMAIL --password=$IONIC_UPLOAD_PASSWORD
