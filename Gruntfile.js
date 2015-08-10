@@ -31,6 +31,8 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  require('nopt-grunt-fix')(grunt);
+
   // Define the configuration for all the tasks
   grunt.initConfig({
 
