@@ -9,14 +9,12 @@
         {{ tab.title | translate }}
       </button>
   </div>
-
-  <ion-slide-box disable-scroll="true" show-pager="false">
-    <ion-slide ng-repeat="tab in tabs">
-      <ion-content class="full-height has-sub-header">
-        <ng-include src="tab.url"/>
-      </ion-content>
-    </ion-slide>
-  </ion-slide-box>
-
+    <ion-slide-box show-pager="false">
+      <ion-slide ng-repeat="tab in tabs">
+        <ion-content class="full-height has-sub-header">
+          <ng-include src="tab.url"/>
+        </ion-content>
+      </ion-slide>
+    </ion-slide-box>
 
 </ion-view>
