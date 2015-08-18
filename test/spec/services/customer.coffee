@@ -112,11 +112,9 @@ describe 'Service: Customer', ->
           lastName: 'lastName'
           phoneNumber: '0606060606'
       sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      )
+      sandbox.stub(Address, 'get').returns $q.when
+        details: 'Au niveau du clocher de TibDex'
+        residency: 'aux toilettes'
 
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
@@ -131,10 +129,9 @@ describe 'Service: Customer', ->
           lastName: 'lastName'
           phoneNumber: '0606060606'
       sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Address, 'get').returns $q.when
+        details: ''
+        residency: ''
 
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
@@ -147,11 +144,9 @@ describe 'Service: Customer', ->
       customerGetResponse =
         data: {}
       sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve('address')
-        return deferred.promise
-      )
+      sandbox.stub(Address, 'get').returns $q.when
+        details: 'Chez la mère Michelle'
+        residency: 'à gauche'
 
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
@@ -165,11 +160,9 @@ describe 'Service: Customer', ->
         data:
           firstName: 'firstName'
       sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve('address')
-        return deferred.promise
-      )
+      sandbox.stub(Address, 'get').returns $q.when
+        details: 'bonjour'
+        residency: 'madame'
 
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(customerGetResponse)
