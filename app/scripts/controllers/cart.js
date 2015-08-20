@@ -48,6 +48,13 @@ angular.module('groupeat.controllers.cart', [
     $scope.activeButton = $scope.confirmButtons[index];
   };
 
+  $scope.closeCart = function() {
+    $scope.modal.hide()
+    .then(function() {
+      $ionicSlideBoxDelegate.slide(0);
+    });
+  };
+
   $scope.confirmButtonAction = function() {
     if($scope.slideIndex === 0) {
       $ionicSlideBoxDelegate.slide(1);
