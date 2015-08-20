@@ -127,10 +127,6 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		$scope.modal.show();
 	};
 
-	$scope.closeCart = function() {
-		$scope.modal.hide();
-	};
-
 	$scope.isDiscountToShow = function () {
 		return ($scope.currentOrder.currentDiscount || $scope.currentOrder.groupOrderDiscount) && $scope.cart.getTotalPrice();
 	};
