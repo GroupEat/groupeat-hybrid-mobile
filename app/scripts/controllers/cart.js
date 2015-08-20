@@ -8,10 +8,11 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.cart',
   'groupeat.services.credentials',
   'groupeat.services.order',
+  'groupeat.services.popup',
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses) {
+.controller('CartCtrl', function ($ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
@@ -71,13 +72,25 @@ angular.module('groupeat.controllers.cart', [
       Order.setProductFormats(requestProducts);
       Order.save()
       .then(function() {
-        Order.resetCurrentOrder();
-        Cart.reset();
-        $state.go('app.group-orders');
+        $scope.leaveOrder();
         $scope.modal.hide();
+      })
+      .catch(function (errorResponse) {
+        Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
+        .then(function(leaveOrder) {
+          if(leaveOrder) {
+            $scope.leaveOrder();
+            $scope.modal.hide();
+          }
+        });
       });
-      // TODO : CATCH ERRORS FROM SAVE ORDER WITH POPUP
     }
+  };
+
+  $scope.leaveOrder = function() {
+    Order.resetCurrentOrder();
+    Cart.reset();
+    $state.go('app.group-orders');
   };
 
 });
