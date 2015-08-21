@@ -33,7 +33,7 @@ angular.module('groupeat.controllers.restaurants', [
       } else {
         $scope.restaurants = restaurants;
       }
-    })
+    });
     ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
