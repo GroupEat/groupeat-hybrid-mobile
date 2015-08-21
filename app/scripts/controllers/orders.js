@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat.controllers.orders', [
+  'groupeat.services.controller-promise-handler',
   'groupeat.services.credentials',
   'groupeat.services.lodash',
   'groupeat.services.network',
@@ -8,10 +9,10 @@ angular.module('groupeat.controllers.orders', [
   'timer'
 ])
 
-.controller('OrdersCtrl', function (_, $q, $rootScope, $scope, $state, $stateParams, Credentials, Network, Order) {
+.controller('OrdersCtrl', function (_, $q, $rootScope, $scope, $state, $stateParams, ControllerPromiseHandler, Credentials, Network, Order) {
 
   $scope.onReload = function () {
-    Network.hasConnectivity()
+    var promise = Network.hasConnectivity()
     .then(function() {
       return Order.queryForCustomer(Credentials.get().id);
     })
@@ -21,13 +22,8 @@ angular.module('groupeat.controllers.orders', [
       } else {
         $scope.orders = orders;
       }
-    })
-    .then(function() {
-      $rootScope.$broadcast('hideMessageBackdrop');
-    })
-    .catch(function(errorKey) {
-      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
-    })
+    });
+    ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
@@ -38,6 +34,7 @@ angular.module('groupeat.controllers.orders', [
   };
 
   $scope.$on('$ionicView.afterEnter', function() {
+    $scope.initialState = $state.current.name;
     $scope.onReload();
   });
 

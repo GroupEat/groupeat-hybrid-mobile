@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.address',
   'groupeat.services.analytics',
   'groupeat.services.authentication',
+  'groupeat.services.controller-promise-handler',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
@@ -15,7 +16,7 @@ angular.module('groupeat.controllers.settings', [
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup) {
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $scope, $state, Address, Analytics, Authentication, ControllerPromiseHandler, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup) {
 
 	Analytics.trackView('Restaurants');
 
@@ -45,7 +46,7 @@ angular.module('groupeat.controllers.settings', [
 	$scope.onReload = function() {
 		var customerId = Credentials.get().id;
 
-    Network.hasConnectivity()
+    var promise = Network.hasConnectivity()
     .then(function() {
       return Customer.get(customerId);
     })
@@ -62,13 +63,8 @@ angular.module('groupeat.controllers.settings', [
 			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
 				return (option.value === customerSettings.noNotificationAfter);
 			});
-		})
-    .then(function() {
-      $rootScope.$broadcast('hideMessageBackdrop');
-    })
-    .catch(function(errorKey) {
-      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
-    })
+		});
+    ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
@@ -136,6 +132,7 @@ angular.module('groupeat.controllers.settings', [
     $scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
+    $scope.initialState = $state.current.name;
     $scope.onReload();
   });
 
