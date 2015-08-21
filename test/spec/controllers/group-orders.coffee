@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = rootScope = $q = $httpBackend = $state = Customer = GroupOrder = Geolocation = Network = Order = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $state = ControllerPromiseHandler = Customer = GroupOrder = Geolocation = Network = Order = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -26,7 +26,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     inject ($controller, $rootScope, $injector) ->
 
       sandbox = sinon.sandbox.create()
-
+      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get('Customer')
       Order = $injector.get('Order')
       Geolocation = $injector.get('Geolocation')
@@ -35,7 +35,6 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
       $httpBackend = $injector.get('$httpBackend')
 
-      rootScope = $rootScope
       scope = $rootScope.$new()
 
       $state = $injector.get('$state')
@@ -44,7 +43,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       $compile = $injector.get('$compile')
 
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
-        $scope: scope, $state: $state, Customer: Customer, Geolocation: Geolocation, GroupOrder: GroupOrder, Network: Network, Order: Order, _: $injector.get('_')
+        $scope: scope, $state: $state, ControllerPromiseHandler: ControllerPromiseHandler, Customer: Customer, Geolocation: Geolocation, GroupOrder: GroupOrder, Network: Network, Order: Order, _: $injector.get('_')
       })
       ENV = $injector.get('ENV')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
@@ -54,18 +53,22 @@ describe 'Ctrl: GroupOrdersCtrl', ->
 
   describe "GroupOrders#onReload", ->
 
+    beforeEach ->
+      scope.initialState = 'initial'
+
     it 'should check connectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.defer().promise
       scope.onReload()
       Network.hasConnectivity.should.have.been.called
 
-    it 'should broadcast the displaying of a no network message backdrop if there is no network', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noNetwork if there is no network', ->
       errorKey = 'noNetwork'
+      expectedPromise = $q.reject errorKey
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should check user current position', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -74,14 +77,15 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
       Geolocation.getGeolocation.should.have.been.called
 
-    it 'should broadcast the displaying of a no geolocation message backdrop if there is no geolocation', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noGeolocation if there is no geolocation', ->
       errorKey = 'noGeolocation'
+      expectedPromise = $q.reject errorKey
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.reject(errorKey)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should check get the group orders around the customer\'s position', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -91,25 +95,27 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
       GroupOrder.get.should.have.been.calledWithExactly positionMock.coords.latitude, positionMock.coords.longitude
 
-    it 'should broadcast the displaying of a backdrop message if it could not load group orders', ->
+    it 'should call ControllerPromiseHandler.handle with a rejected promise if it could not load group orders', ->
+      expectedPromise = $q.reject()
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(positionMock)
       sandbox.stub(GroupOrder, 'get').returns $q.reject()
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
-    it 'should broadcast the displaying of no group orders backdrop message if it loaded no group orders', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noGroupOrders if it loaded no group orders', ->
+      expectedPromise = $q.reject 'noGroupOrders'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(positionMock)
       sandbox.stub(GroupOrder, 'get').returns $q.when(emptyGroupOrdersMock)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', 'noGroupOrders'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should get in the scope the groupOrders if there are more than one of them', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -120,15 +126,16 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       scope.$digest()
       scope.groupOrders.should.deep.equal groupOrdersMock
 
-    it 'should broadcast the hiding of the message backdrop if it loaded some group orders', ->
+    it 'should call ControllerPromiseHandler.handle with a resolved promise if it loaded some group orders', ->
+      expectedPromise = $q.when()
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(positionMock)
       sandbox.stub(GroupOrder, 'get').returns $q.when(groupOrdersMock)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
   describe 'GroupOrdersCtrl#onJoinOrderTouch', ->
 

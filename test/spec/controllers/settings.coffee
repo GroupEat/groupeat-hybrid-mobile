@@ -7,12 +7,11 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  rootScope = sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
+  sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = ControllerPromiseHandler = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
-      rootScope = $rootScope
       scope = $rootScope.$new()
       $compile = $injector.get '$compile'
       $ionicSlideBoxDelegate = $injector.get '$ionicSlideBoxDelegate'
@@ -26,6 +25,7 @@ describe 'Ctrl: SettingsCtrl', ->
       Credentials = $injector.get 'Credentials'
       sandbox.stub(Credentials, 'get').returns
         id: 1
+      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get 'Customer'
       validator = $injector.get 'validator'
       ElementModifier = $injector.get 'ElementModifier'
@@ -36,7 +36,7 @@ describe 'Ctrl: SettingsCtrl', ->
       Network = $injector.get 'Network'
       CustomerSettings = $injector.get 'CustomerSettings'
       Popup = $injector.get 'Popup'
-      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
+      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $injector.get('$httpBackend').expect('GET', regex).respond(200, 'Success')
 
@@ -69,6 +69,7 @@ describe 'Ctrl: SettingsCtrl', ->
   describe 'SettingsCtrl#onReload', ->
 
     beforeEach ->
+      scope.initialState = 'initial'
       scope.noNotificationAfterOptions = [
         {
           value: '21:00:00',
@@ -80,13 +81,14 @@ describe 'Ctrl: SettingsCtrl', ->
         }
       ]
 
-    it 'should broadcast the displaying of a no network message backdrop if no network is available', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejecting the errorKey if no network is available', ->
       errorKey = 'noNetwork'
-      sandbox.spy rootScope, '$broadcast'
+      expectedPromise = $q.reject errorKey
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should call Customer#get if connectivity is available', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -96,12 +98,13 @@ describe 'Ctrl: SettingsCtrl', ->
       Customer.get.should.have.been.calledWithExactly(1)
 
     it 'should broadcast the displaying of a generic failure message backdrop if getting the customer fails', ->
-      sandbox.spy rootScope, '$broadcast'
+      expectedPromise = $q.reject()
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should load the customer in the scope if getting the customer succeeds', ->
       customer = 'customer'
@@ -121,13 +124,14 @@ describe 'Ctrl: SettingsCtrl', ->
       Address.get.should.have.been.called
 
     it 'should broadcast the displaying of a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
-      sandbox.spy rootScope, '$broadcast'
+      expectedPromise = $q.reject()
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should add residency and details information to the customer in scope if getting the customer address succeeds', ->
       customer = {}
@@ -145,17 +149,19 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.customer.details.should.equal(details)
       scope.customer.residency.should.equal(residency)
 
-    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer and address succeeds but getting his settings fails', ->
-      sandbox.spy rootScope, '$broadcast'
+    it 'should call ControllerPromiseHandle.handle with the rejected promise', ->
+      expectedPromise = $q.reject()
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.when({})
       sandbox.stub(CustomerSettings, 'get').returns $q.reject()
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should build the scope.customerSettings object with the received customerSettings if CustomerSettings.get is resolved', ->
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.when({})
@@ -172,15 +178,16 @@ describe 'Ctrl: SettingsCtrl', ->
           value: '22:00:00'
           label: '22h00'
 
-    it 'should broadcast the hiding of the message backdrop if CustomerSettings.get is resolved', ->
+    it 'should call ControllerPromiseHandler.handle with the rejected promise if CustomerSettings.get is resolved', ->
+      expectedPromise = $q.when()
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.when({})
       sandbox.stub(CustomerSettings, 'get').returns $q.when({})
-      sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise
 
   describe 'SettingsCtrl#slideTo', ->
 
