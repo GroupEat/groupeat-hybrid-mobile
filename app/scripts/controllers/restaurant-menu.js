@@ -128,7 +128,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.isDiscountToShow = function () {
-		return ($scope.currentOrder.currentDiscount || $scope.currentOrder.groupOrderDiscount) && $scope.cart.getTotalPrice();
+		return $scope.currentOrder && ($scope.currentOrder.currentDiscount || $scope.currentOrder.groupOrderDiscount) && $scope.cart.getTotalPrice();
 	};
 
 	$scope.callbackTimer = function() {
