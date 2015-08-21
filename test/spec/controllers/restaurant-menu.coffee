@@ -5,7 +5,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     module 'groupeat.controllers.cart'
     module 'templates'
 
-  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = rootScope = scope = $stateParams = Cart = Network = Order = Popup = Product = Restaurant = {}
+  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = scope = $stateParams = Cart = ControllerPromiseHandler = Network = Order = Popup = Product = Restaurant = {}
 
   mockProduct = {}
   mockFormat = {}
@@ -15,7 +15,6 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
 
       sandbox = sinon.sandbox.create()
 
-      rootScope = $rootScope
       scope = $rootScope.$new()
       $ionicHistory = $injector.get '$ionicHistory'
       $ionicModal = $injector.get '$ionicModal'
@@ -24,18 +23,22 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       $q = $injector.get '$q'
       $stateParams = $injector.get '$stateParams'
       Cart = $injector.get 'Cart'
+      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Network = $injector.get 'Network'
       Order = $injector.get 'Order'
       Popup = $injector.get 'Popup'
       Product = $injector.get 'Product'
       Restaurant = $injector.get 'Restaurant'
 
-      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
+      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, ControllerPromiseHandler: ControllerPromiseHandler, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
 
   afterEach ->
     sandbox.restore()
 
   describe 'RestaurantMenu#onReload', ->
+
+    beforeEach ->
+      scope.initialState = 'initial'
 
     it 'should create an empty cart', ->
       scope.onReload()
@@ -51,13 +54,14 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope.$digest()
       Network.hasConnectivity.should.have.been.called
 
-    it 'should broadcast the displaying of a no network message backrop', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noNetwork', ->
       errorKey = 'noNetwork'
+      expectedPromise = $q.reject errorKey
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
   describe 'RestaurantMenu#onAddProduct', ->
 

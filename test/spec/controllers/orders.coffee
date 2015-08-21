@@ -4,25 +4,25 @@ describe 'Ctrl: OrdersCtrl', ->
     module 'groupeat.controllers.orders'
     module 'templates'
 
-  scope = rootScope = $q = $state = $stateParams = Credentials = Network = Order = sandbox = {}
+  scope = $q = $state = $stateParams = ControllerPromiseHandler = Credentials = Network = Order = sandbox = {}
 
   ordersMock = ['firstOrder', 'secondOrder']
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
-      rootScope = $rootScope
       scope = $rootScope.$new()
 
       $q = $injector.get '$q'
       $state = $injector.get '$state'
       $stateParams = $injector.get '$stateParams'
+      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Credentials = $injector.get 'Credentials'
       Network = $injector.get 'Network'
       Order = $injector.get 'Order'
 
       OrdersCtrl = $controller('OrdersCtrl', {
-        _: $injector.get('_'), $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, $stateParams: $stateParams, Credentials: Credentials, Network: Network, Order: Order
+        _: $injector.get('_'), $q: $q, $scope: scope, $state: $state, $stateParams: $stateParams, ControllerPromiseHandler: ControllerPromiseHandler, Credentials: Credentials, Network: Network, Order: Order
       })
       $injector.get('$httpBackend').whenGET(/^translations\/.*/).respond '{}'
 
@@ -30,6 +30,9 @@ describe 'Ctrl: OrdersCtrl', ->
     sandbox.restore()
 
   describe "OrdersCtrl#onReload", ->
+
+    beforeEach ->
+      scope.initialState = 'initial'
 
     it 'should call Network.hasConnectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.defer().promise
@@ -39,15 +42,16 @@ describe 'Ctrl: OrdersCtrl', ->
 
       Network.hasConnectivity.should.have.been.called
 
-    it 'should broadcast the displaying of a no network message backdrop if there is no network', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noNetwork if there is no network', ->
       errorKey = 'noNetwork'
+      expectedPromise = $q.reject errorKey
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
 
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should call Order.queryForCustomer with the customer id if Network.hasConnectivity is resolved', ->
       expectedCustomerId = 1
@@ -61,17 +65,18 @@ describe 'Ctrl: OrdersCtrl', ->
 
       Order.queryForCustomer.should.have.been.calledWithExactly expectedCustomerId
 
-    it 'should broadcast the displaying of a noOrders message backdrop if there are no orders for the given customer', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noOrders if there are no orders for the given customer', ->
+      expectedPromise = $q.reject 'noOrders'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Order, 'queryForCustomer').returns $q.when([])
       sandbox.stub(Credentials, 'get').returns
         id: '1'
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
 
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', 'noOrders'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should set scope.orders with the given orders if there are orders for the given customer', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -84,17 +89,18 @@ describe 'Ctrl: OrdersCtrl', ->
 
       scope.orders.should.equal ordersMock
 
-    it 'should broadcast the hiding of the message backdrop if there are orders for the given customer', ->
+    it 'should call ControllerPromiseHandler.handle with a resolved promise if there are orders for the given customer', ->
+      expectedPromise = $q.when()
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Order, 'queryForCustomer').returns $q.when(ordersMock)
       sandbox.stub(Credentials, 'get').returns
         id: '1'
-      sandbox.stub rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
 
-      rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should broadcast the scroll.refreshComplete at the end of the promise chain', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})

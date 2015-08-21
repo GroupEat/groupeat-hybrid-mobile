@@ -6,6 +6,7 @@ angular.module('groupeat.services', [
   'groupeat.services.authentication',
   'groupeat.services.backend-utils',
   'groupeat.services.cart',
+  'groupeat.services.controller-promise-handler',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',

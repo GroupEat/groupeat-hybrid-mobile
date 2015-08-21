@@ -4,18 +4,18 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  rootScope = scope = $state = $httpBackend = ENV = sandbox = Customer = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
+  scope = $state = $httpBackend = ENV = sandbox = ControllerPromiseHandler = Customer = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
       scope = $rootScope.$new()
-      rootScope = $rootScope
 
       $q = $injector.get('$q')
       $state = $injector.get('$state')
       sandbox.stub($state, 'go')
 
+      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get('Customer')
       Restaurant = $injector.get('Restaurant')
       GroupOrder = $injector.get('GroupOrder')
@@ -142,6 +142,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
         longitude: 1
 
     beforeEach ->
+      scope.initialState = 'initial'
       sandbox.spy(scope, '$broadcast')
 
     afterEach ->
@@ -149,11 +150,12 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should show an absence of connectivity message backdrop when there is no connectivity', ->
       errorKey = 'noNetwork'
+      expectedPromise = $q.reject errorKey
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
-      sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should broadcast scroll.refreshComplete when there is no connectivity', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.reject 'noNetwork'
@@ -163,11 +165,12 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should show a lack of geolocation permission message backdrop if the current position cannot be aquired', ->
       errorKey = 'noGeolocation'
+      expectedPromise = $q.reject errorKey
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.reject errorKey
-      sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', errorKey
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should eventually broadcast scroll.refreshComplete if the current position cannot be aquired', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -176,15 +179,16 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
-    it 'should broadcast the displaying of a generic network failure message backdrop if the server cannot get the list of restaurants', ->
+    it 'should call ControllerPromiseHandler.handle with a rejected promise if the server cannot get the list of restaurants', ->
+      expectedPromise = $q.reject()
+      sandbox.spy ControllerPromiseHandler, 'handle'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.reject()
-      sandbox.spy rootScope, '$broadcast'
       scope.onReload()
       scope.$digest()
       Restaurant.getFromCoordinates.should.have.been.calledWithExactly(1, 1)
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', undefined
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should eventually broadcast scroll.refreshComplete if the server cannot get the list of restaurants', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -194,52 +198,38 @@ describe 'Ctrl: RestaurantsCtrl', ->
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')
 
-    it 'should broadcast the displaying of a message backdrop when no restaurants are returned by the server', ->
+    it 'should call ControllerPromiseHandler.handle with a promise rejected with noRestaurants when no restaurants are returned by the server', ->
+      expectedPromise = $q.reject('noRestaurants')
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when([])
-      sandbox.spy rootScope, '$broadcast'
+      sandbox.spy ControllerPromiseHandler, 'handle'
 
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'displayMessageBackdrop', 'noRestaurants'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
-    it 'should broadcast the hiding of the message backdrop if at least one restaurant is returned by the server', ->
+    it 'should call ControllerPromiseHandler.handle with a resolved promise if at least one restaurant is returned by the server', ->
+      expectedPromise = $q.when()
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when(['restaurant'])
-      sandbox.spy rootScope, '$broadcast'
-
+      sandbox.spy ControllerPromiseHandler, 'handle'
       scope.onReload()
       scope.$digest()
-      rootScope.$broadcast.should.have.been.calledWithExactly 'hideMessageBackdrop'
+      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
 
     it 'should load restaurants in the scope if at least one is returned by the server', ->
       restaurants = ['firstRestaurant', 'secondRestaurant']
-      sandbox.stub(Restaurant, 'getFromCoordinates', ->
-        deferred = $q.defer()
-        deferred.resolve(restaurants)
-        return deferred.promise
-      )
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when(restaurants)
       scope.onReload()
       scope.$digest()
       scope.restaurants.should.equal(restaurants)
 
     it 'should eventually broadcast scroll.refreshComplete if the server returns a list of restaurants', ->
-      sandbox.stub Network, 'hasConnectivity', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub(Geolocation, 'getGeolocation', ->
-        deferred = $q.defer()
-        deferred.resolve(currentPosition)
-        return deferred.promise
-      )
-      sandbox.stub(Restaurant, 'getFromCoordinates', ->
-        deferred = $q.defer()
-        deferred.resolve(['restaurant'])
-        return deferred.promise
-      )
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
+      sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when(['restaurant'])
       scope.onReload()
       scope.$digest()
       scope.$broadcast.should.have.been.calledWithExactly('scroll.refreshComplete')

@@ -57,18 +57,18 @@ angular.module('groupeat', [
   $rootScope.$on('displayMessageBackdrop', function(event, errorKey) {
     $rootScope.messageBackdrop = MessageBackdrop.backdropFromErrorKey(errorKey);
   });
-  $rootScope.$on('displayLoadingBackdrop', function() {
-    $rootScope.messageBackdrop.status = 'loading';
-  });
+
   $rootScope.$on('hideMessageBackdrop', function() {
     $rootScope.messageBackdrop.status = 'hidden';
   });
 
-  var stateLoad = function() {
-    $rootScope.$broadcast('displayLoadingBackdrop');
-  };
+  $rootScope.$on('$ionicView.afterEnter', function() {
+    $rootScope.messageBackdrop.status = 'loading';
+  });
 
-  $rootScope.$on('$stateChangeSuccess', stateLoad);
+  $rootScope.$on('$ionicView.beforeLeave', function() {
+    $rootScope.messageBackdrop.status = 'hidden';
+  });
 
   $ionicPlatform.ready(function () {
 

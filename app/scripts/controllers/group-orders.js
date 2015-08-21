@@ -2,6 +2,7 @@
 
 angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.analytics',
+  'groupeat.services.controller-promise-handler',
   'groupeat.services.customer',
   'groupeat.services.geolocation',
   'groupeat.services.group-order',
@@ -11,14 +12,14 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, Customer, Geolocation, GroupOrder, Network, Order) {
+.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, Geolocation, GroupOrder, Network, Order) {
 
   Analytics.trackView('Group Orders');
 
   $scope.groupOrders = [];
 
   $scope.onReload = function() {
-    Network.hasConnectivity()
+    var promise = Network.hasConnectivity()
     .then(function() {
       return Geolocation.getGeolocation();
     })
@@ -32,13 +33,8 @@ angular.module('groupeat.controllers.group-orders', [
       } else {
         $scope.groupOrders = groupOrders;
       }
-    })
-    .then(function() {
-      $rootScope.$broadcast('hideMessageBackdrop');
-    })
-    .catch(function(errorKey) {
-      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
-    })
+    });
+    ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
       $scope.$broadcast('scroll.refreshComplete');
     });
@@ -60,6 +56,7 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.$on('$ionicView.afterEnter', function() {
+    $scope.initialState = $state.current.name;
     $scope.onReload();
   });
 

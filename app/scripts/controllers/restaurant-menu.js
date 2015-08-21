@@ -3,6 +3,7 @@
 angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.analytics',
 	'groupeat.services.cart',
+	'groupeat.services.controller-promise-handler',
 	'groupeat.services.lodash',
 	'groupeat.services.network',
 	'groupeat.services.order',
@@ -12,7 +13,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic',
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $rootScope, $scope, $stateParams, $timeout, Analytics, Cart, Network, Order, Popup, Product, Restaurant) {
+.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $rootScope, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -30,7 +31,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		$scope.cart = Cart;
 		$scope.isNewOrder.value = Order.isNewOrder();
 
-		Network.hasConnectivity()
+		var promise = Network.hasConnectivity()
 		.then(function() {
 			return Restaurant.get($stateParams.restaurantId);
 		})
@@ -44,13 +45,8 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			} else {
 				$scope.products = products;
 			}
-		})
-		.then(function() {
-      $rootScope.$broadcast('hideMessageBackdrop');
-    })
-    .catch(function(errorKey) {
-      $rootScope.$broadcast('displayMessageBackdrop', errorKey);
-    })
+		});
+		ControllerPromiseHandler.handle(promise, $scope.initialState)
 		.finally(function() {
 			$scope.$broadcast('scroll.refreshComplete');
 		});
@@ -145,6 +141,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	};
 
 	$scope.$on('$ionicView.afterEnter', function() {
+		$scope.initialState = $state.current.name;
 		$scope.onReload();
 	});
 
