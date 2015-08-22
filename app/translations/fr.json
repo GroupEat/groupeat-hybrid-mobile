@@ -129,8 +129,6 @@
   "notFromCampusErrorKey": "Veuillez entrer une adresse ensta.fr, ensta-paristech.fr, institutoptique.fr ou polytechnique.edu",
   "geCampusEmailShortErrorKey": "Email de votre école uniquement!",
   "matchErrorKey": "Les mots de passe doivent correspondre",
-  "gePhoneFormatErrorKey" : "Le format du numéro de téléphone n'est pas valide (ex: 0612345678)",
-  "gePhoneFormatShortErrorKey" : "Téléphone invalide",
   "notFoundErrorKey" : "Email non reconnu",
   "alreadyTakenErrorKey" : "Email déjà utilisé",
   "invalidErrorKey": "Le {{fieldName}} est invalide",

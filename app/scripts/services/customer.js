@@ -14,6 +14,22 @@ angular.module('groupeat.services.customer', [
 
   var resource = $resource(ENV.apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
 
+  var removeInternationalPrefixFromPhoneNumber = function(customer) {
+    if (customer && customer.phoneNumber && customer.phoneNumber.length > 10) {
+      customer.phoneNumber = customer.phoneNumber.substring(2);
+    }
+
+    return customer;
+  };
+
+  var addFrenchPrefixToPhoneNumber = function(customer) {
+    if (customer && customer.phoneNumber && customer.phoneNumber.substring(0, 2) !== '33') {
+      customer.phoneNumber = '33' + customer.phoneNumber;
+    }
+
+    return customer;
+  };
+
   var
     /**
   * @ngdoc function
@@ -31,7 +47,7 @@ angular.module('groupeat.services.customer', [
     var defer = $q.defer();
     resource.get({id: customerId}).$promise
     .then(function(response) {
-      defer.resolve(response.data);
+      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
     })
     .catch(function(errorResponse) {
       if (errorResponse.status === 404) {
@@ -59,7 +75,7 @@ angular.module('groupeat.services.customer', [
     var defer = $q.defer();
     resource.save(null, requestBody).$promise
     .then(function (response) {
-      defer.resolve(response.data);
+      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
     })
     .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
@@ -82,9 +98,9 @@ angular.module('groupeat.services.customer', [
   */
   update = function (customerId, requestBody) {
     var defer = $q.defer();
-    resource.update({id: customerId}, requestBody).$promise
+    resource.update({id: customerId}, addFrenchPrefixToPhoneNumber(requestBody)).$promise
     .then(function (response) {
-      defer.resolve(response.data);
+      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
     })
     .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));

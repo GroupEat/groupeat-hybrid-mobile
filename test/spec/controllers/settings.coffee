@@ -218,7 +218,7 @@ describe 'Ctrl: SettingsCtrl', ->
         '<form name="form.customerEdit">'+
         '<input ng-model="customer.oldPassword" name="oldPassword" type="password" ng-minlength="6">'+
         '<input ng-model="customer.newPassword" name="newPassword" type="password" ng-minlength="6">'+
-        '<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" ge-phone-format>'+
+        '<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" ui-mask="+33 9-99-99-99-99">'+
         '</form>'
         )
       $compile(formElement)(scope)
