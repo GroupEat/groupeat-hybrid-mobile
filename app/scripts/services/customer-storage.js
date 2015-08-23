@@ -41,6 +41,8 @@ angular.module('groupeat.services.customer-storage', [
     }
     if(settings.daysWithoutNotifying) {
       localStorageService.set('noNotificationAfter', settings.noNotificationAfter);
+    }
+  },
 
   reset = function () {
     localStorageService.remove('firstName');

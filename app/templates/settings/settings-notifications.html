@@ -42,7 +42,8 @@
           {{ 'after' | translate }} :</p>
         </div>
         <select ng-model="customerSettings.noNotificationAfter" name="noNotificationAfter">
-          <option ng-repeat="hour in noNotificationAfterOptions" value="{{hour}}" ng-selected="hour === customer.noNotificationAfter">{{ getLabelFromValue(hour)}}</option>
+
+          <option ng-repeat="hour in noNotificationAfterOptions" value="{{hour}}" ng-selected="hour === customerSettings.noNotificationAfter">{{ getLabelFromValue(hour)}}</option>
         </select>
       </label>
 

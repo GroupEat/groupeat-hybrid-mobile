@@ -49,7 +49,7 @@ angular.module('groupeat.services.customer-settings', [
 
   getLabelHourFromValue = function(value) {
     var matchHour = _.find(noNotificationAfterHours, function(hour) {
-      return hour.value === value
+      return hour.value === value;
     });
     return matchHour.label;
   },
