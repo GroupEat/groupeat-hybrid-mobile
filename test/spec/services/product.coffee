@@ -27,7 +27,7 @@ describe 'Service: Product', ->
       response =
         data:
           products
-      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats$')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats,tags$')
       $httpBackend.expect('GET', regex).respond(response)
       Product.get(1).should.become(products)
       $httpBackend.flush()
@@ -63,13 +63,13 @@ describe 'Service: Product', ->
         }
       ]
 
-      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats$')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats,tags$')
       $httpBackend.expect('GET', regex).respond(response)
       Product.get(1).should.become(expected)
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats$')
+      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants/\\d+/products\\?include=formats,tags$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
       Product.get(1).should.be.rejected
       $httpBackend.flush()
