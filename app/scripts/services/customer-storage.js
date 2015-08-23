@@ -44,6 +44,12 @@ angular.module('groupeat.services.customer-storage', [
     }
   },
 
+  setDefaultSettings = function() {
+    localStorageService.set('notificationsEnabled', true);
+    localStorageService.set('daysWithoutNotifying', '2');
+    localStorageService.set('noNotificationAfter', '23:00:00');
+  },
+
   reset = function () {
     localStorageService.remove('firstName');
     localStorageService.remove('lastName');
@@ -84,6 +90,7 @@ angular.module('groupeat.services.customer-storage', [
     setAddress: setAddress,
     setIdentity: setIdentity,
     setSettings: setSettings,
+    setDefaultSettings: setDefaultSettings,
     reset: reset,
     getAddress: getAddress,
     getIdentity: getIdentity,
