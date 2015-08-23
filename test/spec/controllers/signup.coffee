@@ -121,7 +121,7 @@ describe 'Ctrl: SignupCtrl', ->
       scope.$digest()
       Address.update.should.have.been.calledWithExactly expectedCustomerId, expectedAddressParams
 
-    it 'should call $state.go to the group-orders if Address.update is resolved', ->
+    it 'should call scope.hasSignedUp if Address.update is resolved', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when {}
       sandbox.stub(Credentials, 'get').returns
         id: '1'
@@ -129,7 +129,21 @@ describe 'Ctrl: SignupCtrl', ->
       sandbox.stub(Customer, 'update').returns $q.when
         id: '1'
       sandbox.stub(Address, 'update').returns $q.when({})
-      sandbox.stub $state, 'go'
+      sandbox.stub scope, 'hasSignedUp'
       scope.confirmSignup()
       scope.$digest()
+      scope.hasSignedUp.should.have.been.called
+
+  describe "SignupCtrl#hasSignedUp", ->
+
+    beforeEach ->
+      sandbox.stub $state, 'go'
+      sandbox.stub Popup, 'alert'
+
+    it 'should open a Popup welcoming the user', ->
+      scope.hasSignedUp()
+      Popup.alert.should.have.been.calledWithExactly 'welcome', 'welcomeDetails'
+
+    it 'should switch the state to group orders', ->
+      scope.hasSignedUp()
       $state.go.should.have.been.calledWithExactly 'app.group-orders'
