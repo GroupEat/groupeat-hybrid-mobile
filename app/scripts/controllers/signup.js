@@ -32,11 +32,16 @@ angular.module('groupeat.controllers.signup', [
       return Address.update(customer.id, addressParams);
     })
     .then(function() {
-      $state.go('app.group-orders');
+      $scope.hasSignedUp();
     })
     .catch(function(errorMessage) {
       return Popup.error(errorMessage);
     });
+  };
+
+  $scope.hasSignedUp = function() {
+    Popup.alert('welcome', 'welcomeDetails');
+    $state.go('app.group-orders');
   };
 
 });
