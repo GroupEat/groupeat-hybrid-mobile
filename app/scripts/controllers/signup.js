@@ -4,13 +4,14 @@ angular.module('groupeat.controllers.signup', [
   'groupeat.services.address',
   'groupeat.services.credentials',
   'groupeat.services.customer',
+  'groupeat.services.customer-storage',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.popup',
   'ionic'
 ])
 
-.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, Network, Popup) {
+.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, Network, Popup) {
 
   $scope.slideIndex = 0;
   $scope.user = {};
@@ -28,10 +29,12 @@ angular.module('groupeat.controllers.signup', [
       return Customer.update(customerId, customerParams);
     })
     .then(function(customer) {
+      CustomerStorage.setIdentity(customer);
       var addressParams = _.merge(Address.getAddressFromResidencyInformation($scope.user.residency), {details: $scope.user.addressSupplement});
       return Address.update(customer.id, addressParams);
     })
-    .then(function() {
+    .then(function(address) {
+      CustomerStorage.setAddress(address);
       $scope.hasSignedUp();
     })
     .catch(function(errorMessage) {
