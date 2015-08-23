@@ -83,5 +83,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
       }
     }
   });
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.otherwise(function($injector) {
+    var $state = $injector.get('$state');
+    $state.go('app.group-orders');
+  });
 });
