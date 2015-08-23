@@ -4,7 +4,7 @@ describe 'Ctrl: SignupCtrl', ->
     module 'groupeat.controllers.signup'
     module 'templates'
 
-  scope = rootScope = $ionicSlideBoxDelegate = $q = $state = $state = Address = Credentials = Customer = Network = Popup = sandbox = {}
+  scope = rootScope = $ionicSlideBoxDelegate = $q = $state = $state = Address = Credentials = Customer = CustomerStorage = Network = Popup = sandbox = {}
 
   userMock =
     firstName: 'Walter'
@@ -30,6 +30,7 @@ describe 'Ctrl: SignupCtrl', ->
       Address = $injector.get 'Address'
       Credentials = $injector.get 'Credentials'
       Customer = $injector.get 'Customer'
+      CustomerStorage = $injector.get 'CustomerStorage'
       Network = $injector.get 'Network'
       Popup = $injector.get 'Popup'
 
@@ -103,6 +104,21 @@ describe 'Ctrl: SignupCtrl', ->
       scope.$digest()
       Customer.update.should.have.been.calledWithExactly expectedCustomerId, expectedCustomerParams
 
+    it 'should call CustomerStorage.setIdentity with the received response if Customer.update is resolved', ->
+      expectedCustomerId = "1"
+      customerUpdateResponse =
+        response: 'response'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when {}
+      sandbox.stub(Credentials, 'get').returns
+        id: expectedCustomerId
+      sandbox.stub(Customer, 'update').returns $q.when
+        response: 'response' 
+      sandbox.spy(CustomerStorage, 'setIdentity')
+      sandbox.stub(Address, 'update').returns $q.defer().promise
+      scope.confirmSignup()
+      scope.$digest()
+      CustomerStorage.setIdentity.should.have.been.calledWithExactly customerUpdateResponse
+
     it 'should call Address.update with the customer id and params if Customer.update is resolved', ->
       expectedCustomerId = "1"
       expectedAddressParams =
@@ -120,6 +136,23 @@ describe 'Ctrl: SignupCtrl', ->
       scope.confirmSignup()
       scope.$digest()
       Address.update.should.have.been.calledWithExactly expectedCustomerId, expectedAddressParams
+
+    it 'should call CustomerStorage#setAddress with the received response if Address.update is resolved', ->
+      addressResponse =
+        response: 'addressResponse'
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when {}
+      sandbox.stub(Credentials, 'get').returns
+        id: '1'
+      sandbox.stub(Address, 'getAddressFromResidencyInformation').returns addressMock
+      sandbox.stub(Customer, 'update').returns $q.when
+        id: '1'
+      sandbox.stub(Address, 'update').returns $q.when
+        response: 'addressResponse'
+      sandbox.stub $state, 'go'
+      sandbox.stub CustomerStorage, 'setAddress'
+      scope.confirmSignup()
+      scope.$digest()
+      CustomerStorage.setAddress.should.have.been.calledWithExactly addressResponse
 
     it 'should call scope.hasSignedUp if Address.update is resolved', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when {}
