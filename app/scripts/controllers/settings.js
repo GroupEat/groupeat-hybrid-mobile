@@ -23,10 +23,15 @@ angular.module('groupeat.controllers.settings', [
 	/*
 	Models
 	*/
+<<<<<<< HEAD
 	$scope.customerIdentity = {};
 	$scope.customerAddress = {};
 	$scope.customerSettings = {};
 	$scope.form = {};
+=======
+  $scope.customer = {};
+  $scope.form = {};
+>>>>>>> use customer storage in settings view
   /*
 	Settings list
 	*/

@@ -41,8 +41,8 @@
         <div class="input-label">
           {{ 'after' | translate }} :</p>
         </div>
-        <select ng-model="customerSettings.noNotificationAfter.value" name="noNotificationAfter">
-          <option ng-repeat="hour in noNotificationAfterOptions" value="{{hour.value}}">{{hour.label}}</option>
+        <select ng-model="customerSettings.noNotificationAfter" name="noNotificationAfter">
+          <option ng-repeat="hour in noNotificationAfterOptions" value="{{hour}}" ng-selected="hour === customer.noNotificationAfter">{{ getLabelFromValue(hour)}}</option>
         </select>
       </label>
 
