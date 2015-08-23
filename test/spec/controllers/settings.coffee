@@ -7,11 +7,12 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = ControllerPromiseHandler = Customer = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
+  rootScope = sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer  = CustomerStorage = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
+      rootScope = $rootScope
       scope = $rootScope.$new()
       $compile = $injector.get '$compile'
       $ionicSlideBoxDelegate = $injector.get '$ionicSlideBoxDelegate'
@@ -25,8 +26,8 @@ describe 'Ctrl: SettingsCtrl', ->
       Credentials = $injector.get 'Credentials'
       sandbox.stub(Credentials, 'get').returns
         id: 1
-      ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get 'Customer'
+      CustomerStorage = $injector.get 'CustomerStorage'
       validator = $injector.get 'validator'
       ElementModifier = $injector.get 'ElementModifier'
       ErrorMessageResolver = $injector.get 'ErrorMessageResolver'
@@ -36,7 +37,7 @@ describe 'Ctrl: SettingsCtrl', ->
       Network = $injector.get 'Network'
       CustomerSettings = $injector.get 'CustomerSettings'
       Popup = $injector.get 'Popup'
-      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
+      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
       $injector.get('$httpBackend').expect('GET', regex).respond(200, 'Success')
 
@@ -51,9 +52,17 @@ describe 'Ctrl: SettingsCtrl', ->
 
   describe 'Constructor', ->
 
-    it 'should create an empty customer object', ->
-      scope.customer.should.be.instanceof(Object)
-      scope.customer.should.be.empty
+    it 'should create an empty customer settings object', ->
+      scope.customerSettings.should.be.instanceof(Object)
+      scope.customerSettings.should.be.empty
+
+    it 'should create an empty customer identity object', ->
+      scope.customerIdentity.should.be.instanceof(Object)
+      scope.customerIdentity.should.be.empty
+
+    it 'should create an empty customer address object', ->
+      scope.customerAddress.should.be.instanceof(Object)
+      scope.customerAddress.should.be.empty
 
     it 'should create an empty customer form object', ->
       scope.form.should.be.instanceof(Object)
@@ -69,7 +78,6 @@ describe 'Ctrl: SettingsCtrl', ->
   describe 'SettingsCtrl#onReload', ->
 
     beforeEach ->
-      scope.initialState = 'initial'
       scope.noNotificationAfterOptions = [
         {
           value: '21:00:00',
@@ -81,113 +89,21 @@ describe 'Ctrl: SettingsCtrl', ->
         }
       ]
 
-    it 'should call ControllerPromiseHandler.handle with a promise rejecting the errorKey if no network is available', ->
-      errorKey = 'noNetwork'
-      expectedPromise = $q.reject errorKey
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.reject(errorKey)
+    it 'should call Customer Storage get methods', ->
+      sandbox.spy CustomerStorage, 'getAddress'
+      sandbox.spy CustomerStorage, 'getSettings'
+      sandbox.spy CustomerStorage, 'getIdentity'
       scope.onReload()
-      scope.$digest()
-      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
+      CustomerStorage.getAddress.should.have.been.called
+      CustomerStorage.getSettings.should.have.been.called
+      CustomerStorage.getIdentity.should.have.been.called
 
-    it 'should call Customer#get if connectivity is available', ->
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.defer().promise
+    it 'should load in the scope values of CustomerStorage service', ->
       scope.onReload()
-      scope.$digest()
-      Customer.get.should.have.been.calledWithExactly(1)
+      scope.customerSettings.should.deep.equal CustomerStorage.getSettings()
+      scope.customerAddress.should.deep.equal CustomerStorage.getAddress()
+      scope.customerIdentity.should.deep.equal CustomerStorage.getIdentity()
 
-    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer fails', ->
-      expectedPromise = $q.reject()
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.reject()
-      scope.onReload()
-      scope.$digest()
-      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
-
-    it 'should load the customer in the scope if getting the customer succeeds', ->
-      customer = 'customer'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when(customer)
-      sandbox.stub(Address, 'get').returns $q.defer().promise
-      scope.onReload()
-      scope.$digest()
-      scope.customer.should.equal customer
-
-    it 'should call Address#get if getting the customer succeeds', ->
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.defer().promise
-      scope.onReload()
-      scope.$digest()
-      Address.get.should.have.been.called
-
-    it 'should broadcast the displaying of a generic failure message backdrop if getting the customer succeeds but getting his address fails', ->
-      expectedPromise = $q.reject()
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.reject()
-      scope.onReload()
-      scope.$digest()
-      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
-
-    it 'should add residency and details information to the customer in scope if getting the customer address succeeds', ->
-      customer = {}
-      details = 'details'
-      residency = 'residency'
-      address =
-        details: details
-        residency: residency
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.when(address)
-      sandbox.stub(CustomerSettings, 'get').returns $q.defer().promise
-      scope.onReload()
-      scope.$digest()
-      scope.customer.details.should.equal(details)
-      scope.customer.residency.should.equal(residency)
-
-    it 'should call ControllerPromiseHandle.handle with the rejected promise', ->
-      expectedPromise = $q.reject()
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.when({})
-      sandbox.stub(CustomerSettings, 'get').returns $q.reject()
-      scope.onReload()
-      scope.$digest()
-      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise, 'initial'
-
-    it 'should build the scope.customerSettings object with the received customerSettings if CustomerSettings.get is resolved', ->
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.when({})
-      sandbox.stub(CustomerSettings, 'get').returns $q.when
-        notificationsEnabled: true
-        daysWithoutNotifying: 4
-        noNotificationAfter: "22:00:00"
-      scope.onReload()
-      scope.$digest()
-      scope.customerSettings.should.deep.equal
-        notificationsEnabled: true
-        daysWithoutNotifying: 4
-        noNotificationAfter:
-          value: '22:00:00'
-          label: '22h00'
-
-    it 'should call ControllerPromiseHandler.handle with the rejected promise if CustomerSettings.get is resolved', ->
-      expectedPromise = $q.when()
-      sandbox.spy ControllerPromiseHandler, 'handle'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(Customer, 'get').returns $q.when({})
-      sandbox.stub(Address, 'get').returns $q.when({})
-      sandbox.stub(CustomerSettings, 'get').returns $q.when({})
-      scope.onReload()
-      scope.$digest()
-      ControllerPromiseHandler.handle.should.have.been.calledWithMatch expectedPromise
 
   describe 'SettingsCtrl#slideTo', ->
 
@@ -273,6 +189,18 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       Customer.update.should.have.been.called
 
+    it 'should call CustomerStorage#setIdentity with the received customer if Customer.update is resolved', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when
+        customer: 'customer'
+      sandbox.stub(Authentication, 'updatePassword').returns($q.defer().promise)
+      sandbox.spy(CustomerStorage, 'setIdentity')
+      scope.onSave()
+      scope.$digest()
+      CustomerStorage.setIdentity.should.have.been.calledWithExactly
+        customer: 'customer'
+
     it 'should display an error popup if client side validation succeeds but Customer#update fails', ->
       errorMessage = 'errorMessage'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
@@ -299,6 +227,17 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.onSave()
       scope.$digest()
       Address.update.should.have.been.called
+
+    it 'should call CustomerStorage#setAddress if Address.update is resolved', ->
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'update').returns $q.when({})
+      sandbox.stub(Address, 'update').returns $q.when({})
+      sandbox.stub(CustomerSettings, 'update').returns($q.defer().promise)
+      sandbox.spy(CustomerStorage, 'setAddress')
+      scope.onSave()
+      scope.$digest()
+      CustomerStorage.setAddress.should.have.been.called
 
     it 'should display an error popup if client side validation and Customer#update succeed but Address#update fails', ->
       errorMessage = 'errorMessage'
@@ -354,7 +293,7 @@ describe 'Ctrl: SettingsCtrl', ->
       scope.$digest()
       CustomerSettings.update.should.have.been.called
 
-    it 'should build the scope.customerSettings object with the received customerSettings if CustomerSettings.update is resolved', ->
+    it 'should call Customer Storage with the received customerSettings if CustomerSettings.update is resolved', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'update').returns $q.when({})
@@ -363,15 +302,14 @@ describe 'Ctrl: SettingsCtrl', ->
       sandbox.stub(CustomerSettings, 'update').returns $q.when
         notificationsEnabled: false
         daysWithoutNotifying: 3
-        noNotificationAfter: "21:00:00"
+        noNotificationAfter: '21:00:00'
+      sandbox.spy(CustomerStorage, 'setSettings')
       scope.onSave()
       scope.$digest()
-      scope.customerSettings.should.deep.equal
+      CustomerStorage.setSettings.should.have.been.calledWithExactly
         notificationsEnabled: false
         daysWithoutNotifying: 3
-        noNotificationAfter:
-          value: '21:00:00'
-          label: '21h00'
+        noNotificationAfter: '21:00:00'
 
     it 'should display a confirmation popup if all previous steps succeeded', ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})

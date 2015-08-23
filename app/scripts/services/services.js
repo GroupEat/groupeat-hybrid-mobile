@@ -10,6 +10,7 @@ angular.module('groupeat.services', [
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
+  'groupeat.services.customer-storage',
   'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
