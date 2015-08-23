@@ -50,7 +50,6 @@ angular.module('groupeat.controllers.settings', [
 		$scope.customerAddress = CustomerStorage.getAddress();
 		$scope.customerSettings = CustomerStorage.getSettings();
 		$rootScope.$broadcast('hideMessageBackdrop');
-		$scope.$broadcast('scroll.refreshComplete');	
 	};
 
   /*
@@ -117,5 +116,4 @@ angular.module('groupeat.controllers.settings', [
 		$scope.residencies = Address.getResidencies();
 		$scope.onReload();
 	});
-
 });
