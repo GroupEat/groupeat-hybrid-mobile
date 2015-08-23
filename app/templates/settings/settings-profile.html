@@ -18,10 +18,8 @@
 	</div>
 	<input ng-model="customer.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
 	<input ng-model="customer.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
-	<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel" placeholder="{{ 'phoneNumber' | translate }}" ge-phone-format>
-	<div ng-messages="furtherRegisterForm.phoneNumber.$error">
-		<div ng-message="gePhoneFormat">{{ 'gePhoneFormatShortErrorKey' | translate }}</div>
-	</div>
+	<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel"
+    ui-mask="+33 9-99-99-99-99" placeholder="{{ 'phoneNumber' | translate }}" ui-mask-placeholder>
 
 	<div class="item item-divider">
 		{{ 'editPassword' | translate }}
