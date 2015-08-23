@@ -6,8 +6,8 @@ angular.module('groupeat.services.product', [
 ])
 
 .factory('Product', function ($resource, ENV, $q, _) {
-  var resource = $resource(ENV.apiEndpoint + '/restaurants/:restaurantId/products?include=formats');
-  
+  var resource = $resource(ENV.apiEndpoint + '/restaurants/:restaurantId/products?include=formats,tags');
+
   var
   /**
   * @ngdoc function
@@ -35,5 +35,5 @@ angular.module('groupeat.services.product', [
     return defer.promise;
   };
   return { get: get };
-  
+
 });
