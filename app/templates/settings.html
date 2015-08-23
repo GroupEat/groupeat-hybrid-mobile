@@ -1,7 +1,10 @@
-<ion-view ng-init="initCtrl()" id="settings" title="{{ 'settings' | translate }}" >
+<ion-view hide-back-button="true" id="settings" title="{{ 'settings' | translate }}" >
 
   <ion-nav-buttons side="right">
     <button on-tap="onSave()" class="button button-clear button-positive icon ion-checkmark-circled"></button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="left">
+    <button class="button button-clear button-positive icon ion-ios-arrow-thin-left" ui-sref="app.group-orders"></button>
   </ion-nav-buttons>
 
   <div class="bar bar-subheader bar-tab" ng-class="{'second-selected' : slideIndex == 1}">
