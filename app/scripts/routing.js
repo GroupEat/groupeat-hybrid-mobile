@@ -28,6 +28,7 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
     }
   })
   .state('app.group-orders', {
+    cache: false,
     url: '',
     views: {
       'app': {
