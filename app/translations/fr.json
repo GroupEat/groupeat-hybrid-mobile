@@ -1,6 +1,7 @@
 {
   "cancel": "Annuler",
   "ok": "Ok",
+  "ok!": "OK !",
   "and": "et",
   "send": "Envoyer",
   "back": "Retour",
@@ -11,7 +12,6 @@
   "disconnect": "Se déconnecter",
 
   "forgotPassword": "Mot de passe oublié",
-  "login": "Se connecter",
   "register": "S'inscrire",
   "email": "E-mail",
   "password": "Mot de passe",
@@ -20,7 +20,7 @@
   "firstName": "Prénom",
   "lastName": "Nom",
   "phoneNumber": "Numéro de téléphone",
-  "address": "Adresse postale",
+  "address": "Adresse",
   "ENSTAParisTech": "ENSTA ParisTech",
   "polytechnique": "Polytechnique",
   "supoptique": "Supoptique",
@@ -76,12 +76,13 @@
   "restaurantMenu": "Carte du restaurant",
   "alreadyAGroupOrder": "Rejoignez la commande en cours !",
   "pleaseChangeRestaurantOrJoinGroupOrder": "Il existe déjà une commande groupée dans ce restaurant, vous ne pouvez pas en créer une nouvelle. Rejoignez l'existante, et bénéficiez de réductions alléchantes...",
-
   "yourCart": "Votre panier",
   "confirmOrder": "Valider ma Commande",
   "total": "Total",
+  "insteadOf": "Au lieu de",
   "myAddress": "Mon adresse",
   "newAddress": "Nouvelle adresse",
+  "otherAddresses": "Autres adresses",
   "predefinedAddress": "Lieu commun",
   "emptyCart": "Votre panier est vide.",
   "howLongFoodRush" : "Quelle durée, souhaitez-vous pour le",
@@ -168,5 +169,44 @@
   "pullToRefresh": "Tirez pour rafraîchir",
 
   "restaurantHasGroupOrder": "Attention",
-  "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?"
+  "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?",
+
+  "left": "restantes",
+  "doOrder": "Passer commande",
+
+  "addAComment": "Ajouter un commentaire à votre commande",
+
+  "upTo": "Jusqu'à",
+
+  "yummy": "Miam",
+  "orderSaved": "Votre commande a été enregistrée",
+  "whereDoYouWantToBeDelivered": "Où souhaitez vous être livré",
+  "youWillBeDeliveredAt": "Vous serez livré à",
+
+  "createAnOrder": "Crée une commande",
+  "createAnOrderDetails": "Sélectionne un restaurant, ce que tu souhaites manger, et regarde le prix de ton panier baisser chaque fois que quelqu’un rejoint la commande.",
+  "joinAnOrder": "Rejoins une commande",
+  "joinAnOrderDetails": "Rejoins une commande GroupEat autour de toi et économise directement sur ton achat",
+  "groupEatSpirit": "C’est ça l’esprit GroupEat",
+  "setTheFoodRush": "Règle le Food Rush",
+  "setTheFoodRushDetails": "Plutôt économe ou pressé ? Définis combien de temps tu souhaites attendre avant d’être livré : plus tu attends, plus tu économises",
+  "groupPriceAtHome": "Le prix du groupe, à la maison",
+  "createMyAccount": "Créer mon compte",
+  "login": "Me connecter",
+  "alreadyHaveAccount": "Je possède déjà un compte",
+  "noAccount": "Je ne possède pas de compte",
+
+  "nothingInteresting": "Rien ne vous intéresse",
+
+  "pizzasLeft": "Pizzas restantes",
+
+  "restaurants": "Restaurants",
+  "restaurantsAroundYou": "restaurants autour de vous",
+
+  "aboutYou": "À propos de toi",
+  "aboutYouDetails": "Les informations serviront à t’identifier auprès du livreur",
+  "nextStep": "Étape suivante",
+  "helloYou": "Allo {{firstName}}",
+  "helloYouDetails": "Le livreur pourra te contacter à ce numéro",
+  "noSpamNoCommercials": "Jamais de spams, jamais de pubs"
 }
