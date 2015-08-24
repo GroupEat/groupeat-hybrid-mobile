@@ -11,7 +11,7 @@
 			}
 			h4 {
 				font-weight: 300;
-				font-size: 16px;
+				font-size: 15px;
 				margin-top: 30px;
 				color: $font-grey;
 			}
@@ -213,5 +213,35 @@
 	&.is-hidden {
 		opacity: 0;
 		pointer-events: none;
+	}
+}
+
+@media (max-width: 350px) {
+	#auth {
+		.content {
+			.logo {
+				margin-bottom: 10px;
+				h4 {
+					display: none;
+				}
+			}
+			.form {
+				margin-bottom: 0;
+			}
+			.titles {
+				padding: 10px;
+    			margin-top: 40px;
+    			margin-bottom: 0;
+			}
+		}
+	}
+	.progress {
+		top: 70px;
+	}
+	.later {
+		bottom: 30px;
+		a {
+			font-size: 11px;
+		}
 	}
 }
