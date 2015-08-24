@@ -47,10 +47,7 @@ angular.module('groupeat.services.customer-settings', [
     ];
   }, 
 
-  getLabelHourFromValue = function(value) {
-    return _.find(noNotificationAfterHours, 'value', value).label;
-  },
-    /**
+  /**
   * @ngdoc function
   * @name CustomerSettings#get
   * @methodOf CustomerSettings
@@ -92,7 +89,6 @@ angular.module('groupeat.services.customer-settings', [
     getNoNotificationAfterHours: getNoNotificationAfterHours,
     getDaysWithoutNotifying: getDaysWithoutNotifying,
     get: get,
-    getLabelHourFromValue: getLabelHourFromValue,
     update: update
   };
 });

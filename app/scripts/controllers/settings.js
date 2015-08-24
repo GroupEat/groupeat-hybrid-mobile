@@ -105,10 +105,6 @@ angular.module('groupeat.controllers.settings', [
 		});
 	};
 
-	$scope.getLabelFromValue = function(value) {
-		return CustomerSettings.getLabelHourFromValue(value);
-	};
-
 	$scope.$on('$ionicView.afterEnter', function() {
 		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
