@@ -41,12 +41,11 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
       if (hasAtLeastOneProduct(productToDelete, format)) {
         _.forEach(products, function (product) {
           if (product.name === productToDelete.name && product.format === format.name) {
-              if(product.price === 0) {
-                productToDeleteIndex = _.indexOf(products, product);
-              } else {
-                product.quantity -= 1;
-                product.price = product.quantity * format.price;
-              }
+            product.quantity -= 1;
+            product.price = product.quantity * format.price;
+            if(product.quantity === 0) {
+              productToDeleteIndex = _.indexOf(products, product);
+            }
           }
         });
         if(productToDeleteIndex) {
