@@ -7,6 +7,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.customer',
+  'groupeat.services.customer-storage',
   'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
@@ -15,7 +16,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.popup',
 ])
 
-.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Authentication, Credentials, Customer, DeviceAssistant, ElementModifier, Network, Popup) {
+.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Authentication, Credentials, Customer, CustomerStorage, DeviceAssistant, ElementModifier, Network, Popup) {
 
   Analytics.trackView('Authentication');
 
@@ -79,6 +80,7 @@ angular.module('groupeat.controllers.authentication', [
       return Customer.save(requestBody);
     })
     .then(function(credentials) {
+      CustomerStorage.setDefaultSettings();
       Credentials.set(credentials.id, credentials.token);
       return DeviceAssistant.register();
     })

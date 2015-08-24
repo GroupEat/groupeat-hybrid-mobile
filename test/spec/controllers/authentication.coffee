@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
+  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
 
   formMock = 'form'
 
@@ -28,6 +28,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Authentication = $injector.get 'Authentication'
       Credentials = $injector.get 'Credentials'
       Customer = $injector.get 'Customer'
+      CustomerStorage = $injector.get 'CustomerStorage'
       DeviceAssistant = $injector.get 'DeviceAssistant'
       Network = $injector.get 'Network'
       Popup = $injector.get 'Popup'
@@ -252,6 +253,22 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.$digest()
 
       Customer.save.should.have.been.calledWithExactly expectedRequestBody
+
+    it "if Customer.save is resolved, CustomerStorage#setDefaultSettings should be called", ->
+      expectedId = '1'
+      expectedToken = 'token'
+      sandbox.stub(Customer, 'save').returns $q.when
+        id: expectedId
+        token: expectedToken
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
+      sandbox.stub CustomerStorage, 'setDefaultSettings'
+
+      scope.submitRegisterForm formMock
+      scope.$digest()
+
+      CustomerStorage.setDefaultSettings.should.have.been.called
 
     it "if Customer.save is resolved, Credentials.set should be called with the given credentials", ->
       expectedId = '1'

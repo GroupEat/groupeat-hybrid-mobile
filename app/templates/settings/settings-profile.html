@@ -7,28 +7,29 @@
         <div class="input-label">
           {{ 'residency' | translate }} :
         </div>
-        <select ng-model="customer.residency" ng-options="residency | translate for residency in residencies">
+        <select ng-model="customerAddress.residency" ng-options="residency | translate for residency in residencies">
 			<option value="" selected disabled>{{ 'residency' | translate }}</option>
 		</select>
 	</label>
-	<input ng-model="customer.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
+	<input ng-model="customerAddress.details" name="details" type="text" placeholder="{{ 'addressSupplement' | translate }}">
 
 	<div class="item item-divider">
 		{{ 'otherDeliveryInformation' | translate }}
 	</div>
-	<input ng-model="customer.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
-	<input ng-model="customer.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
-	<input ng-model="customer.phoneNumber" name="phoneNumber" type="tel"
+	<input ng-model="customerIdentity.firstName" type="text" placeholder="{{ 'firstName' | translate }}">
+	<input ng-model="customerIdentity.lastName" name="lastName" type="text" placeholder="{{ 'lastName' | translate }}">
+	<input ng-model="customerIdentity.phoneNumber" name="phoneNumber" type="tel"
     ui-mask="+33 9-99-99-99-99" placeholder="{{ 'phoneNumber' | translate }}" ui-mask-placeholder>
+
 
 	<div class="item item-divider">
 		{{ 'editPassword' | translate }}
 	</div>
-	<input ng-model="customer.oldPassword" name="oldPassword" type="password" placeholder="{{ 'oldPassword' | translate }}" ng-minlength="6">
+	<input ng-model="customerIdentity.oldPassword" name="oldPassword" type="password" placeholder="{{ 'oldPassword' | translate }}" ng-minlength="6">
 	<div ng-messages="customerEditForm.oldPassword.$error">
 		<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 	</div>
-	<input ng-model="customer.newPassword" name="newPassword" type="password" placeholder="{{ 'newPassword' | translate }}" ng-minlength="6">
+	<input ng-model="customerIdentity.newPassword" name="newPassword" type="password" placeholder="{{ 'newPassword' | translate }}" ng-minlength="6">
 	<div ng-messages="customerEditForm.newPassword.$error">
 		<div ng-message="min">{{ 'minShortErrorKey' | translate }}</div>
 	</div>

@@ -195,7 +195,7 @@ angular.module('groupeat.services.customer', [
         Popup.confirm('missingProperties', missingCustomerInformationMessage, 'settings')
         .then(function(res) {
           if (res) {
-            $state.go('app.settings');
+            $state.go('settings');
           }
         });
       }

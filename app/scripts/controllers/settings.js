@@ -4,10 +4,10 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.address',
   'groupeat.services.analytics',
   'groupeat.services.authentication',
-  'groupeat.services.controller-promise-handler',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
+  'groupeat.services.customer-storage',
   'groupeat.services.element-modifier',
   'groupeat.services.lodash',
   'groupeat.services.network',
@@ -16,111 +16,88 @@ angular.module('groupeat.controllers.settings', [
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $scope, $state, Address, Analytics, Authentication, ControllerPromiseHandler, Credentials, Customer, CustomerSettings, ElementModifier, Network, Popup) {
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, Network, Popup) {
 
 	Analytics.trackView('Restaurants');
 
 	/*
 	Models
 	*/
-  $scope.customer = {};
-  $scope.form = {};
-  $scope.customerSettings = {};
-  /*
+	$scope.customerIdentity = {};
+	$scope.customerAddress = {};
+	$scope.customerSettings = {};
+	$scope.form = {};
+
+	/*
 	Settings list
 	*/
 	$scope.slideIndex = 0;
-  $scope.tabs = [
-    {
-      id: 0,
-      title: 'editProfile',
-      url: 'templates/settings/settings-profile.html'
-    },
-    {
-      id: 1,
-      title: 'pushSettings',
-      url: 'templates/settings/settings-notifications.html'
-    }
-  ];
+	$scope.tabs = [
+		{
+			id: 0,
+			title: 'editProfile',
+			url: 'templates/settings/settings-profile.html'
+		},
+		{
+			id: 1,
+			title: 'pushSettings',
+			url: 'templates/settings/settings-notifications.html'
+		}
+	];
 
 	$scope.onReload = function() {
-		var customerId = Credentials.get().id;
-
-    var promise = Network.hasConnectivity()
-    .then(function() {
-      return Customer.get(customerId);
-    })
-		.then(function(customer) {
-			$scope.customer = customer;
-			return Address.get(customerId);
-		})
-		.then(function(address) {
-			$scope.customer = _.merge($scope.customer, address);
-			return CustomerSettings.get(customerId);
-		})
-		.then(function(customerSettings) {
-			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
-			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
-				return (option.value === customerSettings.noNotificationAfter);
-			});
-		});
-    ControllerPromiseHandler.handle(promise, $scope.initialState)
-    .finally(function() {
-      $scope.$broadcast('scroll.refreshComplete');
-    });
+		$scope.customerIdentity = CustomerStorage.getIdentity();
+		$scope.customerAddress = CustomerStorage.getAddress();
+		$scope.customerSettings = CustomerStorage.getSettings();
 	};
 
-  /*
-  Switching tab
-  */
-  $scope.slideTo = function(slideId) {
-    $ionicSlideBoxDelegate.slide(slideId);
-    $scope.slideIndex = slideId;
-  };
+	/*
+	Switching tab
+	*/
+	$scope.slideTo = function(slideId) {
+		$ionicSlideBoxDelegate.slide(slideId);
+		$scope.slideIndex = slideId;
+	};
 
 	/*
 	Saving
 	*/
 	$scope.onSave = function() {
 		var customerId = Credentials.get().id;
+		
+		// TODO : make request only if changes has been notified
 
-    Network.hasConnectivity()
-    .then(function() {
-      return ElementModifier.validate($scope.form.customerEdit);
-    })
+		Network.hasConnectivity()
 		.then(function() {
-			var customerParams = _.pick($scope.customer, ['firstName', 'lastName', 'phoneNumber']);
-			return Customer.update(customerId, customerParams);
+			return ElementModifier.validate($scope.form.customerEdit);
+		})
+		.then(function() {
+			return Customer.update(customerId, $scope.customerIdentity);
 		})
 		.then(function(customer) {
-			$scope.customer = _.merge($scope.customer, customer);
-			var addressParams = Address.getAddressFromResidencyInformation($scope.customer.residency);
+			CustomerStorage.setIdentity(customer);
+			var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
 			if (!addressParams)
 			{
 				// If no residency was provided, not requesting the Address update
 				return $q.when({});
 			}
-			addressParams = _.merge(addressParams, {details: $scope.customer.details});
+			addressParams = _.merge(addressParams, {details: $scope.customerAddress.details});
 			return Address.update(customerId, addressParams);
 		})
 		.then(function(address) {
-			$scope.customer = _.merge($scope.customer, address);
-			var authenticationParams = _.pick($scope.customer, ['email', 'oldPassword', 'newPassword']);
+			CustomerStorage.setAddress(address);
+			var authenticationParams = _.pick($scope.customerIdentity, ['email', 'oldPassword', 'newPassword']);
 			return Authentication.updatePassword(authenticationParams);
 		})
 		.then(function() {
 			// Clearing both passwords
 			$scope.oldPassword = '';
 			$scope.newPassword = '';
-			var customerSettings = _.pick($scope.customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
-			customerSettings.noNotificationAfter = $scope.customerSettings.noNotificationAfter.value;
-			return CustomerSettings.update(customerId, customerSettings);
+			return CustomerSettings.update(customerId, $scope.customerSettings);
 		})
 		.then(function(customerSettings) {
-			$scope.customerSettings = _.pick(customerSettings, ['notificationsEnabled', 'daysWithoutNotifying']);
-			$scope.customerSettings.noNotificationAfter = _.find($scope.noNotificationAfterOptions, function(option) {
-				return (option.value === customerSettings.noNotificationAfter);
-			});
+			CustomerStorage.setSettings(customerSettings);
 			Popup.title('customerEdited');
 		})
 		.catch(function(errorMessage) {
@@ -128,12 +105,10 @@ angular.module('groupeat.controllers.settings', [
 		});
 	};
 
-  $scope.$on('$ionicView.afterEnter', function() {
-    $scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
+	$scope.$on('$ionicView.afterEnter', function() {
+		$scope.daysWithoutNotifyingOptions = CustomerSettings.getDaysWithoutNotifying();
 		$scope.noNotificationAfterOptions = CustomerSettings.getNoNotificationAfterHours();
 		$scope.residencies = Address.getResidencies();
-    $scope.initialState = $state.current.name;
-    $scope.onReload();
-  });
-
+		$scope.onReload();
+	});
 });
