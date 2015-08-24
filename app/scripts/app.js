@@ -16,6 +16,7 @@ angular.module('groupeat', [
   'validation.match',
   'groupeat.controllers',
   'groupeat.directives',
+  'groupeat.filters',
   'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
