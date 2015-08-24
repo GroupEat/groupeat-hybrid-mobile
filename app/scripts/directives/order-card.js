@@ -1,21 +1,11 @@
 'use strict';
-angular.module('groupeat.directives.order-card', []).directive('orderCard', function (Customer, Order, $state) {
+angular.module('groupeat.directives.order-card', []).directive('orderCard', function () {
     return {
       restrict: 'EA',
-      templateUrl: 'templates/cards/order-card.html',
-      scope: { order: '=' },
-      link: function (scope) {
-        scope.setArrayFromInt = function (num) {
-          return new Array(num);
-        };
-        scope.onJoinOrderTouch = function (groupOrder) {
-          Customer.checkActivatedAccount().then(function () {
-            return Customer.checkMissingInformation();
-          }).then(function () {
-            Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity);
-            $state.go('app.restaurant-menu', { restaurantId: groupOrder.restaurant.data.id });
-          });
-        };
+      link: function (scope, elem) {
+        var top = elem[0].querySelector('.top');
+        console.log($(document).height());
+        top.style.height = $(document).height() - 380 + 'px';
       }
     };
   });
