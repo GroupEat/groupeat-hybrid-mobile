@@ -28,7 +28,7 @@ angular.module('groupeat.controllers.settings', [
 	$scope.customerSettings = {};
 	$scope.form = {};
 
-  /*
+	/*
 	Settings list
 	*/
 	$scope.slideIndex = 0;
@@ -49,16 +49,15 @@ angular.module('groupeat.controllers.settings', [
 		$scope.customerIdentity = CustomerStorage.getIdentity();
 		$scope.customerAddress = CustomerStorage.getAddress();
 		$scope.customerSettings = CustomerStorage.getSettings();
-		$rootScope.$broadcast('hideMessageBackdrop');
 	};
 
-  /*
-  Switching tab
-  */
-  $scope.slideTo = function(slideId) {
-    $ionicSlideBoxDelegate.slide(slideId);
-    $scope.slideIndex = slideId;
-  };
+	/*
+	Switching tab
+	*/
+	$scope.slideTo = function(slideId) {
+		$ionicSlideBoxDelegate.slide(slideId);
+		$scope.slideIndex = slideId;
+	};
 
 	/*
 	Saving
