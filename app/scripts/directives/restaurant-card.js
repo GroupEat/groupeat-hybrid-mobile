@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('groupeat.directives.restaurant-card', [])
+angular.module('groupeat.directives.restaurant-card', [
+  'pascalprecht.translate'
+])
 
 .directive('geRestaurantCard', function () {
 
