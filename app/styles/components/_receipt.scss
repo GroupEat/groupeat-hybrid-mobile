@@ -19,6 +19,10 @@
 		background-color: #FFF;
 		font-size: 11px;
 		padding: 0 15px;
+		@media (max-width: 350px) { 
+			max-height: 80px;
+			overflow-y: auto;
+		}
 		.order {
 			.number-item {
 				vertical-align: middle;
