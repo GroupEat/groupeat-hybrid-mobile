@@ -105,7 +105,7 @@ angular.module('groupeat.services.message-backdrop', [])
     *
     */
     noGroupOrders = function() {
-      return backdrop('noGroupOrders', 'ion-ios-cart-outline', 'newOrder', 'app.restaurants');
+      return backdrop('noGroupOrders', 'ion-pizza', 'newOrder', 'app.restaurants');
     },
 
     /**
@@ -117,7 +117,7 @@ angular.module('groupeat.services.message-backdrop', [])
     *
     */
     noRestaurants = function() {
-      return backdrop('noRestaurants', 'ion-android-restaurant');
+      return backdrop('noRestaurants', 'ion-android-globe');
     },
 
     /**
@@ -129,7 +129,7 @@ angular.module('groupeat.services.message-backdrop', [])
     *
     */
     noOrders = function() {
-      return backdrop('noOrders', 'ion-thumbsdown');
+      return backdrop('noOrders', 'ion-pizza');
     },
 
     /**
@@ -141,7 +141,7 @@ angular.module('groupeat.services.message-backdrop', [])
     *
     */
     emptyMenu = function() {
-      return backdrop('emptyMenu', 'ion-android-pizza');
+      return backdrop('emptyMenu', 'ion-pizza');
     };
 
     return {
