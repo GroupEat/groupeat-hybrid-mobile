@@ -43,24 +43,9 @@
 				</div>
 				<form ng-submit="slideTo(2)">
 					<div class="form">
-						<div class="row">
-							<div class="col-25 col">
-								<div class="input input-bordered input-fixed">
-									+33
-								</div>
-							</div>
-							<div class="col">
-								<div class="input input-bordered input-tel">
-									<input ui-mask="9-99-99-99-99" type="tel" ng-model="user.phoneNumber" placeholder="x-xx-xx-xx-xx">
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col">
-								<p class="info-comment">
-									* Jamais de spams, jamais de pubs.
-								</p>
-							</div>
+						<div class="input input-bordered input-tel">
+							<input ng-model="user.phoneNumber" name="phoneNumber" type="tel"
+								ui-mask="+33 9-99-99-99-99" placeholder="{{ 'phoneNumber' | translate }}" ui-mask-placeholder>
 						</div>
 					</div>
 					<div class="btn-group">
