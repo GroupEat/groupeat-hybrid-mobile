@@ -7,8 +7,8 @@
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="title has-sub-title">
-      Allo Pizza 91
-      <small>{{currentOrder.remainingCapacity}} Pizzas restantes</small>
+      {{ restaurant.name }}
+      <small>{{currentOrder.remainingCapacity}} {{'pizzasLeft' | translate }}</small>
     </div>
   </ion-nav-title>
   <ion-nav-buttons side="secondary">
@@ -119,7 +119,7 @@
       </div>
       <div class="col">
         <button on-tap="openCart()" class="btn btn-bloc btn-green btn-xlg btn-square" ng-disabled="cart.getTotalQuantity() == 0">
-          Commander
+          {{ 'toOrder' | translate }}
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@
     <div class="time-left">
       <span>
         <timer end-time="groupOrder.endingAt" interval="1000"> {{mminutes}}</timer>mn
-        </span> left
+      </span> {{ 'left' | translate }}
     </div>
   </div>
   <div class="content">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <a href="#" on-tap="onJoinOrderTouch(order)" class="btn btn-bloc btn-green btn-lg">
-      <i class="ion-plus-round"></i> Passer commande
+      <i class="ion-plus-round"></i> {{ 'order' | translate }}
     </a>
   </div>
 </div>

@@ -70,7 +70,7 @@ angular.module('groupeat.services.restaurant', [
   checkGroupOrders = function (restaurantId, groupOrders) {
     var deferred = $q.defer();
     if (_.some(groupOrders, 'restaurant.data.id', restaurantId)) {
-      Popup.confirm('restaurantHasGroupOrder', 'restaurantHasGroupOrderMessage', 'join')
+      Popup.confirm('restaurantHasGroupOrder', 'restaurantHasGroupOrderMessage', 'ok!')
       .then(function(res) {
         if (res) {
           deferred.resolve();

@@ -4,8 +4,8 @@
 		<ion-slide>
 			<div class="content">
 				<div class="titles">
-					<h3>À propos de toi !</h3>
-					<p>Ces informations serviront à t’identifier auprès du livreur.</p>
+					<h3>{{ 'aboutYou' | translate }} !</h3>
+					<p>{{ 'aboutYouDetails' | translate }}.</p>
 				</div>
 				<form ng-submit="slideTo(1)">
 					<div class="form">
@@ -13,10 +13,10 @@
 							<div class="col">
 								<div class="group-input group-two">
 									<div class="input">
-										<input type="text" placeholder="Prénom" ng-model="user.firstName">
+										<input type="text" placeholder="{{ 'firstName' | translate }}" ng-model="user.firstName">
 									</div>
 									<div class="input">
-										<input type="text" placeholder="Nom" ng-model="user.lastName">
+										<input type="text" placeholder="{{ 'lastName' | translate }}" ng-model="user.lastName">
 									</div>
 								</div>
 							</div>
@@ -26,7 +26,7 @@
 						<div class="row">
 							<div class="col">
 								<button type="submit" on-tap="slideTo(1)" ng-disabled="!user.firstName || !user.lastName" class="btn btn-bloc btn-lg btn-green">
-									Etape suivante <i class="ion-ios-arrow-thin-right"></i>
+									{{ 'nextStep' | translate }} <i class="ion-ios-arrow-thin-right"></i>
 								</button>
 							</div>
 						</div>
@@ -38,8 +38,8 @@
 		<ion-slide>
 			<div class="content">
 				<div class="titles">
-					<h3>Allo {{firstName}} ?</h3>
-					<p>Le livreur pourra te contacter à ce numéro.</p>
+					<h3>{{ 'helloYou' | translate:'{"firstName": firstName}' }} ?</h3>
+					<p>{{ 'helloYouDetails' | translate }}.</p>
 				</div>
 				<form ng-submit="slideTo(2)">
 					<div class="form">
@@ -54,7 +54,7 @@
             <div class="row">
               <div class="col">
                 <p class="info-comment">
-                  * Jamais de spams, jamais de pubs.
+                  * {{ 'noSpamNoCommercials' | translate }}.
                 </p>
               </div>
             </div>

@@ -3,49 +3,49 @@
 	<ion-slide-box id="intro-slides" on-slide-changed="slideHasChanged($index)" show-pager="true" class="full-height">
 		<ion-slide>
 			<div class="titles">
-				<h3>Crée une commande</h3>
-				<p>Sélectionne un restaurant, ce que tu souhaites manger, et regarde le prix de ton panier baisser chaque fois que quelqu’un rejoint la commande.</p>
+				<h3>{{ 'createAnOrder' | translate }}</h3>
+				<p>{{ 'createAnOrderDetails' | translate }}</p>
 			</div>
 		</ion-slide>
 		<ion-slide>
 			<div class="titles">
-				<h3>Rejoins une commande</h3>
-				<p>Rejoins une commande GroupEat autour de toi et économise directement sur ton achat.<br /> C’est ça l’esprit GroupEat !</p>
+				<h3>{{ 'joinAnOrder' | translate }}</h3>
+				<p>{{ 'joinAnOrderDetails' | translate }}.<br /> {{ 'groupEatSpirit' | translate }} !</p>
 			</div>
 		</ion-slide>
 		<ion-slide>
 			<div class="titles">
-				<h3>Règle le Food Rush</h3>
-				<p>Plutôt économe ou pressé ? Définis combien de temps tu souhaites attendre avant d’être livré : plus tu attends, plus tu économises !</p>
+				<h3>{{ 'setTheFoodRush' | translate }}</h3>
+				<p>{{ 'setTheFoodRushDetails' | translate }} !</p>
 			</div>
 		</ion-slide>
 		<ion-slide id="auth">
 			<div class="content">
 				<div class="logo">
 					<img src="images/logo-groupeat.png" alt="">
-					<h4 class="baseline">Le prix du groupe, à la maison !</h4>
+					<h4 class="baseline">{{ 'groupPriceAtHome' | translate }} !</h4>
 				</div>
 				<div class="row">
 					<div class="col">
 						<form name="form" ng-submit="submitForm(form, registering);" ng-submit-force="true" novalidate>
 							<div class="group-input group-two">
 								<div class="input">
-									<input name="email" type="email" placeholder="Adresse Email" ng-model="user.email" required ge-campus-email>
+									<input name="email" type="email" placeholder="{{ 'email' | translate }}" ng-model="user.email" required ge-campus-email>
 								</div>
 								<div class="input">
-									<input name="password" type="password" placeholder="Mot de Passe" ng-model="user.password" required ng-minlength="6">
+									<input name="password" type="password" placeholder="{{ 'password' | translate }}" ng-model="user.password" required ng-minlength="6">
 								</div>
 							</div>
 							<div class="flip-container" ng-class="{'is-flipped' : !registering}">
 								<div class="flip">
 									<div class="front">
 										<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20">
-											Créer mon compte !
+											{{ 'createMyAccount' | translate }} !
 										</button>
 									</div>
 									<div class="back">
 										<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20">
-											Me connecter !
+											{{ 'login' || translate }} !
 										</button>
 									</div>
 								</div>
@@ -53,12 +53,12 @@
 						</form>
 						<p class="mute-link mg-top-20" on-tap="registering = !registering">
 							<span ng-show="registering">
-								Je possède déjà un compte.
-								<b class="color-red">Me connecter !</b>
+								{{ 'alreadyHaveAccount' | translate }}.
+								<b class="color-red">{{ 'login' || translate }} !</b>
 							</span>
 							<span ng-show="!registering">
-								Je ne possède pas de compte.
-								<b class="color-green">M'inscrire !</b>
+								{{ 'noAccount' | translate }}.
+								<b class="color-green">{{ 'createMyAccount' | translate }} !</b>
 							</span>
 						</p>
 					</div>

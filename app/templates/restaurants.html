@@ -2,13 +2,13 @@
 
 	<ion-nav-title>
 		<div class="title has-sub-title">
-			Restaurants
-			<small>{{restaurants.length}} restaurants autour de vous</small>
+			{{ 'restaurants' | translate }}
+			<small>{{restaurants.length}} {{ 'restaurantsAroundYou' | translate }}</small>
 		</div>
 	</ion-nav-title>
 
 	<ion-content class="bg-blue">
-		<ion-refresher pulling-text="{{ 'Pull to refresh...' | translate }}" on-refresh="onReload()">
+		<ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
 		</ion-refresher>
 		<ge-restaurant-card data="restaurant" ng-repeat="restaurant in restaurants" on-tap="onRestaurantTouch(restaurant)">
 		</ge-restaurant-card>
