@@ -107,11 +107,11 @@
       <div class="col">
         <div class="summup">
           <div class="clearfix">
-            <div class="pull-left">
+            <div class="pull-left block">
               <b>{{cart.getTotalQuantity()}}</b>
               <ng-pluralize count="cart.getTotalQuantity()" when="{'0': 'Pizza', '1': 'Pizza', 'other': 'Pizzas'}" ></ng-pluralize>
             </div>
-            <div class="pull-right">
+            <div class="pull-right block">
               <strike ng-show="isDiscountToShow()" class="color-red">{{ cart.getTotalPrice() | number : 2 }}€</strike> <b>{{ cart.getTotalPrice()*(100 - currentOrder.currentDiscount)/100 | number : 2}}</b>€
             </div>
           </div>
