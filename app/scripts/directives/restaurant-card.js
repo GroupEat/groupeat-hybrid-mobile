@@ -12,14 +12,13 @@ angular.module('groupeat.directives.restaurant-card', [
     scope: { data: '=' },
     link: function (scope) {
 
-      var rating = 2 * scope.data.rating;
+      var rating = scope.data.rating;
 
       scope.setArrayFromInt = function (num) {
         return new Array(num);
       };
 
       scope.starClass = function(index) {
-        console.log(rating/2);
         if (index < Math.floor(rating / 2)) {
           return 'icon ion-ios-star';
         } else if (index === Math.floor(rating / 2) && rating % 2 === 1){
