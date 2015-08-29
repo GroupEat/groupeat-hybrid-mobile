@@ -1,0 +1,74 @@
+<div class="receipt">
+
+	<div class="infos">
+		<h4>{{ order.restaurant }}</h4>
+		<p ng-if="order.closedAt">{{ order.closedAt | date:'dd/MM/yyyy'}}</p>
+		<div class="buttons buttons-right" ng-if="!order.closedAt">
+			<span class="secondary-buttons">
+				<button class="button button-clear button-timer">
+		      		<i class="ion-ios-timer"></i>
+		      		<timer end-time="order.endingAt" interval="1000"> {{mminutes}}:{{sseconds}}</timer>
+		    	</button>
+		    </span>
+		</div>
+	</div>
+
+	<div class="orders">
+		<div class="order" ng-repeat="product in order.productFormats">
+			<div class="row">
+				<div class="col-10">
+					<b class="number-item">
+						{{product.quantity}}
+					</b>
+				</div>
+				<div class="col-67">
+					<span class="order-item">
+						{{product.name}} {{product.format}}
+					</span>
+				</div>
+				<div class="col col-no-padding text-right">
+					<span class="price">
+						{{product.price * product.quantity / 100 | number : 2 }}
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="dashed-border"></div>
+
+	<div class="totals">
+		<div class="subtotal">
+			<div class="row">
+				<div class="col-50">
+					<span class="title">
+						Sous-total
+					</span>
+				</div>
+				<div class="col-50 text-right">
+					{{order.totalPrice/100 | number : 2 }}
+				</div>
+			</div>
+		</div>
+		<div class="total">
+			<div class="row">
+				<div class="col-50">
+					<span class="title">
+						<b>total</b>
+					</span>
+				</div>
+				<div class="col-50">
+					<div class="discounted text-right">
+						<b class="color-red">-{{order.discount | number : 0 }}%</b>
+						<b class="color-green">{{ order.discountedPrice | number : 2 }}</b>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="dashed-border"></div>
+	<div class="white-space" ng-show="order.comment"></div>
+	<div class="comment">
+		{{ order.comment }}
+	</div>
+</div>
