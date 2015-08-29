@@ -6,8 +6,8 @@
 		<ion-slide class="bg-green">
 			<div class="cart-content">
 				<div class="titles">
-					<h3>Miam!</h3>
-					<p>Votre commande a été enregistré !</p>
+					<h3>{{ 'yummy' | translate }} !</h3>
+					<p>{{ 'orderSaved' | translate }} !</p>
 				</div>
 				<receipt-card comment="comment.value" orders="cart" restaurant="restaurant" discount="currentDiscount"></receipt-card>
 			</div>
@@ -16,8 +16,8 @@
 			<div class="cart-content">
 				<div class="titles">
 					<i class="ion-map"></i>
-					<h3>Adresse?</h3>
-					<p>Où souhaitez vous être livré ?</p>
+					<h3>{{ 'address' | translate }} ?</h3>
+					<p>{{ 'whereDoYouWantToBeDelivered' | translate }} ?</p>
 				</div>
 
 				<div class="shipping-address">
@@ -25,7 +25,7 @@
 						<label class="item item-radio" ng-class="{'checked' : address.name == 'preset'}">
 							<input type="radio" value="preset" ng-model="address.name" name="address">
 							<div class="item-content">
-								Mon Adresse
+								{{ 'myAddress' | translate }}
 							</div>
 							<i class="radio-icon ion-checkmark"></i>
 						</label>
@@ -34,7 +34,7 @@
 						<label class="item item-radio" ng-class="{'checked' : address.name == 'other'}">
 							<input type="radio" value="other" ng-model="address.name" name="address">
 							<div class="item-content">
-								Autres Adresses
+								{{ 'otherAddresses' | translate }}
 							</div>
 							<i class="radio-icon ion-checkmark"></i>
 						</label>
@@ -58,7 +58,7 @@
 				</div>
 
 				<div class="display-address">
-					<p>Vous serez livré à : 
+					<p>{{ 'youWillBeDeliveredAt' | translate }} :
 						<b ng-if="address.name === 'preset'">
 							{{presetAddress.residency}} <small>{{presetAddress.details}}</small>
 						</b>

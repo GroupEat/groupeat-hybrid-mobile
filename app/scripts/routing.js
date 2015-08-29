@@ -46,17 +46,6 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
       }
     }
   })
-  .state('cart', {
-    url: '/cart',
-    templateUrl: 'templates/cart.html',
-    controller: 'CartCtrl',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
-      }
-    }
-  })
   .state('app.restaurants', {
     url: '/restaurants',
     views: {

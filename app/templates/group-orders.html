@@ -48,7 +48,7 @@
                 </div>
               </div>
               <a href="#" on-tap="onJoinOrderTouch(groupOrder)" class="btn btn-bloc btn-green btn-lg">
-                <i class="ion-plus-round"></i> Passer commande
+                <i class="ion-plus-round"></i> {{ 'doOrder' | translate }}
               </a>
             </div>
           </div>
@@ -60,7 +60,7 @@
   <div class="bar bar-footer bar-transparent create-order" on-tap="onNewGroupOrder()" ng-if="groupOrders.length > 0">
     <div class="content">
       <div class="small-title">
-        Rien ne vous intéresse ?
+        {{ 'nothingInteresting' | translate }} ?
       </div>
       <h4 ui-sref="app.restaurants">{{ 'newOrder' | translate }} !</h4>
     </div>
