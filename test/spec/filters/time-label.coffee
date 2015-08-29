@@ -13,5 +13,5 @@ describe 'Filter: timeLabel', ->
   describe 'Integration tests', ->
 
     it 'should call CustomerSettings.getLabelHourFromValue with the given input', ->
-      input = '23:00:00';
+      input = '23:00:00'
       $filter('timeLabel')(input).should.equal '23h00'

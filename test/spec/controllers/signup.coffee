@@ -112,7 +112,7 @@ describe 'Ctrl: SignupCtrl', ->
       sandbox.stub(Credentials, 'get').returns
         id: expectedCustomerId
       sandbox.stub(Customer, 'update').returns $q.when
-        response: 'response' 
+        response: 'response'
       sandbox.spy(CustomerStorage, 'setIdentity')
       sandbox.stub(Address, 'update').returns $q.defer().promise
       scope.confirmSignup()
