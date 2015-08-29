@@ -74,9 +74,9 @@
   "chooseARestaurant": "Choisissez un restaurant",
   "restaurantPlaceholderDescription": "Cette pizzeria n'a pas souhaité ajouter de description.",
   "restaurantMenu": "Carte du restaurant",
-  "alreadyAGroupOrder": "Rejoignez la commande en cours !",
-  "pleaseChangeRestaurantOrJoinGroupOrder": "Il existe déjà une commande groupée dans ce restaurant, vous ne pouvez pas en créer une nouvelle. Rejoignez l'existante, et bénéficiez de réductions alléchantes...",
-  "yourCart": "Votre panier",
+  "alreadyAGroupOrder": "Rejoindre la commande en cours !",
+  "pleaseChangeRestaurantOrJoinGroupOrder": "Il existe déjà une commande groupée dans ce restaurant, impossible d'en créer une nouvelle. Rejoins l'existante, et bénéficie de réductions alléchantes !",
+  "yourCart": "Mon panier",
   "confirmOrder": "Valider ma Commande",
   "total": "Total",
   "insteadOf": "Au lieu de",
@@ -84,8 +84,8 @@
   "newAddress": "Nouvelle adresse",
   "otherAddresses": "Autres adresses",
   "predefinedAddress": "Lieu commun",
-  "emptyCart": "Votre panier est vide.",
-  "howLongFoodRush" : "Quelle durée, souhaitez-vous pour le",
+  "emptyCart": "Le panier est vide.",
+  "howLongFoodRush" : "Quelle durée, souhaites-tu pour le",
   "min": "min",
   "comment": "Ajoutez ici un commentaire sur votre commande !",
   "quantity" : "Quantité",
@@ -166,7 +166,7 @@
   "noOrders": "Aucune commande",
   "noOrdersDetails": "Vous n'avez pour l'instant passé aucune commande sur GroupEat",
 
-  "pullToRefresh": "Tirez pour rafraîchir",
+  "pullToRefresh": "Tirer pour rafraîchir",
 
   "restaurantHasGroupOrder": "Attention",
   "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?",
@@ -174,14 +174,14 @@
   "left": "restantes",
   "doOrder": "Passer commande",
 
-  "addAComment": "Ajouter un commentaire à votre commande",
+  "addAComment": "Un commentaire à passer au restaurateur ?",
 
   "upTo": "Jusqu'à",
 
   "yummy": "Miam",
-  "orderSaved": "Votre commande a été enregistrée",
-  "whereDoYouWantToBeDelivered": "Où souhaitez vous être livré",
-  "youWillBeDeliveredAt": "Vous serez livré à",
+  "orderSaved": "Commande enregistrée",
+  "whereDoYouWantToBeDelivered": "Où souhaites-tu être livré(e)",
+  "youWillBeDeliveredAt": "Tu seras livré(e) à",
 
   "createAnOrder": "Crée une commande",
   "createAnOrderDetails": "Sélectionne un restaurant, ce que tu souhaites manger, et regarde le prix de ton panier baisser chaque fois que quelqu’un rejoint la commande.",
@@ -196,12 +196,12 @@
   "alreadyHaveAccount": "Je possède déjà un compte",
   "noAccount": "Je ne possède pas de compte",
 
-  "nothingInteresting": "Rien ne vous intéresse",
+  "nothingInteresting": "Rien d'intéressant",
 
   "pizzasLeft": "Pizzas restantes",
 
   "restaurants": "Restaurants",
-  "restaurantsAroundYou": "restaurants autour de vous",
+  "restaurantsAroundYou": "restaurants dans le coin",
 
   "aboutYou": "À propos de toi",
   "aboutYouDetails": "Les informations serviront à t’identifier auprès du livreur",
