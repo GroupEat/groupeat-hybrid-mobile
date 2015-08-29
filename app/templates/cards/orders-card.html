@@ -15,21 +15,23 @@
 
 	<div class="orders">
 		<div class="order" ng-repeat="product in order.productFormats">
-			<div class="row">
-				<div class="col-10">
-					<b class="number-item">
-						{{product.quantity}}
-					</b>
-				</div>
-				<div class="col-67">
-					<span class="order-item">
-						{{product.name}} {{product.format}}
-					</span>
-				</div>
-				<div class="col col-no-padding text-right">
-					<span class="price">
-						{{product.price * product.quantity / 100 | number : 2 }}
-					</span>
+			<div ng-repeat="format in product.formats">
+				<div class="row">
+					<div class="col-10">
+						<b class="number-item">
+							{{ format.quantity }}
+						</b>
+					</div>
+					<div class="col-67">
+						<span class="order-item">
+							{{product.name}} {{ format.name }}
+						</span>
+					</div>
+					<div class="col col-no-padding text-right">
+						<span class="price">
+							{{ format.price * format.quantity / 100 | number : 2 }}
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>

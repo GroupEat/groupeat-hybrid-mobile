@@ -252,6 +252,7 @@ angular.module('groupeat.services.order', [
 		var defer = $q.defer();
 		forCustomerResource.get({customerId: customerId}).$promise
 		.then(function(response) {
+			console.log(response);
 			var orders = [], oldOrders = [];
 			_.forEach(response.data, function(rawOrder) {
 			var order = {'discountedPrice': rawOrder.discountedPrice/100};
