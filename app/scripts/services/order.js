@@ -9,7 +9,7 @@ angular.module('groupeat.services.order', [
 .service('Order', function(ENV, $q, $resource, BackendUtils, _) {
 
 	var fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
-	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant');
+	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant,productFormats');
 
 	var
 	currentOrder = {
@@ -254,11 +254,14 @@ angular.module('groupeat.services.order', [
 		.then(function(response) {
 			var orders = [], oldOrders = [];
 			_.forEach(response.data, function(rawOrder) {
-		var order = {'discountedPrice': rawOrder.discountedPrice/100};
+			var order = {'discountedPrice': rawOrder.discountedPrice/100};
 				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
 				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
 				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
 				order.endingAt = new Date(rawOrder.groupOrder.data.endingAt);
+				order.productFormats = rawOrder.productFormats.data;
+				order.totalPrice = rawOrder.rawPrice;
+				order.comment = rawOrder.comment;
 				if (order.closedAt)
 				{
 					oldOrders.push(order);
