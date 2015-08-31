@@ -15,6 +15,7 @@ angular.module('groupeat.controllers.signup', [
 
   $scope.slideIndex = 0;
   $scope.user = {};
+  $scope.residencies = Address.getResidencies();
 
   $scope.slideTo = function(index) {
     $ionicSlideBoxDelegate.slide(index);

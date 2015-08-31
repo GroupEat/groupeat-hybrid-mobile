@@ -92,9 +92,7 @@
 								<div class="group-input group-two">
 									<div class="input input-select">
 										<select ng-model="user.residency">
-											<option value="ENSTAParisTech">{{ 'ENSTAParisTech' | translate }}</option>
-											<option value="supoptique">{{ 'supoptique' | translate }}</option>
-											<option value="polytechnique">{{ 'polytechnique' | translate }}</option>
+											<option ng-repeat="residency in residencies" value="{{ residency }}">{{ residency | translate }}</option>
 										</select>
 									</div>
 									<div class="input">

@@ -50,8 +50,7 @@ describe 'Service: Address', ->
       response =
         data:
           details: details
-          latitude: 48.7107339
-          longitude: 2.2182327
+          street: 'Résidence ENSTA ParisTech, 828 Boulevard des Maréchaux'
       regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenGET(regex).respond(response)
       Address.get(1).should.become({residency: residency, details: details})
@@ -69,65 +68,52 @@ describe 'Service: Address', ->
       Address.should.have.property('getAddressFromResidencyInformation')
 
     it 'should return the address of polytechnique when requested', ->
-      street = 'Boulevard des Maréchaux'
-      latitude = 48.709862
-      longitude = 2.210241
-      address = Address.getAddressFromResidencyInformation('polytechnique')
-      address.street.should.equal(street)
-      address.latitude.should.equal(latitude)
-      address.longitude.should.equal(longitude)
+      Address.getAddressFromResidencyInformation('joffre').should.deep.equal
+        street: 'Résidence Joffre (Polytechnique), 11 Boulevard des Maréchaux'
+        latitude: 48.711109
+        longitude: 2.210736
 
-    it 'should return the address of supoptique when requested', ->
-      street = '2 Avenue Augustin Fresnel'
-      latitude = 48.714258
-      longitude = 2.203553
-      address = Address.getAddressFromResidencyInformation('supoptique')
-      address.street.should.equal(street)
-      address.latitude.should.equal(latitude)
-      address.longitude.should.equal(longitude)
+    it 'should return the address of fayolle when requested', ->
+      address = Address.getAddressFromResidencyInformation('fayolle').should.deep.equal
+        street: 'Résidence Fayolle (Polytechnique), 11 Boulevard des Maréchaux'
+        latitude: 48.711109
+        longitude: 2.210736
 
     it 'should return the address of ENSTA ParisTech when requested', ->
-      street = 'Boulevard des Maréchaux'
-      latitude = 48.7107339
-      longitude = 2.2182327
-      address = Address.getAddressFromResidencyInformation('ENSTAParisTech')
-      address.street.should.equal(street)
-      address.latitude.should.equal(latitude)
-      address.longitude.should.equal(longitude)
+      address = Address.getAddressFromResidencyInformation('ENSTAParisTech').should.deep.equal
+        street: 'Résidence ENSTA ParisTech, 828 Boulevard des Maréchaux'
+        latitude: 48.7107339
+        longitude: 2.2182327
 
     it 'should return undefined for other requests', ->
       expect(Address.getAddressFromResidencyInformation('residency')).to.be.undefined
 
   describe 'Address#getAddressFromResidencyInformation', ->
 
-    it 'should return polytechnique if the coordinates match polytechnique residency', ->
-      address =
-        latitude: 48.709862
-        longitude: 2.210241
-      Address.getResidencyInformationFromAddress(address).should.equal('polytechnique')
-
-    it 'should return supoptique if the coordinates match supoptique residency', ->
-      address =
-        latitude: 48.714258
-        longitude: 2.203553
-      Address.getResidencyInformationFromAddress(address).should.equal('supoptique')
-
     it 'should return ENSTAParisTech if the coordinates match ENSTA residency', ->
       address =
-        latitude: 48.7107339
-        longitude: 2.2182327
-      Address.getResidencyInformationFromAddress(address).should.equal('ENSTAParisTech')
+        street: 'Résidence ENSTA ParisTech, 828 Boulevard des Maréchaux'
+      Address.getResidencyInformationFromAddress(address).should.equal 'ENSTAParisTech'
+
+    it 'should return joffre if the coordinates match Joffre residency', ->
+      address =
+        street: 'Résidence Joffre (Polytechnique), 11 Boulevard des Maréchaux'
+      Address.getResidencyInformationFromAddress(address).should.equal 'joffre'
+
+    it 'should return fayolle if the coordinates match Fayolle residency', ->
+      address =
+        street: 'Résidence Fayolle (Polytechnique), 11 Boulevard des Maréchaux'
+      Address.getResidencyInformationFromAddress(address).should.equal 'fayolle'
 
     it 'should return undefined for other coordinates', ->
       address =
-        latitude: 48
-        longitude: 2
+        street: 'Résidence Pollos Hermanos'
       expect(Address.getResidencyInformationFromAddress(address)).to.be.undefined
 
   describe 'Address#getResidencies', ->
 
     it 'should have a getResidencies method', ->
-      Address.should.have.property('getResidencies')
+      Address.should.have.property 'getResidencies'
 
-    it 'should return 3 residencies', ->
-      Address.getResidencies().should.have.length(3)
+    it 'should return 7 residencies', ->
+      Address.getResidencies().should.have.length 7
