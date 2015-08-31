@@ -10,8 +10,9 @@ describe 'Directive: geRestaurantCard', ->
     inject ($compile, $rootScope, $injector) ->
       sandbox = sinon.sandbox.create()
       scope = $rootScope.$new()
+      scope.data = {}
 
-      element = $compile('<ge-restaurant-card></ge-restaurant-card>') scope
+      element = $compile('<ge-restaurant-card data="data"></ge-restaurant-card>') scope
 
       scope.$digest()
 
