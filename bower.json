@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "ionic": "~1.0.0",
+    "ionic-process-spinner": "0.0.1",
     "lodash": "3.9.3",
     "angular-translate": "~2.6.1",
     "angular-translate-loader-static-files": "~2.6.1",
