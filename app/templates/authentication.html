@@ -38,16 +38,20 @@
 							</div>
 							<div class="flip-container" ng-class="{'is-flipped' : !registering}">
 								<div class="flip">
-									<div class="front">
-										<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20">
-											{{ 'createMyAccount' | translate }} !
-										</button>
-									</div>
-									<div class="back">
-										<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20">
-											{{ 'login' || translate }} !
-										</button>
-									</div>
+										<div class="front">
+											<ion-process-spinner css-class="spinner-assertive" spinner="ripple" processing="isProcessingRequest">
+												<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20">
+													{{ 'createMyAccount' | translate }} !
+												</button>
+											</ion-process-spinner>										
+										</div>
+										<div class="back">
+											<ion-process-spinner class="center" css-class="spinner-assertive" spinner="ripple" processing="isProcessingRequest">
+												<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20">
+													{{ 'login' || translate }} !
+												</button>
+											</ion-process-spinner>
+										</div>
 								</div>
 							</div>
 						</form>
