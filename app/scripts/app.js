@@ -22,7 +22,7 @@ angular.module('groupeat', [
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.message-backdrop',
-  'slick',
+  'slickCarousel',
   'ui.mask'
 ])
 

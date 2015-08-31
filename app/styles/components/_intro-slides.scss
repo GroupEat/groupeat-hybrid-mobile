@@ -119,12 +119,12 @@
 			}
 		}
 		.clock {
-			width: 120px;
-			height: 120px;
+			width: 100px;
+			height: 100px;
 			position: absolute;
-			top: 0;
+			top: 40px;
 			left: 50%;
-			margin-left: -60px;
+			margin-left: -50px;
 			border: 3px solid $purple;
 			@include border-radius(100%);
 			opacity: 0;
@@ -353,5 +353,19 @@
 			opacity: 0;
 			@include transition(all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1));
 		}
+	}
+}
+
+@media (max-width: 350px) {
+	#intro-slides {
+		.titles {
+			padding: 10px 40px;
+			p {
+				font-size: 11px;
+			}
+		}
+	}
+	#intro-animations {
+		bottom: 50px;
 	}
 }

@@ -1,7 +1,6 @@
 .order-card {
   background: #FFF;
   margin: 10px;
-  margin-top: 40px;
   min-height: 300px;
   border-radius: 4px;
   .top {
@@ -94,8 +93,11 @@
           text-align: center;
           -webkit-flex: 1 0 0px;
           span {
-            font-size: 30px;
+            font-size: 25px;
             color: $border-light;
+            @media (max-width: 350px) { 
+              font-size: 20px;
+            }
             &.filled {
               color: $red;
             }

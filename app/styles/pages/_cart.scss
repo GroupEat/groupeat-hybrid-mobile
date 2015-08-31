@@ -34,6 +34,9 @@
 					background-color: transparent;
 					color: darken($orange, 15%);
 					font-weight: 500;
+					@media (max-width: 350px) { 
+						font-size: 12px;
+					}
 				}
 				i {
 					visibility: visible;
@@ -84,6 +87,9 @@
 				small {
 					display: block;
 				}
+			}
+			@media (max-width: 350px) { 
+				display: none;
 			}
 		}
 	}

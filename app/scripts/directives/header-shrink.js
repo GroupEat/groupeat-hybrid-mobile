@@ -7,7 +7,7 @@ angular.module('groupeat.directives.header-shrink', []).directive('headerShrink'
       var header = $document[0].body.querySelector(attr.headerShrink);
       var content = $document[0].body.querySelector(attr.headerShrink + '-content');
       $timeout(function () {
-        navbar = $document[0].body.querySelector('.nav-bar-block .bar-header');
+        navbar = $document[0].body.querySelector('.bar.bar-header');
       });
       element.bind('scroll', function(e) {
         var scrollTop = e.originalEvent.detail.scrollTop;
