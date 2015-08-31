@@ -429,6 +429,7 @@ module.exports = function (grunt) {
         '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
         '<%= yeoman.app %>/lib/ionic-service-core/ionic-core.js',
         '<%= yeoman.app %>/lib/ionic-service-analytics/ionic-analytics.js',
+        '<%= yeoman.app %>/lib/ionic-process-spinner/src/ionic-process-spinner.min.js',
         '<%= yeoman.app %>/lib/lodash/lodash.min.js',
         '<%= yeoman.app %>/lib/sprintf/dist/sprintf.min.js',
         '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
