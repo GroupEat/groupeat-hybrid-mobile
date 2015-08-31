@@ -22,8 +22,12 @@
   "phoneNumber": "Numéro de téléphone",
   "address": "Adresse",
   "ENSTAParisTech": "ENSTA ParisTech",
-  "polytechnique": "Polytechnique",
-  "supoptique": "Supoptique",
+  "joffre": "Résidence Joffre (Polytechnique)",
+  "fayolle": "Résidence Fayolle (Polytechnique)",
+  "foche": "Résidence Foche (Polytechnique)",
+  "manoury": "Résidence Manoury (Polytechnique)",
+  "lemonnier": "Résidence Lemonnier (Polytechnique)",
+  "schaeffer": "Résidence Schaeffer (Polytechnique)",
   "residency": "Résidence",
   "addressSupplement": "Compléments d'Adresse",
   "confirmPassword": "Confirmation du mot de passe",
@@ -172,7 +176,6 @@
   "restaurantHasGroupOrder": "Attention",
   "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?",
 
-  "left": "restantes",
   "doOrder": "Passer commande",
 
   "addAComment": "Un commentaire à passer au restaurateur ?",
