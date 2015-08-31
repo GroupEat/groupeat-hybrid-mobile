@@ -118,7 +118,7 @@ angular.module('groupeat.services.customer', [
   */
   checkActivatedAccount = function() {
     var deferred = $q.defer();
-    if (localStorageService.get('activatedAccount')) {
+    if (localStorageService.get('activatedAccount') === 'true') {
       deferred.resolve();
     }
     else {
