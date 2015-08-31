@@ -7,7 +7,5 @@ angular.module('groupeat.directives.orders-card', []).directive('ordersCard', fu
     scope: {
       order: '=',
     },
-    link: function () {
-    }
   };
 });

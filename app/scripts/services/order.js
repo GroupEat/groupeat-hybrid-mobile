@@ -254,7 +254,7 @@ angular.module('groupeat.services.order', [
 		.then(function(response) {
 			var orders = [], oldOrders = [];
 			_.forEach(response.data, function(rawOrder) {
-			var order = {'discountedPrice': rawOrder.discountedPrice/100};
+				var order = {'discountedPrice': rawOrder.discountedPrice/100};
 				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
 				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
 				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
