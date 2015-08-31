@@ -69,11 +69,12 @@ angular.module('groupeat.services.restaurant', [
   */
   checkGroupOrders = function (restaurantId, groupOrders) {
     var deferred = $q.defer();
-    if (_.some(groupOrders, 'restaurant.data.id', restaurantId)) {
+    var existingGroupOrder = _.find(groupOrders, 'restaurant.data.id', restaurantId);
+    if (existingGroupOrder) {
       Popup.confirm('restaurantHasGroupOrder', 'restaurantHasGroupOrderMessage', 'ok!')
       .then(function(res) {
         if (res) {
-          deferred.resolve();
+          deferred.resolve(existingGroupOrder);
         } else {
           deferred.reject();
         }
