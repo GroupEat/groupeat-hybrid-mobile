@@ -51,8 +51,13 @@ angular.module('groupeat.controllers.restaurants', [
     .then(function (groupOrders) {
       return Restaurant.checkGroupOrders(restaurant.id, groupOrders);
     })
-    .then(function() {
-      Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
+    .then(function(existingGroupOrder) {
+      if (existingGroupOrder) {
+        Order.setCurrentOrder(existingGroupOrder.id, existingGroupOrder.endingAt, existingGroupOrder.discountRate, existingGroupOrder.remainingCapacity, existingGroupOrder.restaurant.data.discountPolicy, existingGroupOrder.totalRawPrice);
+      }
+      else {
+        Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
+      }
       $state.go('app.restaurant-menu', {restaurantId: restaurant.id});
     });
   };
