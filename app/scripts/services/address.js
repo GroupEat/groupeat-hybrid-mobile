@@ -3,14 +3,60 @@
 angular.module('groupeat.services.address', [
   'constants',
   'groupeat.services.backend-utils',
+  'groupeat.services.lodash',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function ($filter, $resource, $q, BackendUtils, ENV) {
+.factory('Address', function (_, $filter, $resource, $q, BackendUtils, ENV) {
 
   var $translate = $filter('translate');
   var resource = $resource(ENV.apiEndpoint + '/customers/:id/address', null, { 'update': { method: 'PUT' } });
+
+  var residencies = [
+    {
+      name: 'ENSTAParisTech',
+      street: 'Résidence ENSTA ParisTech, 828 Boulevard des Maréchaux',
+      latitude: 48.7107339,
+      longitude: 2.2182327
+    },
+    {
+      name: 'joffre',
+      street: 'Résidence Joffre (Polytechnique), 11 Boulevard des Maréchaux',
+      latitude: 48.711109,
+      longitude: 2.210736
+    },
+    {
+      name: 'fayolle',
+      street: 'Résidence Fayolle (Polytechnique), 11 Boulevard des Maréchaux',
+      latitude: 48.711109,
+      longitude: 2.210736
+    },
+    {
+      name: 'foche',
+      street: 'Résidence Foche (Polytechnique), 11 Boulevard des Maréchaux',
+      latitude: 48.711109,
+      longitude: 2.210736
+    },
+    {
+      name: 'manoury',
+      street: 'Résidence Manoury (Polytechnique), 11 Boulevard des Maréchaux',
+      latitude: 48.711109,
+      longitude: 2.210736
+    },
+    {
+      name: 'lemonnier',
+      street: 'Résidence Lemonnier (Polytechnique), 76 Boulevard des Maréchaux',
+      latitude: 48.710476,
+      longitude: 2.213126
+    },
+    {
+      name: 'schaeffer',
+      street: 'Résidence Schaeffer (Polytechnique), 79 Boulevard des Maréchaux',
+      latitude: 48.710169,
+      longitude: 2.214365
+    }
+  ];
 
   /**
   * @ngdoc function
@@ -40,9 +86,21 @@ angular.module('groupeat.services.address', [
     return deferred.promise;
   },
 
+  /**
+  * @ngdoc function
+  * @name Address#get
+  * @methodOf Address
+  *
+  * @description
+  * Fetches a customer address
+  * https://groupeat.fr/docs
+  *
+  * @param {String} customerId the id of the customer to update
+  */
   get = function (userId) {
     var deferred = $q.defer();
-    resource.get({ id: userId }).$promise.then(function (response) {
+    resource.get({ id: userId }).$promise
+    .then(function (response) {
       var address = response.data;
       if (address) {
         var residency = getResidencyInformationFromAddress(address);
@@ -53,7 +111,8 @@ angular.module('groupeat.services.address', [
       } else {
         deferred.resolve();
       }
-    }).catch(function (errorResponse) {
+    })
+    .catch(function (errorResponse) {
       var errorKey = BackendUtils.errorKeyFromBackend(errorResponse);
       if (errorKey === 'noAddressForThisCustomer') {
         deferred.resolve();
@@ -65,53 +124,24 @@ angular.module('groupeat.services.address', [
   },
 
   getAddressFromResidencyInformation = function (residency) {
-    var street, latitude, longitude = null;
-    if (residency === 'polytechnique') {
-      street = 'Boulevard des Mar\xE9chaux';
-      latitude = 48.709862;
-      longitude = 2.210241;
-    } else if (residency === 'supoptique') {
-      street = '2 Avenue Augustin Fresnel';
-      latitude = 48.714258;
-      longitude = 2.203553;
-    } else if (residency === 'ENSTAParisTech') {
-      street = 'Boulevard des Mar\xE9chaux';
-      latitude = 48.7107339;
-      longitude = 2.2182327;
-    } else {
-      return undefined;
-    }
-    return {
-      street: street,
-      latitude: latitude,
-      longitude: longitude
-    };
+    var address = _.chain(residencies).find('name', residency).omit('name').value();
+    return _.isEmpty(address) ? undefined : address;
   },
 
   getResidencyInformationFromAddress = function (address) {
-    if (address.latitude === 48.709862 && address.longitude === 2.210241) {
-      return 'polytechnique';
-    } else if (address.latitude === 48.714258 && address.longitude === 2.203553) {
-      return 'supoptique';
-    } else if (address.latitude === 48.7107339 && address.longitude === 2.2182327) {
-      return 'ENSTAParisTech';
-    }
-    return undefined;
+    var residency = _.find(residencies, 'street', address.street);
+    return residency ? residency.name : undefined;
   },
 
-  getResidencies = function () {
-    return [
-      'ENSTAParisTech',
-      'polytechnique',
-      'supoptique'
-    ];
+  getResidencies = function() {
+    return _.pluck(residencies, 'name');
   };
 
   return {
     get: get,
     update: update,
     getAddressFromResidencyInformation: getAddressFromResidencyInformation,
-    getResidencyInformationFromAddress: getResidencyInformationFromAddress,
-    getResidencies: getResidencies
+    getResidencies: getResidencies,
+    getResidencyInformationFromAddress: getResidencyInformationFromAddress
   };
 });
