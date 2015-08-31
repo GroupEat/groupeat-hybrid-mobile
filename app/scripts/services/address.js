@@ -97,9 +97,9 @@ angular.module('groupeat.services.address', [
   *
   * @param {String} customerId the id of the customer to update
   */
-  get = function (userId) {
+  get = function (customerId) {
     var deferred = $q.defer();
-    resource.get({ id: userId }).$promise
+    resource.get({ id: customerId }).$promise
     .then(function (response) {
       var address = response.data;
       if (address) {
