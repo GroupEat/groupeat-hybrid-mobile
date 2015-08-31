@@ -190,12 +190,13 @@ describe 'Ctrl: SettingsCtrl', ->
       Customer.update.should.have.been.called
 
     it 'should call CustomerStorage#setIdentity with the received customer if Customer.update is resolved', ->
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when {}
+      sandbox.stub(ElementModifier, 'validate').returns $q.when {}
       sandbox.stub(Customer, 'update').returns $q.when
         customer: 'customer'
       sandbox.stub(Authentication, 'updatePassword').returns($q.defer().promise)
       sandbox.spy(CustomerStorage, 'setIdentity')
+      sandbox.stub Address, 'getAddressFromResidencyInformation'
       scope.onSave()
       scope.$digest()
       CustomerStorage.setIdentity.should.have.been.calledWithExactly
