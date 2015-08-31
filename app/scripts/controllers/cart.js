@@ -12,7 +12,7 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($ionicSlideBoxDelegate, $ionicHistory, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
+.controller('CartCtrl', function ($ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
