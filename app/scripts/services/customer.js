@@ -5,10 +5,11 @@ angular.module('groupeat.services.customer', [
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
   'groupeat.services.lodash',
-  'groupeat.services.popup'
+  'groupeat.services.popup',
+  'LocalStorageModule'
 ])
 
-.factory('Customer', function ($filter, $resource, $q, $state, ENV, _, Address, BackendUtils, Credentials, Popup) {
+.factory('Customer', function (_, Address, BackendUtils, Credentials, ENV, $filter, localStorageService, Popup, $q, $resource, $state) {
 
   var $translate = $filter('translate');
 
@@ -117,19 +118,25 @@ angular.module('groupeat.services.customer', [
   */
   checkActivatedAccount = function() {
     var deferred = $q.defer();
-    var customerId = Credentials.get().id;
-    get(customerId)
-    .then(function(customer) {
-      if (!customer.activated)
-      {
-        deferred.reject();
-        Popup.error('nonActivatedAccountDetails');
-      }
-      else
-      {
-        deferred.resolve();
-      }
-    });
+    if (localStorageService.get('activatedAccount')) {
+      deferred.resolve();
+    }
+    else {
+      var customerId = Credentials.get().id;
+      get(customerId)
+      .then(function(customer) {
+        if (!customer.activated)
+        {
+          deferred.reject();
+          Popup.error('nonActivatedAccountDetails');
+        }
+        else
+        {
+          localStorageService.set('activatedAccount', true);
+          deferred.resolve();
+        }
+      });
+    }
 
     return deferred.promise;
   },
