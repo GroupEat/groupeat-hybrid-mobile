@@ -9,7 +9,7 @@ angular.module('groupeat.services.customer', [
   'LocalStorageModule'
 ])
 
-.factory('Customer', function (_, Address, BackendUtils, Credentials, ENV, $filter, localStorageService, Popup, $q, $resource, $state) {
+.factory('Customer', function (_, $filter, $q, $resource, $state, Address, BackendUtils, Credentials, ENV, localStorageService, Popup) {
 
   var $translate = $filter('translate');
 
