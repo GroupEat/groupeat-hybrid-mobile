@@ -37,8 +37,6 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
       });
     },removeProduct = function (productToDelete, format) {
       // Find product in products and decrement its quantity
-      console.log(productToDelete);
-      console.log(format);
       var productToDeleteId;
       if (hasAtLeastOneProduct(productToDelete, format)) {
         _.forEach(products, function (product) {
@@ -50,13 +48,11 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
             }
           }
         });
-        console.log(productToDeleteId);
         if(productToDeleteId) {
           _.remove(products, function(product) {
             return product.id === productToDeleteId;
           });
         }
-        console.log(products);
         refresh();
       }
     }, hasAtLeastOneProduct = function (productToTest, format) {
@@ -66,7 +62,6 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
 			 */
       var isInProducts = false;
       _.forEach(products, function (product) {
-        console.log(product.name + productToTest.name + '  ||  ' + product.format + format.name);
         if (product.name === productToTest.name && product.format === format.name) {
           isInProducts = true;
         }
