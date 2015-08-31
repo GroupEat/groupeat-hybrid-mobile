@@ -39,12 +39,12 @@
 							<div class="flip-container" ng-class="{'is-flipped' : !registering}">
 								<div class="flip">
 									<div class="front">
-										<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20">
+										<button type="input" class="btn btn-bloc btn-lg btn-green mg-top-20" ng-disabled="isProcessingRequest">
 											{{ 'createMyAccount' | translate }} !
 										</button>
 									</div>
 									<div class="back">
-										<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20">
+										<button type="input" class="btn btn-bloc btn-lg btn-red mg-top-20" ng-disabled="isProcessingRequest">
 											{{ 'login' || translate }} !
 										</button>
 									</div>

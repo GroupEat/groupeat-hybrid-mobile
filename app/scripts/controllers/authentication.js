@@ -22,6 +22,7 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.slideIndex = 0;
   $scope.user = {};
+  $scope.isProcessingRequest = false;
 
   /* Analytics Timing */
   var d = new Date();
@@ -50,6 +51,7 @@ angular.module('groupeat.controllers.authentication', [
   };
 
   $scope.submitLoginForm = function(form) {
+    $scope.isProcessingRequest = true;
     Analytics.trackEvent('Authentication', 'Tries to Login');
     Network.hasConnectivity()
     .then(function() {
@@ -62,14 +64,17 @@ angular.module('groupeat.controllers.authentication', [
       Credentials.set(credentials.id, credentials.token);
       Analytics.trackEvent('Authentication', 'Logs In');
       Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
+      $scope.isProcessingRequest = false;
       $state.go('app.group-orders');
     })
     .catch(function(errorMessage) {
+      $scope.isProcessingRequest = false;
       return Popup.error(errorMessage);
     });
   };
 
   $scope.submitRegisterForm = function(form) {
+    $scope.isProcessingRequest = true;
     Network.hasConnectivity()
     .then(function() {
       return ElementModifier.validate(form);
@@ -85,9 +90,11 @@ angular.module('groupeat.controllers.authentication', [
       return DeviceAssistant.register();
     })
     .then(function() {
+      $scope.isProcessingRequest = false;
       $state.go('signup');
     })
     .catch(function(errorMessage) {
+      $scope.isProcessingRequest = false;
       Popup.error(errorMessage);
     });
   };
