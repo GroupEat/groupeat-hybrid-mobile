@@ -6,7 +6,7 @@ For all the following commands used to run the application, the following flags 
 
 | Flag/Option          | Values                                 | Default   |
 | -------------------- |:--------------------------------------:| ---------:|
-| `--env`              | `development`, `staging`, `production` | `development` |
+| `--env`              | `development`, `staging`, `production` | `staging` |
 
 Assets will be minified only when picking the `production` environment.
 
