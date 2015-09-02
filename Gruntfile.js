@@ -18,10 +18,10 @@ else
 
 module.exports = function (grunt) {
 
-  var envArg = grunt.option('env') ? grunt.option('env') : 'development';
+  var envArg = grunt.option('env') ? grunt.option('env') : 'staging';
   if (envArg && !_.includes(['development', 'staging', 'production'], envArg)) {
-    console.error('Env ' + envArg + ' does not exist, using development');
-    envArg = 'development';
+    console.error('Env ' + envArg + ' does not exist, using staging');
+    envArg = 'staging';
   }
   var preparationTask = envArg === 'production' ? 'compress' : 'expand';
 
