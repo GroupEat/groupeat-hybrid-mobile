@@ -1,9 +1,11 @@
-<ion-view ng-init="initCtrl()" nav-bar-class="bar-transparent" hide-back-button="true">
+<ion-view ng-init="initCtrl()" nav-bar-class="bar-transparent">
 
   <!-- - - - - - - - - - - - - - - - - - - NAV BAR - - - - - - - - - - - - - - - - - -->
 
   <ion-nav-buttons side="primary">
-    <button class="button button-clear button-icon button-back ion-ios-arrow-thin-left" on-tap="onLeaveRestaurant()"></button>
+    <ion-nav-back-button class="button button-clear" on-tap="onLeaveRestaurant()">
+      <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+    </ion-nav-back-button>
   </ion-nav-buttons>
   <ion-nav-title>
     <div class="title has-sub-title">
