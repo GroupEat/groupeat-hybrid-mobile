@@ -28,11 +28,10 @@ angular.module('groupeat.controllers.group-orders', [
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);
     })
     .then(function(groupOrders) {
+      $scope.groupOrders = groupOrders;
       if (_.isEmpty(groupOrders)) {
         return $q.reject('noGroupOrders');
-      } else {
-        $scope.groupOrders = groupOrders;
-      }
+      } 
     });
     ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
@@ -59,5 +58,10 @@ angular.module('groupeat.controllers.group-orders', [
     $scope.initialState = $state.current.name;
     $scope.onReload();
   });
+
+  $scope.callbackTimer = {};
+  $scope.callbackTimer.finished = function() {
+    $scope.onReload();
+  };
 
 });
