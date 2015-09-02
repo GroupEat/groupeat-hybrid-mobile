@@ -23,6 +23,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.slideIndex = 0;
   $scope.user = {};
   $scope.isProcessingRequest = false;
+  $scope.registering = true;
 
   /* Analytics Timing */
   var d = new Date();
