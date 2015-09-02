@@ -124,6 +124,9 @@ angular.module('groupeat.services.address', [
   },
 
   getAddressFromResidencyInformation = function (residency) {
+    if (!residency) {
+      return undefined;
+    }
     var address = _.chain(residencies).find('name', residency).omit('name').value();
     return _.isEmpty(address) ? undefined : address;
   },
