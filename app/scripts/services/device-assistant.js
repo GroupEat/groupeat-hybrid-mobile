@@ -73,6 +73,9 @@ angular.module('groupeat.services.device-assistant', [
       }
       PushNotification.subscribe(platform)
       .then(function (registrationToken) {
+        if (!registrationToken) {
+          return $q.when({});
+        }
         notificationToken = registrationToken;
         return registerDevice();
       })
