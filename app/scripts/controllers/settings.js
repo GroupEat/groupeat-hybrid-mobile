@@ -64,7 +64,7 @@ angular.module('groupeat.controllers.settings', [
 	*/
 	$scope.onSave = function() {
 		var customerId = Credentials.get().id;
-		
+
 		// TODO : make request only if changes has been notified
 
 		Network.hasConnectivity()
@@ -77,7 +77,7 @@ angular.module('groupeat.controllers.settings', [
 		.then(function(customer) {
 			CustomerStorage.setIdentity(customer);
 			var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
-			if (!addressParams)
+      if (!addressParams)
 			{
 				// If no residency was provided, not requesting the Address update
 				return $q.when({});
