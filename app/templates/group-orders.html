@@ -22,7 +22,7 @@
               <h3>-{{groupOrder.discountRate}}<span>%</span></h3>
               <div class="time-left">
                 <span>
-                  <timer end-time="groupOrder.endingAt" interval="1000"> {{minutes}}</timer>mn
+                  <timer end-time="groupOrder.endingAt" interval="1000" finish-callback="callbackTimer.finished()"> {{minutes}} mn</timer>
                 </span>
               </div>
             </div>
