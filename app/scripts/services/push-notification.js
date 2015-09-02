@@ -43,7 +43,8 @@ angular.module('groupeat.services.push-notification', [
     var deferred = $q.defer();
 
     platform = devicePlatform;
-    $cordovaPush.register(config[platform]).then(function (response) {
+    $cordovaPush.register(config[platform])
+    .then(function (response) {
       deferredRegistration = $q.defer();
 
       /* Bind onNotification callback method to the $cordovaPush's notificationReceived */
@@ -54,10 +55,16 @@ angular.module('groupeat.services.push-notification', [
       }
 
       return deferredRegistration.promise;
-    }).then(function (registrationToken) {
+    })
+    .then(function (registrationToken) {
       deferred.resolve(registrationToken);
-    }).catch(function (err) {
-      deferred.reject(err);
+    })
+    .catch(function (err) {
+      if (err.indexOf('not supported in the simulator') > -1) {
+        deferred.resolve();
+      } else {
+        deferred.reject(err);
+      }
     });
     return deferred.promise;
   },
