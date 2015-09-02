@@ -175,7 +175,7 @@ angular.module('groupeat.services.customer', [
       return Address.get(customerId);
     })
     .then(function (address) {
-      if (!address.residency) {
+      if (!address || !address.residency) {
         missingProperties.push('address');
       }
     })
