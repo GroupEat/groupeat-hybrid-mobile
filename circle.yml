@@ -29,3 +29,9 @@ deployment:
     branch: master
     commands:
       - grunt upload --email=$IONIC_UPLOAD_EMAIL --password=$IONIC_UPLOAD_PASSWORD
+      - npm install -g cordova
+      - npm install -g ionic
+      - ionic platform add android
+      - grunt build:android
+      - cp platforms/android/build/outputs/apk/android-debug.apk $CIRCLE_ARTIFACTS
+      
