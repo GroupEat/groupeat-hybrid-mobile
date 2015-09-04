@@ -12,7 +12,9 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
+.controller('CartCtrl', function ($filter, $ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
+
+  var $translate = $filter('translate');
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
@@ -85,23 +87,36 @@ angular.module('groupeat.controllers.cart', [
         $scope.modal.hide();
       })
       .catch(function (errorResponse) {
-        Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
-        .then(function(leaveOrder) {
-          if(leaveOrder) {
-            $ionicHistory.clearHistory();
-            $ionicHistory.clearCache();
-            $scope.leaveOrder();
-            $scope.modal.hide();
-          }
-        });
+        if (errorResponse === $translate('missingCustomerInformationErrorKey')) {
+          Popup.confirm('missingProperties', errorResponse, 'settings', 'cancel')
+          .then(function(leaveOrder) {
+            if(leaveOrder) {
+              $ionicHistory.clearHistory();
+              $ionicHistory.clearCache();
+              $scope.leaveOrder('settings');
+              $scope.modal.hide();
+            }
+          });
+        } else {
+          Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
+          .then(function(leaveOrder, redirectState) {
+            if(leaveOrder) {
+              $ionicHistory.clearHistory();
+              $ionicHistory.clearCache();
+              $scope.leaveOrder();
+              $scope.modal.hide();
+            }
+          });
+        }
       });
     }
   };
 
-  $scope.leaveOrder = function() {
+  $scope.leaveOrder = function(redirectState) {
+    redirectState = redirectState || 'app.group-orders';
     Order.resetCurrentOrder();
     Cart.reset();
-    $state.go('app.group-orders');
+    $state.go(redirectState);
   };
 
 });
