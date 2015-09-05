@@ -49,9 +49,7 @@ angular.module('groupeat.services.cart', ['groupeat.services.lodash']).service('
           }
         });
         if(productToDeleteId) {
-          _.remove(products, function(product) {
-            return product.id === productToDeleteId;
-          });
+          _.remove(products, 'id', productToDeleteId);
         }
         refresh();
       }
