@@ -99,7 +99,7 @@ angular.module('groupeat.controllers.cart', [
           });
         } else {
           Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
-          .then(function(leaveOrder, redirectState) {
+          .then(function(leaveOrder) {
             if(leaveOrder) {
               $ionicHistory.clearHistory();
               $ionicHistory.clearCache();
