@@ -12,7 +12,7 @@ angular.module('groupeat.controllers.cart', [
   'groupeat.services.predefined-addresses'
 ])
 
-.controller('CartCtrl', function ($filter, $ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
+.controller('CartCtrl', function ($ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
 
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
@@ -85,7 +85,7 @@ angular.module('groupeat.controllers.cart', [
         $scope.modal.hide();
       })
       .catch(function (errorResponse) {
-        Popup.confirm('missingProperties', errorResponse, 'exitOrder', 'cancel')
+        Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
         .then(function(leaveOrder) {
           if(leaveOrder) {
             $ionicHistory.clearHistory();
