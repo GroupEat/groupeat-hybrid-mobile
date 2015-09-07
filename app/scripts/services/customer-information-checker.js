@@ -48,7 +48,6 @@ angular.module('groupeat.services.customer-information-checker', [
   */
   checkFromBackend = function () {
     var deferred = $q.defer();
-    var missingPropertiesString;
     var customerId = Credentials.get().id;
     $q.all([Customer.get(customerId), Address.get(customerId)])
     .then(function(data) {
