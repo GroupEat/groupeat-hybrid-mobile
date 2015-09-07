@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.analytics',
   'groupeat.services.controller-promise-handler',
   'groupeat.services.customer',
+  'groupeat.services.customer-information-checker',
   'groupeat.services.geolocation',
   'groupeat.services.lodash',
   'groupeat.services.group-order',
@@ -12,7 +13,7 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.restaurant',
 ])
 
-.controller('RestaurantsCtrl', function(_, $q, $rootScope, $scope, $state, Analytics, ControllerPromiseHandler, Geolocation, GroupOrder, Customer, Network, Order, Restaurant) {
+.controller('RestaurantsCtrl', function(_, $q, $rootScope, $scope, $state, Analytics, ControllerPromiseHandler, Geolocation, GroupOrder, Customer, CustomerInformationChecker, Network, Order, Restaurant) {
 
   Analytics.trackView('Restaurants');
 
@@ -43,7 +44,7 @@ angular.module('groupeat.controllers.restaurants', [
   $scope.onRestaurantTouch = function(restaurant) {
     Customer.checkActivatedAccount()
     .then(function() {
-      return Customer.checkMissingInformation();
+      return CustomerInformationChecker.check();
     })
     .then(function () {
       return GroupOrder.get($scope.userCurrentPosition.coords.latitude, $scope.userCurrentPosition.coords.longitude);

@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = BackendUtils = Credentials = AuthenticationCtrl = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
+  Authentication = BackendUtils = Credentials = AuthenticationCtrl = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
 
   formMock = 'form'
 
@@ -24,7 +24,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setDefaultElementModifier ElementModifier.key
       validator.setErrorMessageResolver ErrorMessageResolver.resolve
 
-      Address = $injector.get 'Address'
       Authentication = $injector.get 'Authentication'
       Credentials = $injector.get 'Credentials'
       Customer = $injector.get 'Customer'
@@ -43,7 +42,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       $compile = $injector.get '$compile'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), Address: Address, BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
       })
 
       # Hack to validate elements

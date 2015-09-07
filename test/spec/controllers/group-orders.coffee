@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $state = ControllerPromiseHandler = Customer = GroupOrder = Geolocation = Network = Order = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $state = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Geolocation = Network = Order = sandbox = ENV = $compile = {}
 
   positionMock = {
     'coords': {
@@ -28,6 +28,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       sandbox = sinon.sandbox.create()
       ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get('Customer')
+      CustomerInformationChecker = $injector.get 'CustomerInformationChecker'
       Order = $injector.get('Order')
       Geolocation = $injector.get('Geolocation')
       GroupOrder = $injector.get('GroupOrder')
@@ -150,22 +151,16 @@ describe 'Ctrl: GroupOrdersCtrl', ->
         deferred = $q.defer()
         deferred.resolve()
         deferred.promise
-      sandbox.stub Customer, 'checkMissingInformation'
+      sandbox.stub CustomerInformationChecker, 'check'
 
       scope.onJoinOrderTouch groupOrderMock
       scope.$digest()
 
-      Customer.checkMissingInformation.should.have.been.called
+      CustomerInformationChecker.check.should.have.been.called
 
     it 'should call Order.setCurrentOrder and change the state if the customer is activated and has provided all information', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.when({})
+      sandbox.stub(CustomerInformationChecker, 'check').returns $q.when({})
       sandbox.spy(Order, 'setCurrentOrder')
 
       scope.onJoinOrderTouch groupOrderMock
