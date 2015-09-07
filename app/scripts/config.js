@@ -6,7 +6,6 @@ angular.module('config', [
   'ionic.service.core',
   'LocalStorageModule',
   'ngCookies',
-  'ngMaterial',
   'pascalprecht.translate'
 ])
 
