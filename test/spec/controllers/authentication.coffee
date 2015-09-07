@@ -41,6 +41,9 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $q = $injector.get '$q'
 
       $compile = $injector.get '$compile'
+
+      sandbox.spy Credentials, 'reset'
+      sandbox.spy CustomerStorage, 'reset'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
         $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
       })
@@ -60,6 +63,10 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
     it 'should initialize as empty objects the different user forms', ->
       scope.user.should.be.empty
+
+    it 'should reset the Credentials and the CustomerStorage information', ->
+      Credentials.reset.should.have.been.called
+      CustomerStorage.reset.should.have.been.called
 
   describe 'Authentication#slideHasChanged', ->
 

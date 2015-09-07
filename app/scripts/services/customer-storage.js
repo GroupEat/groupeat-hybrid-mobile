@@ -7,6 +7,11 @@ angular.module('groupeat.services.customer-storage', [
 .factory('CustomerStorage', function (localStorageService) {
 
   var
+
+  setActivated = function(activated) {
+    localStorageService.set('activatedAccount', activated);
+  },
+
   setAddress = function(address) {
     if(address) {
       localStorageService.set('address', address);
@@ -29,7 +34,7 @@ angular.module('groupeat.services.customer-storage', [
     var settings = {
       'notificationsEnabled' : 'true',
       'daysWithoutNotifying': '2',
-      'noNotificationAfter': '23:00:00' 
+      'noNotificationAfter': '23:00:00'
     };
     localStorageService.set('settings', settings);
   },
@@ -38,6 +43,12 @@ angular.module('groupeat.services.customer-storage', [
     localStorageService.remove('settings');
     localStorageService.remove('identity');
     localStorageService.remove('settings');
+    localStorageService.remove('address');
+    localStorageService.remove('activatedAccount');
+  },
+
+  getActivated = function() {
+    return localStorageService.get('activatedAccount') === 'true';
   },
 
   getAddress = function() {
@@ -56,10 +67,12 @@ angular.module('groupeat.services.customer-storage', [
 
   return {
     setAddress: setAddress,
+    setActivated: setActivated,
     setIdentity: setIdentity,
     setSettings: setSettings,
     setDefaultSettings: setDefaultSettings,
     reset: reset,
+    getActivated: getActivated,
     getAddress: getAddress,
     getIdentity: getIdentity,
     getSettings: getSettings

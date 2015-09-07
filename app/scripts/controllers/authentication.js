@@ -29,6 +29,9 @@ angular.module('groupeat.controllers.authentication', [
   var d = new Date();
   $scope.initialTime = d.getTime();
 
+  Credentials.reset();
+  CustomerStorage.reset();
+
   $scope.slideHasChanged = function(index) {
     $scope.slideIndex = index;
   };
