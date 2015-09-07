@@ -4,13 +4,14 @@ angular.module('groupeat.services.customer', [
   'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
+  'groupeat.services.customer-storage',
   'groupeat.services.popup',
   'LocalStorageModule',
   'ngResource',
   'ui.router'
 ])
 
-.factory('Customer', function ($q, $resource, $state, BackendUtils, Credentials, ENV, localStorageService, Popup) {
+.factory('Customer', function ($q, $resource, $state, BackendUtils, Credentials, CustomerStorage, ENV, localStorageService, Popup) {
 
   var resource = $resource(ENV.apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
 
@@ -117,7 +118,7 @@ angular.module('groupeat.services.customer', [
   */
   checkActivatedAccount = function() {
     var deferred = $q.defer();
-    if (localStorageService.get('activatedAccount') === 'true') {
+    if (CustomerStorage.getActivated()) {
       deferred.resolve();
     }
     else {
@@ -131,7 +132,7 @@ angular.module('groupeat.services.customer', [
         }
         else
         {
-          localStorageService.set('activatedAccount', true);
+          CustomerStorage.setActivated(true);
           deferred.resolve();
         }
       });
