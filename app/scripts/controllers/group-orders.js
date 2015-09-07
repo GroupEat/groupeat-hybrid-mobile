@@ -18,6 +18,7 @@ angular.module('groupeat.controllers.group-orders', [
   Analytics.trackView('Group Orders');
 
   $scope.groupOrders = [];
+  $scope.isRequesting = false;
 
   $scope.onReload = function() {
     var promise = Network.hasConnectivity()
@@ -41,14 +42,20 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.onJoinOrderTouch = function(groupOrder) {
-    Customer.checkActivatedAccount()
-    .then(function() {
-      return CustomerInformationChecker.check();
-    })
-    .then(function() {
-      Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity, groupOrder.restaurant.data.discountPolicy, groupOrder.totalRawPrice);
-	    $state.go('app.restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
-    });
+    if(!$scope.isRequesting) {
+      $scope.isRequesting = true;
+      Customer.checkActivatedAccount()
+      .then(function() {
+        return CustomerInformationChecker.check();
+      })
+      .then(function() {
+        Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity, groupOrder.restaurant.data.discountPolicy, groupOrder.totalRawPrice);
+        $state.go('app.restaurant-menu', {restaurantId: groupOrder.restaurant.data.id});
+      })
+      .finally(function() {
+        $scope.isRequesting = false;
+      });
+    }
   };
 
   $scope.setArrayFromInt = function (num) {
