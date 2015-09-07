@@ -140,6 +140,7 @@
   "invalidErrorKey": "Le {{fieldName}} est invalide",
   "invalidAddressErrorKey": "L'adresse entrée n'est pas correctement reconnue. Merci d'entrer le champ à nouveau",
   "userShouldBeActivatedErrorKey": "Votre compte n'a pas encore été activé. Veuillez cliquer sur le lien qui vous a été envoyé par mail à l'inscription pour pouvoir passer commande.",
+  "missingCustomerInformationErrorKey": "Tu dois compléter tes informations dans la section réglages pour pouvoir passer commande",
 
   "noNetwork": "Pas de réseau !",
   "noNetworkDetails": "Veuillez réessayer avec une connexion internet...",
