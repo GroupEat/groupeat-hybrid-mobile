@@ -21,8 +21,6 @@ angular.module('groupeat.controllers.restaurants', [
   $scope.isRequesting = false;
 
   $scope.onReload = function() {
-    if(!$scope.isRequesting) {
-      $scope.isRequesting = true;
       var promise = Network.hasConnectivity()
       .then(function() {
         return Geolocation.getGeolocation();
@@ -41,7 +39,6 @@ angular.module('groupeat.controllers.restaurants', [
       ControllerPromiseHandler.handle(promise, $scope.initialState)
       .finally(function() {
         $scope.$broadcast('scroll.refreshComplete');
-        $scope.isRequesting = false;
       });
     }
   };

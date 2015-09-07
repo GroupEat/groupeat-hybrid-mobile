@@ -86,12 +86,10 @@ angular.module('groupeat.controllers.cart', [
           $ionicHistory.clearCache();
           $scope.leaveOrder();
           $scope.modal.hide();
-          $scope.isRequesting = false;
         })
         .catch(function (errorResponse) {
           Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
           .then(function(leaveOrder) {
-            $scope.isRequesting = false;
             if(leaveOrder) {
               $ionicHistory.clearHistory();
               $ionicHistory.clearCache();
@@ -99,6 +97,9 @@ angular.module('groupeat.controllers.cart', [
               $scope.modal.hide();
             }
           });
+        })
+        .finally(function() {
+          $scope.isRequesting = false;
         });
       }
     }
