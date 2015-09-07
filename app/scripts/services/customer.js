@@ -1,17 +1,16 @@
 'use strict';
 
 angular.module('groupeat.services.customer', [
-  'groupeat.services.address',
+  'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
-  'groupeat.services.lodash',
   'groupeat.services.popup',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'ngResource',
+  'ui.router'
 ])
 
-.factory('Customer', function (_, $filter, $q, $resource, $state, Address, BackendUtils, Credentials, ENV, localStorageService, Popup) {
-
-  var $translate = $filter('translate');
+.factory('Customer', function ($q, $resource, $state, BackendUtils, Credentials, ENV, localStorageService, Popup) {
 
   var resource = $resource(ENV.apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
 
@@ -139,75 +138,6 @@ angular.module('groupeat.services.customer', [
     }
 
     return deferred.promise;
-  },
-
-  /**
-  * @ngdoc function
-  * @name Customer#checkMissingInformation
-  * @methodOf Customer
-  *
-  * @description Returns a promise informing wether or not the customer has already provided all needed information to order
-  * if fulfilled, all required information were given
-  * if rejected with a string, it will be a formatted string of missing properties (in the current locale)
-  * it will also be rejected (with nothing) if an error was encountered along the way
-  *
-  * @todo : The string formatted relies heavily on the grammar and thus on the locale.
-  * It will however probably work fine for most locales (French, English, Spanish...)
-  *
-  */
-  checkMissingInformation = function () {
-    var missingPropertiesString;
-    var deferred = $q.defer();
-    var customerId = Credentials.get().id;
-    var mandatoryCustomerProperties = [
-      'firstName',
-      'lastName',
-      'phoneNumber'
-    ];
-    var missingProperties = [];
-    get(customerId)
-    .then(function (customer) {
-      _.forEach(mandatoryCustomerProperties, function (mandatoryProperty) {
-        if (!_.has(customer, mandatoryProperty) || !customer[mandatoryProperty]) {
-          missingProperties.push(mandatoryProperty);
-        }
-      });
-      return Address.get(customerId);
-    })
-    .then(function (address) {
-      if (!address || !address.residency) {
-        missingProperties.push('address');
-      }
-    })
-    .finally(function () {
-      if (_.isEmpty(missingProperties)) {
-        deferred.resolve();
-      } else {
-        missingPropertiesString = '';
-        if (missingProperties.length === 1) {
-          missingPropertiesString = $translate(missingProperties[0]);
-        } else if (missingProperties.length === 2) {
-          missingPropertiesString = $translate(missingProperties[0]) + ' ' + $translate('and') + ' ';
-          missingPropertiesString += $translate(missingProperties[1]);
-        } else {
-          var i;
-          for (i = 0; i < missingProperties.length - 2; i++) {
-            missingPropertiesString += $translate(missingProperties[i]) + ', ';
-          }
-          missingPropertiesString += $translate(missingProperties[missingProperties.length - 2]) + ' ' + $translate('and') + ' ';
-          missingPropertiesString += $translate(missingProperties[missingProperties.length - 1]);
-        }
-        deferred.reject(missingPropertiesString);
-        var missingCustomerInformationMessage = $translate('missingCustomerInformationMessage', { missingProperties: missingPropertiesString });
-        Popup.confirm('missingProperties', missingCustomerInformationMessage, 'settings')
-        .then(function(res) {
-          if (res) {
-            $state.go('settings');
-          }
-        });
-      }
-    });
-    return deferred.promise;
   };
 
   return {
@@ -215,6 +145,5 @@ angular.module('groupeat.services.customer', [
     save: save,
     update: update,
     checkActivatedAccount: checkActivatedAccount,
-    checkMissingInformation: checkMissingInformation
   };
 });
