@@ -87,27 +87,15 @@ angular.module('groupeat.controllers.cart', [
         $scope.modal.hide();
       })
       .catch(function (errorResponse) {
-        if (errorResponse === $translate('missingCustomerInformationErrorKey')) {
-          Popup.confirm('missingProperties', errorResponse, 'settings', 'cancel')
-          .then(function(leaveOrder) {
-            if(leaveOrder) {
-              $ionicHistory.clearHistory();
-              $ionicHistory.clearCache();
-              $scope.leaveOrder('settings');
-              $scope.modal.hide();
-            }
-          });
-        } else {
-          Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
-          .then(function(leaveOrder) {
-            if(leaveOrder) {
-              $ionicHistory.clearHistory();
-              $ionicHistory.clearCache();
-              $scope.leaveOrder();
-              $scope.modal.hide();
-            }
-          });
-        }
+        Popup.confirm('missingProperties', errorResponse, 'exitOrder', 'cancel')
+        .then(function(leaveOrder) {
+          if(leaveOrder) {
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $scope.leaveOrder('settings');
+            $scope.modal.hide();
+          }
+        });
       });
     }
   };
