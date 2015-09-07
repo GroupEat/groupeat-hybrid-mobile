@@ -4,6 +4,7 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.analytics',
   'groupeat.services.controller-promise-handler',
   'groupeat.services.customer',
+  'groupeat.services.customer-information-checker',
   'groupeat.services.geolocation',
   'groupeat.services.group-order',
   'groupeat.services.lodash',
@@ -12,7 +13,7 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, Geolocation, GroupOrder, Network, Order) {
+.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, CustomerInformationChecker, Geolocation, GroupOrder, Network, Order) {
 
   Analytics.trackView('Group Orders');
 
@@ -42,7 +43,7 @@ angular.module('groupeat.controllers.group-orders', [
   $scope.onJoinOrderTouch = function(groupOrder) {
     Customer.checkActivatedAccount()
     .then(function() {
-      return Customer.checkMissingInformation();
+      return CustomerInformationChecker.check();
     })
     .then(function() {
       Order.setCurrentOrder(groupOrder.id, groupOrder.endingAt, groupOrder.discountRate, groupOrder.remainingCapacity, groupOrder.restaurant.data.discountPolicy, groupOrder.totalRawPrice);
