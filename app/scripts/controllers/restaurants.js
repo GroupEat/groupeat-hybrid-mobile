@@ -40,7 +40,6 @@ angular.module('groupeat.controllers.restaurants', [
       .finally(function() {
         $scope.$broadcast('scroll.refreshComplete');
       });
-    }
   };
 
   $scope.onRestaurantTouch = function(restaurant) {
