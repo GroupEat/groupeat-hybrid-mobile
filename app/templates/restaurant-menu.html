@@ -85,7 +85,7 @@
               <div class="col-50">
                 <div class="add-to-cart">
                   <div class="clearfix">
-                    <a class="action-btn" ng-disabled="cart.getProductQuantity(product, format) === 0" ng-class="{'is-active' : cart.getProductQuantity(product, format) > 0}" on-tap="onDeleteProduct(product, format)">
+                    <a class="action-btn" ng-disabled="!cart.getProductQuantity(product, format)" ng-class="{'is-active' : cart.getProductQuantity(product, format) > 0}" on-tap="onDeleteProduct(product, format)">
                       <i class="ion-ios-minus-empty"></i>
                     </a>
                     <a class="total">{{ cart.getProductQuantity(product, format) }}</a>
