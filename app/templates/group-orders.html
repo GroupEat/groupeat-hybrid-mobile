@@ -10,18 +10,20 @@
   >
   </ge-message-backdrop>
 
-  <ion-nav-buttons side="primary" >
-    <button class="button button-icon icon ion-ios-gear" ui-sref="app.settings"></button>
-  </ion-nav-buttons>
-  <ion-nav-title>
-    <div class="title has-sub-title">
-      {{ 'group-orders' | translate }}
-      <small>{{groupOrders.length}} {{'orders-around' | translate}}</small>
-    </div>
-  </ion-nav-title>
-  <ion-nav-buttons side="secondary" >
-    <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
-  </ion-nav-buttons>
+  <ion-nav-bar class="bar-blue">
+    <ion-nav-buttons side="primary" >
+      <button class="button button-icon icon ion-ios-gear" ui-sref="settings"></button>
+    </ion-nav-buttons>
+    <ion-nav-title>
+      <div class="title has-sub-title">
+        {{ 'group-orders' | translate }}
+        <small>{{groupOrders.length}} {{'orders-around' | translate}}</small>
+      </div>
+    </ion-nav-title>
+    <ion-nav-buttons side="secondary" >
+      <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
   <ion-content has-bouncing="false" class="bg-blue no-header full-height">
     <div style="height:44px"></div>
