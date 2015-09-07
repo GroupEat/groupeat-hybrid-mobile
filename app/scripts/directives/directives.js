@@ -10,5 +10,6 @@ angular.module('groupeat.directives', [
   'groupeat.directives.message-backdrop',
   'groupeat.directives.header-shrink',
   'groupeat.directives.receipt-card',
-  'groupeat.directives.restaurant-card'
+  'groupeat.directives.restaurant-card',
+  'groupeat.directives.timer'
 ]);

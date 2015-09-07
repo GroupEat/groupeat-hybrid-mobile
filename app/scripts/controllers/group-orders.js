@@ -31,7 +31,7 @@ angular.module('groupeat.controllers.group-orders', [
       $scope.groupOrders = groupOrders;
       if (_.isEmpty(groupOrders)) {
         return $q.reject('noGroupOrders');
-      } 
+      }
     });
     ControllerPromiseHandler.handle(promise, $scope.initialState)
     .finally(function() {
