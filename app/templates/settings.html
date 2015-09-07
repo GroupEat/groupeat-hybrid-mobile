@@ -1,8 +1,12 @@
 <ion-view id="settings" title="{{ 'settings' | translate }}" >
-
-  <ion-nav-buttons side="right">
-    <button on-tap="onSave()" class="button button-clear button-positive icon ion-checkmark-circled"></button>
-  </ion-nav-buttons>
+  <ion-nav-bar class="bar-blue">
+    <ion-nav-back-button class='button button-clear'>
+      <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+    </ion-nav-back-button>
+    <ion-nav-buttons side="right">
+      <button on-tap="onSave()" class="button button-clear button-positive icon ion-checkmark-circled"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
   <div class="bar bar-subheader bar-tab" ng-class="{'second-selected' : slideIndex == 1}">
       <button ng-repeat="tab in tabs" ng-class="{'active' : slideIndex == tab.id}" on-tap="slideTo({{ tab.id }})">
