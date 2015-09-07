@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Address = Credentials = Customer = scope = $httpBackend = $q = $state = ENV = sandbox = BackendUtils = Popup = {}
+  Credentials = Customer = scope = $httpBackend = $q = $state = ENV = sandbox = BackendUtils = Popup = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -13,7 +13,6 @@ describe 'Service: Customer', ->
       scope = $rootScope.$new()
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      Address = $injector.get('Address')
       Credentials = $injector.get('Credentials')
       Customer = $injector.get('Customer')
       ENV = $injector.get('ENV')
@@ -102,70 +101,3 @@ describe 'Service: Customer', ->
       $httpBackend.expect('PUT', regex).respond(400, 'Failure')
       Customer.update("1", requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
-
-  describe 'Customer#checkMissingInformation', ->
-
-    it 'should resolve a promise when the Customer GET and Address GET requests succeed and no required information is missing', ->
-      customerGetResponse =
-        data:
-          firstName: 'firstName'
-          lastName: 'lastName'
-          phoneNumber: '0606060606'
-      sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get').returns $q.when
-        details: 'Au niveau du clocher de TibDex'
-        residency: 'aux toilettes'
-
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(customerGetResponse)
-      Customer.checkMissingInformation().should.be.resolved
-      $httpBackend.flush()
-
-    it 'should reject a promise with the string "address" when just the customer address is missing', ->
-      sandbox.stub(Popup, 'confirm')
-      customerGetResponse =
-        data:
-          firstName: 'firstName'
-          lastName: 'lastName'
-          phoneNumber: '0606060606'
-      sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get').returns $q.when
-        details: ''
-        residency: ''
-
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(customerGetResponse)
-      Customer.checkMissingInformation().should.be.rejectedWith('address')
-      $httpBackend.flush()
-      Popup.confirm.should.have.been.calledWithExactly
-
-    it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (> 2 missing)', ->
-      sandbox.stub(Popup, 'confirm')
-      customerGetResponse =
-        data: {}
-      sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get').returns $q.when
-        details: 'Chez la mère Michelle'
-        residency: 'à gauche'
-
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(customerGetResponse)
-      Customer.checkMissingInformation().should.be.rejectedWith('firstName, lastName and phoneNumber')
-      $httpBackend.flush()
-      Popup.confirm.should.have.been.calledWithExactly
-
-    it 'should reject a promise with a string of the missing customer keys when just the customer get returns an incomplete profile (2 missing)', ->
-      sandbox.stub(Popup, 'confirm')
-      customerGetResponse =
-        data:
-          firstName: 'firstName'
-      sandbox.stub(Credentials, 'get').returns(id: 1)
-      sandbox.stub(Address, 'get').returns $q.when
-        details: 'bonjour'
-        residency: 'madame'
-
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
-      $httpBackend.expect('GET', regex).respond(customerGetResponse)
-      Customer.checkMissingInformation().should.be.rejectedWith('lastName and phoneNumber')
-      $httpBackend.flush()
-      Popup.confirm.should.have.been.calledWithExactly

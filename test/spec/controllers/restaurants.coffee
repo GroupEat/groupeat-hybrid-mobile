@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $state = $httpBackend = ENV = sandbox = ControllerPromiseHandler = Customer = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
+  scope = $state = $httpBackend = ENV = sandbox = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -17,6 +17,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
       ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Customer = $injector.get('Customer')
+      CustomerInformationChecker = $injector.get 'CustomerInformationChecker'
       Restaurant = $injector.get('Restaurant')
       GroupOrder = $injector.get('GroupOrder')
       Network = $injector.get('Network')
@@ -58,22 +59,16 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deferred = $q.defer()
         deferred.resolve()
         deferred.promise
-      sandbox.stub(Customer, 'checkMissingInformation').returns $q.defer().promise
+      sandbox.stub(CustomerInformationChecker, 'check').returns $q.defer().promise
 
       scope.onRestaurantTouch 1
       scope.$digest()
 
-      Customer.checkMissingInformation.should.have.been.called
+      CustomerInformationChecker.check.should.have.been.called
 
     it 'should call GroupOrder#get if customer information are available', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.when({})
+      sandbox.stub(CustomerInformationChecker, 'check').returns $q.when({})
       sandbox.stub(GroupOrder, 'get').returns $q.defer().promise
 
       scope.onRestaurantTouch 1
@@ -82,19 +77,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
       GroupOrder.get.should.have.been.called
 
     it 'should call Restaurant#checkGroupOrders when the group orders were fetched', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.when({})
+      sandbox.stub(CustomerInformationChecker, 'check').returns $q.when({})
       groupOrders = []
-      sandbox.stub GroupOrder, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve(groupOrders)
-        deferred.promise
+      sandbox.stub(GroupOrder, 'get').returns $q.when(groupOrders)
       sandbox.stub(Restaurant, 'checkGroupOrders').returns $q.defer().promise
 
       restaurant =
@@ -105,22 +91,10 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Restaurant.checkGroupOrders.should.have.been.calledWithExactly(1, groupOrders)
 
     it 'should change the state to settings if all previous chains were resolved', ->
-      sandbox.stub Customer, 'checkActivatedAccount', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Customer, 'checkMissingInformation', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub GroupOrder, 'get', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
-      sandbox.stub Restaurant, 'checkGroupOrders', ->
-        deferred = $q.defer()
-        deferred.resolve()
-        deferred.promise
+      sandbox.stub(Customer, 'checkActivatedAccount').returns $q.when({})
+      sandbox.stub(CustomerInformationChecker, 'check').returns $q.when({})
+      sandbox.stub(GroupOrder, 'get').returns $q.when({})
+      sandbox.stub(Restaurant, 'checkGroupOrders').returns $q.when()
 
       sandbox.spy(Order, 'setCurrentOrder')
 
