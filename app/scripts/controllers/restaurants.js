@@ -21,25 +21,25 @@ angular.module('groupeat.controllers.restaurants', [
   $scope.isRequesting = false;
 
   $scope.onReload = function() {
-      var promise = Network.hasConnectivity()
-      .then(function() {
-        return Geolocation.getGeolocation();
-      })
-      .then(function(currentPosition) {
-        $scope.userCurrentPosition = currentPosition;
-        return Restaurant.getFromCoordinates(currentPosition.coords.latitude, currentPosition.coords.longitude);
-      })
-      .then(function(restaurants) {
-        if (_.isEmpty(restaurants)) {
-          return $q.reject('noRestaurants');
-        } else {
-          $scope.restaurants = restaurants;
-        }
-      });
-      ControllerPromiseHandler.handle(promise, $scope.initialState)
-      .finally(function() {
-        $scope.$broadcast('scroll.refreshComplete');
-      });
+    var promise = Network.hasConnectivity()
+    .then(function() {
+      return Geolocation.getGeolocation();
+    })
+    .then(function(currentPosition) {
+      $scope.userCurrentPosition = currentPosition;
+      return Restaurant.getFromCoordinates(currentPosition.coords.latitude, currentPosition.coords.longitude);
+    })
+    .then(function(restaurants) {
+      if (_.isEmpty(restaurants)) {
+        return $q.reject('noRestaurants');
+      } else {
+        $scope.restaurants = restaurants;
+      }
+    });
+    ControllerPromiseHandler.handle(promise, $scope.initialState)
+    .finally(function() {
+      $scope.$broadcast('scroll.refreshComplete');
+    });
   };
 
   $scope.onRestaurantTouch = function(restaurant) {
