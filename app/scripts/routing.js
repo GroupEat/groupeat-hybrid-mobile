@@ -2,6 +2,7 @@
 angular.module('routing', []).config(function ($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('authentication', {
+    cache: false,
     url: '/authentication',
     templateUrl: 'templates/authentication.html',
     controller: 'AuthenticationCtrl',
