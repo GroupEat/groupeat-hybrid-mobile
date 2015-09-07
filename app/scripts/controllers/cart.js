@@ -14,8 +14,6 @@ angular.module('groupeat.controllers.cart', [
 
 .controller('CartCtrl', function ($filter, $ionicHistory, $ionicSlideBoxDelegate, $scope, $state, Address, Cart, Credentials, Order, PredefinedAddresses, Popup) {
 
-  var $translate = $filter('translate');
-
   $scope.$on('modal.shown', function() {
     $scope.cart = Cart;
     $scope.comment = {value : ''};
@@ -92,7 +90,7 @@ angular.module('groupeat.controllers.cart', [
           if(leaveOrder) {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
-            $scope.leaveOrder('settings');
+            $scope.leaveOrder();
             $scope.modal.hide();
           }
         });
@@ -100,11 +98,10 @@ angular.module('groupeat.controllers.cart', [
     }
   };
 
-  $scope.leaveOrder = function(redirectState) {
-    redirectState = redirectState || 'app.group-orders';
+  $scope.leaveOrder = function() {
     Order.resetCurrentOrder();
     Cart.reset();
-    $state.go(redirectState);
+    $state.go('app.group-orders');
   };
 
 });
