@@ -12,7 +12,7 @@ angular.module('config', [
 
 .config(function($ionicAppProvider) {
   $ionicAppProvider.identify({
-    /* jshint camelcase: false */   // The camelcase feature is deprecated by jshint and will soon be removed. So would be this line. 
+    /* jshint camelcase: false */   // The camelcase feature is deprecated by jshint and will soon be removed. So would be this line.
     app_id: 'd1f6e877',
     api_key: 'a50a33809f344de407b835f9f31f36e3c1b717abb4bd8461'
   });
@@ -24,10 +24,6 @@ angular.module('config', [
     prefix: 'translations/',
     suffix: '.json'
   }).preferredLanguage('fr').fallbackLanguage(['fr']).useLocalStorage();
-})
-
-.config(function ($mdThemingProvider) {
-  $mdThemingProvider.theme('default').primaryPalette('orange');
 })
 
 .config(function (localStorageServiceProvider) {
