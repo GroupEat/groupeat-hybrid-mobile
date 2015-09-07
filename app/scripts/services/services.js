@@ -9,6 +9,7 @@ angular.module('groupeat.services', [
   'groupeat.services.controller-promise-handler',
   'groupeat.services.credentials',
   'groupeat.services.customer',
+  'groupeat.services.customer-information-checker',
   'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
   'groupeat.services.device-assistant',
