@@ -3,10 +3,12 @@
 angular.module('groupeat.controllers.authentication', [
   'ionic',
   'jcs-autoValidate',
+  'groupeat.services.address',
   'groupeat.services.authentication',
   'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.customer',
+  'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
   'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
@@ -16,7 +18,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.popup',
 ])
 
-.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Analytics, Authentication, Credentials, Customer, CustomerStorage, DeviceAssistant, ElementModifier, Network, Popup) {
+.controller('AuthenticationCtrl', function (_, $filter, $ionicSlideBoxDelegate, $q, $scope, $state, $stateParams, $timeout, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, DeviceAssistant, ElementModifier, Network, Popup) {
 
   Analytics.trackView('Authentication');
 
@@ -57,6 +59,7 @@ angular.module('groupeat.controllers.authentication', [
   $scope.submitLoginForm = function(form) {
     $scope.isProcessingRequest = true;
     Analytics.trackEvent('Authentication', 'Tries to Login');
+    var customerId = null;
     Network.hasConnectivity()
     .then(function() {
       return ElementModifier.validate(form);
@@ -65,15 +68,30 @@ angular.module('groupeat.controllers.authentication', [
       return Authentication.authenticate($scope.user);
     })
     .then(function (credentials) {
-      Credentials.set(credentials.id, credentials.token);
+      customerId = credentials.id;
+      Credentials.set(customerId, credentials.token);
+      return Customer.get(customerId);
+    })
+    .then(function(customer) {
+      CustomerStorage.setIdentity(customer);
+      CustomerStorage.setActivated(customer.activated);
+      return Address.get(customerId);
+    })
+    .then(function(address) {
+      CustomerStorage.setAddress(address);
+      return CustomerSettings.get(customerId);
+    })
+    .then(function(customerSettings) {
+      CustomerStorage.setSettings(customerSettings);
       Analytics.trackEvent('Authentication', 'Logs In');
       Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
-      $scope.isProcessingRequest = false;
       $state.go('app.group-orders');
     })
     .catch(function(errorMessage) {
-      $scope.isProcessingRequest = false;
       return Popup.error(errorMessage);
+    })
+    .finally(function() {
+      $scope.isProcessingRequest = false;
     });
   };
 
@@ -94,12 +112,13 @@ angular.module('groupeat.controllers.authentication', [
       return DeviceAssistant.register();
     })
     .then(function() {
-      $scope.isProcessingRequest = false;
       $state.go('signup');
     })
     .catch(function(errorMessage) {
-      $scope.isProcessingRequest = false;
       Popup.error(errorMessage);
+    })
+    .finally(function() {
+      $scope.isProcessingRequest = false;
     });
   };
 

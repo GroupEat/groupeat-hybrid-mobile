@@ -32,7 +32,7 @@ angular.module('groupeat.services.customer-storage', [
 
   setDefaultSettings = function() {
     var settings = {
-      'notificationsEnabled' : 'true',
+      'notificationsEnabled' : true,
       'daysWithoutNotifying': '2',
       'noNotificationAfter': '23:00:00'
     };
@@ -61,7 +61,6 @@ angular.module('groupeat.services.customer-storage', [
 
   getSettings = function() {
     var settings = localStorageService.get('settings');
-    settings.notificationsEnabled = (settings.notificationsEnabled === 'true');
     return settings || {};
   };
 

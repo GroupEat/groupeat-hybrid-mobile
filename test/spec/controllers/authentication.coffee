@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Authentication = BackendUtils = Credentials = AuthenticationCtrl = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
+  Address = Authentication = AuthenticationCtrl = BackendUtils = Credentials = CustomerSettings = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
 
   formMock = 'form'
 
@@ -24,9 +24,11 @@ describe 'Ctrl: AuthenticationCtrl', ->
       validator.setDefaultElementModifier ElementModifier.key
       validator.setErrorMessageResolver ErrorMessageResolver.resolve
 
+      Address = $injector.get 'Address'
       Authentication = $injector.get 'Authentication'
       Credentials = $injector.get 'Credentials'
       Customer = $injector.get 'Customer'
+      CustomerSettings = $injector.get 'CustomerSettings'
       CustomerStorage = $injector.get 'CustomerStorage'
       DeviceAssistant = $injector.get 'DeviceAssistant'
       Network = $injector.get 'Network'
@@ -45,7 +47,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.spy Credentials, 'reset'
       sandbox.spy CustomerStorage, 'reset'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -191,6 +193,10 @@ describe 'Ctrl: AuthenticationCtrl', ->
     it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
       sandbox.stub(Authentication, 'authenticate').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub(Customer, 'get').returns $q.when({})
+      sandbox.stub(Address, 'get').returns $q.when({})
+      sandbox.stub(CustomerSettings, 'get').returns $q.when({})
+
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
       sandbox.stub $state, 'go'
