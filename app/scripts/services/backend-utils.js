@@ -85,13 +85,17 @@ angular.module('groupeat.services.backend-utils', [
     *
     * @param {Object} response - The response from the backend
     */
-    getErrorMsgFromBackend = function (response) {
+    getErrorMsgFromBackend = function (response, fallback) {
       var errorObject = getErrorObjectFromBackend(response);
       if (errorObject === undefined) {
         return undefined;
       }
       var fieldName = $translate(errorObject.field + 'FieldName');
-      var errorMessage = $translate(errorObject.errorKey + 'ErrorKey', { fieldName: fieldName });
+      var label = errorObject.errorKey + 'ErrorKey';
+      var errorMessage = $translate(label, { fieldName: fieldName });
+      if (fallback && errorMessage === label) {
+        return $translate(fallback);
+      }
       return _.has(errorObject, 'additionalValue') ? vsprintf(errorMessage, errorObject.additionalValue) : errorMessage;
     };
   return {

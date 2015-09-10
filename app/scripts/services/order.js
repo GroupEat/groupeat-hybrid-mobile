@@ -205,7 +205,7 @@ angular.module('groupeat.services.order', [
 			defer.resolve(response);
 		})
 		.catch(function(errorResponse) {
-			defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
+			defer.reject(BackendUtils.errorMsgFromBackend(errorResponse, 'genericFailureDetails'));
 		});
 		return defer.promise;
 	},
