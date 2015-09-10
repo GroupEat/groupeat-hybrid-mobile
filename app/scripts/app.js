@@ -64,7 +64,9 @@ angular.module('groupeat', [
   });
 
   $rootScope.$on('$ionicView.afterEnter', function() {
-    $rootScope.messageBackdrop.status = 'loading';
+    if ($rootScope.messageBackdrop.status === 'hidden') {
+      $rootScope.messageBackdrop.status = 'loading';
+    }
   });
 
   $rootScope.$on('$ionicView.beforeLeave', function() {
