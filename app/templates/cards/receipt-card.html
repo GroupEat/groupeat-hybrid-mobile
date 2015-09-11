@@ -4,29 +4,30 @@
 		<h4>{{restaurant.name}}</h4>
 		<p>{{date | date:'MM/dd/yyyy'}}</p>
 	</div>
-
 	<div class="orders">
-		<div class="order" ng-repeat="order in orders.getProducts()">
-			<div class="row">
-				<div class="col-10">
-					<b class="number-item">
-						{{order.quantity}}
-					</b>
-				</div>
-				<div class="col-67">
-					<span class="order-item">
-						{{order.name}} {{order.format}}
-					</span>
-				</div>
-				<div class="col col-no-padding text-right">
-					<span class="price">
-						{{order.price | number : 2 }}
-					</span>
+		<ion-scroll zooming="true" direction="y" style="max-height: 80px">
+			<div class="order" ng-repeat="order in orders.getProducts()">
+				<div class="row">
+					<div class="col-10">
+						<b class="number-item">
+							{{order.quantity}}
+						</b>
+					</div>
+					<div class="col-67">
+						<span class="order-item">
+							{{order.name}} {{order.format}}
+						</span>
+					</div>
+					<div class="col col-no-padding text-right">
+						<span class="price">
+							{{order.price | number : 2 }}
+						</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		</ion-scroll>
 	</div>
-
+	
 	<div class="dashed-border"></div>
 
 	<div class="totals">
