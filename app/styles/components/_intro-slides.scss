@@ -3,14 +3,14 @@
 		padding: 80px 40px;
 		text-align: center;
 		h3 {
-			font-size: 20px;
+			font-size: 25px;
 			font-weight: 300;
 			margin-bottom: 10px;
 			font-family: "Helvetica Neue", "Helvetica", Arial !important;
 		}
 		p {
 			color: $font-grey;
-			font-size: 13px;
+			font-size: 14px;
 		}
 	}
 }
@@ -361,7 +361,10 @@
 @media (max-width: 350px) {
 	#intro-slides {
 		.titles {
-			padding: 10px 40px;
+			padding: 30px 40px;
+			h3 {
+				font-size: 20px;
+			}
 			p {
 				font-size: 11px;
 			}
@@ -369,5 +372,8 @@
 	}
 	#intro-animations {
 		bottom: 50px;
+		width: 280px;
+		height: 280px;
+		margin-left: -140px;
 	}
 }
