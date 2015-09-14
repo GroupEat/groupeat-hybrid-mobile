@@ -85,7 +85,7 @@ angular.module('groupeat.services.backend-utils', [
     *
     * @param {Object} response - The response from the backend
     */
-    getErrorMsgFromBackend = function (response, fallback) {
+    getErrorMsgFromBackend = function (response) {
       var errorObject = getErrorObjectFromBackend(response);
       if (errorObject === undefined) {
         return undefined;
@@ -93,8 +93,10 @@ angular.module('groupeat.services.backend-utils', [
       var fieldName = $translate(errorObject.field + 'FieldName');
       var label = errorObject.errorKey + 'ErrorKey';
       var errorMessage = $translate(label, { fieldName: fieldName });
-      if (fallback && errorMessage === label) {
-        return $translate(fallback);
+      // If the errorMessage equals the translated label, the errorKey was not translated by the application
+      // So we return a generic error message.
+      if (errorMessage === label) {
+        return $translate('genericFailureDetails');
       }
       return _.has(errorObject, 'additionalValue') ? vsprintf(errorMessage, errorObject.additionalValue) : errorMessage;
     };
