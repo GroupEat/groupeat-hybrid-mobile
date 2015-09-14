@@ -45,7 +45,7 @@ angular.module('groupeat.services.customer-settings', [
     6,
     7
     ];
-  }, 
+  },
 
   getLabelHourFromValue = function(value) {
     return _.find(noNotificationAfterHours, 'value', value).label;

@@ -60,8 +60,7 @@ angular.module('groupeat.services.customer-storage', [
   },
 
   getSettings = function() {
-    var settings = localStorageService.get('settings');
-    return settings || {};
+    return localStorageService.get('settings') || {};
   };
 
   return {
