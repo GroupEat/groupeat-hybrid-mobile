@@ -1,5 +1,15 @@
 <ion-view view-title="{{ 'myOrders' | translate }}" >
 
+	<ge-message-backdrop
+		icon="messageBackdrop.icon"
+		title="messageBackdrop.title"
+		details="messageBackdrop.details"
+		button-sref="messageBackdrop.buttonSref"
+		button-text="messageBackdrop.buttonText"
+		status="messageBackdrop.status"
+	>
+	</ge-message-backdrop>
+
 	<ion-content class="bg-blue has-header full-height">
     <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
     </ion-refresher>
