@@ -73,7 +73,7 @@
   "days": "jours",
 
   "whatWouldYouLikeToEat": "Que voulez-vous mangez ?",
-  "tooManyProducts": "Aïe aïe aïe, ce restaurant ne peut pas livrer plus de pizzas...",
+  "tooManyProducts": "Attention, ce restaurant ne peut pas livrer plus de pizzas...",
 
   "chooseARestaurant": "Choisissez un restaurant",
   "restaurantPlaceholderDescription": "Cette pizzeria n'a pas souhaité ajouter de description.",
@@ -108,7 +108,7 @@
   "selectFoodRush": "Séléctionnez une durée",
   "groupOrderAlreadyExistingErrorKey": "Une commande groupée existe déjà pour ce restaurant, rejoignez-là, ou créez en une dans un autre restaurant !",
   "minimumGroupOrderPriceNotReachedErrorKey": "Vous n'avez pas atteint le prix minimum pour commander dans ce restaurant.",
-  "restaurantDeliveryCapacityExceededErrorKey": "Aïe aïe aïe ! Votre commande dépasse le nombre maximale de produits pour ce restaurant... Essayez d'en enlever quelques-uns, ou essayez un autre restaurant !",
+  "restaurantDeliveryCapacityExceededErrorKey": "Votre commande dépasse le nombre maximale de produits pour ce restaurant... Essayez d'en enlever quelques-uns, ou essayez un autre restaurant !",
   "deliveryDistanceTooLongErrorKey": "Il semble que vous soyez trop loin pour rejoindre cette commande... Vous pouvez essayer un autre restaurant ! Excusez-nous du problème.",
   "foodRushIsOver": "Le FoodRush est terminé...",
   "tooLateToOrder": "Trop tard pour rejoindre cette commande groupée, retente ta chance !",
