@@ -2,6 +2,7 @@
 
 angular.module('groupeat.services.geolocation', [
   'constants',
+  'ngCordova'
 ])
 
 .factory('Geolocation', function ($q, ENV, $cordovaGeolocation) {
