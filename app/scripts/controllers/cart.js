@@ -83,6 +83,7 @@ angular.module('groupeat.controllers.cart', [
         $ionicHistory.clearCache();
         $scope.leaveOrder();
         $scope.modal.hide();
+        Popup.alert('successfulOrder', 'yourOrderIsSuccessful');
       })
       .catch(function (errorResponse) {
         Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
@@ -99,6 +100,7 @@ angular.module('groupeat.controllers.cart', [
   };
 
   $scope.leaveOrder = function() {
+   
     Order.resetCurrentOrder();
     Cart.reset();
     $state.go('app.group-orders');
