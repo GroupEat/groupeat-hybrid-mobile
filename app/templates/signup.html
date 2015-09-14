@@ -25,7 +25,7 @@
 					<div class="btn-group">
 						<div class="row">
 							<div class="col">
-								<button type="submit" on-tap="slideTo(1)" ng-disabled="!user.firstName || !user.lastName" class="btn btn-bloc btn-lg btn-green">
+								<button type="submit" ng-click="slideTo(1)" ng-disabled="!user.firstName || !user.lastName" class="btn btn-bloc btn-lg btn-green">
 									{{ 'nextStep' | translate }} <i class="ion-ios-arrow-thin-right"></i>
 								</button>
 							</div>
@@ -67,7 +67,7 @@
 								</button>
 							</div>
 							<div class="col">
-								<button type="submit" ng-disabled="!user.phoneNumber" on-tap="slideTo(2)" class="btn btn-bloc btn-lg btn-green">
+								<button type="submit" ng-disabled="!user.phoneNumber" ng-click="slideTo(2)" class="btn btn-bloc btn-lg btn-green">
 									Étape suivante <i class="ion-ios-arrow-thin-right"></i>
 								</button>
 							</div>
@@ -110,7 +110,7 @@
 								</button>
 							</div>
 							<div class="col">
-								<a on-tap="confirmSignup()" ng-disabled="!user.residency" class="btn btn-bloc btn-lg btn-green">
+								<a ng-click="confirmSignup()" ng-disabled="!user.residency" class="btn btn-bloc btn-lg btn-green">
 									Confirmer <i class="ion-checkmark"></i>
 								</a>
 							</div>
