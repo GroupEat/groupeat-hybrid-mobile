@@ -94,7 +94,7 @@ angular.module('groupeat.controllers.cart', [
             $ionicHistory.clearCache();
             $scope.leaveOrder();
             $scope.modal.hide();
-            $ionicSlideBoxDelegate.slide(0)
+            $ionicSlideBoxDelegate.slide(0);
           }
         });
       });
@@ -102,7 +102,7 @@ angular.module('groupeat.controllers.cart', [
   };
 
   $scope.leaveOrder = function() {
-   
+
     Order.resetCurrentOrder();
     Cart.reset();
     $state.go('app.group-orders');
