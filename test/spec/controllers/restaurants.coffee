@@ -195,6 +195,8 @@ describe 'Ctrl: RestaurantsCtrl', ->
 
     it 'should load restaurants in the scope if at least one is returned by the server', ->
       restaurants = ['firstRestaurant', 'secondRestaurant']
+      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
+      sandbox.stub(Geolocation, 'getGeolocation').returns $q.when(currentPosition)
       sandbox.stub(Restaurant, 'getFromCoordinates').returns $q.when(restaurants)
       scope.onReload()
       scope.$digest()
