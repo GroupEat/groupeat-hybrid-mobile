@@ -108,7 +108,8 @@
     "com.ionic.keyboard",
     "org.apache.cordova.splashscreen",
     "com.danielcwilson.plugins.googleanalytics",
-    "cordova-plugin-whitelist"
+    "cordova-plugin-whitelist",
+    "org.apache.cordova.geolocation"
   ],
   "cordovaPlatforms": [
     "ios"

@@ -242,7 +242,8 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
-        ignorePath:  /\.\.\//
+        ignorePath:  /\.\.\//,
+        exclude: [ 'lib/ngCordova/dist/ng-cordova.js' ]
       },
       sass: {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -422,7 +423,6 @@ module.exports = function (grunt) {
         '<%= yeoman.app %>/lib/angular-validation-match/dist/angular-input-match.min.js',
         '<%= yeoman.app %>/lib/angular-timer/dist/angular-timer.js',
         '<%= yeoman.app %>/lib/angular-auto-validate/dist/jcs-auto-validate.js',
-        '<%= yeoman.app %>/lib/ngGeolocation/ngGeolocation.min.js',
         '<%= yeoman.app %>/lib/ngAutocomplete/src/ngAutocomplete.js',
         '<%= yeoman.app %>/lib/ionic/release/js/ionic.js',
         '<%= yeoman.app %>/lib/ionic/release/js/ionic-angular.js',
@@ -436,6 +436,7 @@ module.exports = function (grunt) {
         '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
         '<%= yeoman.app %>/lib/angular-permission/dist/angular-permission.js',
         '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
+        '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.js',
         '<%= yeoman.app %>/<%= yeoman.scripts %>/**/*.js',
         'app/templates/**/*.html',
         'test/utils/**/*.js',
