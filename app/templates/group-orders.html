@@ -10,18 +10,20 @@
   >
   </ge-message-backdrop>
 
-  <ion-nav-buttons side="primary" >
-    <button class="button button-icon icon ion-ios-gear" ui-sref="app.settings"></button>
-  </ion-nav-buttons>
-  <ion-nav-title>
-    <div class="title has-sub-title">
-      {{ 'group-orders' | translate }}
-      <small>{{groupOrders.length}} {{'orders-around' | translate}}</small>
-    </div>
-  </ion-nav-title>
-  <ion-nav-buttons side="secondary" >
-    <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
-  </ion-nav-buttons>
+  <ion-nav-bar class="bar-blue">
+    <ion-nav-buttons side="primary" >
+      <button class="button button-icon icon ion-ios-gear" ui-sref="app.settings"></button>
+    </ion-nav-buttons>
+    <ion-nav-title>
+      <div class="title has-sub-title">
+        {{ 'group-orders' | translate }}
+        <small>{{groupOrders.length}} {{'orders-around' | translate}}</small>
+      </div>
+    </ion-nav-title>
+    <ion-nav-buttons side="secondary" >
+      <button class="button button-icon icon ion-bag" ui-sref="app.orders"></button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
   <ion-content has-bouncing="false" class="bg-blue no-header full-height">
     <div style="height:44px"></div>
@@ -29,7 +31,7 @@
       <slick data="groupOrders" ng-if="groupOrders.length" init-onload="true" arrows="false" slides-to-show="1" slides-to-scroll="1" center-mode="{{groupOrders.length == 1 ? false : true}}" center-padding="20px" >
         <div ng-repeat="groupOrder in groupOrders track by $index">
           <div class="order-card" order-card on-tap="onJoinOrderTouch(groupOrder)" >
-            <div class="top" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
+            <div class="top" ng-style="{'background-image' : 'url(' + groupOrder.restaurant.data.pictureUrl + ')'}">
               <h3>-{{groupOrder.discountRate}}<span>%</span></h3>
               <div class="time-left">
                 <span>

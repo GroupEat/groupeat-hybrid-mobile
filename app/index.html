@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <title>GroupEat</title>
 
     <!-- build:css styles/vendor.css -->
@@ -33,12 +34,6 @@
           Icons provided by Ionicons: http://ionicons.com/
         -->
 
-    <ion-nav-bar class="bar-blue">
-        <ion-nav-back-button class='button button-clear'>
-          <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
-        </ion-nav-back-button>
-    </ion-nav-bar>
-
         <!--
           The views will be rendered in the <nav-view> directive below
           Templates are in the /templates folder (but you could also
@@ -66,7 +61,6 @@
     <script src="lib/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
     <script src="lib/angular-translate-storage-local/angular-translate-storage-local.js"></script>
     <script src="lib/angular-resource/angular-resource.js"></script>
-    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="lib/angular-validation-match/dist/angular-input-match.min.js"></script>
     <script src="lib/angular-auto-validate/dist/jcs-auto-validate.min.js"></script>
     <script src="lib/sprintf/src/sprintf.js"></script>
@@ -75,7 +69,6 @@
     <script src="lib/momentjs/moment.js"></script>
     <script src="lib/humanize-duration/humanize-duration.js"></script>
     <script src="lib/angular-timer/dist/angular-timer.js"></script>
-    <script src="lib/ngGeolocation/ngGeolocation.js"></script>
     <script src="lib/angular-permission/dist/angular-permission.js"></script>
     <script src="lib/ngAutocomplete/src/ngAutocomplete.js"></script>
     <script src="lib/angular-ui-mask/dist/mask.js"></script>
@@ -85,11 +78,10 @@
     <script src="lib/sprintf/src/angular-sprintf.js"></script>
     <script src="lib/ionic-service-core/ionic-core.js"></script>
     <script src="lib/ionic-service-analytics/ionic-analytics.js"></script>
-    <!-- endbuild -->
-
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
-    <script src="plugins/org.apache.cordova.device/device.js"></script>
-
+    <script src="plugins/org.apache.cordova.device/www/device.js"></script>
+    <!-- endbuild -->
 
     <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>

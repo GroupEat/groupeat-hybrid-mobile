@@ -1,8 +1,11 @@
 'use strict';
+
 angular.module('groupeat.services.geolocation', [
-  'ngResource',
-  'ngGeolocation'
-]).factory('Geolocation', function ($q, ENV, $geolocation) {
+  'constants',
+  'ngCordova'
+])
+
+.factory('Geolocation', function ($q, ENV, $cordovaGeolocation) {
   var getGeolocation = function () {
     var defer = $q.defer();
     if (ENV.name !== 'production') {
@@ -14,12 +17,15 @@ angular.module('groupeat.services.geolocation', [
       };
       defer.resolve(response);
     } else {
-      $geolocation.getCurrentPosition().then(function (currentPosition) {
-        defer.resolve(currentPosition);
-      })
-      .catch(function() {
-        defer.reject('noGeolocation');
-      });
+      document.addEventListener('deviceready', function() {
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation.getCurrentPosition(posOptions)
+        .then(function (currentPosition) {
+          defer.resolve(currentPosition);
+        }, function () {
+          defer.reject('noGeolocation');
+        });
+      }, false);
     }
     return defer.promise;
   };

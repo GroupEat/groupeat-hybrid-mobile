@@ -101,14 +101,15 @@
     "org.apache.cordova.dialogs",
     "org.apache.cordova.file",
     "org.apache.cordova.media",
-    "https://github.com/phonegap-build/PushPlugin",
     "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "org.apache.cordova.network-information",
     "https://github.com/phonegap-build/PushPlugin.git",
     "org.apache.cordova.inappbrowser",
     "com.ionic.keyboard",
     "org.apache.cordova.splashscreen",
-    "com.danielcwilson.plugins.googleanalytics"
+    "com.danielcwilson.plugins.googleanalytics",
+    "cordova-plugin-whitelist",
+    "org.apache.cordova.geolocation"
   ],
   "cordovaPlatforms": [
     "ios"
