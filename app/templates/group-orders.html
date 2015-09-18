@@ -29,7 +29,7 @@
       <slick data="groupOrders" ng-if="groupOrders.length" init-onload="true" arrows="false" slides-to-show="1" slides-to-scroll="1" center-mode="{{groupOrders.length == 1 ? false : true}}" center-padding="20px" >
         <div ng-repeat="groupOrder in groupOrders track by $index">
           <div class="order-card" order-card on-tap="onJoinOrderTouch(groupOrder)" >
-            <div class="top" ng-style="{'background-image' : 'url(https://snap-photos.s3.amazonaws.com/img-thumbs/960w/9D0F9026F8.jpg)'}">
+            <div class="top" ng-style="{'background-image' : 'url(' + groupOrder.restaurant.data.pictureUrl + ')'}">
               <h3>-{{groupOrder.discountRate}}<span>%</span></h3>
               <div class="time-left">
                 <span>
