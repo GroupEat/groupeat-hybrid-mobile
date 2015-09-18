@@ -65,14 +65,12 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
       }
     }
   })
-  .state('settings', {
+  .state('app.settings', {
     url: '/settings',
-    templateUrl: 'templates/settings.html',
-    controller: 'SettingsCtrl',
-    data: {
-      permissions: {
-        only: ['customer'],
-        redirectTo: 'authentication'
+    views: {
+      'app': {
+        templateUrl: 'templates/settings.html',
+        controller: 'SettingsCtrl'
       }
     }
   });
