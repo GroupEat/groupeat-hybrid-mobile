@@ -1,27 +1,27 @@
 <ion-view view-title="{{ 'myOrders' | translate }}" >
 	<ion-nav-bar class="bar-blue">
-        <ion-nav-back-button class='button button-clear'>
-          <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
-        </ion-nav-back-button>
+		<ion-nav-back-button class='button button-clear'>
+			<i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+		</ion-nav-back-button>
 	</ion-nav-bar>
 
 	<ge-message-backdrop
-		icon="messageBackdrop.icon"
-		title="messageBackdrop.title"
-		details="messageBackdrop.details"
-		button-sref="messageBackdrop.buttonSref"
-		button-text="messageBackdrop.buttonText"
-		status="messageBackdrop.status"
+	icon="messageBackdrop.icon"
+	title="messageBackdrop.title"
+	details="messageBackdrop.details"
+	button-sref="messageBackdrop.buttonSref"
+	button-text="messageBackdrop.buttonText"
+	status="messageBackdrop.status"
 	>
 	</ge-message-backdrop>
 
 	<ion-content class="bg-blue has-header full-height">
-    <ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
-    </ion-refresher>
+		<ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">
+		</ion-refresher>
 		<div ng-repeat="order in orders">
 			<orders-card order="order"></orders-card>
 			&nbsp
 		</div>
-  </ion-content>
+	</ion-content>
 
 </ion-view>
