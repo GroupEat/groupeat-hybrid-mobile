@@ -17,12 +17,12 @@ angular.module('groupeat.services.geolocation', [
       };
       defer.resolve(response);
     } else {
-      document.addEventListener("deviceready", function() {
+      document.addEventListener('deviceready', function() {
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         $cordovaGeolocation.getCurrentPosition(posOptions)
         .then(function (currentPosition) {
           defer.resolve(currentPosition);
-        }, function (err) {
+        }, function () {
           defer.reject('noGeolocation');
         });
       }, false);
