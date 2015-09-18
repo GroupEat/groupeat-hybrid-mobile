@@ -2,7 +2,7 @@
 
 	<div class="infos">
 		<h4>{{restaurant.name}}</h4>
-		<p>{{date | date:'MM/dd/yyyy'}}</p>
+		<p>{{date | amDateFormat:'DD/MM/YYYY'}}</p>
 	</div>
 	<div class="orders">
 		<ion-scroll zooming="true" direction="y" style="max-height: 80px">
@@ -27,7 +27,7 @@
 			</div>
 		</ion-scroll>
 	</div>
-	
+
 	<div class="dashed-border"></div>
 
 	<div class="totals">
