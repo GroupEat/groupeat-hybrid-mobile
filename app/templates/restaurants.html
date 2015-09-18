@@ -10,12 +10,17 @@
 	>
 	</ge-message-backdrop>
 
-	<ion-nav-title>
-		<div class="title has-sub-title">
-			{{ 'restaurants' | translate }}
-			<small>{{restaurants.length}} {{ 'restaurantsAroundYou' | translate }}</small>
-		</div>
-	</ion-nav-title>
+	<ion-nav-bar class="bar-blue">
+	  <ion-nav-back-button class='button button-clear'>
+	    <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+	  </ion-nav-back-button>
+		<ion-nav-title>
+			<div class="title has-sub-title">
+				{{ 'restaurants' | translate }}
+				<small>{{restaurants.length}} {{ 'restaurantsAroundYou' | translate }}</small>
+			</div>
+		</ion-nav-title>
+	</ion-nav-bar>
 
 	<ion-content class="bg-blue">
 		<ion-refresher pulling-text="{{ 'pullToRefresh' | translate }}" on-refresh="onReload()">

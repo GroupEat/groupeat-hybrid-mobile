@@ -11,24 +11,25 @@
   </ge-message-backdrop>
 
   <!-- - - - - - - - - - - - - - - - - - - NAV BAR - - - - - - - - - - - - - - - - - -->
-
-  <ion-nav-buttons side="primary">
-    <ion-nav-back-button class="button button-clear" on-tap="onLeaveRestaurant()">
-      <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
-    </ion-nav-back-button>
-  </ion-nav-buttons>
+  <ion-nav-bar class="bar-blue">
   <ion-nav-title>
     <div class="title has-sub-title">
       {{ restaurant.name }}
       <small>{{currentOrder.remainingCapacity}} {{'pizzasLeft' | translate }}</small>
     </div>
   </ion-nav-title>
-  <ion-nav-buttons side="secondary">
-    <button class="button button-clear button-timer" ng-if="currentOrder.endingAt">
-      <i class="ion-ios-timer"></i>
-      <timer end-time="currentOrder.endingAt" interval="1000" finish-callback="callbackTimer()"> {{mminutes}}:{{sseconds}}</timer>
-    </button>
-  </ion-nav-buttons>
+    <ion-nav-buttons side="primary">
+      <button class="button button-clear" on-tap="onLeaveRestaurant()">
+        <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+      </button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear button-timer" ng-if="currentOrder.endingAt">
+        <i class="ion-ios-timer"></i>
+        <timer end-time="currentOrder.endingAt" interval="1000" finish-callback="callbackTimer()"> {{mminutes}}:{{sseconds}}</timer>
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
 
   <!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
   <ion-content header-shrink="#discount-placeholder" class="no-header has-footer-summup full-height bg-blue">
