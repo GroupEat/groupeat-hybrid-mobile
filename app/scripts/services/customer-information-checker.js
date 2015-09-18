@@ -63,7 +63,7 @@ angular.module('groupeat.services.customer-information-checker', [
         .then(function(res) {
           if (res) {
             // Redirecting the customer to settings when asked
-            $state.go('settings');
+            $state.go('app.settings');
           }
           deferred.reject();
         });

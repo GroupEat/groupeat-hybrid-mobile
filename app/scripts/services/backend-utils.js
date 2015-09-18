@@ -91,7 +91,13 @@ angular.module('groupeat.services.backend-utils', [
         return undefined;
       }
       var fieldName = $translate(errorObject.field + 'FieldName');
-      var errorMessage = $translate(errorObject.errorKey + 'ErrorKey', { fieldName: fieldName });
+      var label = errorObject.errorKey + 'ErrorKey';
+      var errorMessage = $translate(label, { fieldName: fieldName });
+      // If the errorMessage equals the translated label, the errorKey was not translated by the application
+      // So we return a generic error message.
+      if (errorMessage === label) {
+        return $translate('genericFailureDetails');
+      }
       return _.has(errorObject, 'additionalValue') ? vsprintf(errorMessage, errorObject.additionalValue) : errorMessage;
     };
   return {

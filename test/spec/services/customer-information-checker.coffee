@@ -76,4 +76,4 @@ describe 'Service: CustomerInformationChecker', ->
       @sandbox.stub @$state, 'go'
       @CustomerInformationChecker.check().should.be.rejected
       @$rootScope.$digest()
-      @$state.go.should.have.been.calledWithExactly 'settings'
+      @$state.go.should.have.been.calledWithExactly 'app.settings'

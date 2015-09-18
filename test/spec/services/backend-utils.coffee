@@ -129,12 +129,12 @@ describe 'Service: BackendUtils', ->
             notErrors: 'oops'
       expect(BackendUtils.errorMsgFromBackend(response)).to.be.undefined
 
-    it 'should return the errorKey if the response.data.data has an errorKey property', ->
+    it 'should return the genericFailureDetails if the response.data.data has an errorKey property which is not translated', ->
       response =
         data:
           data:
             errorKey: 'validationKey'
-      BackendUtils.errorMsgFromBackend(response).should.equal('validationKeyErrorKey')
+      BackendUtils.errorMsgFromBackend(response).should.equal('genericFailureDetails')
 
     it 'should call Credentials.set and change the state if the response.data.data has an errorKey equal to noUserForAuthenticationToken', ->
       response =
@@ -166,30 +166,3 @@ describe 'Service: BackendUtils', ->
               field: 'notAnObject'
               otherField: null
       expect(BackendUtils.errorMsgFromBackend(response)).to.be.undefined
-
-    it 'should return the first validation key (concatenated with ErrorKey) whose value is an array of the first field whose value is a non null object of response.data.data.errors', ->
-      response =
-        data:
-          data:
-            errors:
-              field: 'notAnObject'
-              otherField:
-                firstValidationKey: 'notAnArray'
-                validationKey: []
-      expect(BackendUtils.errorMsgFromBackend(response)).to.equal('validationKeyErrorKey')
-
-    it 'should properly insert an additional value in the validation key (concatenated with ErrorKey) when relevant', ->
-      response = {
-        'data': {
-          'data': {
-            'errors': {
-              'password': {
-                'min%s': [
-                  6
-                ]
-              }
-            }
-          }
-        }
-      }
-      expect(BackendUtils.errorMsgFromBackend(response)).to.equal('min6ErrorKey')
