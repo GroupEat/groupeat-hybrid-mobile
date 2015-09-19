@@ -433,7 +433,6 @@ module.exports = function (grunt) {
         '<%= yeoman.app %>/lib/sprintf/dist/angular-sprintf.min.js',
         '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.min.js',
         '<%= yeoman.app %>/lib/angular-messages/angular-messages.js',
-        '<%= yeoman.app %>/lib/angular-aria/angular-aria.js',
         '<%= yeoman.app %>/lib/angular-permission/dist/angular-permission.js',
         '<%= yeoman.app %>/lib/angular-local-storage/dist/angular-local-storage.js',
         '<%= yeoman.app %>/lib/ngCordova/dist/ng-cordova.js',
