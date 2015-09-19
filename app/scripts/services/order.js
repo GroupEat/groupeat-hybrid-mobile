@@ -257,8 +257,8 @@ angular.module('groupeat.services.order', [
 				var order = {'discountedPrice': rawOrder.discountedPrice/100};
 				order.discount = 100*(rawOrder.rawPrice-rawOrder.discountedPrice)/rawOrder.rawPrice;
 				order.restaurant = rawOrder.groupOrder.data.restaurant.data.name;
-				order.closedAt = rawOrder.groupOrder.data.closedAt ? new Date(rawOrder.groupOrder.data.closedAt) : null;
-				order.endingAt = new Date(rawOrder.groupOrder.data.endingAt);
+				order.closedAt = rawOrder.groupOrder.data.closedAt ? rawOrder.groupOrder.data.closedAt : null;
+				order.endingAt = rawOrder.groupOrder.data.endingAt;
 				order.productFormats = rawOrder.productFormats.data;
 				order.totalPrice = rawOrder.rawPrice;
 				order.comment = rawOrder.comment;
@@ -271,7 +271,7 @@ angular.module('groupeat.services.order', [
 					orders.push(order);
 				}
 			});
-		defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
+			defer.resolve(orders.concat(_.sortByOrder(oldOrders, ['closedAt'], [false])));
 		})
 		.catch(function() {
 			defer.reject();

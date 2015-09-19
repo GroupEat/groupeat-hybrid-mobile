@@ -2,7 +2,7 @@
 
 	<div class="infos">
 		<h4>{{ order.restaurant }}</h4>
-		<p ng-if="order.closedAt">{{ order.closedAt | date:'dd/MM/yyyy'}}</p>
+		<p ng-if="order.closedAt">{{ order.closedAt | amDateFormat:'DD/MM/YYYY'}}</p>
 		<div class="buttons buttons-right" ng-if="!order.closedAt">
 			<span class="secondary-buttons">
 				<button class="button button-clear button-timer">

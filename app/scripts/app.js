@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('groupeat', [
+  'angularMoment',
   'config',
   'constants',
   'ionic',
