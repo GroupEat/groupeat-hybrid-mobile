@@ -20,14 +20,14 @@
 					</div>
 					<div class="col col-no-padding text-right">
 						<span class="price">
-							{{order.price | number : 2 }}
+							{{order.price | number : 2 }}€
 						</span>
 					</div>
 				</div>
 			</div>
 		</ion-scroll>
 	</div>
-	
+
 	<div class="dashed-border"></div>
 
 	<div class="totals">
@@ -39,7 +39,7 @@
 					</span>
 				</div>
 				<div class="col-50 text-right">
-					{{orders.getTotalPrice() | number : 2 }}
+					{{orders.getTotalPrice() | number : 2 }}€
 				</div>
 			</div>
 		</div>
@@ -47,13 +47,13 @@
 			<div class="row">
 				<div class="col-50">
 					<span class="title">
-						<b>{{ 'total' | translate }}</b>
+						<b>{{ 'total' | translate }}€</b>
 					</span>
 				</div>
 				<div class="col-50">
 					<div class="discounted text-right">
 						<b class="color-red">-{{discount | number : 0 }}%</b>
-						<b class="color-green">{{realPrice | number : 2 }}</b>
+						<b class="color-green">{{realPrice | number : 2 }}€</b>
 					</div>
 				</div>
 			</div>
