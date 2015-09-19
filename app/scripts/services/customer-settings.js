@@ -1,10 +1,13 @@
 'use strict';
+
 angular.module('groupeat.services.customer-settings', [
   'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.lodash',
   'ngResource'
-]).factory('CustomerSettings', function ($resource, $q, BackendUtils, ENV, _) {
+])
+
+.factory('CustomerSettings', function (_, $q, $resource, BackendUtils, ENV) {
   var resource = $resource(ENV.apiEndpoint + '/customers/:id/settings', null, { 'update': { method: 'PUT' } });
   var noNotificationAfterHours = [
     {
@@ -18,20 +21,11 @@ angular.module('groupeat.services.customer-settings', [
     {
       value: '23:00:00',
       label: '23h00'
-    },
-    {
-      value: '00:00:00',
-      label: '00h00'
-    },
-    {
-      value: '01:00:00',
-      label: '01h00'
     }
   ];
 
   var getNoNotificationAfterHours = function () {
     return _.pluck(noNotificationAfterHours, 'value');
-
   },
 
   getDaysWithoutNotifying = function () {
@@ -50,7 +44,8 @@ angular.module('groupeat.services.customer-settings', [
   getLabelHourFromValue = function(value) {
     return _.find(noNotificationAfterHours, 'value', value).label;
   },
-    /**
+  
+  /**
   * @ngdoc function
   * @name CustomerSettings#get
   * @methodOf CustomerSettings
@@ -62,14 +57,18 @@ angular.module('groupeat.services.customer-settings', [
   */
   get = function (customerId) {
     var defer = $q.defer();
-    resource.get({ id: customerId }).$promise.then(function (response) {
+    resource.get({ id: customerId }).$promise
+    .then(function (response) {
       defer.resolve(response.data);
-    }).catch(function () {
+    })
+    .catch(function () {
       defer.reject();
     });
+    
     return defer.promise;
   },
-    /**
+  
+  /**
   * @ngdoc function
   * @name CustomerSettings#update
   * @methodOf CustomerSettings
@@ -81,13 +80,16 @@ angular.module('groupeat.services.customer-settings', [
   */
   update = function (customerId, customerSettings) {
     var defer = $q.defer();
-    resource.update({ id: customerId }, customerSettings).$promise.then(function (response) {
+    resource.update({ id: customerId }, customerSettings).$promise
+    .then(function (response) {
       defer.resolve(response.data);
     }).catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
+    
     return defer.promise;
   };
+  
   return {
     getNoNotificationAfterHours: getNoNotificationAfterHours,
     getDaysWithoutNotifying: getDaysWithoutNotifying,
