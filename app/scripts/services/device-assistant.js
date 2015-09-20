@@ -37,7 +37,8 @@ angular.module('groupeat.services.device-assistant', [
       'UUID': device.uuid,
       'notificationToken': notificationToken,
       'platform': platform,
-      'model': device.model,
+      'platformVersion': device.version,
+      'model': device.model
     };
     return resource.save({ id: Credentials.get().id }, requestBody).$promise;
   };
