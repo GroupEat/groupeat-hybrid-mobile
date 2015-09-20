@@ -29,7 +29,7 @@
 					</div>
 					<div class="col col-no-padding text-right">
 						<span class="price">
-							{{ format.price * format.quantity / 100 | number : 2 }}
+							{{ format.price * format.quantity / 100 | number : 2 }}€
 						</span>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 					</span>
 				</div>
 				<div class="col-50 text-right">
-					{{order.totalPrice/100 | number : 2 }}
+					{{order.totalPrice/100 | number : 2 }}€
 				</div>
 			</div>
 		</div>
@@ -62,7 +62,7 @@
 				<div class="col-50">
 					<div class="discounted text-right">
 						<b class="color-red">-{{order.discount | number : 0 }}%</b>
-						<b class="color-green">{{ order.discountedPrice | number : 2 }}</b>
+						<b class="color-green">{{ order.discountedPrice | number : 2 }}</b>€
 					</div>
 				</div>
 			</div>
