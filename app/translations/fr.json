@@ -57,6 +57,7 @@
   "pizza": "Pizza",
   "pizzeria": "Pizzeria",
   "joinThisOrder": "Rejoindre cette commande",
+  "joinIt!": "La rejoindre !",
   "toOrder": "Commander",
   "remainingCapacity": "Pizzas restantes :",
   "noGroupOrder": "Aucune commande en cours actuellement",
@@ -175,7 +176,7 @@
   "pullToRefresh": "Tirer pour rafraîchir",
 
   "restaurantHasGroupOrder": "Quelle chance !",
-  "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant! La rejoindre?",
+  "restaurantHasGroupOrderMessage": "Il existe déjà une commande groupée pour ce restaurant...",
 
   "doOrder": "Passer commande",
 
