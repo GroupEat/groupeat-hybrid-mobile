@@ -5,7 +5,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
     module 'groupeat.controllers.cart'
     module 'templates'
 
-  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = scope = $stateParams = Cart = ControllerPromiseHandler = Network = Order = Popup = Product = Restaurant = {}
+  sandbox = ctrl = $ionicHistory = $ionicModal = $ionicScrollDelegate = $ionicSlideBoxDelegate = $q = scope = $stateParams = Cart = ControllerPromiseHandler = Network = Order = Popup = Product = Restaurant = $state ={}
 
   mockProduct = {}
   mockFormat = {}
@@ -22,6 +22,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       $ionicSlideBoxDelegate = $injector.get '$ionicSlideBoxDelegate'
       $q = $injector.get '$q'
       $stateParams = $injector.get '$stateParams'
+      $state = $injector.get '$state'
       Cart = $injector.get 'Cart'
       ControllerPromiseHandler = $injector.get 'ControllerPromiseHandler'
       Network = $injector.get 'Network'
@@ -142,13 +143,14 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope.onReload()
       scope.cart.setProducts []
 
-    it 'should call reset the Cart, the current order and call $ionicHistory.goBack if the Popup.confirm is resoved with a true value', ->
+    it 'should call reset the Cart, the current order and call $state.go(app.group-orders) if the Popup.confirm is resoved with a true value', ->
       sandbox.stub Order, 'resetCurrentOrder'
       sandbox.stub $ionicHistory, 'goBack'
+      sandbox.stub $state, 'go'
       scope.onLeaveRestaurant()
       scope.$digest()
       Order.resetCurrentOrder.should.have.been.called
-      $ionicHistory.goBack.should.have.been.called
+      $state.go.should.have.been.calledWithExactly 'app.group-orders'
 
   describe 'RestaurantMenu#onLeaveRestaurant with a non-empty cart', ->
 
@@ -163,30 +165,26 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       scope.$digest()
       Popup.confirm.should.have.been.calledWithExactly 'leaveOrder', 'cartWillBeDestroyed'
 
-    it 'should call reset the Cart, the current order and call $ionicHistory.goBack if the Popup.confirm is resoved with a true value', ->
+    it 'should call reset the Cart, the current order and call $state.go(app.group-orders) if the Popup.confirm is resolved with a true value', ->
       sandbox.stub Cart, 'reset'
       sandbox.stub Order, 'resetCurrentOrder'
       sandbox.stub $ionicHistory, 'goBack'
-      sandbox.stub Popup, 'confirm', ->
-        deferred = $q.defer()
-        deferred.resolve true
-        deferred.promise
+      sandbox.stub(Popup, 'confirm').returns $q.when true
+      sandbox.stub $state, 'go'
       scope.onLeaveRestaurant()
       scope.$digest()
       Cart.reset.should.have.been.called
       Order.resetCurrentOrder.should.have.been.called
-      $ionicHistory.goBack.should.have.been.called
+      $state.go.should.have.been.calledWithExactly 'app.group-orders'
 
     it 'should not call any of these if the Popup.confirm is resoved with a false value', ->
       sandbox.stub Cart, 'reset'
       sandbox.stub Order, 'resetCurrentOrder'
       sandbox.stub $ionicHistory, 'goBack'
-      sandbox.stub Popup, 'confirm', ->
-        deferred = $q.defer()
-        deferred.resolve false
-        deferred.promise
+      sandbox.stub(Popup, 'confirm').returns $q.when false
+      sandbox.stub $state, 'go'
       scope.onLeaveRestaurant()
       scope.$digest()
       Cart.reset.should.not.have.been.called
       Order.resetCurrentOrder.should.not.have.been.called
-      $ionicHistory.goBack.should.not.have.been.called
+      $state.go.should.not.have.been.called

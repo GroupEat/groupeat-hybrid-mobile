@@ -77,7 +77,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.onLeaveRestaurant = function() {
 		if (_.isEmpty($scope.cart.getProducts())) {
 			Order.resetCurrentOrder();
-			$ionicHistory.goBack();
+			$state.go('app.group-orders');
 		}
 		else {
 			Popup.confirm('leaveOrder', 'cartWillBeDestroyed')
@@ -85,7 +85,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 				if(res) {
 					Cart.reset();
 					Order.resetCurrentOrder();
-					$ionicHistory.goBack();
+					$state.go('app.group-orders');
 				}
 			});
 		}
