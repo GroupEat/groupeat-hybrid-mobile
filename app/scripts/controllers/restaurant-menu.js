@@ -136,7 +136,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 			{
 				$scope.closeCart();
 			}
-			$state.go('app.group-orders');
+			$ionicHistory.goBack();
 		});
 	};
 
