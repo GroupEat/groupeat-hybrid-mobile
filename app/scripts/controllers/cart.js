@@ -79,22 +79,14 @@ angular.module('groupeat.controllers.cart', [
       Order.setProductFormats(requestProducts);
       Order.save()
       .then(function() {
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
         $scope.leaveOrder();
-        $scope.modal.hide();
-        $ionicSlideBoxDelegate.slide(0);
         Popup.alert('successfulOrder', 'yourOrderIsSuccessful');
       })
       .catch(function (errorResponse) {
         Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
         .then(function(leaveOrder) {
           if(leaveOrder) {
-            $ionicHistory.clearHistory();
-            $ionicHistory.clearCache();
             $scope.leaveOrder();
-            $scope.modal.hide();
-            $ionicSlideBoxDelegate.slide(0);
           }
         });
       });
@@ -102,7 +94,8 @@ angular.module('groupeat.controllers.cart', [
   };
 
   $scope.leaveOrder = function() {
-
+    $scope.modal.hide();
+    $ionicSlideBoxDelegate.slide(0);
     Order.resetCurrentOrder();
     Cart.reset();
     $state.go('app.group-orders');

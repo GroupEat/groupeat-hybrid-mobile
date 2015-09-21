@@ -27,4 +27,8 @@ angular.module('config', [
 
 .config(function (localStorageServiceProvider) {
   localStorageServiceProvider.setPrefix('groupeat');
+})
+
+.config(function($ionicConfigProvider) {
+  $ionicConfigProvider.views.maxCache(0);
 });

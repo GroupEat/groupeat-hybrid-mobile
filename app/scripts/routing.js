@@ -2,7 +2,6 @@
 angular.module('routing', []).config(function ($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('authentication', {
-    cache: false,
     url: '/authentication',
     templateUrl: 'templates/authentication.html',
     controller: 'AuthenticationCtrl',
@@ -29,7 +28,6 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
     }
   })
   .state('app.group-orders', {
-    cache: false,
     url: '',
     views: {
       'app': {
