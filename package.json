@@ -34,7 +34,7 @@
     "chai": "^2.3.0",
     "coffee-script": "^1.8.0",
     "coffeelint": "^1.8.1",
-    "cordova": "~5.1.1",
+    "cordova": "~5.3.1",
     "glob": "~4.0.5",
     "grunt": "~0.4.1",
     "grunt-coffeelint": "0.0.13",
@@ -105,11 +105,11 @@
     "org.apache.cordova.network-information",
     "https://github.com/phonegap-build/PushPlugin.git",
     "org.apache.cordova.inappbrowser",
-    "com.ionic.keyboard",
     "org.apache.cordova.splashscreen",
-    "com.danielcwilson.plugins.googleanalytics",
     "cordova-plugin-whitelist",
-    "org.apache.cordova.geolocation"
+    "org.apache.cordova.geolocation",
+    "com.danielcwilson.plugins.googleanalytics",
+    "com.ionic.keyboard"
   ],
   "cordovaPlatforms": [
     "ios"
