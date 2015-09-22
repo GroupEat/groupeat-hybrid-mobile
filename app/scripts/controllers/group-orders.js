@@ -10,10 +10,11 @@ angular.module('groupeat.controllers.group-orders', [
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.order',
+  'ionic',
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function(_, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, CustomerInformationChecker, Geolocation, GroupOrder, Network, Order) {
+.controller('GroupOrdersCtrl', function(_, $ionicPlatform, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, CustomerInformationChecker, Geolocation, GroupOrder, Network, Order) {
 
   Analytics.trackView('Group Orders');
 
@@ -56,6 +57,11 @@ angular.module('groupeat.controllers.group-orders', [
   };
 
   $scope.$on('$ionicView.afterEnter', function() {
+    $scope.initialState = $state.current.name;
+    $scope.onReload();
+  });
+
+  $ionicPlatform.on('resume', function() {
     $scope.initialState = $state.current.name;
     $scope.onReload();
   });

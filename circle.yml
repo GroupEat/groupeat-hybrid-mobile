@@ -17,7 +17,6 @@ dependencies:
         - rvm install ruby-1.9.3-p551
         - gem install compass
         - npm install
-        - grunt init
 
 test:
   post:
