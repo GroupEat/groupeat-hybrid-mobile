@@ -62,7 +62,7 @@ angular.module('groupeat.controllers.cart', [
       $ionicSlideBoxDelegate.slide(1);
     } else {
       if(!$scope.isRequesting) {
-+        $scope.isRequesting = true;
+        $scope.isRequesting = true;
         if($scope.address.name === 'preset') {
           var requestDetails = Address.getAddressFromResidencyInformation($scope.presetAddress.residency);
           Order.setStreet(requestDetails.street);
