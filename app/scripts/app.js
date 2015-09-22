@@ -9,6 +9,7 @@ angular.module('groupeat', [
   'jcs-autoValidate',
   'ngCordova',
   'ngCookies',
+  'ngIOS9UIWebViewPatch',
   'ngMessages',
   'ngAnimate',
   'pascalprecht.translate',
