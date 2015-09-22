@@ -31,6 +31,8 @@ angular.module('groupeat.controllers.cart', [
 
   $scope.slideIndex = 0;
 
+  $scope.isRequesting = false;
+
   $scope.confirmButtons = [
     {title: 'Valider ma commande !', color: 'green'},
     {title: 'Valider mon adresse !', color: 'orange'}
@@ -59,37 +61,43 @@ angular.module('groupeat.controllers.cart', [
     if($scope.slideIndex === 0) {
       $ionicSlideBoxDelegate.slide(1);
     } else {
-      if($scope.address.name === 'preset') {
-        var requestDetails = Address.getAddressFromResidencyInformation($scope.presetAddress.residency);
-        Order.setStreet(requestDetails.street);
-        Order.setLatitude(requestDetails.latitude);
-        Order.setLongitude(requestDetails.longitude);
-        Order.setDetails($scope.presetAddress.details);
-      } else {
-        Order.setStreet($scope.predifinedAddresses[$scope.address.other].street);
-        Order.setLatitude($scope.predifinedAddresses[$scope.address.other].latitude);
-        Order.setLongitude($scope.predifinedAddresses[$scope.address.other].longitude);
-        Order.setDetails($scope.predifinedAddresses[$scope.address.other].details);
-      }
-      Order.setComment($scope.comment.value);
-      var requestProducts = {};
-      angular.forEach(Cart.getProducts(), function(product) {
-          requestProducts[product.id] = product.quantity;
-      });
-      Order.setProductFormats(requestProducts);
-      Order.save()
-      .then(function() {
-        $scope.leaveOrder();
-        Popup.alert('successfulOrder', 'yourOrderIsSuccessful');
-      })
-      .catch(function (errorResponse) {
-        Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
-        .then(function(leaveOrder) {
-          if(leaveOrder) {
-            $scope.leaveOrder();
-          }
+      if(!$scope.isRequesting) {
++        $scope.isRequesting = true;
+        if($scope.address.name === 'preset') {
+          var requestDetails = Address.getAddressFromResidencyInformation($scope.presetAddress.residency);
+          Order.setStreet(requestDetails.street);
+          Order.setLatitude(requestDetails.latitude);
+          Order.setLongitude(requestDetails.longitude);
+          Order.setDetails($scope.presetAddress.details);
+        } else {
+          Order.setStreet($scope.predifinedAddresses[$scope.address.other].street);
+          Order.setLatitude($scope.predifinedAddresses[$scope.address.other].latitude);
+          Order.setLongitude($scope.predifinedAddresses[$scope.address.other].longitude);
+          Order.setDetails($scope.predifinedAddresses[$scope.address.other].details);
+        }
+        Order.setComment($scope.comment.value);
+        var requestProducts = {};
+        angular.forEach(Cart.getProducts(), function(product) {
+            requestProducts[product.id] = product.quantity;
         });
-      });
+        Order.setProductFormats(requestProducts);
+        Order.save()
+        .then(function() {
+          $scope.leaveOrder();
+          Popup.alert('successfulOrder', 'yourOrderIsSuccessful');
+        })
+        .catch(function (errorResponse) {
+          Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
+          .then(function(leaveOrder) {
+            if(leaveOrder) {
+              $scope.leaveOrder();
+            }
+          });
+        })
+        .finally(function() {
+          $scope.isRequesting = false;
+        });
+      }
     }
   };
 
