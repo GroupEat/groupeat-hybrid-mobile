@@ -51,7 +51,6 @@
   "settings": "Réglages",
   "orders": "Mes commandes",
   "menu": "Menu",
-  "orders-around": "commandes autour de toi",
 
   "newOrder": "Nouvelle commande",
   "pizza": "Pizza",
@@ -207,7 +206,7 @@
   "pizzasLeft": "Pizzas restantes",
 
   "restaurants": "Restaurants",
-  "restaurantsAroundYou": "restaurants dans le coin",
+  "aroundYou": "dans le coin",
 
   "aboutYou": "À propos de toi",
   "aboutYouDetails": "Les informations serviront à t’identifier auprès du livreur",

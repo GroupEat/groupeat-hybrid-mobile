@@ -17,7 +17,11 @@
 		<ion-nav-title>
 			<div class="title has-sub-title">
 				{{ 'restaurants' | translate }}
-				<small>{{restaurants.length}} {{ 'restaurantsAroundYou' | translate }}</small>
+				<small>
+					{{restaurants.length}}
+					<ng-pluralize count="restaurants.length" when="{'0': 'restaurant', '1': 'restaurant', 'other': 'restaurants'}">
+					</ng-pluralize>
+					{{ 'aroundYou' | translate }}</small>
 			</div>
 		</ion-nav-title>
 	</ion-nav-bar>
