@@ -61,10 +61,12 @@ angular.module('groupeat.controllers.group-orders', [
     $scope.onReload();
   });
 
-  $ionicPlatform.on('resume', function() {
+  var deregister = $ionicPlatform.on('resume', function() {
     $scope.initialState = $state.current.name;
     $scope.onReload();
   });
+
+  $scope.$on('$destroy', deregister);
 
   $scope.callbackTimer = {};
   $scope.callbackTimer.finished = function() {
