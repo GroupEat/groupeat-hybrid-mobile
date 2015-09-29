@@ -54,7 +54,7 @@ describe 'Service: Customer', ->
       $httpBackend.expect('GET', regex).respond(404, 'Customer not found')
       Customer.get(id).should.be.rejected
       $httpBackend.flush()
-      $state.go.should.have.been.calledWithExactly('authentication')
+      $state.go.should.have.been.calledWithExactly('app.authentication')
 
   describe 'Customer#save', ->
 

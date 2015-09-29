@@ -135,7 +135,7 @@ describe 'Service: HttpProviderInterceptor', ->
             errorKey: 'userMustAuthenticate'
       HttpProviderInterceptor.responseError(response).should.be.rejectedWith response
       scope.$digest()
-      $state.go.should.have.been.calledWithExactly 'authentication'
+      $state.go.should.have.been.calledWithExactly 'app.authentication'
       response =
         status: 401
         data:
@@ -143,4 +143,4 @@ describe 'Service: HttpProviderInterceptor', ->
             errorKey: 'invalidAuthenticationTokenSignature'
       HttpProviderInterceptor.responseError(response).should.be.rejectedWith response
       scope.$digest()
-      $state.go.should.have.been.calledWithExactly 'authentication'
+      $state.go.should.have.been.calledWithExactly 'app.authentication'

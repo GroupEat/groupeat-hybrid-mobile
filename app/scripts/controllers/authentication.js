@@ -112,7 +112,7 @@ angular.module('groupeat.controllers.authentication', [
       return DeviceAssistant.register();
     })
     .then(function() {
-      $state.go('signup');
+      $state.go('app.signup');
     })
     .catch(function(errorMessage) {
       Popup.error(errorMessage);

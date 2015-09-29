@@ -52,7 +52,7 @@ angular.module('groupeat.services.backend-utils', [
         // Those errorKey require a redirection to the authentication view
         if (errorKeysRequiringAuthentication.indexOf(responseData.errorKey) > -1) {
           Credentials.reset();
-          $state.go('authentication');
+          $state.go('app.authentication');
         }
         return { errorKey: responseData.errorKey };
       }
