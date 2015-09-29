@@ -27,6 +27,7 @@ angular.module('groupeat.controllers.settings', [
   $scope.customerAddress = {};
   $scope.customerSettings = {};
   $scope.form = {};
+  $scope.isProcessingRequest = false;
 
   /*
   Settings list
@@ -46,9 +47,11 @@ angular.module('groupeat.controllers.settings', [
   ];
 
   $scope.onReload = function() {
+    $scope.isProcessingRequest = true;
     $scope.customerIdentity = CustomerStorage.getIdentity();
     $scope.customerAddress = CustomerStorage.getAddress();
     $scope.customerSettings = CustomerStorage.getSettings();
+    $scope.isProcessingRequest = false;
   };
 
   /*
@@ -63,6 +66,7 @@ angular.module('groupeat.controllers.settings', [
   Saving
   */
   $scope.onSave = function() {
+    $scope.isProcessingRequest = true;
     var customerId = Credentials.get().id;
 
     // TODO : make request only if changes has been notified
@@ -98,10 +102,16 @@ angular.module('groupeat.controllers.settings', [
     })
     .then(function(customerSettings) {
       CustomerStorage.setSettings(customerSettings);
-      Popup.title('customerEdited');
+      return Popup.title('customerEdited');
+    })
+    .then(function() {
+      $scope.isProcessingRequest = false;
     })
     .catch(function(errorMessage) {
-      Popup.error(errorMessage);
+      Popup.error(errorMessage)
+      .then(function() {
+        $scope.isProcessingRequest = false;
+      });
     });
   };
 

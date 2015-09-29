@@ -176,7 +176,7 @@ describe 'Ctrl: SettingsCtrl', ->
       errorMessage = 'errorMessage'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'error')
+      sandbox.stub(Popup, 'error').returns $q.defer().promise
       scope.onSave()
       scope.$digest()
       Popup.error.should.have.been.calledWithExactly(errorMessage)
@@ -210,7 +210,7 @@ describe 'Ctrl: SettingsCtrl', ->
         noNotificationAfter:
           value: '22:00:00'
       sandbox.stub(Customer, 'update').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'error')
+      sandbox.stub(Popup, 'error').returns $q.defer().promise
       scope.onSave()
       scope.$digest()
       Popup.error.should.have.been.calledWithExactly errorMessage
@@ -248,7 +248,7 @@ describe 'Ctrl: SettingsCtrl', ->
       address = 'address'
       sandbox.stub(Address, 'getAddressFromResidencyInformation').returns(address)
       sandbox.stub(Address, 'update').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'error')
+      sandbox.stub(Popup, 'error').returns $q.defer().promise
       scope.customerSettings =
         noNotificationAfter:
           value: '22:00:00'
@@ -273,7 +273,7 @@ describe 'Ctrl: SettingsCtrl', ->
       sandbox.stub(Customer, 'update').returns $q.when({})
       sandbox.stub(Address, 'update').returns $q.when({})
       sandbox.stub(Authentication, 'updatePassword').returns($q.reject(errorMessage))
-      sandbox.stub(Popup, 'error')
+      sandbox.stub(Popup, 'error').returns $q.defer().promise
       scope.onSave()
       scope.$digest()
       Popup.error.should.have.been.calledWithExactly errorMessage
