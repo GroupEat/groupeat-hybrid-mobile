@@ -54,7 +54,7 @@ angular.module('groupeat.services.credentials', [
     redirect = redirect !== false;
     if (!localStorageService.get('id') || !localStorageService.get('token')) {
       if (redirect) {
-        $state.go('authentication');
+        $state.go('app.authentication');
       }
       return undefined;
     }

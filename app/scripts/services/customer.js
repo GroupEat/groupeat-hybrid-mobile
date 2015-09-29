@@ -52,7 +52,7 @@ angular.module('groupeat.services.customer', [
     })
     .catch(function(errorResponse) {
       if (errorResponse.status === 404) {
-        $state.go('authentication');
+        $state.go('app.authentication');
       }
       defer.reject();
     });

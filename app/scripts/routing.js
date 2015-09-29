@@ -1,21 +1,6 @@
 'use strict';
 angular.module('routing', []).config(function ($stateProvider, $urlRouterProvider) {
   $stateProvider
-  .state('authentication', {
-    url: '/authentication',
-    templateUrl: 'templates/authentication.html',
-    controller: 'AuthenticationCtrl',
-    params: {
-      slideIndex: 0
-    },
-    data: { permissions: { except: [] } }
-  })
-  .state('signup', {
-    url: '/signup',
-    templateUrl: 'templates/signup.html',
-    controller: 'SignupCtrl',
-    data: { permissions: { except: [] } }
-  })
   .state('app', {
     url: '',
     abstract: true,
@@ -23,7 +8,28 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
     data: {
       permissions: {
         only: ['customer'],
-        redirectTo: 'authentication'
+        redirectTo: 'app.authentication'
+      }
+    }
+  })
+  .state('app.authentication', {
+    url: '/authentication',
+    params: {
+      slideIndex: 0
+    },
+    views: {
+      'app': {
+        templateUrl: 'templates/authentication.html',
+        controller: 'AuthenticationCtrl'
+      }
+    }
+  })
+  .state('app.signup', {
+    url: '/signup',
+    views: {
+      'app': {
+        templateUrl: 'templates/signup.html',
+        controller: 'SignupCtrl'
       }
     }
   })

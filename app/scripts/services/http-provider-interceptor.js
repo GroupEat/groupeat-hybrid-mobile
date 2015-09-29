@@ -27,7 +27,7 @@ angular.module('groupeat.services.http-provider-interceptor', [
       'noUserForAuthenticationToken'
     ];
     if (_.includes(responseStatusRequiringAuthentication, response.status) && _.has(response, 'data.data.errorKey') && _.includes(keysRequiringRedirection, response.data.data.errorKey)) {
-      $injector.get('$state').go('authentication');
+      $injector.get('$state').go('app.authentication');
     }
     return $q.reject(response);
   };
