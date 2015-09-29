@@ -30,7 +30,6 @@
 							<i class="radio-icon ion-checkmark"></i>
 						</label>
 
-
 						<label class="item item-radio" ng-class="{'checked' : address.name == 'other'}">
 							<input type="radio" value="other" ng-model="address.name" name="address">
 							<div class="item-content">
@@ -38,7 +37,6 @@
 							</div>
 							<i class="radio-icon ion-checkmark"></i>
 						</label>
-
 
 						<div class="item-sub" ng-class="{'is-active' : address.name == 'other'}">
 							<label ng-repeat="predifinedAddress in predifinedAddresses track by $index"
@@ -60,10 +58,10 @@
 				<div class="display-address">
 					<p>{{ 'youWillBeDeliveredAt' | translate }} :
 						<b ng-if="address.name === 'preset'">
-							{{presetAddress.residency}} <small>{{presetAddress.details}}</small>
+							{{ presetAddress.residency | translate }} <small>{{presetAddress.details}}</small>
 						</b>
 						<b ng-if="address.name !== 'preset'">
-							{{predifinedAddresses[address.other].details}}
+							{{ predifinedAddresses[address.other].details }}
 						</b>
 					</p>
 				</div>
