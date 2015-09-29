@@ -326,4 +326,4 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.submitRegisterForm formMock
       scope.$digest()
 
-      $state.go.should.have.been.calledWithExactly('signup')
+      $state.go.should.have.been.calledWithExactly('app.signup')

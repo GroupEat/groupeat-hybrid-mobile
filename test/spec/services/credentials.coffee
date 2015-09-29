@@ -33,7 +33,7 @@ describe 'Service: Credentials', ->
 
   it 'should initially return undefined when getting the customer credentials', ->
     Credentials.get()
-    $state.go.should.have.been.called.with.calledWithExactly('authentication')
+    $state.go.should.have.been.called.with.calledWithExactly('app.authentication')
     expect(Credentials.get()).to.be.undefined
 
   it 'should return credentials when they were previously set', ->
