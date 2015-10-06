@@ -22,7 +22,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         templateUrl: 'templates/authentication.html',
         controller: 'AuthenticationCtrl'
       }
-    }
+    },
+    data: { permissions: { except: [] } }
   })
   .state('app.signup', {
     url: '/signup',
@@ -31,7 +32,8 @@ angular.module('routing', []).config(function ($stateProvider, $urlRouterProvide
         templateUrl: 'templates/signup.html',
         controller: 'SignupCtrl'
       }
-    }
+    },
+    data: { permissions: { except: [] } }
   })
   .state('app.group-orders', {
     url: '',
