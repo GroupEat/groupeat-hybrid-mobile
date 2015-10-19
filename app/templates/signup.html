@@ -121,7 +121,7 @@
 		</ion-slide>
 	</ion-slide-box>
 
-	<div class="progress" ng-class="{'is-slide-2' : slideIndex === 1, 'is-slide-3' : slideIndex === 2}">
+	<div class="progress hide-on-keyboard-open" ng-class="{'is-slide-2' : slideIndex === 1, 'is-slide-3' : slideIndex === 2}">
 		<div class="groupin">
 			<img src="images/groupin.png" alt="">
 		</div>
@@ -133,7 +133,7 @@
 		</div>
 	</div>
 
-	<div class="later" ng-class="{'is-hidden' : slideIndex > 0}">
+	<div class="later hide-on-keyboard-open" ng-class="{'is-hidden' : slideIndex > 0}">
 		<a on-tap="hasSignedUp()">Compléter mes informations <b>plus tard.</b></a>
 	</div>
 
