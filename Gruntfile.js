@@ -648,10 +648,6 @@ module.exports = function (grunt) {
     'newer:copy:tmp'
     ]);
 
-  grunt.registerTask('fixAllJs', [
-    'fixmyjs:all'
-    ]);
-
   grunt.registerTask('generateFont', [
     'webfont'
     ]);
