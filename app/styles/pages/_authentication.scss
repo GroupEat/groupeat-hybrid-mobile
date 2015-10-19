@@ -118,7 +118,7 @@
 .progress {
 	position: absolute;
 	width: 80%;
-	top: 100px;
+	top: 70px;
 	left: 10%;
 	.groupin {
 		position: absolute;
@@ -201,7 +201,7 @@
 
 .later {
 	position: absolute;
-	bottom: 100px;
+	bottom: 30px;
 	left: 10%;
 	width: 80%;
 	a {
@@ -235,11 +235,7 @@
 			}
 		}
 	}
-	.progress {
-		top: 70px;
-	}
 	.later {
-		bottom: 30px;
 		a {
 			font-size: 11px;
 		}

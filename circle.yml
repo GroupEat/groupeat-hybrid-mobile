@@ -24,13 +24,13 @@ test:
       - codeclimate-test-reporter < coverage/lcov/lcov.info
 
 deployment:
-  master:
-    branch: master
+  staging:
+    branch: staging
     commands:
-      - grunt upload --email=$IONIC_UPLOAD_EMAIL --password=$IONIC_UPLOAD_PASSWORD
+      - grunt init:staging
+      - ionic upload --email=$IONIC_UPLOAD_EMAIL --password=$IONIC_UPLOAD_PASSWORD
       - npm install -g cordova
       - npm install -g ionic
       - ionic platform add android
       - grunt build:android
       - cp platforms/android/build/outputs/apk/android-debug.apk $CIRCLE_ARTIFACTS
-      
