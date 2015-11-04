@@ -30,7 +30,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Customer = $injector.get 'Customer'
       CustomerSettings = $injector.get 'CustomerSettings'
       CustomerStorage = $injector.get 'CustomerStorage'
-      DeviceAssistant = $injector.get 'DeviceAssistant'
       Network = $injector.get 'Network'
       Popup = $injector.get 'Popup'
 
@@ -47,7 +46,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.spy Credentials, 'reset'
       sandbox.spy CustomerStorage, 'reset'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, _: $injector.get('_')
       })
 
       # Hack to validate elements
