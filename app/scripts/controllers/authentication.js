@@ -85,6 +85,9 @@ angular.module('groupeat.controllers.authentication', [
       CustomerStorage.setSettings(customerSettings);
       Analytics.trackEvent('Authentication', 'Logs In');
       Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
+      return DeviceAssistant.register();
+    })
+    .then(function(){
       $state.go('app.group-orders');
     })
     .catch(function(errorMessage) {

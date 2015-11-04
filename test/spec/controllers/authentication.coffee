@@ -190,12 +190,32 @@ describe 'Ctrl: AuthenticationCtrl', ->
       $state.go.should.have.not.been.called
       Popup.error.should.have.been.called
 
-    it 'if there is no client side validation error and if the server responds properly, the state should change to group-orders on form submit', ->
+    it 'if there is no client side validation error, neither from the server but the device registration returns an error, an error dialog should be displayed', ->
+      sandbox.stub(Authentication, 'authenticate').returns $q.when {}
+      sandbox.stub(ElementModifier, 'validate').returns $q.when {}
+      sandbox.stub(Credentials, 'set').returns $q.when {}
+      sandbox.stub(Customer, 'get').returns $q.when {}
+      sandbox.stub(Address, 'get').returns $q.when {}
+      sandbox.stub(CustomerSettings, 'get').returns $q.when {}
+      sandbox.stub(DeviceAssistant, 'register').returns $q.reject()
+
+      sandbox.stub Popup, 'error'
+      sandbox.stub $state, 'go'
+
+      window.browserTrigger(formElement, 'submit')
+      scope.submitLoginForm(scope.form)
+      scope.$digest()
+
+      $state.go.should.have.not.been.called
+      Popup.error.should.have.been.called
+
+    it 'if there is no client side validation error, if the server responds properly and if the device is properly registered, the state should change to group-orders on form submit', ->
       sandbox.stub(Authentication, 'authenticate').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'get').returns $q.when({})
       sandbox.stub(Address, 'get').returns $q.when({})
       sandbox.stub(CustomerSettings, 'get').returns $q.when({})
+      sandbox.stub(DeviceAssistant, 'register').returns $q.when({})
 
       sandbox.stub Credentials, 'set'
       sandbox.stub Popup, 'error'
@@ -206,7 +226,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       scope.$digest()
 
       Credentials.set.should.have.been.called
-      $state.go.should.have.been.called
+      $state.go.should.have.been.calledWithExactly 'app.group-orders'
       Popup.error.should.have.not.been.called
 
   describe 'Authentication#submitRegisterForm', ->
