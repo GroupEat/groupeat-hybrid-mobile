@@ -109,9 +109,6 @@ angular.module('groupeat.controllers.authentication', [
     .then(function(credentials) {
       CustomerStorage.setDefaultSettings();
       Credentials.set(credentials.id, credentials.token);
-      return DeviceAssistant.register();
-    })
-    .then(function() {
       $state.go('app.signup');
     })
     .catch(function(errorMessage) {
