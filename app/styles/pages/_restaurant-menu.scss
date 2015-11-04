@@ -104,6 +104,7 @@ $placeholder-height: 300px;
 			}
 			p {
 				color: lighten($blue, 30%);
+        white-space: normal !important;
 			}
 		}
 		.item.item-accordion {
