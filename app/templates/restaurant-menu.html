@@ -15,7 +15,7 @@
   <ion-nav-title>
     <div class="title has-sub-title">
       {{ restaurant.name }}
-      <small>{{currentOrder.remainingCapacity}} {{'pizzasLeft' | translate }}</small>
+      <small>{{currentOrder.remainingCapacity - cart.getTotalQuantity()}} {{'pizzasLeft' | translate }}</small>
     </div>
   </ion-nav-title>
     <ion-nav-buttons side="primary">
