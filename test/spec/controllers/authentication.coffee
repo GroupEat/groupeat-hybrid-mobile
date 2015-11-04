@@ -273,6 +273,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         token: expectedToken
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub $state, 'go'
       sandbox.stub CustomerStorage, 'setDefaultSettings'
 
       scope.submitRegisterForm formMock
@@ -288,6 +289,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         token: expectedToken
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
+      sandbox.stub $state, 'go'
       sandbox.stub Credentials, 'set'
 
       scope.submitRegisterForm formMock
@@ -301,8 +303,8 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'save').returns $q.when({})
 
-      sandbox.stub $state, 'go'
       sandbox.stub Credentials, 'set'
+      sandbox.stub $state, 'go'
 
       scope.submitRegisterForm formMock
       scope.$digest()
