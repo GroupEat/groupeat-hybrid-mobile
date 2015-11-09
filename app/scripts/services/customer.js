@@ -4,6 +4,7 @@ angular.module('groupeat.services.customer', [
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
   'groupeat.services.customer-storage',
+  'groupeat.services.phone-format',
   'groupeat.services.popup',
   'LocalStorageModule',
   'ngConstants',
@@ -11,25 +12,9 @@ angular.module('groupeat.services.customer', [
   'ui.router'
 ])
 
-.factory('Customer', function ($q, $resource, $state, apiEndpoint, BackendUtils, Credentials, CustomerStorage, localStorageService, Popup) {
+.factory('Customer', function ($q, $resource, $state, apiEndpoint, BackendUtils, Credentials, CustomerStorage, localStorageService, PhoneFormat, Popup) {
 
   var resource = $resource(apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
-
-  var removeInternationalPrefixFromPhoneNumber = function(customer) {
-    if (customer && customer.phoneNumber && customer.phoneNumber.length > 10) {
-      customer.phoneNumber = customer.phoneNumber.substring(2);
-    }
-
-    return customer;
-  };
-
-  var addFrenchPrefixToPhoneNumber = function(customer) {
-    if (customer && customer.phoneNumber && customer.phoneNumber.substring(0, 2) !== '33') {
-      customer.phoneNumber = '33' + customer.phoneNumber;
-    }
-
-    return customer;
-  };
 
   var
     /**
@@ -48,7 +33,9 @@ angular.module('groupeat.services.customer', [
     var defer = $q.defer();
     resource.get({id: customerId}).$promise
     .then(function(response) {
-      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
+      var user = response.data;
+      user.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(user.phoneNumber);
+      defer.resolve(user);
     })
     .catch(function(errorResponse) {
       if (errorResponse.status === 404) {
