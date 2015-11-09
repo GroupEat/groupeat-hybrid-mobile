@@ -40,7 +40,7 @@ angular.module('groupeat.controllers.signup', [
       $scope.hasSignedUp();
     })
     .catch(function(errorMessage) {
-      return Popup.error(errorMessage);
+      Popup.error(errorMessage);
     });
   };
 

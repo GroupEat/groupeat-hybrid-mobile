@@ -298,7 +298,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Credentials.set.should.have.been.calledWithExactly expectedId, expectedToken
 
     it "if Customer.save is resolved, $state.go should be called  to reach signup", ->
-      errorMessage = 'errorMessage'
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
       sandbox.stub(Customer, 'save').returns $q.when({})
