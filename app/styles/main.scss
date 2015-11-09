@@ -4,13 +4,11 @@
  *
  ************************************/
 
-@import "compass";
-
 @import "base/variables";
 @import "base/fonts";
 @import "base/typography";
-@import "base/icons";
-@import "components/animations";
+
+@import "fonts/icons";
 
 /**
  * HELPERS
@@ -20,8 +18,17 @@
 @import "helpers/fixes";
 
 /**
+ * VENDORS
+ */
+
+ @import "vendors/accordion";
+ @import "vendors/card-flip";
+ @import "vendors/keyframes";
+
+/**
  * COMPONENTS
  */
+@import "components/animations";
 @import "components/backgrounds";
 @import "components/buttons";
 @import "components/create-order-footer";
@@ -33,13 +40,6 @@
 @import "components/summup-order";
 @import "components/titles";
 @import "components/popup";
-
-/**
- * VENDORS
- */
-
- @import "vendors/accordion";
- @import "vendors/card-flip";
 
 /**
  * PAGES

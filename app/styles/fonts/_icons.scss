@@ -1,0 +1,77 @@
+@font-face {
+	font-family: "icons";
+	src: url('../fonts/Groupeat/icons.eot');
+	src: url('../fonts/Groupeat/icons.eot?#iefix') format('eot'),
+		url('../fonts/Groupeat/icons.woff') format('woff'),
+		url('../fonts/Groupeat/icons.ttf') format('truetype'),
+		url('../fonts/Groupeat/icons.svg#icons') format('svg');
+}
+
+@mixin gp-styles {
+	font-family: "icons";
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+	text-decoration: none;
+	text-transform: none;
+}
+
+%gp {
+	@include gp-styles;
+}
+
+@function gp-char($filename) {
+	$char: "";
+
+	@if $filename == fish {
+		$char: "\E001";
+	}
+	@if $filename == meat {
+		$char: "\E002";
+	}
+	@if $filename == pepper {
+		$char: "\E003";
+	}
+	@if $filename == pizza {
+		$char: "\E004";
+	}
+	@if $filename == pork {
+		$char: "\E005";
+	}
+	@if $filename == vegie {
+		$char: "\E006";
+	}
+
+	@return $char;
+}
+
+@mixin gp($filename, $insert: before, $extend: true) {
+	&:#{$insert} {
+		@if $extend {
+			@extend %gp;
+		} @else {
+			@include gp-styles;
+		}
+		content: gp-char($filename);
+	}
+}
+
+.gp-fish {
+	@include gp(fish);
+}
+.gp-meat {
+	@include gp(meat);
+}
+.gp-pepper {
+	@include gp(pepper);
+}
+.gp-pizza {
+	@include gp(pizza);
+}
+.gp-pork {
+	@include gp(pork);
+}
+.gp-vegie {
+	@include gp(vegie);
+}
