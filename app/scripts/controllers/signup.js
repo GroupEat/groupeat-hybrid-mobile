@@ -8,11 +8,12 @@ angular.module('groupeat.controllers.signup', [
   'groupeat.services.device-assistant',
   'groupeat.services.lodash',
   'groupeat.services.network',
+  'groupeat.services.phone-format',
   'groupeat.services.popup',
   'ionic'
 ])
 
-.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, DeviceAssistant, Network, Popup) {
+.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, DeviceAssistant, Network, PhoneFormat, Popup) {
 
   $scope.slideIndex = 0;
   $scope.user = {};
@@ -27,6 +28,7 @@ angular.module('groupeat.controllers.signup', [
     Network.hasConnectivity()
     .then(function() {
       var customerId = Credentials.get().id;
+      $scope.user.phoneNumber = PhoneFormat.formatPhoneNumberForBackend($scope.user.phoneNumber);
       var customerParams = _.pick($scope.user, ['firstName', 'lastName', 'phoneNumber']);
       return Customer.update(customerId, customerParams);
     })
