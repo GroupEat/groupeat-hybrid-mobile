@@ -69,8 +69,10 @@
               </ul>
             </div>
           </div>
+          <div class="col-95">
+            <p ng-show="product.isShown">{{product.description}}</p>
+          </div>
 
-          <p>{{product.description}}</p>
         </ion-item>
         <ion-item class="item-accordion" ng-repeat="format in product.formats.data" ng-class="{'is-active': product.isShown}">
           <div class="content">
