@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var watch = require('gulp-watch');
+var livereload = require('gulp-livereload');
 var plumber = require('gulp-plumber');
 
 var files = [
@@ -12,7 +12,7 @@ var files = [
 
 gulp.task('copy', ['js-lint'], function() {
   gulp.src(files, { "base" : "app" })
-  .pipe(watch(files))
   .pipe(plumber())
-  .pipe(gulp.dest('www'));
+  .pipe(gulp.dest('www'))
+  .pipe(livereload());
 });

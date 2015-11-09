@@ -9,3 +9,4 @@ require('./devops/tasks/lint.js');
 require('./devops/tasks/serve.js');
 require('./devops/tasks/styles.js');
 require('./devops/tasks/test.js');
+require('./devops/tasks/watch.js');
