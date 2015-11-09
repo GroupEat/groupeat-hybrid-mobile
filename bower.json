@@ -35,7 +35,10 @@
   },
   "overrides": {
     "sprintf": {
-      "main": "dist/angular-sprintf.min.js"
+      "main": [
+        "dist/sprintf.min.js",
+        "dist/angular-sprintf.min.js"
+      ]
     }
   }
 }
