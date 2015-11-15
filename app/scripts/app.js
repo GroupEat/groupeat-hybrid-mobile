@@ -3,7 +3,6 @@
 angular.module('groupeat', [
   'angularMoment',
   'config',
-  'constants',
   'ionic',
   'jcs-autoValidate',
   'ngCordova',

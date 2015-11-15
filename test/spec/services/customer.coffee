@@ -5,7 +5,7 @@ describe 'Service: Customer', ->
     module 'groupeat.services.customer'
     module 'templates'
 
-  Credentials = Customer = scope = $httpBackend = $q = $state = ENV = sandbox = BackendUtils = Popup = {}
+  Credentials = Customer = scope = $httpBackend = $q = $state = apiEndpoint = sandbox = BackendUtils = Popup = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -15,7 +15,7 @@ describe 'Service: Customer', ->
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       Credentials = $injector.get('Credentials')
       Customer = $injector.get('Customer')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       $q = $injector.get('$q')
       BackendUtils = $injector.get('BackendUtils')
       Popup = $injector.get('Popup')
@@ -35,14 +35,14 @@ describe 'Service: Customer', ->
       customer = 'customer'
       response =
         data: customer
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(response)
       Customer.get(id).should.become(customer)
       $httpBackend.flush()
 
     it 'should reject a promise when the server responds with an error', ->
       id = 1
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
       Customer.get(id).should.be.rejected
       $httpBackend.flush()
@@ -50,7 +50,7 @@ describe 'Service: Customer', ->
     it 'should change the state to authentication if we get a 404 (customer not found)', ->
       sandbox.stub($state, 'go')
       id = 1
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(404, 'Customer not found')
       Customer.get(id).should.be.rejected
       $httpBackend.flush()
@@ -67,7 +67,7 @@ describe 'Service: Customer', ->
         data:
           id: 1
           token: 'token'
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(response)
+      $httpBackend.whenPOST(apiEndpoint+'/customers').respond(response)
       customer = Customer.save(requestBody)
       customer.should.eventually.have.property('id').and.equal(1)
       customer.should.eventually.have.property('token').and.equal('token')
@@ -77,7 +77,7 @@ describe 'Service: Customer', ->
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       requestBody = {}
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/customers').respond(400, 'Failure')
+      $httpBackend.whenPOST(apiEndpoint+'/customers').respond(400, 'Failure')
       Customer.save(requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
 
@@ -88,7 +88,7 @@ describe 'Service: Customer', ->
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
       requestBody = {}
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(200, 'Success')
       Customer.update("1", requestBody)
       $httpBackend.flush()
@@ -97,7 +97,7 @@ describe 'Service: Customer', ->
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       requestBody = {}
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('PUT', regex).respond(400, 'Failure')
       Customer.update("1", requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()

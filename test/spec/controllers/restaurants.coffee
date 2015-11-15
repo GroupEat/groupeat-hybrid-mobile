@@ -4,7 +4,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
     module 'groupeat.controllers.restaurants'
     module 'templates'
 
-  scope = $state = $httpBackend = ENV = sandbox = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
+  scope = $state = $httpBackend = apiEndpoint = sandbox = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Network = Order = Popup = Restaurant = Geolocation = $q = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -25,7 +25,7 @@ describe 'Ctrl: RestaurantsCtrl', ->
       Geolocation = $injector.get('Geolocation')
       Popup = $injector.get('Popup')
       Order = $injector.get('Order')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
 
       RestaurantsCtrl = $controller('RestaurantsCtrl', {
         $scope: scope, $state: $state, Customer: Customer, GroupOrder: GroupOrder, Restaurant: Restaurant, Network: Network, Order: Order, Popup: Popup, _: _, Geolocation: Geolocation

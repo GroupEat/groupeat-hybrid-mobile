@@ -7,7 +7,7 @@ describe 'Ctrl: SettingsCtrl', ->
     module 'groupeat.directives'
     module 'jcs-autoValidate'
 
-  rootScope = sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer  = CustomerStorage = ElementModifier = ENV = formElement = Network = CustomerSettings = Popup = {}
+  rootScope = sandbox = ctrl = scope = $compile = $ionicSlideBoxDelegate = $q = $state = $timeout = _ = Address = Authentication = Credentials = Customer  = CustomerStorage = ElementModifier = apiEndpoint = formElement = Network = CustomerSettings = Popup = {}
 
   beforeEach ->
     inject ($controller, $rootScope, $injector) ->
@@ -38,7 +38,7 @@ describe 'Ctrl: SettingsCtrl', ->
       CustomerSettings = $injector.get 'CustomerSettings'
       Popup = $injector.get 'Popup'
       ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $injector.get('$httpBackend').expect('GET', regex).respond(200, 'Success')
 
       # Hack to validate elements

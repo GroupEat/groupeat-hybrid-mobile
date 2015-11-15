@@ -2,11 +2,13 @@
 
 angular.module('groupeat.services.product', [
   'groupeat.services.backend-utils',
-  'groupeat.services.lodash'
+  'groupeat.services.lodash',
+  'ngConstants',
+  'ngResource'
 ])
 
-.factory('Product', function ($resource, ENV, $q, _) {
-  var resource = $resource(ENV.apiEndpoint + '/restaurants/:restaurantId/products?include=formats,tags');
+.factory('Product', function ($resource, $q, _, apiEndpoint) {
+  var resource = $resource(apiEndpoint + '/restaurants/:restaurantId/products?include=formats,tags');
 
   var
   /**

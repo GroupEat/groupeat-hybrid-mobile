@@ -3,13 +3,15 @@
 angular.module('groupeat.services.restaurant', [
   'groupeat.services.backend-utils',
   'groupeat.services.lodash',
-  'groupeat.services.popup'
+  'groupeat.services.popup',
+  'ngConstants',
+  'ngResource'
 ])
 
-.factory('Restaurant', function (_, Popup, $resource, $q, ENV) {
+.factory('Restaurant', function (_, $resource, $q, apiEndpoint, Popup) {
 
-  var resource = $resource(ENV.apiEndpoint + '/restaurants/:id');
-  var listResource = $resource(ENV.apiEndpoint + '/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
+  var resource = $resource(apiEndpoint + '/restaurants/:id');
+  var listResource = $resource(apiEndpoint + '/restaurants?opened=1&around=1&latitude=:latitude&longitude=:longitude');
 
   var
   /**

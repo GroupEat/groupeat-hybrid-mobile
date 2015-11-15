@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('groupeat.services.customer-settings', [
-  'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.lodash',
+  'ngConstants',
   'ngResource'
 ])
 
-.factory('CustomerSettings', function (_, $q, $resource, BackendUtils, ENV) {
-  var resource = $resource(ENV.apiEndpoint + '/customers/:id/settings', null, { 'update': { method: 'PUT' } });
+.factory('CustomerSettings', function (_, $q, $resource, apiEndpoint, BackendUtils) {
+  var resource = $resource(apiEndpoint + '/customers/:id/settings', null, { 'update': { method: 'PUT' } });
   var noNotificationAfterHours = [
     {
       value: '21:00:00',
@@ -44,7 +44,7 @@ angular.module('groupeat.services.customer-settings', [
   getLabelHourFromValue = function(value) {
     return _.find(noNotificationAfterHours, 'value', value).label;
   },
-  
+
   /**
   * @ngdoc function
   * @name CustomerSettings#get
@@ -64,10 +64,10 @@ angular.module('groupeat.services.customer-settings', [
     .catch(function () {
       defer.reject();
     });
-    
+
     return defer.promise;
   },
-  
+
   /**
   * @ngdoc function
   * @name CustomerSettings#update
@@ -86,10 +86,10 @@ angular.module('groupeat.services.customer-settings', [
     }).catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
     });
-    
+
     return defer.promise;
   };
-  
+
   return {
     getNoNotificationAfterHours: getNoNotificationAfterHours,
     getDaysWithoutNotifying: getDaysWithoutNotifying,

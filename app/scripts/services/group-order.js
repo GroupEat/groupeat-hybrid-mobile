@@ -1,6 +1,13 @@
 'use strict';
-angular.module('groupeat.services.group-order', ['groupeat.services.backend-utils']).factory('GroupOrder', function ($resource, $q, ENV) {
-  var resource = $resource(ENV.apiEndpoint + '/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
+
+angular.module('groupeat.services.group-order', [
+  'groupeat.services.backend-utils',
+  'ngConstants',
+  'ngResource'
+])
+
+.factory('GroupOrder', function ($resource, $q, apiEndpoint) {
+  var resource = $resource(apiEndpoint + '/groupOrders?joinable=1&around=1&latitude=:latitude&longitude=:longitude&include=restaurant');
   var
   /**
   * @ngdoc function

@@ -4,7 +4,7 @@ describe 'Service: Address', ->
   beforeEach ->
     module 'groupeat.services.address'
 
-  Address = scope = sandbox = $httpBackend = ENV = {}
+  Address = scope = sandbox = $httpBackend = apiEndpoint = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -12,7 +12,7 @@ describe 'Service: Address', ->
       sandbox = sinon.sandbox.create()
       scope = $rootScope.$new()
       Address = $injector.get('Address')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
@@ -29,13 +29,13 @@ describe 'Service: Address', ->
         data:
           longitude: 1
           latitude: 1
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenPUT(regex).respond(response)
       Address.update('1', null).should.be.fulfilled
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenPUT(regex).respond(404 , 'Error')
       Address.update('1', null).should.be.rejectedWith('invalidAddressErrorKey')
       $httpBackend.flush()
@@ -51,13 +51,13 @@ describe 'Service: Address', ->
         data:
           details: details
           street: 'Résidence ENSTA ParisTech, 828 Boulevard des Maréchaux'
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenGET(regex).respond(response)
       Address.get(1).should.become({residency: residency, details: details})
       $httpBackend.flush()
 
     it 'should reject a promise when the server responds with an error to the get request', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/address$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/address$')
       $httpBackend.whenGET(regex).respond(404 , 'Error')
       Address.get(1).should.be.rejected
       $httpBackend.flush()

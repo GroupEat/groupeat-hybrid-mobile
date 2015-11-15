@@ -1,17 +1,17 @@
 'use strict';
 
 angular.module('groupeat.services.address', [
-  'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.lodash',
+  'ngConstants',
   'ngResource',
   'pascalprecht.translate'
 ])
 
-.factory('Address', function (_, $filter, $resource, $q, BackendUtils, ENV) {
+.factory('Address', function (_, $filter, $resource, $q, apiEndpoint, BackendUtils) {
 
   var $translate = $filter('translate');
-  var resource = $resource(ENV.apiEndpoint + '/customers/:id/address', null, { 'update': { method: 'PUT' } });
+  var resource = $resource(apiEndpoint + '/customers/:id/address', null, { 'update': { method: 'PUT' } });
 
   var residencies = [
     {

@@ -5,7 +5,7 @@ describe 'Service: Authentication', ->
     module 'groupeat.services.authentication'
     module 'templates'
 
-  $httpBackend = BackendUtils = Authentication = scope = sandbox = localStorageService = mockLocalStorage = ENV = {}
+  $httpBackend = BackendUtils = Authentication = scope = sandbox = localStorageService = mockLocalStorage = apiEndpoint = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -16,7 +16,7 @@ describe 'Service: Authentication', ->
       Authentication = $injector.get('Authentication')
       localStorageService = $injector.get('localStorageService')
       BackendUtils = $injector.get('BackendUtils')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       sandbox.stub(localStorageService, 'get', (key) ->
         return mockLocalStorage[key]
       )
@@ -40,7 +40,7 @@ describe 'Service: Authentication', ->
       response =
         data:
           token: 'token'
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(response)
+      $httpBackend.whenPUT(apiEndpoint+'/auth/token').respond(response)
       Authentication.authenticate(credentials).should.eventually.have.property('token')
       $httpBackend.flush()
 
@@ -48,7 +48,7 @@ describe 'Service: Authentication', ->
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       credentials = 'credentials'
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/token').respond(404, 'Failure')
+      $httpBackend.whenPUT(apiEndpoint+'/auth/token').respond(404, 'Failure')
       Authentication.authenticate(credentials).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
 
@@ -59,7 +59,7 @@ describe 'Service: Authentication', ->
 
     it 'should return a fulfilled promise when the server responds properly', ->
       email = 'email@ensta.fr'
-      $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
+      $httpBackend.whenDELETE(apiEndpoint+'/auth/password').respond(200, 'Success')
       Authentication.resetPassword(email).should.be.fulfilled
       $httpBackend.flush()
 
@@ -67,7 +67,7 @@ describe 'Service: Authentication', ->
       errorKeyFromBackend = 'errorKeyFromBackend'
       sandbox.stub(BackendUtils, 'errorKeyFromBackend').returns(errorKeyFromBackend)
       email = 'email@ensta.fr'
-      $httpBackend.whenDELETE(ENV.apiEndpoint+'/auth/password').respond(404, 'Failure')
+      $httpBackend.whenDELETE(apiEndpoint+'/auth/password').respond(404, 'Failure')
       Authentication.resetPassword(email).should.be.rejectedWith(errorKeyFromBackend)
       $httpBackend.flush()
 
@@ -101,7 +101,7 @@ describe 'Service: Authentication', ->
         email: 'email@ensta.fr'
         oldPassword: 'oldPassword'
         newPassword: 'newPassword'
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/password').respond(200, 'Success')
+      $httpBackend.whenPUT(apiEndpoint+'/auth/password').respond(200, 'Success')
       Authentication.updatePassword(authenticationParams).should.be.resolved
       $httpBackend.flush()
 
@@ -112,6 +112,6 @@ describe 'Service: Authentication', ->
         newPassword: 'newPassword'
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
-      $httpBackend.whenPUT(ENV.apiEndpoint+'/auth/password').respond(404, 'Failure')
+      $httpBackend.whenPUT(apiEndpoint+'/auth/password').respond(404, 'Failure')
       Authentication.updatePassword(authenticationParams).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()

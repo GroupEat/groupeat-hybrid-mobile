@@ -5,13 +5,13 @@ describe 'Service: CustomerSettings', ->
     module 'groupeat.services.customer-settings'
     module 'templates'
 
-  CustomerSettings = scope = ENV = $httpBackend = {}
+  CustomerSettings = scope = apiEndpoint = $httpBackend = {}
 
   beforeEach ->
     inject ($rootScope, $injector) ->
       scope = $rootScope.$new()
       CustomerSettings = $injector.get('CustomerSettings')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       $httpBackend = $injector.get('$httpBackend')
 
   describe 'CustomerSettings#getNoNotificationAfterHours', ->
@@ -45,7 +45,7 @@ describe 'Service: CustomerSettings', ->
       CustomerSettings.should.have.property('get')
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/settings$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/settings$')
       customerSettings = []
       response =
         data:
@@ -55,7 +55,7 @@ describe 'Service: CustomerSettings', ->
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/settings$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/settings$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
       CustomerSettings.get(1).should.be.rejected
       $httpBackend.flush()
@@ -66,7 +66,7 @@ describe 'Service: CustomerSettings', ->
       CustomerSettings.should.have.property('update')
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/settings$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/settings$')
       customerSettings = []
       response =
         data:
@@ -76,7 +76,7 @@ describe 'Service: CustomerSettings', ->
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/customers/\\d+/settings$')
+      regex = new RegExp('^'+apiEndpoint+'/customers/\\d+/settings$')
       $httpBackend.expect('PUT', regex).respond(400, 'Failure')
       CustomerSettings.update(1, null).should.be.rejected
       $httpBackend.flush()
