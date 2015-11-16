@@ -63,7 +63,7 @@ angular.module('groupeat.services.customer', [
     var defer = $q.defer();
     resource.save(null, requestBody).$promise
     .then(function (response) {
-      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
+      defer.resolve(response.data);
     })
     .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));
@@ -86,9 +86,11 @@ angular.module('groupeat.services.customer', [
   */
   update = function (customerId, requestBody) {
     var defer = $q.defer();
-    resource.update({id: customerId}, addFrenchPrefixToPhoneNumber(requestBody)).$promise
+    requestBody.phoneNumber = PhoneFormat.formatPhoneNumberForBackend(requestBody.phoneNumber);
+    resource.update({id: customerId}, requestBody).$promise
     .then(function (response) {
-      defer.resolve(removeInternationalPrefixFromPhoneNumber(response.data));
+      response.data.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(response.data.phoneNumber);
+      defer.resolve(response.data);
     })
     .catch(function (errorResponse) {
       defer.reject(BackendUtils.errorMsgFromBackend(errorResponse));

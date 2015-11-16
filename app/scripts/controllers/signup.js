@@ -28,7 +28,6 @@ angular.module('groupeat.controllers.signup', [
     Network.hasConnectivity()
     .then(function() {
       var customerId = Credentials.get().id;
-      $scope.user.phoneNumber = PhoneFormat.formatPhoneNumberForBackend($scope.user.phoneNumber);
       var customerParams = _.pick($scope.user, ['firstName', 'lastName', 'phoneNumber']);
       return Customer.update(customerId, customerParams);
     })
