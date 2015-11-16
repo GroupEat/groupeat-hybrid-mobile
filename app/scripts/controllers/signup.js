@@ -5,13 +5,14 @@ angular.module('groupeat.controllers.signup', [
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-storage',
+  'groupeat.services.device-assistant',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.popup',
   'ionic'
 ])
 
-.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, Network, Popup) {
+.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, DeviceAssistant, Network, Popup) {
 
   $scope.slideIndex = 0;
   $scope.user = {};
@@ -39,13 +40,21 @@ angular.module('groupeat.controllers.signup', [
       $scope.hasSignedUp();
     })
     .catch(function(errorMessage) {
-      return Popup.error(errorMessage);
+      Popup.error(errorMessage);
     });
   };
 
   $scope.hasSignedUp = function() {
-    Popup.alert('welcome', 'welcomeDetails');
-    $state.go('app.group-orders');
+    Popup.alert('welcome', 'welcomeDetails')
+    .then(function(){
+      return DeviceAssistant.register();
+    })
+    .then(function(){
+      $state.go('app.group-orders');
+    })
+    .catch(function(errorMessage){
+      return Popup.error(errorMessage);
+    });
   };
 
 });

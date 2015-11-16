@@ -4,7 +4,7 @@ describe 'Ctrl: SignupCtrl', ->
     module 'groupeat.controllers.signup'
     module 'templates'
 
-  scope = rootScope = $ionicSlideBoxDelegate = $q = $state = $state = Address = Credentials = Customer = CustomerStorage = Network = Popup = sandbox = {}
+  scope = rootScope = $ionicSlideBoxDelegate = $q = $state = $state = Address = Credentials = Customer = CustomerStorage = DeviceAssistant = Network = Popup = sandbox = {}
 
   userMock =
     firstName: 'Walter'
@@ -31,11 +31,12 @@ describe 'Ctrl: SignupCtrl', ->
       Credentials = $injector.get 'Credentials'
       Customer = $injector.get 'Customer'
       CustomerStorage = $injector.get 'CustomerStorage'
+      DeviceAssistant = $injector.get 'DeviceAssistant'
       Network = $injector.get 'Network'
       Popup = $injector.get 'Popup'
 
       SignupCtrl = $controller('SignupCtrl', {
-        _: $injector.get('_'), $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $scope: scope, $state: $state, Address: Address, Credentials: Credentials, Customer: Customer, Network: Network, Popup: Popup
+        _: $injector.get('_'), $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $scope: scope, $state: $state, Address: Address, Credentials: Credentials, Customer: Customer, DeviceAssistant: DeviceAssistant, Network: Network, Popup: Popup
       })
       $injector.get('$httpBackend').whenGET(/^translations\/.*/).respond '{}'
 
@@ -171,12 +172,37 @@ describe 'Ctrl: SignupCtrl', ->
 
     beforeEach ->
       sandbox.stub $state, 'go'
-      sandbox.stub Popup, 'alert'
 
     it 'should open a Popup welcoming the user', ->
+      sandbox.spy(Popup, 'alert')
+
       scope.hasSignedUp()
       Popup.alert.should.have.been.calledWithExactly 'welcome', 'welcomeDetails'
 
-    it 'should switch the state to group orders', ->
+    it 'if Popup.alert is resolved, DeviceAssistant.register should be called', ->
+      sandbox.stub(Popup, 'alert').returns $q.when {}
+      sandbox.spy(DeviceAssistant, 'register')
+
       scope.hasSignedUp()
+      scope.$digest()
+
+      DeviceAssistant.register.should.have.been.called
+
+    it 'if DeviceAssistant.register is resolved, state should change to group-orders', ->
+      sandbox.stub(Popup, 'alert').returns $q.when {}
+      sandbox.stub(DeviceAssistant, 'register').returns $q.when {}
+
+      scope.hasSignedUp()
+      scope.$digest()
+
       $state.go.should.have.been.calledWithExactly 'app.group-orders'
+
+    it 'if DeviceAssistant.register is rejected, Popup.error should be called', ->
+      sandbox.stub(Popup, 'alert').returns $q.when {}
+      sandbox.stub(DeviceAssistant, 'register').returns $q.reject()
+      sandbox.spy(Popup, 'error')
+
+      scope.hasSignedUp()
+      scope.$digest()
+
+      Popup.error.should.have.been.called

@@ -6,7 +6,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
     module 'groupeat.controllers.authentication'
     module 'templates'
 
-  Address = Authentication = AuthenticationCtrl = BackendUtils = Credentials = CustomerSettings = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = DeviceAssistant = Network = Popup =  {}
+  Address = Authentication = AuthenticationCtrl = BackendUtils = Credentials = CustomerSettings = CustomerStorage = ElementModifier = scope = $state = $compile = $httpBackend = $timeout = $q = sandbox = elementUtils = formElement = Customer = Network = Popup =  {}
 
   formMock = 'form'
 
@@ -30,7 +30,6 @@ describe 'Ctrl: AuthenticationCtrl', ->
       Customer = $injector.get 'Customer'
       CustomerSettings = $injector.get 'CustomerSettings'
       CustomerStorage = $injector.get 'CustomerStorage'
-      DeviceAssistant = $injector.get 'DeviceAssistant'
       Network = $injector.get 'Network'
       Popup = $injector.get 'Popup'
 
@@ -47,7 +46,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
       sandbox.spy Credentials, 'reset'
       sandbox.spy CustomerStorage, 'reset'
       AuthenticationCtrl = $controller('AuthenticationCtrl', {
-        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, DeviceAssistant: DeviceAssistant, _: $injector.get('_')
+        $scope: scope, $state: $state, $timeout: $timeout, $q: $q, $filter: $injector.get('$filter'), BackendUtils: BackendUtils, Address: Address, Authentication: Authentication, Customer: Customer, ElementModifier: ElementModifier, Network: Network, Popup: Popup, _: $injector.get('_')
       })
 
       # Hack to validate elements
@@ -294,7 +293,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         token: expectedToken
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
+      sandbox.stub $state, 'go'
       sandbox.stub CustomerStorage, 'setDefaultSettings'
 
       scope.submitRegisterForm formMock
@@ -310,7 +309,7 @@ describe 'Ctrl: AuthenticationCtrl', ->
         token: expectedToken
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
+      sandbox.stub $state, 'go'
       sandbox.stub Credentials, 'set'
 
       scope.submitRegisterForm formMock
@@ -318,30 +317,13 @@ describe 'Ctrl: AuthenticationCtrl', ->
 
       Credentials.set.should.have.been.calledWithExactly expectedId, expectedToken
 
-    it "if Customer.save is resolved, DeviceAssistant.register should be called", ->
-      errorMessage = 'errorMessage'
+    it "if Customer.save is resolved, $state.go should be called  to reach signup", ->
       sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
       sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub(DeviceAssistant, 'register').returns $q.defer().promise
       sandbox.stub(Customer, 'save').returns $q.when({})
 
-      sandbox.stub Popup, 'error'
       sandbox.stub Credentials, 'set'
-
-      scope.submitRegisterForm formMock
-      scope.$digest()
-
-      DeviceAssistant.register.should.have.been.called
-
-    it "if DeviceAssistant.register is resolved, $state.go should be called  to reach signup", ->
-      errorMessage = 'errorMessage'
-      sandbox.stub(Network, 'hasConnectivity').returns $q.when({})
-      sandbox.stub(ElementModifier, 'validate').returns $q.when({})
-      sandbox.stub(Customer, 'save').returns $q.when({})
-      sandbox.stub(DeviceAssistant, 'register').returns $q.when({})
-
       sandbox.stub $state, 'go'
-      sandbox.stub Credentials, 'set'
 
       scope.submitRegisterForm formMock
       scope.$digest()
