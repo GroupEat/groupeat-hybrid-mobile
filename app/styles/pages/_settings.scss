@@ -7,6 +7,7 @@
 		padding: 0 15px;
 		background-color: $bg-light;
 	}
+
 	input[type="text"], input[type="password"], input[type="tel"] {
 		line-height: 50px;
 		padding: 0 15px;
@@ -15,6 +16,7 @@
 		height: 50px;
 		border-bottom: 1px solid $border-light;
 	}
+	
   .button-success {
     color: $green;
   }
