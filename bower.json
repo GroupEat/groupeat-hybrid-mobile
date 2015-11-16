@@ -32,5 +32,13 @@
     "angular": "1.3.13",
     "slick-carousel": "~1.5.8",
     "lodash": "3.9.3"
+  },
+  "overrides": {
+    "sprintf": {
+      "main": [
+        "dist/sprintf.min.js",
+        "dist/angular-sprintf.min.js"
+      ]
+    }
   }
 }

@@ -2,7 +2,7 @@ node_modules
 www
 .tmp
 .sass-cache
-app/lib
+bower_components
 coverage
 platforms
 resources/android
@@ -19,4 +19,4 @@ plugins
 *.strings
 *.plist
 
-app/scripts/constants.js
+app/scripts/ngConstants.js

@@ -1,9 +1,11 @@
 'use strict';
+
 /* exported onNotification */
+
 angular.module('groupeat.services.push-notification', [
-  'constants',
   'groupeat.services.element-modifier',
   'ionic',
+  'ngConstants',
   'ngCordova'
 ])
 

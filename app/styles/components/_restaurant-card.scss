@@ -36,7 +36,7 @@ $discount-30 : #F2BC21;
 			line-height: 170%;
 			align-content:center;
 			flex-direction:column;
-			@include border-radius(100%);
+			border-radius: 100%;
 			span {
 				text-transform: uppercase;
 				font-size: 10px;
@@ -56,9 +56,9 @@ $discount-30 : #F2BC21;
 			display: inline-block;
 			i {
 				display: block;
-		        float: left;
-		        font-size: 16px;
-		        margin-right: 3px;
+        float: left;
+        font-size: 16px;
+        margin-right: 3px;
 			}
 		}
 	}

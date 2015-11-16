@@ -1,11 +1,11 @@
 describe 'Service: Order', ->
-	
+
   # Load the controller's module
   beforeEach ->
     module 'groupeat.services.order'
     module 'templates'
 
-  Order = scope = $httpBackend = ENV = sandbox = BackendUtils = {}
+  Order = scope = $httpBackend = apiEndpoint = sandbox = BackendUtils = {}
 
   beforeEach ->
     inject ($rootScope, $injector) ->
@@ -13,11 +13,11 @@ describe 'Service: Order', ->
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       Order = $injector.get('Order')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       _ = $injector.get('_')
       BackendUtils = $injector.get('BackendUtils')
       sandbox = sinon.sandbox.create()
-      
+
   describe "Order Service contents :", ->
 
     it "should create a currentOrder", ->
@@ -107,7 +107,7 @@ describe 'Service: Order', ->
     it 'should return a fulfilled promise when the server responds normally', ->
       requestBody = {}
       response = {id: 1, token: 'token'}
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/orders').respond(response)
+      $httpBackend.whenPOST(apiEndpoint+'/orders').respond(response)
       order = Order.save(requestBody)
       order.should.eventually.have.property('id').and.equal(1)
       order.should.eventually.have.property('token').and.equal('token')
@@ -117,9 +117,6 @@ describe 'Service: Order', ->
       errorMsgFromBackend = 'errorMsgFromBackend'
       sandbox.stub(BackendUtils, 'errorMsgFromBackend').returns(errorMsgFromBackend)
       requestBody = {}
-      $httpBackend.whenPOST(ENV.apiEndpoint+'/orders').respond(400, 'Failure')
+      $httpBackend.whenPOST(apiEndpoint+'/orders').respond(400, 'Failure')
       Order.save(requestBody).should.be.rejectedWith(errorMsgFromBackend)
       $httpBackend.flush()
-
-
-

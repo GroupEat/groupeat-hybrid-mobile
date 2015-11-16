@@ -1,0 +1,14 @@
+{
+  "development": {
+    "environment": "development",
+    "apiEndpoint": "http://groupeat.dev/api"
+  },
+  "staging": {
+    "environment": "staging",
+    "apiEndpoint": "http://staging.groupeat.fr/api"
+  },
+  "production": {
+    "environment": "production",
+    "apiEndpoint": "https://groupeat.fr/api"
+  }
+}

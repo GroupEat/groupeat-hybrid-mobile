@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('groupeat.services.authentication', [
-  'constants',
   'groupeat.services.backend-utils',
+  'ngConstants',
   'ngResource'
 ])
 
-.factory('Authentication', function ($filter, $q, $resource, BackendUtils, ENV) {
+.factory('Authentication', function ($filter, $q, $resource, BackendUtils, apiEndpoint) {
 
-  var authenticationResource = $resource(ENV.apiEndpoint + '/auth/token', null, {
+  var authenticationResource = $resource(apiEndpoint + '/auth/token', null, {
     'authenticate': { method: 'PUT' }
   }),
 
-  passwordResource = $resource(ENV.apiEndpoint + '/auth/password', null, {
+  passwordResource = $resource(apiEndpoint + '/auth/password', null, {
     'update': { method: 'PUT' },
     'reset': { method: 'DELETE' }
   });

@@ -1,12 +1,12 @@
 describe 'Service: HttpProviderInterceptor', ->
 
-  HttpProviderInterceptor = Credentials = scope = sandbox = $state = $http = $httpBackend = ENV = {}
+  HttpProviderInterceptor = Credentials = scope = sandbox = $state = $http = $httpBackend = apiEndpoint = {}
 
   # Load the controller's module
   beforeEach ->
     module 'groupeat.services.http-provider-interceptor'
     module 'config'
-    module 'constants'
+    module 'ngConstants'
     module 'templates'
 
   # Initialize the controller and a mock scope
@@ -18,7 +18,7 @@ describe 'Service: HttpProviderInterceptor', ->
       HttpProviderInterceptor = $injector.get('HttpProviderInterceptor')
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       $http = $injector.get('$http')
       $state = $injector.get('$state')
 
@@ -31,18 +31,18 @@ describe 'Service: HttpProviderInterceptor', ->
       HttpProviderInterceptor.should.be.defined
 
     it 'should add the accept headers', ->
-      $httpBackend.expectGET(ENV.apiEndpoint, (headers) ->
+      $httpBackend.expectGET(apiEndpoint, (headers) ->
         headers.Accept.should.equal('application/vnd.groupeat.v1+json')
       ).respond(200, '')
-      $http.get(ENV.apiEndpoint)
+      $http.get(apiEndpoint)
       $httpBackend.flush()
 
     it 'should have no authorization headers when the customer is not authorized', ->
       sandbox.stub(Credentials, 'get').returns(undefined)
-      $httpBackend.expectGET(ENV.apiEndpoint, (headers) ->
+      $httpBackend.expectGET(apiEndpoint, (headers) ->
         expect(headers.Authorization).to.be.undefined
       ).respond(200, '')
-      $http.get(ENV.apiEndpoint)
+      $http.get(apiEndpoint)
       $httpBackend.flush()
 
     it 'should have the token in the authorization headers when the customer is authorized', ->
@@ -50,10 +50,10 @@ describe 'Service: HttpProviderInterceptor', ->
       sandbox.stub(Credentials, 'get', ->
         token: token
       )
-      $httpBackend.expectGET(ENV.apiEndpoint + '/restaurants', (headers) ->
+      $httpBackend.expectGET(apiEndpoint + '/restaurants', (headers) ->
         headers.Authorization.should.contain(token)
       ).respond(404, '')
-      $http.get(ENV.apiEndpoint + '/restaurants')
+      $http.get(apiEndpoint + '/restaurants')
       $httpBackend.flush()
 
   describe 'HttpProviderInterceptor#request', ->

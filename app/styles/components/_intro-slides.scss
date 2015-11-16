@@ -30,9 +30,8 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		@include transform-origin(30%, 100%, 0);
-		@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
-		-webkit-perspective: 1000;
+		transform-origin: 30% 100% 0;
+		transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
 		&:before{
 			content: "";
 			position: absolute;
@@ -49,7 +48,7 @@
 			height: 200px;
 			@extend %bg-cover;
 			background-image: url(../images/pizzeria.png);
-			@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
+			transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
 			ul.smoke {
 				position: absolute;
 				width: 40px;
@@ -112,9 +111,9 @@
 				left: 50px;
 				height: 18px;
 				width: 34px;
-				@include border-radius(34px 34px 0 0);
+				border-radius: 34px 34px 0 0;
 				background: $orange;
-				@include transform(translateZ(0));
+				transform: translateZ(0);
 				@include animation(fire .8s ease-in alternate infinite);
 
 			}
@@ -127,7 +126,7 @@
 			left: 50%;
 			margin-left: -50px;
 			border: 3px solid $purple;
-			@include border-radius(100%);
+			border-radius: 100%;
 			opacity: 0;
 			&:before {
 				content: "";
@@ -136,8 +135,8 @@
 				left: 50%;
 				width: 3px;
 				height: 30px;
-				@include transform-origin(50%, 100%, 0);
-				@include transform(rotate(200deg));
+				transform-origin: 50% 100% 0;
+				transform: rotate(200deg);
 				background-color: $purple;
 				margin-left: -1.5px;
 				margin-top: -30px;
@@ -149,8 +148,8 @@
 				left: 50%;
 				width: 3px;
 				height: 20px;
-				@include transform-origin(50%, 100%, 0);
-				@include transform(rotate(50deg));
+				transform-origin: 50% 100% 0;
+				transform: rotate(50deg);
 				background-color: $purple;
 				margin-left: -1.5px;
 				margin-top: -20px;
@@ -164,7 +163,7 @@
 			height: 119px;
 			@extend %bg-cover;
 			background-image: url(../images/scooter.png);
-			@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
+			transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
 			ul.speed {
 				position: absolute;
 				top: 45px;
@@ -218,7 +217,7 @@
 					height: 10px;
 					opacity: 0;
 					position: relative;
-					@include transform(translate3d(0, -10px, 0));
+					transform: translate3d(0, -10px, 0);
 					&:after {
 						content: "";
 						position: absolute;
@@ -230,22 +229,22 @@
 					}
 					&:first-child {
 						&:after {
-							@include transform(translateX(1px));
+							transform: translateX(1px);
 						}
 					}
 					&:nth-child(2) {
 						&:after {
-							@include transform(translateX(-3px));
+							transform: translateX(-3px);
 						}
 					}
 					&:nth-child(3) {
 						&:after {
-							@include transform(translateX(5px));
+							transform: translateX(5px);
 						}
 					}
 					&:last-child {
 						&:after {
-							@include transform(translateX(0));
+							transform: translateX(0);
 						}
 					}
 				}
@@ -258,8 +257,8 @@
 				opacity: 0;
 				height: 60px;
 				background-color: $purple;
-				@include transform-origin(50%, 100%, 0);
-				@include transform(rotate(-30deg));
+				transform-origin: 50% 100% 0;
+				transform: rotate(-30deg);
 				&:before {
 					content: "-50%";
 					position: absolute;
@@ -281,7 +280,7 @@
 			}
 		}
 		&.is-slide2 {
-			@include transform(scale(1.8));
+			transform: scale(1.8);
 			.pizzeria {
 				opacity: 0;
 			}
@@ -289,32 +288,32 @@
 				ul.pizzas {
 					li {
 						opacity: 1;
-						@include transform(translate3d(0, 0, 0));
+						transform: translate3d(0, 0, 0);
 						&:first-child {
-							@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .6s);
+							transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .6s;
 						}
 						&:nth-child(2) {
-							@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .5s);
+							transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .5s;
 						}
 						&:nth-child(3) {
-							@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .4s);
+							transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .4s;
 						}
 						&:last-child {
-							@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .3s);
+							transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) .3s;
 						}
 					}
 				}
 				.flag {
-					@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) 1s);
+					transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) 1s;
 					opacity: 1;
-					@include transform(rotate(-20deg));
+					transform: rotate(-20deg);
 				}
 			}
 		}
 		&.is-slide3 {
 			.clock {
 				opacity: 1;
-				@include transition(opacity 0.2s linear .55s);
+				transition: opacity 0.2s linear .55s;
 				&:before {
 					@include animation(clock .5s linear infinite);
 				}
@@ -326,10 +325,10 @@
 				opacity: 0;
 			}
 			.scooter {
-				@include transform(scale(.6) translate3d(-40%, 40px, 0));
+				transform: scale(.6) translate3d(-40%, 40px, 0);
 				@include animation(movingScooter .3s cubic-bezier(0.25, 0.8, 0.25, 1) infinite .3s);
 				.speed {
-					@include transition(all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1));
+					transition: all 0.55s cubic-bezier(0.25, 0.8, 0.25, 1);
 					opacity: 1;
 				}
 				ul.pizzas {
@@ -340,7 +339,7 @@
 				}
 				.flag {
 					opacity: 1;
-					@include transform(rotate(-20deg));
+					transform: rotate(-20deg);
 				}
 			}
 			&:before{
@@ -354,7 +353,7 @@
 		}
 		&.is-hidden {
 			opacity: 0;
-			@include transition(all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1));
+			transition: all 0.1s cubic-bezier(0.25, 0.8, 0.25, 1);
 		}
 	}
 }

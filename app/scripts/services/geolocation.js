@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('groupeat.services.geolocation', [
-  'constants',
+  'ngConstants',
   'ngCordova'
 ])
 
-.factory('Geolocation', function ($q, ENV, $cordovaGeolocation) {
+.factory('Geolocation', function ($q, $cordovaGeolocation, environment) {
   var getGeolocation = function () {
     var defer = $q.defer();
-    if (ENV.name !== 'production') {
+    if (environment !== 'production') {
       var response = {
         'coords': {
           'latitude': 48.710734,

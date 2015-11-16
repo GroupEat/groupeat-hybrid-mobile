@@ -3,9 +3,7 @@
 angular.module('groupeat', [
   'angularMoment',
   'config',
-  'constants',
   'ionic',
-  'ionic.service.analytics',
   'jcs-autoValidate',
   'ngCordova',
   'ngCookies',
@@ -39,7 +37,7 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function ($ionicPlatform, $ionicAnalytics, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
+.run(function ($ionicPlatform, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
 
   Permission.defineRole('customer', function () {
     return Credentials.get();
@@ -75,14 +73,11 @@ angular.module('groupeat', [
 
   $ionicPlatform.ready(function () {
 
-    $ionicAnalytics.register();
-
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
     }
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
-    Analytics.startTrackerWithId('UA-62863405-1');
   });
 });

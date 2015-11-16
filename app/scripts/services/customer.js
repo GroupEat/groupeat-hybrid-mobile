@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('groupeat.services.customer', [
-  'constants',
   'groupeat.services.backend-utils',
   'groupeat.services.credentials',
   'groupeat.services.customer-storage',
   'groupeat.services.popup',
   'LocalStorageModule',
+  'ngConstants',
   'ngResource',
   'ui.router'
 ])
 
-.factory('Customer', function ($q, $resource, $state, BackendUtils, Credentials, CustomerStorage, ENV, localStorageService, Popup) {
+.factory('Customer', function ($q, $resource, $state, apiEndpoint, BackendUtils, Credentials, CustomerStorage, localStorageService, Popup) {
 
-  var resource = $resource(ENV.apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
+  var resource = $resource(apiEndpoint + '/customers/:id', null, { 'update': { method: 'PUT' } });
 
   var removeInternationalPrefixFromPhoneNumber = function(customer) {
     if (customer && customer.phoneNumber && customer.phoneNumber.length > 10) {

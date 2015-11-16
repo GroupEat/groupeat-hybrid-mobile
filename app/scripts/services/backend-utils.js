@@ -1,14 +1,16 @@
 'use strict';
+
 angular.module('groupeat.services.backend-utils', [
-  'constants',
   'ionic',
-  'ngResource',
   'pascalprecht.translate',
   'sprintf',
   'groupeat.services.credentials',
   'groupeat.services.lodash'
-])  /*global vsprintf:true*/.factory('BackendUtils', function ($filter, $state, _, Credentials) {
+])
+
+.factory('BackendUtils', function ($filter, $state, _, Credentials) {
   var $translate = $filter('translate');
+  var vsprintf = $filter('vsprintf');
   var errorKeysRequiringAuthentication = [
     'noUserForAuthenticationToken',
     'userMustAuthenticate'

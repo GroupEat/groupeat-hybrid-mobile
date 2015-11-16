@@ -4,7 +4,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
     module 'groupeat.controllers.group-orders'
     module 'templates'
 
-  scope = $q = $httpBackend = $state = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Geolocation = Network = Order = sandbox = ENV = $compile = {}
+  scope = $q = $httpBackend = $state = ControllerPromiseHandler = Customer = CustomerInformationChecker = GroupOrder = Geolocation = Network = Order = sandbox = apiEndpoint = $compile = {}
 
   positionMock = {
     'coords': {
@@ -46,7 +46,7 @@ describe 'Ctrl: GroupOrdersCtrl', ->
       GroupOrdersCtrl = $controller('GroupOrdersCtrl', {
         $scope: scope, $state: $state, ControllerPromiseHandler: ControllerPromiseHandler, Customer: Customer, Geolocation: Geolocation, GroupOrder: GroupOrder, Network: Network, Order: Order, _: $injector.get('_')
       })
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
 
   afterEach ->

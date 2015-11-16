@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('groupeat.services.predefined-addresses', [
-  'constants',
+  'ngConstants',
   'ngResource'
 ])
 
-.factory('PredefinedAddresses', function ($resource, $q, ENV) {
-  var resource = $resource(ENV.apiEndpoint + '/predefinedAddresses');
+.factory('PredefinedAddresses', function ($resource, $q, apiEndpoint) {
+  var resource = $resource(apiEndpoint + '/predefinedAddresses');
   var get = function () {
     var defer = $q.defer();
     resource.get().$promise.then(function (response) {

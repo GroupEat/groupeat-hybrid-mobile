@@ -4,7 +4,7 @@ describe 'Service: Restaurant', ->
   beforeEach ->
     module 'groupeat.services.restaurant'
 
-  Restaurant = scope = $httpBackend = ENV = sandbox = {}
+  Restaurant = scope = $httpBackend = apiEndpoint = sandbox = {}
 
   # Initialize the controller and a mock scope
   beforeEach ->
@@ -13,7 +13,7 @@ describe 'Service: Restaurant', ->
       $httpBackend = $injector.get('$httpBackend')
       $httpBackend.whenGET(/^translations\/.*/).respond('{}')
       Restaurant = $injector.get('Restaurant')
-      ENV = $injector.get('ENV')
+      apiEndpoint = $injector.get('apiEndpoint')
       sandbox = sinon.sandbox.create()
 
   describe 'Restaurant#getFromCoordinates', ->
@@ -22,7 +22,7 @@ describe 'Service: Restaurant', ->
       Restaurant.should.have.property 'getFromCoordinates'
 
     it 'should return a fulfilled promise when the request returns a 200 status', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
+      regex = new RegExp('^'+apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
       restaurants = []
       response =
         data:
@@ -32,7 +32,7 @@ describe 'Service: Restaurant', ->
       $httpBackend.flush()
 
     it 'should reject a promise with an error message when the server responds with an error', ->
-      regex = new RegExp('^'+ENV.apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
+      regex = new RegExp('^'+apiEndpoint+'/restaurants\\?opened=1&around=1&latitude=\\d+&longitude=1$')
       $httpBackend.expect('GET', regex).respond(400, 'Failure')
       Restaurant.getFromCoordinates(1, 1).should.be.rejected
       $httpBackend.flush()

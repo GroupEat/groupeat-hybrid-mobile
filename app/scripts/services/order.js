@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('groupeat.services.order', [
-	'constants',
 	'groupeat.services.backend-utils',
-	'groupeat.services.lodash'
+	'groupeat.services.lodash',
+	'ngConstants',
+	'ngResource'
 ])
 
-.service('Order', function(ENV, $q, $resource, BackendUtils, _) {
+.service('Order', function($q, $resource, apiEndpoint, BackendUtils, _) {
 
-	var fromGroupOrderResource = $resource(ENV.apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
-	forCustomerResource = $resource(ENV.apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant,productFormats');
+	var fromGroupOrderResource = $resource(apiEndpoint+'/customers/:customerId/groupOrders/:groupOrderId/orders?include=restaurant'),
+	forCustomerResource = $resource(apiEndpoint+'/customers/:customerId/orders?include=groupOrder.restaurant,productFormats');
 
 	var
 	currentOrder = {
@@ -195,10 +196,10 @@ angular.module('groupeat.services.order', [
 		var defer = $q.defer();
 		var resource;
 		if (currentOrder.groupOrderId === null) {
-			resource = $resource(ENV.apiEndpoint+'/orders');
+			resource = $resource(apiEndpoint+'/orders');
 		}
 		else {
-			resource = $resource(ENV.apiEndpoint+'/groupOrders/' + requestBody.id + '/orders');
+			resource = $resource(apiEndpoint+'/groupOrders/' + requestBody.id + '/orders');
 		}
 		resource.save(requestBody).$promise
 		.then(function(response) {
@@ -225,7 +226,7 @@ angular.module('groupeat.services.order', [
 
 	get = function(orderId) {
 		var defer = $q.defer();
-		var resource = $resource(ENV.apiEndpoint+'/orders/:id');
+		var resource = $resource(apiEndpoint+'/orders/:id');
 		resource.get({id: orderId}).$promise
 		.then(function(response) {
 			defer.resolve(response.data);
