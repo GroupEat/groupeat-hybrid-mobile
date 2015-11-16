@@ -19,4 +19,4 @@ plugins
 *.strings
 *.plist
 
-app/scripts/constants.js
+app/scripts/ngConstants.js
