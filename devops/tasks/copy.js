@@ -6,6 +6,7 @@ var files = [
   'app/fonts/**/*',
   'app/images/*',
   'app/scripts/**/*.js',
+  'app/index.html',
   'app/templates/**/*.html',
   'app/translations/*.json'
 ];
@@ -13,6 +14,5 @@ var files = [
 gulp.task('copy', ['js-lint'], function() {
   gulp.src(files, { "base" : "app" })
   .pipe(plumber())
-  .pipe(gulp.dest('www'))
-  .pipe(livereload());
+  .pipe(gulp.dest('www'));
 });

@@ -20,6 +20,5 @@ gulp.task('styles', ['fonts'], function() {
   .pipe(sass())
   .pipe(postcss(processors))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest('www/styles/'))
-  .pipe(livereload());
+  .pipe(gulp.dest('www/styles'));
 });

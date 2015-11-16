@@ -7,18 +7,11 @@
     <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
     <title>GroupEat</title>
 
-    <!-- build:css styles/vendor.css -->
-    <!-- <link rel="stylesheet" href="vendor/some.contrib.css"> -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-
     <!-- fonts -->
     <link rel="stylesheet" type="text/css" href="fonts/Aventura-Bold/stylesheet.css">
 
-    <!-- build:css({.tmp,app}) styles/main.css -->
+    <link rel="stylesheet" href="lib/vendor.css">
     <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
 
   </head>
 
@@ -41,19 +34,14 @@
 
 <!-- ------------------------------------------- -->
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- <script src="vendor/someContribJs.js"></script> -->
-    <!-- bower:js -->
-    <!-- endbower -->
+    <script src="lib/vendor.js"></script>
     <script src="lib/ng-cordova.js"></script>
     <script src="cordova.js"></script>
     <script src="plugins/org.apache.cordova.device/www/device.js"></script>
-    <!-- endbuild -->
 
-    <!-- build:js scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/config.js"></script>
-    <script src="scripts/constants.js"></script>
+    <script src="scripts/ngConstants.js"></script>
     <script src="scripts/routing.js"></script>
     <script src="scripts/angular-ios9-uiwebview.patch.js"></script>
 
@@ -111,6 +99,5 @@
     <script src="scripts/directives/restaurant-card.js"></script>
     <script src="scripts/directives/timer.js"></script>
     <script src="scripts/directives/touch.js"></script>
-    <!-- endbuild -->
 </body>
 </html>

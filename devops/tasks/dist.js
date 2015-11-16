@@ -1,3 +1,3 @@
 var gulp = require('gulp');
 
-gulp.task('dist', ['bower', 'constants', 'copy', 'styles']);
+gulp.task('dist', ['vendor', 'constants', 'copy', 'styles']);

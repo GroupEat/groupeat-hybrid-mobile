@@ -19,5 +19,5 @@ gulp.task('fonts', function(){
       appendUnicode: true,
       timestamp: runTimestamp
      }))
-    .pipe(gulp.dest('app/fonts/Groupeat/'));
+    .pipe(gulp.dest('www/fonts/Groupeat/'));
 });
