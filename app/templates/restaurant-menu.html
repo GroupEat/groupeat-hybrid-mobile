@@ -32,7 +32,7 @@
   </ion-nav-bar>
 
   <!-- - - - - - - - - - - - - - - - - - - SUB HEADER BAR - - - - - - - - - - - - - - - - - -->
-  <ion-content header-shrink="#discount-placeholder" class="no-header has-footer-summup full-height bg-blue">
+  <ion-content delegate-handle="restaurantMenu" header-shrink="#discount-placeholder" class="no-header has-footer-summup full-height bg-blue">
 
     <div id="discount-placeholder">
       <div class="background" ng-style="{'background-image' : 'url('+ restaurant.pictureUrl +')'}">
@@ -56,7 +56,7 @@
 
     <ion-list id="product-list">
       <div ng-repeat="product in products">
-        <ion-item class="products" ng-click="toggleGroup(product)" ng-class="{'is-active': product.isShown}">
+        <ion-item id="product-{{product.id}}" class="products" ng-click="toggleGroup(product)" ng-class="{'is-active': product.isShown}">
           <div class="clearfix">
             <div class="pull-left">
               <h4>{{product.name}}</h4>
