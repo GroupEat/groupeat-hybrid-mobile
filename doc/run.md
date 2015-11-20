@@ -10,7 +10,7 @@ For all the following commands used to run the application, the following flags 
 
 ## Browser
 
-    gulp serve
+    gulp watch
 
 ## iOS
 
