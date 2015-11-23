@@ -10,10 +10,11 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.product',
 	'groupeat.services.popup',
 	'groupeat.services.restaurant',
-	'ionic',
+	'groupeat.services.scroller',
+	'ionic'
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $rootScope, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant) {
+.controller('RestaurantMenuCtrl', function(_, $ionicModal, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant, Scroller) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -102,7 +103,9 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	$scope.toggleGroup = function(group) {
 		group.isShown = !$scope.isGroupShown(group);
 		$timeout(function() {
-			$ionicScrollDelegate.resize();
+			if (group.isShown) {
+				Scroller.scrollTo('restaurantMenu', 'product-' + group.id);
+			}
 		}, 300);
 	};
 

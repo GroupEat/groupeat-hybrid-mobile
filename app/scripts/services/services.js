@@ -27,5 +27,6 @@ angular.module('groupeat.services', [
   'groupeat.services.predefined-addresses',
   'groupeat.services.push-notification',
   'groupeat.services.residency-utils',
-  'groupeat.services.restaurant'
+  'groupeat.services.restaurant',
+  'groupeat.services.scroller'
 ]);
