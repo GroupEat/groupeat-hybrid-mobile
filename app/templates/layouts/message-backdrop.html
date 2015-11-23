@@ -1,6 +1,6 @@
 <div class="message-backdrop" ng-if="isDisplayed() || isLoading()">
 	<div class="content">
-		<div ng-show="isDisplayed()">
+		<div ng-if="isDisplayed()">
 			<div class="large-icon">
 				<i class="{{icon}}"></i>
 			</div>
@@ -12,7 +12,7 @@
 				{{ buttonText | translate }}
 			</a>
 		</div>
-		<div class="loader" ng-show="isLoading()">
+		<div class="loader" ng-if="isLoading()">
 			<ion-spinner icon="ripple"></ion-spinner>
 		</div>
 	</div>
