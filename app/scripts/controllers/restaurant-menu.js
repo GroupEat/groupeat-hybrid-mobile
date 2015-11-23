@@ -10,10 +10,11 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'groupeat.services.product',
 	'groupeat.services.popup',
 	'groupeat.services.restaurant',
-	'ionic',
+	'groupeat.services.scroller',
+	'ionic'
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicHistory, $ionicModal, $ionicScrollDelegate, $q, $rootScope, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant, $document) {
+.controller('RestaurantMenuCtrl', function(_, $ionicModal, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant, Scroller) {
 
 	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
 
@@ -99,37 +100,11 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		return $scope.cart.getTotalPrice() * (1 - Order.getCurrentDiscount()/100) ;
 	};
 
-	$scope.scrollTo = function(elementId) {
-		var handle = 'restaurantMenu';
-		var delegateHandle = $ionicScrollDelegate.$getByHandle(handle);
-		var delegateInstance = _.first(delegateHandle._instances, function(instance) {
-			return instance.$$delegateHandle === handle;
-		});
-		delegateHandle.resize().then(function() {
-			var navBarHeight = document.getElementsByTagName('ion-header-bar')[0].clientHeight;
-			var elm = $document[0].getElementById(elementId);
-
-			// Code inspired by $ionicScrollDelegate.anchorScroll
-			var curElm = elm;
-			var scrollLeft = 0, scrollTop = 0;
-			do {
-				if (curElm !== null) {
-					scrollLeft += curElm.offsetLeft;
-				}
-				if (curElm !== null) {
-					scrollTop += curElm.offsetTop;
-				}
-				curElm = curElm.offsetParent;
-			} while (curElm.attributes !== delegateInstance.element.attributes && curElm.offsetParent);
-			delegateInstance.scrollView.scrollTo(scrollLeft, scrollTop - navBarHeight, true);
-		});
-	};
-
 	$scope.toggleGroup = function(group) {
 		group.isShown = !$scope.isGroupShown(group);
 		$timeout(function() {
 			if (group.isShown) {
-				$scope.scrollTo('product-' + group.id);
+				Scroller.scrollTo('restaurantMenu', 'product-' + group.id);
 			}
 		}, 300);
 	};
