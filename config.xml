@@ -15,13 +15,12 @@
   <access origin="*" subdomains="true"/>
   <allow-navigation href="http://*/*"/>
   <allow-navigation href="https://*/*"/>
-  <plugin name="Notification" value="org.apache.cordova.Notification"/>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
   <feature name="Device">
     <param name="ios-package" value="CDVDevice"/>
-    <param name="android-package" value="org.apache.cordova.device.Device"/>
+    <param name="android-package" value="org.apache.cordova.device"/>
   </feature>
   <platform name="ios">
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>

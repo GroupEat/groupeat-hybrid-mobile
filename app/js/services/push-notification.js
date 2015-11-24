@@ -1,157 +1,58 @@
 'use strict';
 
-/* exported onNotification */
+/*global PushNotification:true*/
+
+var pushConfig = {
+  android: {
+    senderID: '993639413774',
+    icon: 'notification',
+    iconColor: '#ff4e50'
+  },
+  ios: {
+    alert: true,
+    badge: true,
+    sound: true
+  }
+};
 
 angular.module('groupeat.services.push-notification', [
-  'groupeat.services.element-modifier',
   'ionic',
   'ngConstants',
-  'ngCordova'
+  'groupeat.services.element-modifier',
+  'groupeat.services.device-assistant'
 ])
 
-.factory('PushNotification', function ($cordovaPush, $q, $rootScope, $state) {
+.run(function(Network, PushNotificationService) {
+  Network.hasConnectivity().then(PushNotificationService.subscribe);
+})
 
-  var
+.factory('PushNotificationService', function (_, $ionicPlatform, $q, DeviceAssistant) {
 
-  config = {
-      'android': {
-        'senderID': '993639413774'
-      },
-      'ios': {
-        'alert': 'true',
-        'badge': 'true',
-        'sound': 'true'
-      }
-    },
+  var subscribe = function() {
+    var defer = $q.defer();
 
-    platform,
-
-    deferredRegistration;
-
-
-  var
-    /**
-  * @ngdoc function
-  * @name PushNotification#subscribe
-  * @methodOf PushNotification
-  *
-  * @description
-  * Subscribe to a Push Notifications service and register the device
-  * Currently supported push notifications services :
-  *   * Google Cloud Messaging (GCM) : Android
-  *
-  */
-  subscribe = function (devicePlatform) {
-    var deferred = $q.defer();
-
-    platform = devicePlatform;
-    $cordovaPush.register(config[platform])
-    .then(function (response) {
-      deferredRegistration = $q.defer();
-
-      /* Bind onNotification callback method to the $cordovaPush's notificationReceived */
-      $rootScope.$on('$cordovaPush:notificationReceived', onNotification);
-
-      if (platform === 'ios') {
-        deferredRegistration.resolve(response);
+    $ionicPlatform.ready(function() {
+      if (_.isEmpty(ionic.Platform.device())) {
+        defer.reject('no device');
+        return;
       }
 
-      return deferredRegistration.promise;
-    })
-    .then(function (registrationToken) {
-      deferred.resolve(registrationToken);
-    })
-    .catch(function (err) {
-      if (err.indexOf('not supported in the simulator') > -1) {
-        deferred.resolve();
-      } else {
-        deferred.reject(err);
-      }
+      var push = PushNotification.init(pushConfig);
+
+      push.on('registration', function(data) {
+        DeviceAssistant.setNotificationToken(data.registrationId);
+        defer.resolve();
+      });
+
+      push.on('notification', function(data) {
+        DeviceAssistant.update(data.additionalData.notificationId);
+      });
+
+      push.on('error', defer.reject);
     });
-    return deferred.promise;
-  },
 
-  /**
-  * @ngdoc function
-  * @name PushNotification#handleRegisteredEvent
-  * @methodOf PushNotification
-  *
-  * @description
-  * Handles 'registered' event by resolving the deferred registration and returning the registration id with id
-  * Private method
-  * @param id: registration id received
-  */
-  handleRegisteredEvent = function (id) {
-    if (id.length > 0) {
-      deferredRegistration.resolve(id);
-    } else {
-      deferredRegistration.reject();
-    }
+    return defer.promise;
   };
-
-
-  var
-  /**
-  * @ngdoc function
-  * @name PushNotification#handleGCMNotification
-  * @methodOf PushNotification
-  *
-  * @description
-  * Handles notifications sent by the GCM service
-  * Android
-  */
-  handleGCMNotification = function (notification) {
-    switch (notification.event) {
-    case 'registered':
-      handleRegisteredEvent(notification.regid);
-      break;
-    case 'message':
-      if (notification.foreground === '0') {
-        $state.go('app.group-orders');      // Switch to group orders view if the app is in the background
-      }
-      break;
-    default:
-      deferredRegistration.reject(notification.msg);
-      break;
-    }
-  },
-
-  /**
-  * @ngdoc function
-  * @name PushNotification#handleAPNNotification
-  * @methodOf PushNotification
-  *
-  * @description
-  * Handles notifications sent by the APN service
-  * iOS
-  */
-  handleAPNNotification = function (notification) {
-    if (notification.foreground === '0') {
-      $state.go('app.group-orders');        // Switch to group orders view if the app is in the background
-    }
-  };
-
-
-  var
-  /**
-  * @ngdoc function
-  * @name PushNotification#onNotification
-  * @methodOf PushNotification
-  *
-  * @description
-  * On notification received callback method
-  */
-  onNotification = function (event, notification) {
-    switch (platform) {
-    case 'android':
-      handleGCMNotification(notification);
-      break;
-    case 'ios':
-      handleAPNNotification(notification);
-      break;
-    }
-  };
-
 
   return {
     subscribe: subscribe

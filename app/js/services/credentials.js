@@ -62,12 +62,17 @@ angular.module('groupeat.services.credentials', [
       id: localStorageService.get('id'),
       token: localStorageService.get('token')
     };
+  },
+
+  isAuthenticated = function () {
+    return !!localStorageService.get('token');
   };
 
   return {
     set: set,
     reset: reset,
-    get: get
+    get: get,
+    isAuthenticated: isAuthenticated
   };
 
 });

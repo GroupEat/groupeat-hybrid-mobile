@@ -10,7 +10,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
-  'groupeat.services.device-assistant',
+  'groupeat.services.push-notification',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',
@@ -87,7 +87,7 @@ angular.module('groupeat.controllers.authentication', [
       Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
       return DeviceAssistant.register();
     })
-    .then(function(){
+    .then(function() {
       $state.go('app.group-orders');
     })
     .catch(function(errorMessage) {

@@ -3,24 +3,6 @@
   "version": "0.1.0",
   "description": "Ionic+Angular.js application (Yeoman generated) for GroupEat",
   "private": true,
-  "contributors": [
-    {
-      "name": "Guillaume Diallo Mulliez",
-      "email": "g.diallo.mulliez@gmail.com"
-    },
-    {
-      "name": "Etienne de Montalivet",
-      "email": "etienne.demontalivet@gmail.com"
-    },
-    {
-      "name": "Woody Rousseau",
-      "email": "woody.a.rousseau@gmail.com"
-    },
-    {
-      "name": "Sammy Teillet",
-      "email": "sammy.teillet@gmail.com"
-    }
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/GroupEat/groupeat-hybrid-mobile"
@@ -107,13 +89,16 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-google-analytics",
     "cordova-plugin-transport-security",
-    "https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git",
     "cordova-plugin-network-information",
-    "https://github.com/phonegap-build/PushPlugin.git",
+    "phonegap-plugin-push",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
     "ios",
-    "android"
+    {
+      "platform": "android",
+      "version": "5.0.0",
+      "locator": "android@5.0.0"
+    }
   ]
 }

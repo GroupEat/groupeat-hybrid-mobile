@@ -40,4 +40,4 @@ file with XCode before building it.
 
 You need to add the platform by running
 
-    gulp platform:add --platform android
+    gulp platform:add --platform android@5.0.0
