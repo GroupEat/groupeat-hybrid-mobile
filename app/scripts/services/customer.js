@@ -34,7 +34,9 @@ angular.module('groupeat.services.customer', [
     resource.get({id: customerId}).$promise
     .then(function(response) {
       var user = response.data;
-      user.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(user.phoneNumber);
+      if (user.phoneNumber) {
+        user.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(user.phoneNumber);
+      }
       defer.resolve(user);
     })
     .catch(function(errorResponse) {
@@ -86,10 +88,14 @@ angular.module('groupeat.services.customer', [
   */
   update = function (customerId, requestBody) {
     var defer = $q.defer();
-    requestBody.phoneNumber = PhoneFormat.formatPhoneNumberForBackend(requestBody.phoneNumber);
+    if (requestBody.phoneNumber) {
+      requestBody.phoneNumber = PhoneFormat.formatPhoneNumberForBackend(requestBody.phoneNumber);
+    }
     resource.update({id: customerId}, requestBody).$promise
     .then(function (response) {
-      response.data.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(response.data.phoneNumber);
+      if (response.data) {
+        response.data.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(response.data.phoneNumber);
+      }
       defer.resolve(response.data);
     })
     .catch(function (errorResponse) {

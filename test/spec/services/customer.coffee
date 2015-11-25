@@ -32,12 +32,12 @@ describe 'Service: Customer', ->
 
     it 'should return a fulfilled promise with the data from response when the request returns a 200 status', ->
       id = 1
-      customer = 'customer'
+      user = {customer: 'customer'}
       response =
-        data: customer
+        data: user
       regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $httpBackend.expect('GET', regex).respond(response)
-      Customer.get(id).should.become(customer)
+      Customer.get(id).should.become(user)
       $httpBackend.flush()
 
     it 'should reject a promise when the server responds with an error', ->

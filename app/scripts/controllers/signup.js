@@ -13,7 +13,7 @@ angular.module('groupeat.controllers.signup', [
   'ionic'
 ])
 
-.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, DeviceAssistant, Network, PhoneFormat, Popup) {
+.controller('SignupCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, Address, Credentials, Customer, CustomerStorage, DeviceAssistant, Network, Popup) {
 
   $scope.slideIndex = 0;
   $scope.user = {};
