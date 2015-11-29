@@ -4,9 +4,10 @@
 
 For all the following commands used to run the application, the following flags and options are available :
 
-| Flag/Option          | Values                                 | Default   |
-| -------------------- |:--------------------------------------:| ---------:|
-| `--env`              | `development`, `staging`, `production` | `staging` |
+| Flag/Option          | Values                                 | Default                         |
+| -------------------- |:--------------------------------------:| -------------------------------:|
+| `--env`              | `development`, `staging`, `production` | `staging`                       |
+| `--compress`         | Boolean                                | false except for production env |
 
 ## Browser
 
