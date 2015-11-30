@@ -14,6 +14,7 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.phone-format',
   'groupeat.services.popup',
   'ionic',
+  'ionicProcessSpinner',
   'jcs-autoValidate'
 ])
 
@@ -105,10 +106,8 @@ angular.module('groupeat.controllers.settings', [
     })
     .then(function(customerSettings) {
       CustomerStorage.setSettings(customerSettings);
-      return Popup.title('customerEdited');
-    })
-    .then(function() {
       $scope.isProcessingRequest = false;
+      return Popup.title('customerEdited');
     })
     .catch(function(errorMessage) {
       Popup.error(errorMessage)

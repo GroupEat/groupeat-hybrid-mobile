@@ -4,8 +4,7 @@
       <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
     </ion-nav-back-button>
     <ion-nav-buttons side="right">
-      <button on-tap="onSave()" ng-disabled="isProcessingRequest" class="button button-clear button-success icon ion-checkmark">
-      </button>
+      <ion-process-spinner on-tap="onSave()" css-class="spinner-balanced" processing="isProcessingRequest"><i class="button button-clear button-success icon ion-checkmark"></i></ion-process-spinner>
     </ion-nav-buttons>
   </ion-nav-bar>
 
