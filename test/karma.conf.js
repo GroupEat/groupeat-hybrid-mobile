@@ -50,7 +50,7 @@ module.exports = function(config) {
       "../bower_components/angular-slick-carousel/dist/angular-slick.js",
       //<!-- endbower -->
       "../bower_components/angular-mocks/angular-mocks.js",
-      '../app/scripts/**/*.js',
+      '../app/js/**/*.js',
       '../app/templates/**/*.html',
       'utils/**/*.js',
       'spec/**/*.coffee'
@@ -67,7 +67,7 @@ module.exports = function(config) {
     preprocessors: {
       '../app/templates/**/*.html': ['html2js'],
       'spec/**/*.coffee': ['coffee'],
-      '../app/scripts/**/*.js': ['coverage']
+      '../app/js/**/*.js': ['coverage']
     },
 
 
