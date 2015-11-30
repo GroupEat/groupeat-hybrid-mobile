@@ -7,98 +7,115 @@
     <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <title>GroupEat</title>
 
-    <!-- fonts -->
+    <!-- build:css styles/app.css -->
     <link rel="stylesheet" type="text/css" href="fonts/Aventura-Bold/stylesheet.css">
-
-    <link rel="stylesheet" href="lib/vendor.css">
-    <link rel="stylesheet" href="styles/main.css">
-
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/ionic/release/css/ionic.css">
+    <link rel="stylesheet" href="../bower_components/slick-carousel/slick/slick.css">
+    <link rel="stylesheet" href="../bower_components/slick-carousel/slick/slick-theme.css">
+    <!-- endinject -->
+    <link rel="stylesheet" href="../www/styles/main.css">
+    <!-- endbuild -->
   </head>
 
-<!-- ---------------------------- -->
   <body>
 
-        <!--
-          The nav bar that will be updated as we navigate between views
-          Additional attributes set its look, nav-bar animation and icons
-          Icons provided by Ionicons: http://ionicons.com/
-        -->
-
-        <!--
-          The views will be rendered in the <nav-view> directive below
-          Templates are in the /templates folder (but you could also
-          have templates inline in this html file if you'd like).
-        -->
     <ion-nav-view animation="fade-in">
     </ion-nav-view>
 
-<!-- ------------------------------------------- -->
-
-    <script src="lib/vendor.js"></script>
-    <script src="lib/ng-cordova.js"></script>
-    <script src="cordova.js"></script>
-    <script src="plugins/org.apache.cordova.device/www/device.js"></script>
-
-    <script src="scripts/app.js"></script>
-    <script src="scripts/config.js"></script>
-    <script src="scripts/ngConstants.js"></script>
-    <script src="scripts/routing.js"></script>
-    <script src="scripts/angular-ios9-uiwebview.patch.js"></script>
-
-    <script src="scripts/controllers/controllers.js"></script>
-    <script src="scripts/controllers/authentication.js"></script>
-    <script src="scripts/controllers/cart.js"></script>
-    <script src="scripts/controllers/group-orders.js"></script>
-    <script src="scripts/controllers/orders.js"></script>
-    <script src="scripts/controllers/restaurants.js"></script>
-    <script src="scripts/controllers/restaurant-menu.js"></script>
-    <script src="scripts/controllers/settings.js"></script>
-    <script src="scripts/controllers/signup.js"></script>
-
-    <script src="scripts/filters/filters.js"></script>
-    <script src="scripts/filters/time-label.js"></script>
-
+    <!-- build:js scripts/app.js -->
+    <!-- bower:js -->
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="../bower_components/lodash/lodash.js"></script>
+    <script src="../bower_components/angular-translate/angular-translate.js"></script>
+    <script src="../bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+    <script src="../bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js"></script>
+    <script src="../bower_components/ngCordova/dist/ng-cordova.js"></script>
+    <script src="../bower_components/angular-validation-match/dist/angular-input-match.min.js"></script>
+    <script src="../bower_components/angular-auto-validate/dist/jcs-auto-validate.min.js"></script>
+    <script src="../bower_components/sprintf/dist/sprintf.min.js"></script>
+    <script src="../bower_components/sprintf/dist/angular-sprintf.min.js"></script>
+    <script src="../bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="../bower_components/angular-messages/angular-messages.js"></script>
+    <script src="../bower_components/momentjs/moment.js"></script>
+    <script src="../bower_components/humanize-duration/humanize-duration.js"></script>
+    <script src="../bower_components/angular-permission/dist/angular-permission.js"></script>
+    <script src="../bower_components/ngAutocomplete/src/ngAutocomplete.js"></script>
+    <script src="../bower_components/angular-ui-mask/dist/mask.js"></script>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/moment/moment.js"></script>
+    <script src="../bower_components/ionic/release/js/ionic.js"></script>
+    <script src="../bower_components/ionic/release/js/ionic-angular.js"></script>
+    <script src="../bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+    <script src="../bower_components/angular-timer/dist/angular-timer.js"></script>
+    <script src="../bower_components/slick-carousel/slick/slick.min.js"></script>
+    <script src="../bower_components/angular-moment/angular-moment.js"></script>
+    <script src="../bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+    <script src="../bower_components/angular-slick-carousel/dist/angular-slick.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
     <script src="scripts/services/services.js"></script>
-    <script src="scripts/services/address.js"></script>
-    <script src="scripts/services/analytics.js"></script>
-    <script src="scripts/services/authentication.js"></script>
-    <script src="scripts/services/backend-utils.js"></script>
-    <script src="scripts/services/cart.js"></script>
-    <script src="scripts/services/controller-promise-handler.js"></script>
-    <script src="scripts/services/credentials.js"></script>
-    <script src="scripts/services/customer.js"></script>
-    <script src="scripts/services/customer-information-checker.js"></script>
-    <script src="scripts/services/customer-settings.js"></script>
-    <script src="scripts/services/customer-storage.js"></script>
-    <script src="scripts/services/device-assistant.js"></script>
-    <script src="scripts/services/element-modifier.js"></script>
-    <script src="scripts/services/error-message-resolver.js"></script>
-    <script src="scripts/services/geolocation.js"></script>
-    <script src="scripts/services/group-order.js"></script>
-    <script src="scripts/services/http-provider-interceptor.js"></script>
-    <script src="scripts/services/lodash.js"></script>
-    <script src="scripts/services/message-backdrop.js"></script>
-    <script src="scripts/services/network.js"></script>
-    <script src="scripts/services/order.js"></script>
-    <script src="scripts/services/popup.js"></script>
-    <script src="scripts/services/predefined-addresses.js"></script>
-    <script src="scripts/services/product.js"></script>
-    <script src="scripts/services/push-notification.js"></script>
-    <script src="scripts/services/residency-utils.js"></script>
-    <script src="scripts/services/restaurant.js"></script>
     <script src="scripts/services/scroller.js"></script>
-
+    <script src="scripts/services/restaurant.js"></script>
+    <script src="scripts/services/residency-utils.js"></script>
+    <script src="scripts/services/push-notification.js"></script>
+    <script src="scripts/services/product.js"></script>
+    <script src="scripts/services/predefined-addresses.js"></script>
+    <script src="scripts/services/popup.js"></script>
+    <script src="scripts/services/order.js"></script>
+    <script src="scripts/services/network.js"></script>
+    <script src="scripts/services/message-backdrop.js"></script>
+    <script src="scripts/services/lodash.js"></script>
+    <script src="scripts/services/http-provider-interceptor.js"></script>
+    <script src="scripts/services/group-order.js"></script>
+    <script src="scripts/services/geolocation.js"></script>
+    <script src="scripts/services/error-message-resolver.js"></script>
+    <script src="scripts/services/element-modifier.js"></script>
+    <script src="scripts/services/device-assistant.js"></script>
+    <script src="scripts/services/customer.js"></script>
+    <script src="scripts/services/customer-storage.js"></script>
+    <script src="scripts/services/customer-settings.js"></script>
+    <script src="scripts/services/customer-information-checker.js"></script>
+    <script src="scripts/services/credentials.js"></script>
+    <script src="scripts/services/controller-promise-handler.js"></script>
+    <script src="scripts/services/cart.js"></script>
+    <script src="scripts/services/backend-utils.js"></script>
+    <script src="scripts/services/authentication.js"></script>
+    <script src="scripts/services/analytics.js"></script>
+    <script src="scripts/services/address.js"></script>
+    <script src="scripts/filters/time-label.js"></script>
+    <script src="scripts/filters/filters.js"></script>
+    <script src="scripts/directives/touch.js"></script>
+    <script src="scripts/directives/timer.js"></script>
+    <script src="scripts/directives/restaurant-card.js"></script>
+    <script src="scripts/directives/receipt-card.js"></script>
+    <script src="scripts/directives/orders-card.js"></script>
+    <script src="scripts/directives/order-card.js"></script>
+    <script src="scripts/directives/nav-bar-class.js"></script>
+    <script src="scripts/directives/message-backdrop.js"></script>
+    <script src="scripts/directives/hide-tabs.js"></script>
+    <script src="scripts/directives/header-shrink.js"></script>
     <script src="scripts/directives/directives.js"></script>
     <script src="scripts/directives/campus-email.js"></script>
-    <script src="scripts/directives/header-shrink.js"></script>
-    <script src="scripts/directives/hide-tabs.js"></script>
-    <script src="scripts/directives/message-backdrop.js"></script>
-    <script src="scripts/directives/nav-bar-class.js"></script>
-    <script src="scripts/directives/order-card.js"></script>
-    <script src="scripts/directives/orders-card.js"></script>
-    <script src="scripts/directives/receipt-card.js"></script>
-    <script src="scripts/directives/restaurant-card.js"></script>
-    <script src="scripts/directives/timer.js"></script>
-    <script src="scripts/directives/touch.js"></script>
+    <script src="scripts/controllers/signup.js"></script>
+    <script src="scripts/controllers/settings.js"></script>
+    <script src="scripts/controllers/restaurants.js"></script>
+    <script src="scripts/controllers/restaurant-menu.js"></script>
+    <script src="scripts/controllers/orders.js"></script>
+    <script src="scripts/controllers/group-orders.js"></script>
+    <script src="scripts/controllers/controllers.js"></script>
+    <script src="scripts/controllers/cart.js"></script>
+    <script src="scripts/controllers/authentication.js"></script>
+    <script src="scripts/routing.js"></script>
+    <script src="scripts/ngConstants.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/app.js"></script>
+    <!-- endinject -->
+    <!-- endbuild -->
+    <script src="cordova.js"></script>
 </body>
 </html>
