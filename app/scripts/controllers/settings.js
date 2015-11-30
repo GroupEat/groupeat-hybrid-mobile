@@ -68,53 +68,55 @@ angular.module('groupeat.controllers.settings', [
   Saving
   */
   $scope.onSave = function() {
-    $scope.isProcessingRequest = true;
-    var customerId = Credentials.get().id;
+    if (!$scope.isProcessingRequest) {
+      $scope.isProcessingRequest = true;
+      var customerId = Credentials.get().id;
 
-    // TODO : make request only if changes has been notified
+      // TODO : make request only if changes has been notified
 
-    Network.hasConnectivity()
-    .then(function() {
-      return ElementModifier.validate($scope.form.customerEdit);
-    })
-    .then(function() {
-      return Customer.update(customerId, $scope.customerIdentity);
-    })
-    .then(function(customer) {
-      customer.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(customer.phoneNumber);
-      $scope.customerIdentity = customer;
-      CustomerStorage.setIdentity(customer);
-      var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
-      if (!addressParams)
-      {
-        // If no residency was provided, not requesting the Address update
-        return $q.when({});
-      }
-      addressParams = _.merge(addressParams, {details: $scope.customerAddress.details});
-      return Address.update(customerId, addressParams);
-    })
-    .then(function(address) {
-      CustomerStorage.setAddress(address);
-      var authenticationParams = _.pick($scope.customerIdentity, ['email', 'oldPassword', 'newPassword']);
-      return Authentication.updatePassword(authenticationParams);
-    })
-    .then(function() {
-      // Clearing both passwords
-      $scope.oldPassword = '';
-      $scope.newPassword = '';
-      return CustomerSettings.update(customerId, $scope.customerSettings);
-    })
-    .then(function(customerSettings) {
-      CustomerStorage.setSettings(customerSettings);
-      $scope.isProcessingRequest = false;
-      return Popup.title('customerEdited');
-    })
-    .catch(function(errorMessage) {
-      Popup.error(errorMessage)
+      Network.hasConnectivity()
       .then(function() {
+        return ElementModifier.validate($scope.form.customerEdit);
+      })
+      .then(function() {
+        return Customer.update(customerId, $scope.customerIdentity);
+      })
+      .then(function(customer) {
+        customer.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(customer.phoneNumber);
+        $scope.customerIdentity = customer;
+        CustomerStorage.setIdentity(customer);
+        var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
+        if (!addressParams)
+        {
+          // If no residency was provided, not requesting the Address update
+          return $q.when({});
+        }
+        addressParams = _.merge(addressParams, {details: $scope.customerAddress.details});
+        return Address.update(customerId, addressParams);
+      })
+      .then(function(address) {
+        CustomerStorage.setAddress(address);
+        var authenticationParams = _.pick($scope.customerIdentity, ['email', 'oldPassword', 'newPassword']);
+        return Authentication.updatePassword(authenticationParams);
+      })
+      .then(function() {
+        // Clearing both passwords
+        $scope.oldPassword = '';
+        $scope.newPassword = '';
+        return CustomerSettings.update(customerId, $scope.customerSettings);
+      })
+      .then(function(customerSettings) {
+        CustomerStorage.setSettings(customerSettings);
         $scope.isProcessingRequest = false;
+        return Popup.title('customerEdited');
+      })
+      .catch(function(errorMessage) {
+        Popup.error(errorMessage)
+        .then(function() {
+          $scope.isProcessingRequest = false;
+        });
       });
-    });
+    }
   };
 
   $scope.$on('$ionicView.afterEnter', function() {
