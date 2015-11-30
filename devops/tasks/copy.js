@@ -4,6 +4,7 @@ var plumber = require('gulp-plumber');
 
 var files = [
   'app/fonts/**/*',
+  'app/hooks/**/*',
   'app/images/*',
   'app/templates/**/*.html',
   'app/translations/*.json'
