@@ -45,6 +45,7 @@ module.exports = function(config) {
       "../bower_components/angular-timer/dist/angular-timer.js",
       "../bower_components/slick-carousel/slick/slick.min.js",
       "../bower_components/angular-moment/angular-moment.js",
+      "../bower_components/ionic-process-spinner/src/ionic-process-spinner.min.js",
       "../bower_components/angular-translate-storage-local/angular-translate-storage-local.js",
       "../bower_components/angular-slick-carousel/dist/angular-slick.js",
       //<!-- endbower -->
