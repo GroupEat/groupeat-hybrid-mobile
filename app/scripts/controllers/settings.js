@@ -11,12 +11,13 @@ angular.module('groupeat.controllers.settings', [
   'groupeat.services.element-modifier',
   'groupeat.services.lodash',
   'groupeat.services.network',
+  'groupeat.services.phone-format',
   'groupeat.services.popup',
   'ionic',
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, Network, Popup) {
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, Network, PhoneFormat, Popup) {
 
   Analytics.trackView('Restaurants');
 
@@ -79,6 +80,8 @@ angular.module('groupeat.controllers.settings', [
       return Customer.update(customerId, $scope.customerIdentity);
     })
     .then(function(customer) {
+      customer.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(customer.phoneNumber);
+      $scope.customerIdentity = customer;
       CustomerStorage.setIdentity(customer);
       var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
       if (!addressParams)

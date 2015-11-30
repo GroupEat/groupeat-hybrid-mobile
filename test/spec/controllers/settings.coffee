@@ -199,8 +199,9 @@ describe 'Ctrl: SettingsCtrl', ->
       sandbox.stub Address, 'getAddressFromResidencyInformation'
       scope.onSave()
       scope.$digest()
-      CustomerStorage.setIdentity.should.have.been.calledWithExactly
+      CustomerStorage.setIdentity.should.have.been.calledWith
         customer: 'customer'
+        phoneNumber: undefined
 
     it 'should display an error popup if client side validation succeeds but Customer#update fails', ->
       errorMessage = 'errorMessage'

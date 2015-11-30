@@ -8,6 +8,7 @@ angular.module('groupeat.controllers.signup', [
   'groupeat.services.device-assistant',
   'groupeat.services.lodash',
   'groupeat.services.network',
+  'groupeat.services.phone-format',
   'groupeat.services.popup',
   'ionic'
 ])
