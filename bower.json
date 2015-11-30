@@ -27,7 +27,8 @@
     "angular-mocks": "1.4.3",
     "angular-scenario": "1.4.3",
     "ionic-service-core": "~0.1.7",
-    "ionic-service-analytics": "0.2.1"
+    "ionic-service-analytics": "0.2.1",
+    "ionic-platform-web-client": "~0.2.1"
   },
   "overrides": {
     "sprintf": {

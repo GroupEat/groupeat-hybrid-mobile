@@ -29,7 +29,7 @@ gulp.task('html', ['html:inject', 'html:useref']);
 
 gulp.task('html:inject', ['fonts', 'js-lint'], function () {
   gulp.src('app/index.html')
-  .pipe(inject(gulp.src(bowerFiles(), {read: false}), {
+  .pipe(inject(gulp.src(bowerFiles({includeDev: true}), {read: false}), {
     name: 'bower',
     relative: true
   }))
