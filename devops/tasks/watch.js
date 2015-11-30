@@ -3,7 +3,7 @@ var gulp = require('gulp');
 var files = [
   'app/fonts/**/*',
   'app/images/*',
-  'app/scripts/**/*.js',
+  'app/js/**/*.js',
   'app/styles/**/*.scss',
   'app/templates/**/*.html',
   'app/translations/*.json'

@@ -21,4 +21,4 @@ plugins
 *.strings
 *.plist
 
-app/scripts/ngConstants.js
+app/js/ngConstants.js
