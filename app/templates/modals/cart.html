@@ -68,7 +68,9 @@
 			</div>
 		</ion-slide>
 	</ion-slide-box>
-	<ion-footer-bar class="bar-white top-bordered-radius bar-button" on-tap="confirmButtonAction()">
-      <h1 class="title color-{{activeButton.color}}">{{activeButton.title}}</h1>
-    </ion-footer-bar>
+	<ion-footer-bar class="bar-white top-bordered-radius bar-button center" on-tap="confirmButtonAction()">
+		<ion-process-spinner css-class="spinner-footbar spinner-orange" processing="isRequesting">
+			<h1 class="title color-{{activeButton.color}}">{{activeButton.title}}</h1>
+		</ion-process-spinner>
+	</ion-footer-bar>
 </ion-modal-view>

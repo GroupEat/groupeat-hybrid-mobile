@@ -2,6 +2,7 @@
 
 angular.module('groupeat.controllers.cart', [
   'ionic',
+  'ionicProcessSpinner',
   'pascalprecht.translate',
   'groupeat.services.address',
   'groupeat.services.analytics',
@@ -83,19 +84,18 @@ angular.module('groupeat.controllers.cart', [
         Order.setProductFormats(requestProducts);
         Order.save()
         .then(function() {
+          $scope.isRequesting = false;
           $scope.leaveOrder();
           Popup.alert('successfulOrder', 'yourOrderIsSuccessful');
         })
         .catch(function (errorResponse) {
+          $scope.isRequesting = false;
           Popup.confirm('whoops', errorResponse, 'exitOrder', 'cancel')
           .then(function(leaveOrder) {
             if(leaveOrder) {
               $scope.leaveOrder();
             }
           });
-        })
-        .finally(function() {
-          $scope.isRequesting = false;
         });
       }
     }
