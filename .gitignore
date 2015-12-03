@@ -1,12 +1,14 @@
 node_modules
 www
 .tmp
+dist
 .sass-cache
 bower_components
 coverage
 platforms
 resources/android
 resources/ios
+resources/wp8
 plugins
 *.swp
 *.swo
