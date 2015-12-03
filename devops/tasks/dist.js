@@ -1,3 +1,3 @@
 var gulp = require('gulp');
 
-gulp.task('dist', ['html', 'constants', 'copy', 'styles']);
+gulp.task('dist', ['html', 'constants', 'ionic-io', 'copy', 'styles']);

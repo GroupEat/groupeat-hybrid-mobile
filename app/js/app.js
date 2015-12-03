@@ -4,6 +4,8 @@ angular.module('groupeat', [
   'angularMoment',
   'config',
   'ionic',
+  'ionic.service.core',
+  'ionic.service.analytics',
   'jcs-autoValidate',
   'ngCordova',
   'ngCookies',
@@ -36,7 +38,7 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function ($ionicPlatform, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
+.run(function ($ionicAnalytics, $ionicPlatform, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
 
   Permission.defineRole('customer', function () {
     return Credentials.get();
@@ -69,6 +71,8 @@ angular.module('groupeat', [
   $rootScope.$on('$ionicView.beforeLeave', function() {
     $rootScope.messageBackdrop.status = 'hidden';
   });
+
+  $ionicAnalytics.register();
 
   $ionicPlatform.ready(function () {
 

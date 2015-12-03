@@ -5,6 +5,7 @@ require('./devops/tasks/dist.js');
 require('./devops/tasks/fonts.js');
 require('./devops/tasks/html.js');
 require('./devops/tasks/ionic.js');
+require('./devops/tasks/ionic-io.js');
 require('./devops/tasks/lint.js');
 require('./devops/tasks/serve.js');
 require('./devops/tasks/styles.js');

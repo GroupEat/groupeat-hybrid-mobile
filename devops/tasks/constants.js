@@ -18,5 +18,5 @@ gulp.task('constants', function () {
       stream: true,
       wrap: '"use strict";\n\n <%= __ngModule %>'
     })
-    .pipe(gulp.dest('app/scripts'));
+    .pipe(gulp.dest('app/js'));
 });
