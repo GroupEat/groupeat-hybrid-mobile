@@ -46,8 +46,8 @@
             <h5>{{ 'howLongFoodRush' | translate }} <b>Food Rush</b> ?</h5>
             <div class="item range range-assertive">
               5mn
-              <input type="range" min="5" max="60" ng-model="foodRushTime.value" step="5" name="volume">
-              60mn
+              <input type="range" min="5" max="{{currentOrder.foodRushMax}}" ng-model="foodRushTime.value" step="5" name="volume">
+              {{ currentOrder.foodRushMax }}mn
             </div>
           </div>
         </div>
