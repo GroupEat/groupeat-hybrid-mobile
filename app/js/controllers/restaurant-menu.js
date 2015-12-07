@@ -23,10 +23,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		value: null
 	};
 	$scope.foodRushTime = {};
-	$scope.foodRushTime.value = 35;
 
 	$scope.onReload = function() {
 		$scope.currentOrder = Order.getCurrentOrder();
+		$scope.foodRushTime.value = $scope.currentOrder.foodRushMax/2 + ($scope.currentOrder.foodRushMax%10)/2;
 		$scope.detailedProduct = null;
 		Cart.setDiscountRate($scope.currentOrder.currentDiscount);
 		$scope.cart = Cart;
