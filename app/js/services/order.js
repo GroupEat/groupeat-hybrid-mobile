@@ -20,7 +20,8 @@ angular.module('groupeat.services.order', [
 		'groupOrderDiscount': null,
 		'remainingCapacity': null,
 		'discountPolicy': null,
-		'groupOrderTotalPrice': 0
+		'groupOrderTotalPrice': 0,
+		'foodRushMax': 60,
 	},
 
 	requestBody = {
@@ -165,7 +166,8 @@ angular.module('groupeat.services.order', [
 			'groupOrderId': null,
 			'endingAt': null,
 			'currentDiscount': null,
-			'remainingCapacity': null
+			'remainingCapacity': null,
+			'foodRushMax': 60
 		};
 		requestBody = {
 			'id': null,
@@ -181,7 +183,7 @@ angular.module('groupeat.services.order', [
 		};
 	},
 
-	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice) {
+	setCurrentOrder = function(id, date, discount, capacity, discountPolicy, groupOrderTotalPrice, closingHour) {
 		requestBody.id = id;
 		currentOrder.groupOrderId = id;
 		currentOrder.endingAt = date;
@@ -190,6 +192,11 @@ angular.module('groupeat.services.order', [
 		currentOrder.remainingCapacity = capacity;
 		currentOrder.discountPolicy = discountPolicy;
 		currentOrder.groupOrderTotalPrice = groupOrderTotalPrice/100;
+		currentOrder.foodRushMax = parseInt(getTimeDiff(closingHour)/60) - parseInt(getTimeDiff(closingHour)/60) % 5; // seconds
+		if(currentOrder.foodRushMax > 60)
+		{
+			currentOrder.foodRushMax = 60;
+		}
 	},
 
 	save = function() {
