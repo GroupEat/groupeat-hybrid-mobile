@@ -18,7 +18,7 @@
     "chai": "^2.3.0",
     "coffee-script": "^1.8.0",
     "coffeelint": "^1.8.1",
-    "cordova": "~5.3.1",
+    "cordova": "~5.4.1",
     "css-mqpacker": "^4.0.0",
     "del": "^2.0.2",
     "glob": "~4.0.5",
@@ -94,11 +94,6 @@
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    "ios",
-    {
-      "platform": "android",
-      "version": "5.0.0",
-      "locator": "android@5.0.0"
-    }
+    "ios"
   ]
 }
