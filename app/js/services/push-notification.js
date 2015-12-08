@@ -33,22 +33,29 @@ angular.module('groupeat.services.push-notification', [
 
     $ionicPlatform.ready(function() {
       if (_.isEmpty(ionic.Platform.device())) {
+        console.warn('no device, cancelling notifications subscription');
         defer.reject('no device');
         return;
       }
 
       var push = PushNotification.init(pushConfig);
+      console.log('notifications initialized', push);
 
       push.on('registration', function(data) {
+        console.log('notifications registered', data);
         DeviceAssistant.setNotificationToken(data.registrationId);
         defer.resolve();
       });
 
       push.on('notification', function(data) {
+        console.log('notification received', data);
         DeviceAssistant.update(data.additionalData.notificationId);
       });
 
-      push.on('error', defer.reject);
+      push.on('error', function (error) {
+        console.warn('notifications error', error);
+        defer.reject(error);
+      });
     });
 
     return defer.promise;
