@@ -57,10 +57,14 @@ angular.module('groupeat.controllers.restaurants', [
         Order.setCurrentOrder(existingGroupOrder.id, existingGroupOrder.endingAt, existingGroupOrder.discountRate, existingGroupOrder.remainingCapacity, existingGroupOrder.restaurant.data.discountPolicy, existingGroupOrder.totalRawPrice);
       }
       else {
-        Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy);
+        Order.setCurrentOrder(null, null, 0, restaurant.deliveryCapacity, restaurant.discountPolicy, 0, restaurant.closingAt);
       }
       $state.go('app.restaurant-menu', {restaurantId: restaurant.id});
     });
+  };
+
+  $scope.back = function() {
+    $state.go('app.group-orders');
   };
 
   $scope.$on('$ionicView.afterEnter', function() {
