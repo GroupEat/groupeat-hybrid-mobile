@@ -10,6 +10,28 @@
   "bugs": {
     "url": "https://github.com/GroupEat/groupeat-hybrid-mobile/issues"
   },
+  "contributors": [
+    {
+      "name": "Guillaume Diallo Mulliez",
+      "email": "g.diallo.mulliez@gmail.com"
+    },
+    {
+    "name": "Etienne de Montalivet",
+    "email": "etienne.demontalivet@gmail.com"
+    },
+    {
+    "name": "Woody Rousseau",
+    "email": "woody.a.rousseau@gmail.com"
+    },
+    {
+    "name": "Sammy Teillet",
+    "email": "sammy.teillet@gmail.com"
+    },
+    {
+      "name": "Thibault Derousseaux",
+      "email": "tib.dex@gmail.com"
+    }
+  ],
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "~6.1.0",

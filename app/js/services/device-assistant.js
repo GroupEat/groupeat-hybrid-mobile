@@ -13,7 +13,7 @@ angular.module('groupeat.services.device-assistant', [
   Network.hasConnectivity().then(function() {
     setTimeout(function() { // give 5 seconds to the subscribe to push notification service
       DeviceAssistant.update();
-    }, 50000);
+    }, 5000);
   });
 })
 
@@ -68,7 +68,8 @@ angular.module('groupeat.services.device-assistant', [
   };
 
   var register = function() {
-    return getDeviceDetails().then(function(details) {
+    return getDeviceDetails()
+    .then(function(details) {
       if (notificationToken) {
         details.notificationToken = notificationToken;
       }
@@ -82,7 +83,8 @@ angular.module('groupeat.services.device-assistant', [
       return $q.reject('not authenticated');
     }
 
-    return getDeviceDetails().then(function(details) {
+    return getDeviceDetails()
+    .then(function(details) {
       var UUID = details.UUID;
       details.UUID = undefined;
 

@@ -27,34 +27,34 @@ angular.module('groupeat.services.push-notification', [
   Network.hasConnectivity().then(PushNotificationService.subscribe);
 })
 
-.factory('PushNotificationService', function (_, $ionicPlatform, $q, DeviceAssistant) {
+.factory('PushNotificationService', function (_, $ionicPlatform, $q, $log, DeviceAssistant) {
 
   var subscribe = function() {
     var defer = $q.defer();
 
     $ionicPlatform.ready(function() {
       if (_.isEmpty(ionic.Platform.device())) {
-        console.warn('no device, cancelling notifications subscription');
+        $log.warn('no device, cancelling notifications subscription');
         defer.reject('no device');
         return;
       }
 
       var push = PushNotification.init(pushConfig);
-      console.log('notifications initialized', push);
+      $log.log('notifications initialized', push);
 
       push.on('registration', function(data) {
-        console.log('notifications registered', data);
+        $log.log('notifications registered', data);
         DeviceAssistant.setNotificationToken(data.registrationId);
         defer.resolve();
       });
 
       push.on('notification', function(data) {
-        console.log('notification received', data);
+        $log.log('notification received', data);
         DeviceAssistant.update(data.additionalData.notificationId);
       });
 
       push.on('error', function (error) {
-        console.warn('notifications error', error);
+        $log.warn('notifications error', error);
         defer.reject(error);
       });
     });
