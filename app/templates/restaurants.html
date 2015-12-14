@@ -11,9 +11,11 @@
 	</ge-message-backdrop>
 
 	<ion-nav-bar class="bar-blue">
-	  <ion-nav-back-button class='button button-clear'>
-	    <i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
-	  </ion-nav-back-button>
+		<ion-nav-buttons side="primary">
+			<button class="button button-clear" on-tap="back()">
+				<i class="ion-arrow-left-c"></i>{{ 'back' | translate }}
+			</button>
+		</ion-nav-buttons>
 		<ion-nav-title>
 			<div class="title has-sub-title">
 				{{ 'restaurants' | translate }}
