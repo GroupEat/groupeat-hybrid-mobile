@@ -18,6 +18,7 @@ var pushConfig = {
 angular.module('groupeat.services.push-notification', [
   'ionic',
   'ngConstants',
+  'groupeat.services.lodash',
   'groupeat.services.element-modifier',
   'groupeat.services.device-assistant'
 ])

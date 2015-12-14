@@ -10,7 +10,7 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
-  'groupeat.services.push-notification',
+  'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
   'groupeat.services.lodash',

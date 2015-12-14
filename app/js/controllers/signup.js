@@ -5,7 +5,7 @@ angular.module('groupeat.controllers.signup', [
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-storage',
-  'groupeat.services.push-notification',
+  'groupeat.services.device-assistant',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.phone-format',

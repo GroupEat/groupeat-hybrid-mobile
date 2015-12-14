@@ -4,9 +4,9 @@ angular.module('groupeat.services.device-assistant', [
   'ionic',
   'ngConstants',
   'ngResource',
+  'groupeat.services.lodash',
   'groupeat.services.credentials',
-  'groupeat.services.geolocation',
-  'groupeat.services.push-notification'
+  'groupeat.services.geolocation'
 ])
 
 .run(function(Network, DeviceAssistant) {
