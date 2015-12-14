@@ -63,6 +63,10 @@ angular.module('groupeat.controllers.restaurants', [
     });
   };
 
+  $scope.back = function() {
+    $state.go('app.group-orders');
+  };
+
   $scope.$on('$ionicView.afterEnter', function() {
     $scope.initialState = $state.current.name;
     $scope.onReload();
