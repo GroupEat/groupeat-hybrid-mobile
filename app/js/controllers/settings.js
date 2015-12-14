@@ -70,8 +70,7 @@ angular.module('groupeat.controllers.settings', [
       $scope.isProcessingRequest = true;
       var customerId = Credentials.get().id;
 
-      // TODO : make request only if changes has been notified
-
+      // TODO : make request only if changes have been made
       Network.hasConnectivity()
       .then(function() {
         return ElementModifier.validate($scope.form.customerEdit);
