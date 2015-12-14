@@ -2,7 +2,6 @@
 
 angular.module('groupeat.services', [
   'groupeat.services.address',
-  'groupeat.services.analytics',
   'groupeat.services.authentication',
   'groupeat.services.backend-utils',
   'groupeat.services.cart',
@@ -18,6 +17,7 @@ angular.module('groupeat.services', [
   'groupeat.services.geolocation',
   'groupeat.services.group-order',
   'groupeat.services.http-provider-interceptor',
+  'groupeat.services.ionic-user',
   'groupeat.services.lodash',
   'groupeat.services.message-backdrop',
   'groupeat.services.network',

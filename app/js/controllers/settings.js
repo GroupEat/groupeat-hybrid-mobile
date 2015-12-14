@@ -2,13 +2,13 @@
 
 angular.module('groupeat.controllers.settings', [
   'groupeat.services.address',
-  'groupeat.services.analytics',
   'groupeat.services.authentication',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
   'groupeat.services.element-modifier',
+  'groupeat.services.ionic-user',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.phone-format',
@@ -18,9 +18,7 @@ angular.module('groupeat.controllers.settings', [
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, Network, PhoneFormat, Popup) {
-
-  Analytics.trackView('Restaurants');
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, IonicUser, Network, PhoneFormat, Popup) {
 
   /*
   Models

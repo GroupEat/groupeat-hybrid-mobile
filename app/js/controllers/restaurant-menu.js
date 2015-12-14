@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurant-menu', [
-	'groupeat.services.analytics',
 	'groupeat.services.cart',
 	'groupeat.services.controller-promise-handler',
 	'groupeat.services.lodash',
@@ -14,9 +13,7 @@ angular.module('groupeat.controllers.restaurant-menu', [
 	'ionic'
 	])
 
-.controller('RestaurantMenuCtrl', function(_, $ionicModal, $q, $scope, $state, $stateParams, $timeout, Analytics, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant, Scroller) {
-
-	Analytics.trackEvent('Restaurant', 'View', null, $stateParams.restaurantId);
+.controller('RestaurantMenuCtrl', function(_, $ionicModal, $q, $scope, $state, $stateParams, $timeout, Cart, ControllerPromiseHandler, Network, Order, Popup, Product, Restaurant, Scroller) {
 
 	$scope.groups = [];
 	$scope.isNewOrder = {

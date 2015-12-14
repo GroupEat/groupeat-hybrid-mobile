@@ -5,7 +5,6 @@ angular.module('groupeat.controllers.cart', [
   'ionicProcessSpinner',
   'pascalprecht.translate',
   'groupeat.services.address',
-  'groupeat.services.analytics',
   'groupeat.services.cart',
   'groupeat.services.credentials',
   'groupeat.services.order',
