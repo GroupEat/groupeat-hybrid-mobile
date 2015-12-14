@@ -102,10 +102,11 @@ describe 'Ctrl: RestaurantsCtrl', ->
         deliveryCapacity: 10
         discountPolicy: 'discountPolicy'
         id: 1
+        closingAt: '2015-01-30 16:39:26'
       scope.onRestaurantTouch restaurant
       scope.$digest()
 
-      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, 0, 10, 'discountPolicy')
+      Order.setCurrentOrder.should.have.been.calledWithExactly(null, null, 0, 10, 'discountPolicy',0 , restaurant.closingAt)
       $state.go.should.have.been.calledWithExactly('app.restaurant-menu', restaurantId: 1)
 
   describe 'RestaurantsCtrl#onReload', ->
