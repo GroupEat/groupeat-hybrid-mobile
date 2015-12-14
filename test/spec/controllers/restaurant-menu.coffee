@@ -31,7 +31,7 @@ describe 'Ctrl: RestaurantMenuCtrl', ->
       Product = $injector.get 'Product'
       Restaurant = $injector.get 'Restaurant'
 
-      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Analytics: $injector.get('Analytics'), Cart: Cart, ControllerPromiseHandler: ControllerPromiseHandler, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
+      ctrl = $controller('RestaurantMenuCtrl', (_: $injector.get('_'), $ionicHistory: $ionicHistory, $ionicModal: $ionicModal, $ionicScrollDelegate: $ionicScrollDelegate, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $scope: scope, $stateParams: $stateParams, $timeout: $injector.get('$timeout'), Cart: Cart, ControllerPromiseHandler: ControllerPromiseHandler, Network: Network, Popup: Popup, Product: Product, Restaurant: Restaurant))
 
   afterEach ->
     sandbox.restore()
