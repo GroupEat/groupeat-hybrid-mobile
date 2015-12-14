@@ -220,7 +220,7 @@ angular.module('groupeat.services.order', [
 
 	getTimeDiff = function(endingTime) {
 		var response = null;
-		if(!endingTime) {
+		if(endingTime !== null && endingTime !== undefined) {
 			var currentTime = new Date();
 			if (!(endingTime instanceof Date))
 			{
