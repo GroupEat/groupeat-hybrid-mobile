@@ -82,6 +82,7 @@ angular.module('groupeat.controllers.settings', [
       .then(function(customer) {
         customer.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(customer.phoneNumber);
         $scope.customerIdentity = customer;
+        IonicUser.set(_.omit(customer, ['activated']));
         CustomerStorage.setIdentity(customer);
         var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
         if (!addressParams)
@@ -93,6 +94,7 @@ angular.module('groupeat.controllers.settings', [
         return Address.update(customerId, addressParams);
       })
       .then(function(address) {
+        IonicUser.set(address);
         CustomerStorage.setAddress(address);
         var authenticationParams = _.pick($scope.customerIdentity, ['email', 'oldPassword', 'newPassword']);
         return Authentication.updatePassword(authenticationParams);
@@ -104,6 +106,7 @@ angular.module('groupeat.controllers.settings', [
         return CustomerSettings.update(customerId, $scope.customerSettings);
       })
       .then(function(customerSettings) {
+        IonicUser.set(customerSettings);
         CustomerStorage.setSettings(customerSettings);
         $scope.isProcessingRequest = false;
         return Popup.title('customerEdited');

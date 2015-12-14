@@ -62,6 +62,10 @@ angular.module('groupeat.controllers.authentication', [
     })
     .then(function (credentials) {
       customerId = credentials.id;
+      IonicUser.set({
+        id: credentials.id,
+        email: $scope.user.email
+      });
       Credentials.set(customerId, credentials.token);
       return Customer.get(customerId);
     })
@@ -101,6 +105,10 @@ angular.module('groupeat.controllers.authentication', [
       return Customer.save(requestBody);
     })
     .then(function(credentials) {
+      IonicUser.set({
+        id: credentials.id,
+        email: $scope.user.email
+      });
       CustomerStorage.setDefaultSettings();
       Credentials.set(credentials.id, credentials.token);
       $state.go('app.signup');
