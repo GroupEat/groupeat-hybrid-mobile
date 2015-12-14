@@ -5,6 +5,7 @@ angular.module('groupeat.services.device-assistant', [
   'ngConstants',
   'ngResource',
   'groupeat.services.credentials',
+  'groupeat.services.geolocation',
   'groupeat.services.push-notification'
 ])
 
