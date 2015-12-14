@@ -5,7 +5,7 @@
   },
   "staging": {
     "environment": "staging",
-    "apiEndpoint": "http://staging.groupeat.fr/api"
+    "apiEndpoint": "https://staging.groupeat.fr/api"
   },
   "production": {
     "environment": "production",
