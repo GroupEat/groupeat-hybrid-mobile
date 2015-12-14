@@ -41,6 +41,10 @@ angular.module('groupeat.controllers.restaurants', [
     });
   };
 
+  $scope.back = function() {
+    $state.go('app.group-orders');
+  };
+
   $scope.onRestaurantTouch = function(restaurant) {
     Customer.checkActivatedAccount()
     .then(function() {
