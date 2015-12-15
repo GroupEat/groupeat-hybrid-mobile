@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('groupeat.controllers.group-orders', [
-  'groupeat.services.analytics',
   'groupeat.services.controller-promise-handler',
   'groupeat.services.customer',
   'groupeat.services.customer-information-checker',
@@ -14,9 +13,7 @@ angular.module('groupeat.controllers.group-orders', [
   'timer'
 ])
 
-.controller('GroupOrdersCtrl', function(_, $ionicPlatform, $rootScope, $scope, $state, $q, Analytics, ControllerPromiseHandler, Customer, CustomerInformationChecker, Geolocation, GroupOrder, Network, Order) {
-
-  Analytics.trackView('Group Orders');
+.controller('GroupOrdersCtrl', function(_, $ionicPlatform, $rootScope, $scope, $state, $q, ControllerPromiseHandler, Customer, CustomerInformationChecker, Geolocation, GroupOrder, Network, Order) {
 
   $scope.groupOrders = [];
 

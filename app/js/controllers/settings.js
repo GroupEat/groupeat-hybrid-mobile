@@ -2,13 +2,13 @@
 
 angular.module('groupeat.controllers.settings', [
   'groupeat.services.address',
-  'groupeat.services.analytics',
   'groupeat.services.authentication',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
   'groupeat.services.customer-storage',
   'groupeat.services.element-modifier',
+  'groupeat.services.ionic-user',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.phone-format',
@@ -18,9 +18,7 @@ angular.module('groupeat.controllers.settings', [
   'jcs-autoValidate'
 ])
 
-.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, Network, PhoneFormat, Popup) {
-
-  Analytics.trackView('Restaurants');
+.controller('SettingsCtrl', function (_, $ionicSlideBoxDelegate, $q, $rootScope, $scope, $state, Address, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, ElementModifier, IonicUser, Network, PhoneFormat, Popup) {
 
   /*
   Models
@@ -72,8 +70,7 @@ angular.module('groupeat.controllers.settings', [
       $scope.isProcessingRequest = true;
       var customerId = Credentials.get().id;
 
-      // TODO : make request only if changes has been notified
-
+      // TODO : make request only if changes have been made
       Network.hasConnectivity()
       .then(function() {
         return ElementModifier.validate($scope.form.customerEdit);
@@ -84,6 +81,7 @@ angular.module('groupeat.controllers.settings', [
       .then(function(customer) {
         customer.phoneNumber = PhoneFormat.formatPhoneNumberForFrontend(customer.phoneNumber);
         $scope.customerIdentity = customer;
+        IonicUser.set(_.omit(customer, ['activated']));
         CustomerStorage.setIdentity(customer);
         var addressParams = Address.getAddressFromResidencyInformation($scope.customerAddress.residency);
         if (!addressParams)
@@ -95,6 +93,7 @@ angular.module('groupeat.controllers.settings', [
         return Address.update(customerId, addressParams);
       })
       .then(function(address) {
+        IonicUser.set(address);
         CustomerStorage.setAddress(address);
         var authenticationParams = _.pick($scope.customerIdentity, ['email', 'oldPassword', 'newPassword']);
         return Authentication.updatePassword(authenticationParams);
@@ -106,6 +105,7 @@ angular.module('groupeat.controllers.settings', [
         return CustomerSettings.update(customerId, $scope.customerSettings);
       })
       .then(function(customerSettings) {
+        IonicUser.set(customerSettings);
         CustomerStorage.setSettings(customerSettings);
         $scope.isProcessingRequest = false;
         return Popup.title('customerEdited');

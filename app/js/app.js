@@ -18,7 +18,6 @@ angular.module('groupeat', [
   'groupeat.controllers',
   'groupeat.directives',
   'groupeat.filters',
-  'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
@@ -38,7 +37,7 @@ angular.module('groupeat', [
   }
 ])
 
-.run(function ($ionicAnalytics, $ionicPlatform, $translate, $rootScope, $state, Analytics, Credentials, Permission, MessageBackdrop) {
+.run(function ($ionicAnalytics, $ionicPlatform, $translate, $rootScope, $state, Credentials, Permission, MessageBackdrop) {
 
   Permission.defineRole('customer', function () {
     return Credentials.get();

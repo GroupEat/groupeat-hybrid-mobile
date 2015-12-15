@@ -5,7 +5,6 @@ angular.module('groupeat.controllers.authentication', [
   'jcs-autoValidate',
   'groupeat.services.address',
   'groupeat.services.authentication',
-  'groupeat.services.analytics',
   'groupeat.services.credentials',
   'groupeat.services.customer',
   'groupeat.services.customer-settings',
@@ -13,23 +12,18 @@ angular.module('groupeat.controllers.authentication', [
   'groupeat.services.device-assistant',
   'groupeat.services.element-modifier',
   'groupeat.services.error-message-resolver',
+  'groupeat.services.ionic-user',
   'groupeat.services.lodash',
   'groupeat.services.network',
   'groupeat.services.popup',
 ])
 
-.controller('AuthenticationCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, $stateParams, $timeout, Address, Analytics, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, DeviceAssistant, ElementModifier, Network, Popup) {
-
-  Analytics.trackView('Authentication');
+.controller('AuthenticationCtrl', function (_, $ionicSlideBoxDelegate, $scope, $state, $stateParams, $timeout, Address, Authentication, Credentials, Customer, CustomerSettings, CustomerStorage, DeviceAssistant, ElementModifier, IonicUser, Network, Popup) {
 
   $scope.slideIndex = 0;
   $scope.user = {};
   $scope.isProcessingRequest = false;
   $scope.registering = true;
-
-  /* Analytics Timing */
-  var d = new Date();
-  $scope.initialTime = d.getTime();
 
   Credentials.reset();
   CustomerStorage.reset();
@@ -58,7 +52,6 @@ angular.module('groupeat.controllers.authentication', [
 
   $scope.submitLoginForm = function(form) {
     $scope.isProcessingRequest = true;
-    Analytics.trackEvent('Authentication', 'Tries to Login');
     var customerId = null;
     Network.hasConnectivity()
     .then(function() {
@@ -69,6 +62,10 @@ angular.module('groupeat.controllers.authentication', [
     })
     .then(function (credentials) {
       customerId = credentials.id;
+      IonicUser.set({
+        id: credentials.id,
+        email: $scope.user.email
+      });
       Credentials.set(customerId, credentials.token);
       return Customer.get(customerId);
     })
@@ -83,8 +80,6 @@ angular.module('groupeat.controllers.authentication', [
     })
     .then(function(customerSettings) {
       CustomerStorage.setSettings(customerSettings);
-      Analytics.trackEvent('Authentication', 'Logs In');
-      Analytics.trackTimingSinceTime('Authentication', $scope.initialTime, 'Time to Login');
       return DeviceAssistant.register();
     })
     .then(function() {
@@ -110,6 +105,10 @@ angular.module('groupeat.controllers.authentication', [
       return Customer.save(requestBody);
     })
     .then(function(credentials) {
+      IonicUser.set({
+        id: credentials.id,
+        email: $scope.user.email
+      });
       CustomerStorage.setDefaultSettings();
       Credentials.set(credentials.id, credentials.token);
       $state.go('app.signup');

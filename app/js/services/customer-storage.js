@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('groupeat.services.customer-storage', [
+  'groupeat.services.ionic-user',
   'LocalStorageModule'
 ])
 
-.factory('CustomerStorage', function (localStorageService) {
+.factory('CustomerStorage', function (localStorageService, IonicUser) {
 
   var
 
@@ -36,6 +37,7 @@ angular.module('groupeat.services.customer-storage', [
       'daysWithoutNotifying': '2',
       'noNotificationAfter': '23:00:00'
     };
+    IonicUser.set(settings);
     localStorageService.set('settings', settings);
   },
 

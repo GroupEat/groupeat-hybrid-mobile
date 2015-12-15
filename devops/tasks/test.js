@@ -20,7 +20,7 @@ gulp.task('test:configure', function (done) {
 /**
  * Run test once and exit
  */
-gulp.task('test', ['test:configure'], function (done) {
+gulp.task('test', ['ionic-io', 'test:configure'], function (done) {
   new Server({
     configFile: __dirname + '/../../test/karma.conf.js',
     singleRun: true

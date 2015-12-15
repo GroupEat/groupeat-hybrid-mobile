@@ -21,7 +21,6 @@ describe 'Ctrl: SettingsCtrl', ->
       $timeout = $injector.get '$timeout'
       _ = $injector.get '_'
       Address = $injector.get 'Address'
-      Analytics = $injector.get 'Analytics'
       Authentication = $injector.get 'Authentication'
       Credentials = $injector.get 'Credentials'
       sandbox.stub(Credentials, 'get').returns
@@ -37,7 +36,7 @@ describe 'Ctrl: SettingsCtrl', ->
       Network = $injector.get 'Network'
       CustomerSettings = $injector.get 'CustomerSettings'
       Popup = $injector.get 'Popup'
-      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Analytics: Analytics, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
+      ctrl = $controller('SettingsCtrl', (_: _, $ionicSlideBoxDelegate: $ionicSlideBoxDelegate, $q: $q, $rootScope: rootScope, $scope: scope, $state: $state, Address: Address, Authentication: Authentication, Credentials: Credentials, Customer: Customer, CustomerSettings: CustomerSettings, ElementModifier: ElementModifier, Network: Network, Popup: Popup))
       regex = new RegExp('^'+apiEndpoint+'/customers/\\d+$')
       $injector.get('$httpBackend').expect('GET', regex).respond(200, 'Success')
 

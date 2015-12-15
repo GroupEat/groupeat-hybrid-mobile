@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "dependencies": {
     "ionic": "1.1.1",
+    "ionic-service-core": "~0.1.7",
+    "ionic-service-analytics": "0.2.1",
+    "ionic-platform-web-client": "~0.2.1",
     "lodash": "3.9.3",
     "angular-translate": "2.8.1",
     "angular-translate-loader-static-files": "2.8.1",
@@ -25,10 +28,7 @@
   },
   "devDependencies": {
     "angular-mocks": "1.4.8",
-    "angular-scenario": "1.4.8",
-    "ionic-service-core": "0.1.7",
-    "ionic-service-analytics": "0.2.1",
-    "ionic-platform-web-client": "0.2.1"
+    "angular-scenario": "1.4.8"
   },
   "overrides": {
     "sprintf": {
@@ -40,6 +40,7 @@
   },
   "resolutions": {
     "angular": "1.4.8",
-    "ionic-service-core": "0.1.7"
+    "ionic-service-core": "0.1.7",
+    "slick-carousel": "~1.5.8"
   }
 }

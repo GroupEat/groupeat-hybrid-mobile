@@ -1,7 +1,6 @@
 'use strict';
 
 angular.module('groupeat.controllers.restaurants', [
-  'groupeat.services.analytics',
   'groupeat.services.controller-promise-handler',
   'groupeat.services.customer',
   'groupeat.services.customer-information-checker',
@@ -13,9 +12,7 @@ angular.module('groupeat.controllers.restaurants', [
   'groupeat.services.restaurant',
 ])
 
-.controller('RestaurantsCtrl', function(_, $q, $rootScope, $scope, $state, Analytics, ControllerPromiseHandler, Geolocation, GroupOrder, Customer, CustomerInformationChecker, Network, Order, Restaurant) {
-
-  Analytics.trackView('Restaurants');
+.controller('RestaurantsCtrl', function(_, $q, $rootScope, $scope, $state, ControllerPromiseHandler, Geolocation, GroupOrder, Customer, CustomerInformationChecker, Network, Order, Restaurant) {
 
   $scope.restaurants = [];
 
