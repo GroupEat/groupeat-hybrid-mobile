@@ -13,7 +13,8 @@ angular.module('groupeat.services.ionic-user', ['ngConstants'])
   init = function() {
     if (!user.id) {
         var anonymousId = Ionic.User.anonymousId();
-        Ionic.User.load(anonymousId).then(function(){}, function() {
+        Ionic.User.load(anonymousId)
+        .then(function(){}, function() {
           user.id = anonymousId;
           user.save();
         });
