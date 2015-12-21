@@ -9,8 +9,8 @@ var argv = require('yargs')
 .argv;
 
 var packageBuildCommand = 'ionic package build ' + argv.platform + ' --profile ' + argv.env;
-if (argv.env == 'production') {
-  packageCommand += ' --release';
+if (argv.env === 'production') {
+  packageBuildCommand += ' --release';
 }
 var packageDownloadCommand = 'mkdir -p dist && ionic package download ' + argv.id + ' -d dist';
 
