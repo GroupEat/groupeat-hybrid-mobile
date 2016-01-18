@@ -118,6 +118,10 @@ angular.module('groupeat.controllers.restaurant-menu', [
 		$scope.modal = modal;
 	});
 
+	$scope.isProductSelected = function(product) {
+		return _.find($scope.cart.getProducts(), 'name', product.name);
+	};
+
 	$scope.openCart = function() {
 		Order.setFoodRushTime($scope.foodRushTime.value);
 		$scope.modal.show();
